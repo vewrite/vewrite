@@ -1,0 +1,87 @@
+/* Colors */
+$black: #171123;
+$black-dark: #080819;
+$black-light: #1f1c29;
+
+$white: #ffffff;
+$white-dark: #f1f0fb;
+$white-light: #f6f6fb;
+
+$blue: #6A7CBE;
+$blue-dark: #404AA4;
+$blue-light: #8AA1D2;
+
+$orange: #CAA466;
+$orange-dark: #B5803D;
+$orange-light: #f8e1b0;
+
+$green: #5B7D39;
+$green-dark: #374B22;
+$green-light: #76A34A;
+
+$purple: #A276B2;
+$purple-dark: #7D4793;
+$purple-light: #BE99C9;
+
+$red: #F29453;
+$red-dark: #ED6932;
+$red-light: #F6B46C;
+
+$mint: #C3D5AD;
+$mint-dark: #ABC48C;
+$mint-light: #D5E2C6;
+
+$gray: #DBD7E1;
+$gray-dark: #CDC7D5;
+$gray-light: #E6E3EA;
+
+$teal: #82A0CE;
+$teal-dark: #507ABA;
+$teal-light: #A7BDDD;
+
+
+/* Fonts */
+$font-family-main: 'AlmarenaNeue-DisplayRegular', sans-serif;
+$font-family-secondary: 'Roboto Sans', sans-serif;
+$font-size-base: 12px;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 30px;
+$font-size-xxl: 50px;
+$font-size-max: 60px;
+$font-size-mega: 130px;
+
+$multiplier: 1.4;
+$multiplier-sm: 1.14;
+
+/* Border-radius */
+$br-xs: 0;
+$br-sm: 0;
+$br-md: 0;
+$br-lg: 0;
+$br-xl: 0;
+
+/* Spacing */
+$spacing-xxs: 0.25rem;
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 2rem;
+$spacing-lg: 4rem;
+$spacing-xl: 8rem;
+$spacing-xxl: 16rem;
+
+/* Positioning */
+$p-desktop: 1rem;
+$p-tablet: 0.75rem;
+$p-mobile: 0.5rem;
+
+/* Widths */
+$width-sm: 30rem;
+$width-md: 50rem;
+$width-lg: 70rem;
+$width-xl: 90rem;
+
+/* Shadows */
+$main-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05), 0px 24px 24px rgba(0, 0, 0, 0.06);

@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="padding: 50px 0 100px 0">
+  <div class="container" id="vewrite">
       <Account v-if="user" />
       <Auth v-else />
   </div>
@@ -8,3 +8,13 @@
 <script setup>
 const user = useSupabaseUser()
 </script>
+
+<style lang="scss">
+
+@import 'assets/_variables.scss';
+
+#vewrite {
+  background: $white;
+}
+
+</style>

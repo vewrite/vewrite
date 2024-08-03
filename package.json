@@ -9,5 +9,9 @@
   "devDependencies": {
     "@nuxtjs/supabase": "^0.1.23",
     "nuxt": "3.0.0-rc.8"
+  },
+  "dependencies": {
+    "@nuxtjs/style-resources": "^1.2.2",
+    "sass": "^1.77.8"
   }
 }
