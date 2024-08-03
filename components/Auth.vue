@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+
 const supabase = useSupabaseClient()
 
 const loading = ref(false)

@@ -5,6 +5,6 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/supabase'],
   css: [
     '@/assets/main.scss',
-    '@/assets/variables.scss',
+    '@/assets/_variables.scss',
   ],
 })

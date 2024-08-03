@@ -14,7 +14,7 @@ const user = useSupabaseUser()
 @import 'assets/_variables.scss';
 
 #vewrite {
-  background: $white;
+  background: $black;
 }
 
 </style>

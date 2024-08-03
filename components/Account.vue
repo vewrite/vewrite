@@ -25,6 +25,7 @@
             </button>
         </div>
     </form>
+    <Test />
 </template>
 
 <script setup>
