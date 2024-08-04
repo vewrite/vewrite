@@ -3,6 +3,12 @@
     <textarea v-model="text" placeholder="Write something..."></textarea>
     <button @click="submit">Submit</button>
   </div>
+  <div class="container" id="viewText">
+    <article v-for="item in listText" :key="item.id">
+      {{ item.name }}
+    </article>
+  </div>  
+
 </template>
 
 <script setup>
@@ -19,11 +25,7 @@ async function submit() {
   if (!text.value) {
     console.error("Invalid text");
     return
-  } else {
-    console.error("Ok");
   }
-
-  console.log(user.value.id);
 
   const { error } = await supabase
     .from('test')
@@ -38,7 +40,48 @@ async function submit() {
     return;
   }
 
-  console.log("text submitted successfully!");
+  fetchText();
 }
 
+const listText = ref([]);
+
+async function fetchText() {
+  const { data, error } = await supabase
+    .from('test')
+    .select('name')
+    .eq('user_id', user.value.id);
+
+  if (error) {
+    console.error("Error fetching text:", error.message);
+    return;
+  }
+
+  listText.value = data;
+}
+
+fetchText();
+
 </script>
+
+<style lang="scss">
+
+@import 'assets/_variables.scss';
+
+#pushText,
+#viewText {
+  width: 100%;
+  margin: $spacing-md 0 0;
+  padding: $spacing-md 0 0;
+
+  article {
+    padding: $spacing-sm;
+    background-color: rgba($blue, 0.1);
+
+    &:nth-child(odd) {
+      background-color: rgba($blue, 0.05);
+    }
+  }
+}
+
+
+</style>
