@@ -7,4 +7,7 @@ export default defineNuxtConfig({
     '@/assets/main.scss',
     '@/assets/_variables.scss',
   ],
+  routeRules: {
+   
+  },
 })

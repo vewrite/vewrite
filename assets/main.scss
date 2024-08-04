@@ -9,6 +9,10 @@ body {
     font-size: $font-size-sm;
 }
 
+#__nuxt {
+    height: 100%;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -76,8 +80,8 @@ textarea {
 button,
 .button {
     color: $blue;
-    border: 1px solid rgba($blue, 0.3);
-    background-color: rgba($blue, 0.1);
+    border: 1px solid rgba($purple, 0.3);
+    background-color: rgba($purple, 0.1);
     display: inline-block;
     text-align: center;
     border-radius: $br-sm;
@@ -86,13 +90,27 @@ button,
     text-align: center;
     font-size: $font-size-xs;
     font-weight: 400;
+    transition: all 0.2s ease;
+    font-family: $font-family-main;
 }
 
 button.primary,
 .button.primary {
-    border: 1px solid rgba($blue, 0.9);
-    background-color: rgba($blue, 0.85);
+    border: 1px solid rgba($purple, 0.9);
+    background-color: rgba($purple, 0.85);
     color: $white;
+}
+
+button.dark,
+.button.dark {
+    border: 1px solid rgba($white, 0.2);
+    background-color: transparent;
+    text-decoration: none;
+    color: $white;
+
+    &:hover {
+        border: 1px solid rgba($white, 0.8);
+    }
 }
 
 /* Widgets */
@@ -121,65 +139,6 @@ button.primary,
     border-radius: 5px;
 }
 
-.footer {
-    position: absolute;
-    max-width: 100%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-flow: row;
-    border-top: var(--custom-border);
-    background-color: var(--custom-bg-color);
-}
-
-.footer div {
-    padding: var(--custom-spacing);
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.footer div>img {
-    height: 20px;
-    margin-left: 10px;
-}
-
-.footer>div:first-child {
-    display: none;
-}
-
-.footer>div:nth-child(2) {
-    justify-content: left;
-}
-
-@media only screen and (min-width: 60em) {
-
-    /* 960px */
-    .footer>div:first-child {
-        display: flex;
-    }
-
-    .footer>div:nth-child(2) {
-        justify-content: center;
-    }
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.mainHeader {
-    width: 100%;
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-}
 
 .avatarPlaceholder {
     border: var(--custom-border);
@@ -190,30 +149,4 @@ button.primary,
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.form-widget {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.form-widget>.button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background-color: #444444;
-    text-transform: none !important;
-    transition: all 0.2s ease;
-}
-
-.form-widget .button:hover {
-    background-color: #2a2a2a;
-}
-
-.form-widget .button>.loader {
-    width: 17px;
-    animation: spin 1s linear infinite;
-    filter: invert(1);
 }

@@ -1,7 +1,9 @@
 <template>
-  <div class="container" id="vewrite">
-      <Account v-if="user" />
-      <Auth v-else />
+  <div class="app-wrapper">
+    <Vewrite v-if="user" />
+    <Auth v-else />
+      <!-- <Account v-if="user" />
+      <Auth v-else /> -->
   </div>
 </template>
 
@@ -13,9 +15,10 @@ const user = useSupabaseUser()
 
 @import 'assets/_variables.scss';
 
-#vewrite {
+.app-wrapper {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 </style>
