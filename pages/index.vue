@@ -1,10 +1,10 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <div class="app-panel-header">Welcome</div>
+      <div class="app-panel-header">Projects</div>
     </template>
     <template v-slot:body>
-      <p>Body Content</p>
+      <ProjectsContent />
     </template>
   </AppPanel>
 </template>

@@ -38,7 +38,6 @@ export default {
     .app-panel-header {
       margin:0;
       text-align: center;
-      width: 100%;
       font-size: $font-size-lg;
       font-family: $font-family-secondary;
       font-weight: 400;

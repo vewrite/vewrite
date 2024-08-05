@@ -5,8 +5,26 @@
       <HeaderButtons />
     </div>
     <div class="sidebar-content">
-      <router-link to="/account" class="button block">test</router-link>
-      <!-- <router-link to="/test" class="button block">test</router-link> -->
+      <div class="link-group">
+        <div class="title">Work</div>
+        <router-link to="/" class="link">Projects</router-link>
+        <router-link to="/workflows" class="link">Workflows</router-link>
+      </div>
+
+      <div class="link-group">
+        <div class="title">People</div>
+        <router-link to="/people" class="link">Talent</router-link>
+        <router-link to="/stakeholders" class="link">Stakeholders</router-link>
+      </div>
+
+      <div class="link-group">
+        <div class="title">Business</div>
+        <router-link to="/clients" class="link">Clients</router-link>
+        <router-link to="/payments" class="link">Payments</router-link>
+        <router-link to="/invoices" class="link">Invoices</router-link>
+        <router-link to="/analytics" class="link">Analytics</router-link>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -32,11 +50,42 @@
   }
 
   .sidebar-content {
-    padding: $spacing-md;
+    padding: $spacing-lg $spacing-md;
     display: flex;
     flex-direction: column;
+    gap: $spacing-sm;
+
     border-right: 1px solid rgba($black, 0.1);
     height: calc(100% - 75px);
+
+    .link-group {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-lg;
+
+      .title {
+        font-size: $font-size-sm;
+        font-family: $font-family-main;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: $gray-dark;
+      }
+    }
+
+    .link {
+      color: $black;
+      font-size: $font-size-lg;
+      font-family: $font-family-secondary;
+      font-weight: 400;
+      text-decoration: none;
+
+      &:hover,
+      &.router-link-active,
+      &.router-link-exact-active {
+        color: $purple;
+      }
+    }
   }
 }
 
