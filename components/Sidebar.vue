@@ -6,7 +6,7 @@
     </div>
     <div class="sidebar-content">
       <router-link to="/account" class="button block">test</router-link>
-      <router-link to="/test" class="button block">test</router-link>
+      <!-- <router-link to="/test" class="button block">test</router-link> -->
     </div>
   </div>
 </template>
@@ -22,10 +22,11 @@
   .sidebar-header {
     background-color: $purple;
     color: white;
-    padding: $spacing-md;
+    padding: 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     border-right: 1px solid rgba($purple-dark, 0.9);
     height: 75px;
   }

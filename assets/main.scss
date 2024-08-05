@@ -103,13 +103,14 @@ button.primary,
 
 button.dark,
 .button.dark {
-    border: 1px solid rgba($white, 0.2);
-    background-color: transparent;
+    border: 1px solid rgba($purple-light, 0.7);
+    background-color:rgba($purple-light, 0.7);
     text-decoration: none;
     color: $white;
 
     &:hover {
-        border: 1px solid rgba($white, 0.8);
+        border: 1px solid rgba($white, 0.2);
+        background-color:rgba($purple-light, 1);
     }
 }
 

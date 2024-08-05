@@ -1,7 +1,7 @@
 <template>
     <form class="row flex flex-center" @submit.prevent="handleLogin">
         <div class="col-6 form-widget">
-            <h1 class="header">Vewrite</h1>
+            <h2 class="header">Sign in</h2>
             <p class="description">Sign in via magic link with your email below</p>
             <div>
                 <input class="inputField" type="email" placeholder="Your email" v-model="email" />

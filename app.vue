@@ -1,9 +1,7 @@
 <template>
   <div class="app-wrapper">
-    <Vewrite v-if="user" />
-    <Auth v-else />
-      <!-- <Account v-if="user" />
-      <Auth v-else /> -->
+    <Marketing v-if="!user" />
+    <Vewrite v-else />
   </div>
 </template>
 

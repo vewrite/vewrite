@@ -1,7 +1,7 @@
 <template>
   <div id="vewrite">
     <Sidebar />
-    <AppPanel />
+    <NuxtPage />
   </div>
 </template>
 

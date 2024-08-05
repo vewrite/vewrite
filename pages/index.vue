@@ -1,12 +1,22 @@
 <template>
   <AppPanel>
-    test
+    <template v-slot:header>
+      <div class="app-panel-header">Welcome</div>
+    </template>
+    <template v-slot:body>
+      <p>Body Content</p>
+    </template>
   </AppPanel>
 </template>
 
-<script setup>
-import AppPanel from '~/components/AppPanel.vue'
-import Blank from '~/components/Blank.vue'
+<script>
+import AppPanel from '~/components/AppPanel.vue';
+
+export default {
+  components: {
+    AppPanel
+  }
+}
 </script>
 
 <style scoped>

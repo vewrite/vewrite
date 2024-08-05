@@ -1,31 +1,32 @@
 <template>
-    <form class="form-widget" @submit.prevent="updateProfile">
-        <Avatar v-model:path="avatar_path" @upload="updateProfile" />
-        <div>
-            <label for="email">Email</label>
-            <input id="email" type="text" :value="user.email" disabled />
-        </div>
-        <div>
-            <label for="username">Name</label>
-            <input id="username" type="text" v-model="username" />
-        </div>
-        <div>
-            <label for="website">Website</label>
-            <input id="website" type="website" v-model="website" />
-        </div>
+    <main id="AccountContent">
+        <form class="form-widget" @submit.prevent="updateProfile">
+            <Avatar v-model:path="avatar_path" @upload="updateProfile" />
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="text" :value="user.email" disabled />
+            </div>
+            <div>
+                <label for="username">Name</label>
+                <input id="username" type="text" v-model="username" />
+            </div>
+            <div>
+                <label for="website">Website</label>
+                <input id="website" type="website" v-model="website" />
+            </div>
 
-        <div>
-            <input type="submit" class="button block primary" :value="loading ? 'Loading ...' : 'Update'"
-                :disabled="loading" />
-        </div>
+            <div>
+                <input type="submit" class="button block primary" :value="loading ? 'Loading ...' : 'Update'"
+                    :disabled="loading" />
+            </div>
 
-        <div>
-            <button class="button block" @click="signOut" :disabled="loading">
-                Sign Out
-            </button>
-        </div>
-    </form>
-    <Test />
+            <div>
+                <button class="button block" @click="signOut" :disabled="loading">
+                    Sign Out
+                </button>
+            </div>
+        </form>
+    </main>
 </template>
 
 <script setup>
@@ -86,3 +87,14 @@ async function signOut() {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+
+@import 'assets/_variables.scss';
+
+#AccountContent {
+    padding: $spacing-md;
+}
+
+
+</style>

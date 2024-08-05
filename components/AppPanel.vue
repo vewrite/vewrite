@@ -1,24 +1,21 @@
 <template>
-  <main id="AppPanel">
-    <div class="panel-title">
-      <!-- <h1>{{ route }}</h1> -->
+  <div id="AppPanel" class="app-panel">
+    <div class="header">
+      <slot name="header"></slot>
     </div>
-    <div class="panel-content">
-      <slot></slot>
+    <div class="body">
+      <slot name="body"></slot>
     </div>
-  </main>
+  </div>
 </template>
 
-<script setup>
-
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-
-// const route = useRoute().path
-
+<script>
+export default {
+  name: 'AppPanel'
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 @import 'assets/_variables.scss';
 
@@ -27,7 +24,7 @@ import { useRoute } from 'vue-router'
   flex-direction: column;
   width: 100%;
 
-  .panel-title {
+  .header {
     background-color: $purple;
     color: white;
     display: flex;
@@ -36,18 +33,21 @@ import { useRoute } from 'vue-router'
     justify-content: space-between;
     height: 75px;
     width: 100%;
+    padding: 0 $spacing-md;
 
-    h1 {
+    .app-panel-header {
       margin:0;
       text-align: center;
       width: 100%;
-      font-size: $font-size-md;
+      font-size: $font-size-lg;
+      font-family: $font-family-secondary;
+      font-weight: 400;
     }
   }
 
-  .panel-content {
-    flex: 1;
-    padding: 20px;
+  .body {
+    height: calc(100% - 75px);
+    overflow-y: auto;
   }
 }
 
