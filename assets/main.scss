@@ -33,20 +33,28 @@ body,
     justify-content: flex-start;
 }
 
+.inner-container {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 /* Forms */
 
 label {
     display: block;
-    margin: $spacing-sm 0 $spacing-xs;
+    margin: $spacing-md 0 $spacing-xs;
     color: $black;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 input,
 textarea {
     border-radius: 5px;
     border: 1px solid rgba($blue, 0.3);
-    padding: $spacing-xxs $spacing-xs;
+    padding: $spacing-xs;
     background-color: var(--custom-bg-color);
     color: var(--custom-color);
     border-radius: $br-sm;
@@ -54,6 +62,7 @@ textarea {
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
+    width:  100%;
 }
 
 input:focus,
@@ -74,6 +83,13 @@ textarea {
     margin: 0 0 $spacing-sm 0;
 }
 
+.form-group {
+    margin: $spacing-sm 0;
+}
+
+.form-group-footer {
+    padding: $spacing-md 0;
+}
 
 /* Button */
 
@@ -85,7 +101,7 @@ button,
     display: inline-block;
     text-align: center;
     border-radius: $br-sm;
-    padding: $spacing-xxs $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
     cursor: pointer;
     text-align: center;
     font-size: $font-size-xs;

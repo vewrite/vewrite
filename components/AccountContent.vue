@@ -1,29 +1,34 @@
 <template>
     <main id="AccountContent">
-        <form class="form-widget" @submit.prevent="updateProfile">
-            <Avatar v-model:path="avatar_path" @upload="updateProfile" />
-            <div>
-                <label for="email">Email</label>
-                <input id="email" type="text" :value="user.email" disabled />
-            </div>
-            <div>
-                <label for="username">Name</label>
-                <input id="username" type="text" v-model="username" />
-            </div>
-            <div>
-                <label for="website">Website</label>
-                <input id="website" type="website" v-model="website" />
+        <form class="form-widget inner-container" @submit.prevent="updateProfile">
+            
+            <div class="form-group">
+                <h3>Avatar</h3>
+                <Avatar v-model:path="avatar_path" @upload="updateProfile" />
             </div>
 
-            <div>
-                <input type="submit" class="button block primary" :value="loading ? 'Loading ...' : 'Update'"
-                    :disabled="loading" />
-            </div>
+            <div class="form-group">
+                <h3>User details</h3>
+            
+                <div>
+                    <label for="email">Email</label>
+                    <input id="email" type="text" :value="user.email" disabled />
+                </div>
+                <div>
+                    <label for="username">Name</label>
+                    <input id="username" type="text" v-model="username" />
+                </div>
+                <div>
+                    <label for="website">Website</label>
+                    <input id="website" type="website" v-model="website" />
+                </div>
 
-            <div>
-                <button class="button block" @click="signOut" :disabled="loading">
-                    Sign Out
-                </button>
+                <div class="form-group-footer">
+                    <button type="submit" class="button block primary" :disabled="loading">
+                        <span v-if="loading">Loading...</span>
+                        <span v-else>Update</span>
+                    </button>
+                </div>
             </div>
         </form>
     </main>

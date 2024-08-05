@@ -9,6 +9,7 @@
             </label>
             <input style="position: absolute; visibility: hidden;" type="file" id="single" accept="image/*"
                 @change="uploadAvatar" :disabled="uploading" />
+            <!-- <button v-if="path" class="button block" @click="clearAvatar">Remove</button> -->
         </div>
     </div>
 </template>
@@ -60,6 +61,15 @@ const uploadAvatar = async (evt) => {
     }
 }
 
+const clearAvatar = async () => {
+    try {
+        await supabase.storage.from("avatars").remove([path.value])
+        emit("update:path", "")
+    } catch (error) {
+        console.error("Error removing image: ", error.message)
+    }
+}
+
 downloadImage()
 
 watch(path, () => {
@@ -68,3 +78,29 @@ watch(path, () => {
     }
 })
 </script>
+
+<style lang="scss" scoped>
+
+@import 'assets/_variables.scss';
+
+.avatar {
+    border-radius: 50%;
+    background-color: $gray-light;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: $spacing-md;
+
+    &.image {
+        border: 1px solid $gray-light;
+    }
+
+    &.no-image {
+        font-size: $font-size-lg;
+        color: $gray-dark;
+    }
+}
+
+</style>
