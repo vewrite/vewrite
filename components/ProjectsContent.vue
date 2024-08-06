@@ -1,6 +1,6 @@
 <template>
   <main id="ProjectsContent">
-    <div class="empty-state" v-if="!projects">
+    <div class="empty-state" v-if="projects.length === 0">
       <img src="/images/projects-empty-state.svg" alt="No projects found" />
       <h3>You haven’t created a project yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
@@ -67,7 +67,10 @@ onMounted(() => {
   .empty-state {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
 
     img {
       width: 200px;
