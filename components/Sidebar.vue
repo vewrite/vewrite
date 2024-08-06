@@ -2,7 +2,7 @@
   <div id="Sidebar">
     <div class="sidebar-header">
       <Logo />
-      <HeaderButtons />
+      <!-- <HeaderButtons /> -->
     </div>
     <div class="sidebar-content">
       <div class="link-group">
@@ -10,13 +10,11 @@
         <router-link to="/" class="link">Projects</router-link>
         <router-link to="/workflows" class="link">Workflows</router-link>
       </div>
-
       <div class="link-group">
         <div class="title">People</div>
         <router-link to="/talent" class="link">Talent</router-link>
         <router-link to="/stakeholders" class="link">Stakeholders</router-link>
       </div>
-
       <div class="link-group">
         <div class="title">Business</div>
         <router-link to="/clients" class="link">Clients</router-link>
@@ -24,7 +22,9 @@
         <router-link to="/invoices" class="link">Invoices</router-link>
         <router-link to="/analytics" class="link">Analytics</router-link>
       </div>
-      
+    </div>
+    <div class="user-section">
+      <router-link class="button" to="/account">Account</router-link>  
     </div>
   </div>
 </template>
@@ -36,6 +36,17 @@
 #Sidebar {
   height: 100%;
   min-width: 340px;
+  transition: min-width 0.3s ease;
+  position: relative;
+  background-color: $white-light;
+
+  @media (max-width: 1024px) {
+    min-width: 260px;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 
   .sidebar-header {
     background-color: $purple;
@@ -54,9 +65,9 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
-
     border-right: 1px solid rgba($black, 0.1);
-    height: calc(100% - 75px);
+    height: calc(100% - 75px - 90px);
+    overflow-y: auto;
 
     .link-group {
       display: flex;
@@ -85,6 +96,23 @@
       &.router-link-exact-active {
         color: $purple;
       }
+    }
+  }
+
+  .user-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-md;
+    border-right: 1px solid rgba($black, 0.1);
+    backdrop-filter: blur(10px);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    .button {
+      width: 100%;
     }
   }
 }
