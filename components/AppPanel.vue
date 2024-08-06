@@ -34,6 +34,7 @@ export default {
     height: 75px;
     width: 100%;
     padding: 0 $spacing-md;
+    position: relative;
 
     .app-panel-header {
       margin:0;
@@ -41,6 +42,10 @@ export default {
       font-size: $font-size-lg;
       font-family: $font-family-secondary;
       font-weight: 400;
+      position: absolute;
+      left:0;
+      right:0;
+      pointer-events: none;
     }
   }
 

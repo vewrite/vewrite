@@ -1,11 +1,10 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <div class="app-panel-header">Projects</div>
-      <router-link to="/projects/create" class="button dark">Create a project</router-link>
+      <div class="app-panel-header">Create a new project</div>
     </template>
     <template v-slot:body>
-      <ProjectsContent />
+      
     </template>
   </AppPanel>
 </template>
