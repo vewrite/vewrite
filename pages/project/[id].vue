@@ -41,6 +41,16 @@
             </table>
           </div>
         </div>
+
+        <div class="form-block">
+          <div class="form-details">
+            <h3>Creator</h3>
+            <p>Who made this?</p>
+          </div>
+          <div class="form-content">
+            <p>{{ creator.username }}</p>
+          </div>
+        </div>
       </div>
     </template>
   </AppPanel>
@@ -61,6 +71,7 @@ const projectId = route.params.id;
 
 // Fetch the project data from supabase
 const project = ref(null);
+const creator = ref(null);
 
 async function getProject(id) {
   try {
@@ -73,6 +84,26 @@ async function getProject(id) {
     if (error) throw error;
 
     project.value = data;
+
+    // Cool, now go get the creator data
+    getCreator(project.value.created_by);
+
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function getCreator(uuid) {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', uuid)
+      .single();
+
+    if (error) throw error;
+
+    creator.value = data;
   } catch (error) {
     alert(error.message);
   }
