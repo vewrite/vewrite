@@ -35,6 +35,10 @@
 </template>
 
 <script setup>
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
@@ -70,6 +74,10 @@ async function createProject() {
     let { error } = await supabase.from('projects').upsert(updates, {
         returning: 'minimal', // Don't return the value after inserting
     })
+
+    // When complete, load /projects
+    router.push('/projects')
+
     if (error) throw error
 
   } catch (error) {

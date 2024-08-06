@@ -1,19 +1,7 @@
 <template>
     <main id="AccountContent">
-        <form class="inner-container" @submit.prevent="updateProfile">
-            
-            <div class="form-block">
-                <div class="form-details">
-                    <!-- <h3>Account</h3>
-                    <p class="details">View and update your account details.</p> -->
-                </div>
-                <div class="form-content">
-                    <button type="submit" class="button block primary" :disabled="loading">
-                        <span v-if="loading">Updating...</span>
-                        <span v-else>Update</span>
-                    </button>
-                </div>
-            </div> 
+        <Loading v-if="loading" />
+        <form class="inner-container" @submit.prevent="updateProfile" v-else>
 
             <div class="form-block">
                 <div class="form-details">
@@ -52,6 +40,18 @@
                 </div>
             </div>
 
+            <div class="form-block">
+                <div class="form-details">
+                    <p class="details">Update your account details.</p>
+                </div>
+                <div class="form-content">
+                    <button type="submit" class="button block primary" :disabled="loading">
+                        <span v-if="loading">Updating...</span>
+                        <span v-else>Update</span>
+                    </button>
+                </div>
+            </div> 
+
         </form>
     </main>
 </template>
@@ -64,8 +64,6 @@ const username = ref('')
 const website = ref('')
 const avatar_path = ref('')
 
-
-loading.value = true
 const user = useSupabaseUser();
 let { data } = await supabase
     .from('profiles')
