@@ -7,15 +7,48 @@
       <button class="button primary">Create a project</button>
     </div>
     <div class="projects-list" v-else>
-
+      <div class="project-card" v-for="project in projects" :key="project.id">
+        <h3>{{ project.id }}</h3>
+        <h3>{{ project.name }}</h3>
+        <p>{{ project.stakeholders }}</p>
+      </div>
     </div>
   </main>
 </template>
 
 <script setup>
+
+import { onMounted } from 'vue'
 import { ref } from 'vue'
 
-const projects = ref(null)
+const projects = ref([]);
+
+// Fetch projects
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+
+const loading = ref(true)
+
+async function fetchProjects() {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('created_by', user.value.id)
+
+  console.log(data)
+
+  if (error) {
+    console.error('Error fetching projects:', error.message)
+    return
+  }
+
+  projects.value = data
+  loading.value = false
+}
+
+onMounted(() => {
+  fetchProjects()
+})
 
 </script>
 
