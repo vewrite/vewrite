@@ -34,11 +34,55 @@ body,
 }
 
 .inner-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+/* Typography */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: $font-family-secondary;
+    font-weight: 500;
+}
+
+h1 {
+    font-size: $font-size-xxl;
+    margin: $spacing-md 0;
+}
+
+h2 {
+    font-size: $font-size-xl;
+    margin: $spacing-md 0;
+}
+
+h3 {
+    font-size: $font-size-lg;
+    margin: 0 0 $spacing-sm 0;
+}
+
+h4 {
+    font-size: $font-size-md;
+    margin: $spacing-md 0;
+}
+
+h5 {
+    font-size: $font-size-sm;
+    margin: $spacing-md 0;
+}
+
+p {
+    margin: 0 0 $spacing-sm 0;
+}
+
+p.details {
+    color: rgba($black, 0.5);
 }
 
 /* Forms */
@@ -47,7 +91,7 @@ label {
     display: block;
     margin: $spacing-md 0 $spacing-xs;
     color: $black;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 input,
@@ -57,7 +101,7 @@ textarea {
     padding: $spacing-xs;
     background-color: var(--custom-bg-color);
     color: var(--custom-color);
-    border-radius: $br-sm;
+    border-radius: $br-md;
     font-size: $font-size-sm;
     font-weight: 400;
     transition: all 0.2s ease;
@@ -84,7 +128,40 @@ textarea {
 }
 
 .form-group {
-    margin: $spacing-sm 0;
+    margin: 0 0 $spacing-sm 0;
+
+    div:first-child label {
+        margin: 0 0 $spacing-xs 0;
+    }
+}
+
+.form-block {
+    margin: 0 0 $spacing-md 0;
+    padding: 0 0 $spacing-md 0;
+    border-bottom: 1px solid rgba($black, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    .form-details {
+        width: 33%;
+    }
+    
+    .form-content {
+        width: 66%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        button {
+            margin: 0 0 0 auto;
+        }
+    }
 }
 
 .form-group-footer {
@@ -100,7 +177,7 @@ button,
     background-color: rgba($purple, 0.1);
     display: inline-block;
     text-align: center;
-    border-radius: $br-sm;
+    border-radius: $br-md;
     padding: $spacing-xs $spacing-sm;
     cursor: pointer;
     text-align: center;

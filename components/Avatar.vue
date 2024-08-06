@@ -1,13 +1,13 @@
 <template>
-    <div>
-        <img v-if="src" :src="src" alt="Avatar" class="avatar image" style="width: 10em; height: 10em;" />
-        <div v-else class="avatar no-image" :style="{ height: size, width: size }" />
+    <div class="user-avatar">
+        <img v-if="src" :src="src" alt="Avatar" :class="['avatar', 'image', size]" />
+        <div v-else class="avatar no-image" :class="size" />
 
-        <div style="width: 10em; position: relative;">
-            <label class="button primary block" for="single">
-                {{ uploading ? "Uploading ..." : "Upload" }}
+        <div>
+            <label class="block" for="single">
+                {{ uploading ? "Uploading ..." : "Select an image" }}
             </label>
-            <input style="position: absolute; visibility: hidden;" type="file" id="single" accept="image/*"
+            <input type="file" id="single" accept="image/*"
                 @change="uploadAvatar" :disabled="uploading" />
             <!-- <button v-if="path" class="button block" @click="clearAvatar">Remove</button> -->
         </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-const props = defineProps(['path'])
+const props = defineProps(['path', 'size'])
 const { path } = toRefs(props)
 
 const emit = defineEmits(['update:path', 'upload'])
@@ -83,6 +83,27 @@ watch(path, () => {
 
 @import 'assets/_variables.scss';
 
+.user-avatar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: $spacing-sm;
+    width: 100%;
+
+    div {
+        width: 100%;
+    }
+
+    label {
+        margin: $spacing-xs 0 $spacing-xs 0;
+    }
+
+    input {
+        width: 100%;
+    }
+}
+
 .avatar {
     border-radius: 50%;
     background-color: $gray-light;
@@ -91,7 +112,24 @@ watch(path, () => {
     align-items: center;
     overflow: hidden;
     position: relative;
-    margin-bottom: $spacing-md;
+
+    &.small {
+        width: 40px;
+        height: 40px;
+        border-radius: $br-sm;
+    }
+
+    &.medium {
+        width: 80px;
+        height: 80px;
+        border-radius: $br-md;
+    }
+
+    &.large {
+        width: 120px;
+        height: 120px;
+        border-radius: $br-lg;
+    }
 
     &.image {
         border: 1px solid $gray-light;

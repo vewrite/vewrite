@@ -1,35 +1,57 @@
 <template>
     <main id="AccountContent">
-        <form class="form-widget inner-container" @submit.prevent="updateProfile">
+        <form class="inner-container" @submit.prevent="updateProfile">
             
-            <div class="form-group">
-                <h3>Avatar</h3>
-                <Avatar v-model:path="avatar_path" @upload="updateProfile" />
-            </div>
-
-            <div class="form-group">
-                <h3>User details</h3>
-            
-                <div>
-                    <label for="email">Email</label>
-                    <input id="email" type="text" :value="user.email" disabled />
+            <div class="form-block">
+                <div class="form-details">
+                    <!-- <h3>Account</h3>
+                    <p class="details">View and update your account details.</p> -->
                 </div>
-                <div>
-                    <label for="username">Name</label>
-                    <input id="username" type="text" v-model="username" />
-                </div>
-                <div>
-                    <label for="website">Website</label>
-                    <input id="website" type="website" v-model="website" />
-                </div>
-
-                <div class="form-group-footer">
+                <div class="form-content">
                     <button type="submit" class="button block primary" :disabled="loading">
-                        <span v-if="loading">Loading...</span>
+                        <span v-if="loading">Updating...</span>
                         <span v-else>Update</span>
                     </button>
                 </div>
+            </div> 
+
+            <div class="form-block">
+                <div class="form-details">
+                    <h3>Avatar</h3>
+                    <p class="details">Manage your profile picture.</p>
+                </div>
+                <div class="form-content">
+                    <Avatar size="medium" v-model:path="avatar_path" @upload="updateProfile" />
+                </div>
             </div>
+
+            <div class="form-block">
+                <div class="form-details">
+                    <h3>User details</h3>
+                    <p class="details">Update your user details.</p>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <div>
+                            <label for="email">Email</label>
+                            <input id="email" type="text" :value="user.email" disabled />
+                        </div>
+                        <div>
+                            <label for="username">Name</label>
+                            <input id="username" type="text" v-model="username" />
+                        </div>
+                        <div>
+                            <label for="website">Website</label>
+                            <input id="website" type="website" v-model="website" />
+                        </div>
+
+                        <div class="form-group-footer">
+                            
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+
         </form>
     </main>
 </template>
