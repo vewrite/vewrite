@@ -53,7 +53,7 @@ export default {
       flex-direction: row;
       align-items: center;
       justify-content: flex-end;
-      gap: $spacing-xs;
+      gap: $spacing-md;
     }
   }
 
