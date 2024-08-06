@@ -7,11 +7,11 @@
       <button class="button primary">Create a project</button>
     </div>
     <div class="projects-list" v-else>
-      <div class="project-card" v-for="project in projects" :key="project.id">
+      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in projects" :key="project.id">
         <h3>{{ project.id }}</h3>
         <h3>{{ project.name }}</h3>
         <p>{{ project.stakeholders }}</p>
-      </div>
+      </router-link>
     </div>
   </main>
 </template>
@@ -59,8 +59,8 @@ onMounted(() => {
 #ProjectsContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   height: 100%;
   padding: $spacing-md;
 
@@ -89,6 +89,38 @@ onMounted(() => {
 
     .button {
       width: 200px;
+    }
+  }
+
+  .projects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-md;
+
+    .project-card {
+      padding: $spacing-md;
+      background-color: $white;
+      border-radius: $br-md;
+      border: 1px solid rgba($black, 0.1);
+      transition: border 0.18s ease;
+      text-decoration: none;
+
+      &:hover {
+        border: 1px solid rgba($purple, 1);
+      }
+
+      h3 {
+        font-size: $font-size-lg;
+        font-family: $font-family-secondary;
+        font-weight: 500;
+        margin: 0 0 $spacing-sm;
+      }
+
+      p {
+        font-size: $font-size-sm;
+        font-weight: 400;
+        color: $gray-dark;
+      }
     }
   }
 }
