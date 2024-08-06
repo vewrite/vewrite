@@ -13,7 +13,7 @@
 
       <div class="link-group">
         <div class="title">People</div>
-        <router-link to="/people" class="link">Talent</router-link>
+        <router-link to="/talent" class="link">Talent</router-link>
         <router-link to="/stakeholders" class="link">Stakeholders</router-link>
       </div>
 
