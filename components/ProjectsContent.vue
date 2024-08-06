@@ -1,6 +1,7 @@
 <template>
   <main id="ProjectsContent">
-    <div class="empty-state" v-if="projects.length === 0">
+    <Loading v-if="loading" />
+    <div class="empty-state" v-if="projects.length === 0 && !loading">
       <img src="/images/projects-empty-state.svg" alt="No projects found" />
       <h3>You haven’t created a project yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
