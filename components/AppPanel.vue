@@ -47,6 +47,14 @@ export default {
       right:0;
       pointer-events: none;
     }
+
+    .app-panel-header-buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      gap: $spacing-xs;
+    }
   }
 
   .body {

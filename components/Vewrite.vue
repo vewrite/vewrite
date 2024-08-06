@@ -2,6 +2,7 @@
   <div id="vewrite">
     <Sidebar />
     <NuxtPage />
+    <!-- <Modal /> -->
   </div>
 </template>
 
