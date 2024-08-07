@@ -47,7 +47,7 @@ const loading = ref(false)
 const project = reactive({
   name: 'Name your project',
   status: 0,
-  company: 0,
+  client: 0,
   workflow: 0,
   created_at: new Date(),
   updated_at: new Date(),
@@ -63,7 +63,7 @@ async function createProject() {
     const updates = {
       name: project.name,
       status: project.status,
-      company: project.company,
+      company: project.client,
       workflow: project.workflow,
       created_at: project.created_at,
       updated_at: project.updated_at,
