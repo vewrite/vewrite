@@ -24,8 +24,11 @@
     </div>
     <div class="user-section">
       <router-link to="/account" class="button">
-        <Avatar :uuid="uuid" to="/account" />
-        {{ user.username }}
+        <div class="user-identity">
+          <Avatar :uuid="uuid" to="/account" />
+          <p>{{ user.username }}</p>
+        </div>
+        <Icon type="rightArrow" />
       </router-link>
     </div>
   </div>
@@ -121,6 +124,20 @@ const uuid = ref(user.value?.id);
 
     .button {
       width: 100%;
+    }
+
+    p {
+      font-size: $font-size-md;
+      font-family: $font-family-secondary;
+      font-weight: 400;
+      color: $black;
+      margin:0 0 0 $spacing-sm;
+    }
+
+    .user-identity {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
   }
 }

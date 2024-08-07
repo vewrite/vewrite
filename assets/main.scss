@@ -199,7 +199,6 @@ button,
     color: $blue;
     border: 1px solid rgba($purple, 0.1);
     background-color: rgba($purple, 0);
-    display: inline-block;
     text-align: center;
     text-decoration: none;
     border-radius: $br-md;
@@ -212,7 +211,7 @@ button,
     font-family: $font-family-main;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: $spacing-sm;
     align-items: center;
 
