@@ -1,22 +1,23 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <div></div>
-      <div class="app-panel-header">Clients</div>
-      <router-link to="/clients/create" class="button dark">Create a client</router-link>
+      <router-link to="/clients/" class="button dark">Back</router-link>
+      <div class="app-panel-header">Create a new client</div>
     </template>
     <template v-slot:body>
-      <ClientsList />
+      <NewClient />
     </template>
   </AppPanel>
 </template>
 
 <script>
 import AppPanel from '~/components/AppPanel.vue';
+import NewClient from '~/components/Clients/NewClient.vue';
 
 export default {
   components: {
-    AppPanel
+    AppPanel,
+    NewClient
   }
 }
 </script>

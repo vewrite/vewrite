@@ -1,11 +1,11 @@
 <template>
   <main id="Clients">
-    <Loading v-if="loading" />
+    <!-- <Loading v-if="loading" /> -->
     <div class="empty-state" v-if="clients.length === 0 && !loading">
       <img src="/images/clients-empty-state.svg" alt="No clients found" />
       <h3>You haven’t created a client yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
-      <button class="button primary">Create a client</button>
+      <router-link to="clients/create" class="button primary">Create a client</router-link>
     </div>
   </main>
 </template>
