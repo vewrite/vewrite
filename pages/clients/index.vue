@@ -4,7 +4,7 @@
       <div class="app-panel-header">Clients</div>
     </template>
     <template v-slot:body>
-      
+      <ClientsList />
     </template>
   </AppPanel>
 </template>

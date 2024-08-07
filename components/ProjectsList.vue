@@ -1,5 +1,5 @@
 <template>
-  <main id="ProjectsContent">
+  <main id="ProjectsList">
     <Loading v-if="loading" />
     <div class="empty-state" v-if="projects.length === 0 && !loading">
       <img src="/images/projects-empty-state.svg" alt="No projects found" />
@@ -57,7 +57,7 @@ onMounted(() => {
 
 @import 'assets/_variables.scss';
 
-#ProjectsContent {
+#ProjectsList {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -91,9 +91,6 @@ onMounted(() => {
       color: $gray-dark;
     }
 
-    .button {
-      width: 200px;
-    }
   }
 
   .projects-list {

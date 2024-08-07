@@ -6,7 +6,7 @@
       <router-link to="/projects/create" class="button dark">Create a project</router-link>
     </template>
     <template v-slot:body>
-      <ProjectsContent />
+      <ProjectsList />
     </template>
   </AppPanel>
 </template>

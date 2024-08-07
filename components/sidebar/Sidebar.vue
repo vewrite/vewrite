@@ -6,20 +6,20 @@
     <div class="sidebar-content">
       <div class="link-group">
         <div class="title">Work</div>
-        <router-link to="/" class="link">Projects</router-link>
-        <router-link to="/workflows" class="link">Workflows</router-link>
+        <router-link to="/" class="link"><Icon type="folder" /> Projects</router-link>
+        <router-link to="/workflows" class="link"><Icon type="workflow" /> Workflows</router-link>
       </div>
       <div class="link-group">
         <div class="title">People</div>
-        <router-link to="/talent" class="link">Talent</router-link>
-        <router-link to="/stakeholders" class="link">Stakeholders</router-link>
+        <router-link to="/talent" class="link"><Icon type="star" /> Talent</router-link>
+        <router-link to="/stakeholders" class="link"><Icon type="approve" /> Stakeholders</router-link>
       </div>
       <div class="link-group">
         <div class="title">Business</div>
-        <router-link to="/clients" class="link">Clients</router-link>
-        <router-link to="/payments" class="link">Payments</router-link>
-        <router-link to="/invoices" class="link">Invoices</router-link>
-        <router-link to="/analytics" class="link">Analytics</router-link>
+        <router-link to="/clients" class="link"><Icon type="client" /> Clients</router-link>
+        <router-link to="/payments" class="link"><Icon type="wallet" /> Payments</router-link>
+        <router-link to="/invoices" class="link"><Icon type="doc" /> Invoices</router-link>
+        <router-link to="/analytics" class="link"><Icon type="chart" /> Analytics</router-link>
       </div>
     </div>
     <div class="user-section">
@@ -83,8 +83,30 @@ const uuid = ref(user.value?.id);
     .link-group {
       display: flex;
       flex-direction: column;
-      gap: $spacing-sm;
+      gap: $spacing-xxs;
       margin-bottom: $spacing-lg;
+
+      a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-xs;
+        padding: $spacing-xs;
+        border-radius: $br-md;
+        transition: background-color 0.18s ease;
+        color: $black;
+        font-size: $font-size-md;
+        font-family: $font-family-secondary;
+        font-weight: 400;
+        text-decoration: none;
+
+        &:hover,
+        &.router-link-active,
+        &.router-link-exact-active {
+          background-color: rgba($purple, 0.05);
+          color: $purple;
+        }
+      }
 
       .title {
         font-size: $font-size-sm;
@@ -92,20 +114,6 @@ const uuid = ref(user.value?.id);
         font-weight: 500;
         text-transform: uppercase;
         color: $gray-dark;
-      }
-    }
-
-    .link {
-      color: $black;
-      font-size: $font-size-lg;
-      font-family: $font-family-secondary;
-      font-weight: 400;
-      text-decoration: none;
-
-      &:hover,
-      &.router-link-active,
-      &.router-link-exact-active {
-        color: $purple;
       }
     }
   }

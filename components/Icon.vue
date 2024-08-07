@@ -21,8 +21,40 @@ defineProps({
   background-repeat: no-repeat;
   background-position: center;
 
+  &.approve {
+    background-image: url('/icons/approve.svg');
+  }
+
+  &.chart {
+    background-image: url('/icons/chart.svg');
+  }
+
+  &.client {
+    background-image: url('/icons/client.svg');
+  }
+
+  &.doc {
+    background-image: url('/icons/doc.svg');
+  }
+
+  &.folder {
+    background-image: url('/icons/folder.svg');
+  }
+
   &.rightArrow {
     background-image: url('/icons/right-arrow.svg');
+  }
+
+  &.star {
+    background-image: url('/icons/star.svg');
+  }
+
+  &.wallet {
+    background-image: url('/icons/wallet.svg');
+  }
+
+  &.workflow {
+    background-image: url('/icons/workflow.svg');
   }
 }
 
