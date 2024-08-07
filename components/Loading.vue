@@ -27,8 +27,8 @@ const { path } = toRefs(props)
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 4px solid $purple;
-    border-top-color: transparent;
+    border: 4px solid rgba($purple, .1);
+    border-top-color: $purple;
     animation: spin .5s linear infinite;
     display: block;
     padding: 0;
@@ -36,15 +36,15 @@ const { path } = toRefs(props)
     &.small {
       width: 20px;
       height: 20px;
-      border: 2px solid $purple;
-      border-top-color: transparent;
+      border: 2px solid rgba($purple, .1);
+      border-top-color: $purple;
     }
 
     &.header {
       width: 20px;
       height: 20px;
-      border: 2px solid $white;
-      border-top-color: transparent;
+      border: 4px solid rgba($white, .1);
+      border-top-color: $white;
     }
   }
 

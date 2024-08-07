@@ -26,6 +26,7 @@ const fetchAvatar = async () => {
 
     if (error) throw error
 
+    // download the avatar image
     user.value = data[0]
     downloadImage(user.value.avatar_url)
 

@@ -2,7 +2,6 @@
   <div id="Sidebar">
     <div class="sidebar-header">
       <Logo />
-      <!-- <HeaderButtons /> -->
     </div>
     <div class="sidebar-content">
       <div class="link-group">
@@ -24,16 +23,17 @@
       </div>
     </div>
     <div class="user-section">
-      <Avatar :uuid="uuid" to="/account" />
+      <router-link to="/account" class="button">
+        <Avatar :uuid="uuid" to="/account" />
+        {{ user.username }}
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup>
 
-const supabase = useSupabaseClient();
 const user = useSupabaseUser();
-
 const uuid = ref(user.value?.id);
 
 </script>

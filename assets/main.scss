@@ -197,18 +197,28 @@ textarea {
 button,
 .button {
     color: $blue;
-    border: 1px solid rgba($purple, 0.3);
-    background-color: rgba($purple, 0.1);
+    border: 1px solid rgba($purple, 0.1);
+    background-color: rgba($purple, 0);
     display: inline-block;
     text-align: center;
+    text-decoration: none;
     border-radius: $br-md;
     padding: $spacing-xs $spacing-sm;
     cursor: pointer;
     text-align: center;
-    font-size: $font-size-xs;
+    font-size: $font-size-sm;
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: $spacing-sm;
+    align-items: center;
+
+    &:hover {
+        border: 1px solid rgba($purple, 1);
+    }
 }
 
 button.primary,

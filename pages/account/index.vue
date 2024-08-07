@@ -45,4 +45,4 @@ export default {
 
 <style scoped>
 /* Your styles here */
-</style>
+</style>~~/components/user/AccountContent.vue
