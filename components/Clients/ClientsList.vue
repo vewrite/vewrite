@@ -7,12 +7,46 @@
       <p>That’s ok, It’s easy and we’ll do it together</p>
       <router-link to="clients/create" class="button primary">Create a client</router-link>
     </div>
+    <div class="clients-list" v-else>
+      <router-link :to="'/client/' + client.id" class="client-card" v-for="client in clients" :key="client.id">
+        <h3>{{ client.name }}</h3>
+      </router-link>
+    </div>
   </main>
 </template>
 
 <script setup>
 
+import { onMounted, ref } from 'vue'
+
 const clients = ref([]);
+
+// Fetch clients
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+
+const loading = ref(true)
+
+async function fetchClients() {
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .eq('created_by', user.value.id)
+
+  console.log(data)
+
+  if (error) {
+    console.error('Error fetching clients:', error.message)
+    return
+  }
+
+  clients.value = data
+  loading.value = false
+}
+
+onMounted(() => {
+  fetchClients()
+})
 
 </script>
 

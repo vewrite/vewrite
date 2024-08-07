@@ -61,13 +61,14 @@ const uuid = ref(user.value?.id);
 
   .sidebar-header {
     background-color: $purple;
+    background: linear-gradient(130.9deg, #540095 -13.18%, $purple 47.75%);
     color: white;
     padding: 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-right: 1px solid rgba($purple-dark, 0.9);
+    border-right: 1px solid rgba($purple-light, 1);
     height: 75px;
   }
 
@@ -84,7 +85,7 @@ const uuid = ref(user.value?.id);
       display: flex;
       flex-direction: column;
       gap: $spacing-xxs;
-      margin-bottom: $spacing-lg;
+      margin-bottom: $spacing-md;
 
       a {
         display: flex;
@@ -109,11 +110,12 @@ const uuid = ref(user.value?.id);
       }
 
       .title {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-family: $font-family-main;
-        font-weight: 500;
+        font-weight: 600;
         text-transform: uppercase;
         color: $gray-dark;
+        margin-bottom: $spacing-xs;
       }
     }
   }

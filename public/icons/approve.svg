@@ -1,11 +1,11 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3 10L5.23621 10.5436C5.68445 10.6526 6 11.054 6 11.5153V16.6764C6 17.1683 5.64231 17.5871 5.1565 17.6641L3.03672 18" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-<path d="M8 11L10.3383 10.0953C11.5755 9.61652 12.4949 8.55551 12.7927 7.26273L13.3657 4.77551C13.4703 4.3216 13.8744 4 14.3402 4H14.3883C14.8529 4 15.2563 4.31992 15.3621 4.77227L15.5467 5.56157C15.843 6.82873 15.7803 8.15342 15.3655 9.3869L15.1815 9.93404" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+<path d="M3 10L6.17936 10.5797C6.65463 10.6663 7 11.0803 7 11.5634V16.6423C7 17.1489 6.62111 17.5755 6.11801 17.6353L3.04896 18" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+<path d="M9 11L10.9189 9.72077C11.6215 9.2523 12.1579 8.57345 12.4512 7.78147L13.6224 4.61836C13.76 4.24671 14.1144 4 14.5107 4V4C14.9607 4 15.3485 4.31654 15.4388 4.75737L15.4538 4.83112C15.8051 6.54767 15.4999 8.33354 14.5984 9.83597L14.5 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
 <g filter="url(#filter0_b_108_119)">
-<path d="M16.5 10H19.9996C20.7133 10 21.1973 10.7261 20.9226 11.3848L18.2565 17.7796C18.1012 18.1521 17.7371 18.3948 17.3335 18.3948H9.70592C8.96417 18.3948 8.28335 17.9843 7.93714 17.3283L7.5 16.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+<path d="M14.5 10H20.2338C20.8798 10 21.3563 10.6033 21.2065 11.2318L19.691 17.5932C19.5801 18.0587 19.1548 18.3804 18.6767 18.3606L10.7795 18.0324C10.2782 18.0116 9.80309 17.8031 9.44833 17.4483L8.5 16.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
 </g>
 <defs>
-<filter id="filter0_b_108_119" x="2.99989" y="5.5" width="22.5013" height="17.3948" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_b_108_119" x="4" y="5.5" width="21.7345" height="17.3615" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feGaussianBlur in="BackgroundImageFix" stdDeviation="2"/>
 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_108_119"/>
