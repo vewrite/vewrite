@@ -22,7 +22,6 @@ const { path } = toRefs(props)
   align-items: center;
   height: 100%;
   width: 100%;
-  padding: $spacing-md;
   
   .spinner {
     width: 40px;
@@ -33,6 +32,13 @@ const { path } = toRefs(props)
     animation: spin .5s linear infinite;
     display: block;
     padding: 0;
+
+    &.small {
+      width: 20px;
+      height: 20px;
+      border: 2px solid $purple;
+      border-top-color: transparent;
+    }
 
     &.header {
       width: 20px;

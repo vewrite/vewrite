@@ -1,7 +1,7 @@
 <template>
   <router-link to="/" class="user-avatar">
-    <Loading v-if="loading" />
-    <img :src="src" alt="Avatar" v-else />
+    <Loading v-if="loading" type="small" />
+    <img :src="src" alt="" v-else />
   </router-link>
 </template>
 
@@ -70,11 +70,19 @@ watch(path, () => {
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
+  font-size: 0;
+  border: 1px solid $gray-light;
 
   img {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: $gray-light;
+    border: 0;
+    outline: 0;
+    margin: -1px;
     object-fit: cover;
+    text-indent: -9999px;
   }
 }
 
