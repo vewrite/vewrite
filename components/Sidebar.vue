@@ -24,10 +24,19 @@
       </div>
     </div>
     <div class="user-section">
-      <router-link class="button" to="/account">Account</router-link>  
+      <Avatar :uuid="uuid" to="/account" />
     </div>
   </div>
 </template>
+
+<script setup>
+
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
+const uuid = ref(user.value?.id);
+
+</script>
 
 <style lang="scss" scoped>
 
@@ -38,7 +47,6 @@
   min-width: 340px;
   transition: min-width 0.3s ease;
   position: relative;
-  background-color: $white-light;
 
   @media (max-width: 1024px) {
     min-width: 260px;

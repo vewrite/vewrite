@@ -1,35 +1,46 @@
 <template>
-    <div class="user-avatar">
-        <img v-if="src" :src="src" alt="Avatar" :class="['avatar', 'image', size]" />
-        <div v-else class="avatar no-image" :class="size" />
-
-        <div>
-            <label class="block" for="single">
-                {{ uploading ? "Uploading ..." : "Select an image" }}
-            </label>
-            <input type="file" id="single" accept="image/*"
-                @change="uploadAvatar" :disabled="uploading" />
-            <!-- <button v-if="path" class="button block" @click="clearAvatar">Remove</button> -->
-        </div>
-    </div>
+  <router-link to="/" class="user-avatar">
+    <Loading v-if="loading" />
+    <img :src="src" alt="Avatar" v-else />
+  </router-link>
 </template>
 
 <script setup>
-const props = defineProps(['path', 'size'])
-const { path } = toRefs(props)
 
-const emit = defineEmits(['update:path', 'upload'])
-
+const props = defineProps(['uuid', 'size'])
 const supabase = useSupabaseClient()
-
-const uploading = ref(false)
+const user = useSupabaseUser()
+const loading = ref(false)
 const src = ref("")
-const files = ref()
-const downloadImage = async () => {
+const path = ref("")
+
+const fetchAvatar = async () => {
+  try {
+    loading.value = true
+    // load the user via the uuid prop
+    // then go to the profiles table and get the 'avatar_url' for that user
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', props.uuid)
+
+    if (error) throw error
+
+    user.value = data[0]
+    downloadImage(user.value.avatar_url)
+
+  } catch (error) {
+    console.error("Error downloading image: ", error.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+const downloadImage = async (path) => {
     try {
         const { data, error } = await supabase.storage
             .from("avatars")
-            .download(path.value)
+            .download(path)
         if (error) throw error
         src.value = URL.createObjectURL(data)
     } catch (error) {
@@ -37,46 +48,16 @@ const downloadImage = async () => {
     }
 }
 
-const uploadAvatar = async (evt) => {
-    files.value = evt.target.files
-    try {
-        uploading.value = true
-        if (!files.value || files.value.length === 0) {
-            throw new Error("You must select an image to upload.")
-        }
-        const file = files.value[0]
-        const fileExt = file.name.split(".").pop()
-        const fileName = `${Math.random()}.${fileExt}`
-        const filePath = `${fileName}`
-        let { error: uploadError } = await supabase.storage
-            .from("avatars")
-            .upload(filePath, file)
-        if (uploadError) throw uploadError
-        emit("update:path", filePath)
-        emit("upload")
-    } catch (error) {
-        alert(error.message)
-    } finally {
-        uploading.value = false
-    }
-}
-
-const clearAvatar = async () => {
-    try {
-        await supabase.storage.from("avatars").remove([path.value])
-        emit("update:path", "")
-    } catch (error) {
-        console.error("Error removing image: ", error.message)
-    }
-}
-
-downloadImage()
+onMounted(() => {
+  fetchAvatar();
+});
 
 watch(path, () => {
     if (path.value) {
         downloadImage()
     }
 })
+
 </script>
 
 <style lang="scss" scoped>
@@ -84,61 +65,17 @@ watch(path, () => {
 @import 'assets/_variables.scss';
 
 .user-avatar {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: $spacing-sm;
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
     width: 100%;
-
-    div {
-        width: 100%;
-    }
-
-    label {
-        margin: $spacing-xs 0 $spacing-xs 0;
-    }
-
-    input {
-        width: 100%;
-    }
-}
-
-.avatar {
-    border-radius: 50%;
-    background-color: $gray-light;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-
-    &.small {
-        width: 40px;
-        height: 40px;
-        border-radius: $br-sm;
-    }
-
-    &.medium {
-        width: 80px;
-        height: 80px;
-        border-radius: $br-md;
-    }
-
-    &.large {
-        width: 120px;
-        height: 120px;
-        border-radius: $br-lg;
-    }
-
-    &.image {
-        border: 1px solid $gray-light;
-    }
-
-    &.no-image {
-        font-size: $font-size-lg;
-        color: $gray-dark;
-    }
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 </style>

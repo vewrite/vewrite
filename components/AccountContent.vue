@@ -9,7 +9,7 @@
                     <p class="details">Manage your profile picture.</p>
                 </div>
                 <div class="form-content">
-                    <Avatar size="medium" v-model:path="avatar_path" @upload="updateProfile" />
+                    <AvatarManager size="medium" v-model:path="avatar_path" @upload="updateProfile" />
                 </div>
             </div>
 
