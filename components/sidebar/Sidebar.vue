@@ -77,7 +77,7 @@ const uuid = ref(user.value?.id);
     flex-direction: column;
     gap: $spacing-sm;
     border-right: 1px solid rgba($black, 0.1);
-    height: calc(100% - 75px - 90px);
+    height: calc(100% - 75px - 116px);
     overflow-y: auto;
 
     .link-group {
@@ -129,6 +129,7 @@ const uuid = ref(user.value?.id);
     position: absolute;
     bottom: 0;
     width: 100%;
+    height: 116px;
 
     .button {
       width: 100%;
