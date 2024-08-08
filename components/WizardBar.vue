@@ -2,7 +2,7 @@
   <aside id="WizardBar">
     <button class="" @click="prevStep">Back</button>
     <div class="wizard-steps">
-      <!-- {{ useWizardBar.currentStep }} -->
+      {{ wizardBar.currentStep }}
     </div>
     <button class="primary" @click="nextStep">Next</button>
   </aside>
@@ -10,11 +10,11 @@
 
 <script setup>
 
-// import { useWizardBar } from '@/stores/wizardbar'
+import { useWizardBar } from '@/stores/wizardbar'
 
-// const wizardBar = useWizardBar()
+const wizardBar = useWizardBar()
 
-// const { nextStep, prevStep } = wizardBar
+const { nextStep, prevStep } = wizardBar
 
 </script>
 

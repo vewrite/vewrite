@@ -8,11 +8,13 @@
   },
   "devDependencies": {
     "@nuxtjs/supabase": "^0.1.23",
-    "nuxt": "3.0.0-rc.8"
+    "nuxt": "^3.11.2"
   },
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/style-resources": "^1.2.2",
+    "@pinia/nuxt": "^0.5.3",
+    "pinia": "^2.2.1",
     "sass": "^1.77.8"
   },
   "overrides": {

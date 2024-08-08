@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="form-block">
+        <div class="form-block" v-if="creator && !loading">
           <div class="form-details">
             <h3>Creator</h3>
             <p>Who made this?</p>
