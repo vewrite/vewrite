@@ -63,7 +63,7 @@ async function createProject() {
     const updates = {
       name: project.name,
       status: project.status,
-      company: project.client,
+      client: project.client,
       workflow: project.workflow,
       created_at: project.created_at,
       updated_at: project.updated_at,

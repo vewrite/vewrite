@@ -9,7 +9,7 @@
                     <p class="details">Manage your profile picture.</p>
                 </div>
                 <div class="form-content">
-                    <AvatarManager size="medium" v-model:path="avatar_path" @upload="updateProfile" />
+                    <ImageManager size="medium" table="avatars" v-model:path="avatar_path" @upload="updateProfile" />
                 </div>
             </div>
 
@@ -57,14 +57,15 @@
 </template>
 
 <script setup>
+
 const supabase = useSupabaseClient()
+const user = useSupabaseUser();
 
 const loading = ref(true)
 const username = ref('')
 const website = ref('')
 const avatar_path = ref('')
 
-const user = useSupabaseUser();
 let { data } = await supabase
     .from('profiles')
     .select(`username, website, avatar_url`)
