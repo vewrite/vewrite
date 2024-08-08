@@ -119,7 +119,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
     border-radius: 5px;
     border: 1px solid rgba($blue, 0.3);
     padding: $spacing-xs;
@@ -133,16 +134,28 @@ textarea {
     width:  100%;
 }
 
+    select {
+        -moz-appearance:none;
+        -webkit-appearance:none;
+        appearance:none;
+        background-image: url('/icons/down-arrow.svg');
+        background-repeat: no-repeat;
+        background-position: right .5em top 50%, 0 0;
+    }
+
 input:focus,
-textarea:focus {
-    border: 1px solid rgba($blue, 0.9);
-    background-color: rgba($blue, 0.1);
+textarea:focus,
+select:focus,
+input:hover,
+textarea:hover,
+select:hover {
+    border: 1px solid rgba($purple, 0.9);
     outline: none;
 }
 
 input[disabled] {
     color: rgba($black, 0.65);
-    background-color: rgba($black, 0.05);
+    background-color: rgba($orange, 0.05);
     cursor: not-allowed;
 }
 

@@ -4,7 +4,7 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/supabase',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
   ],
   css: [
     '@/assets/main.scss',

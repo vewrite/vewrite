@@ -5,10 +5,7 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-
-      <!-- {{ clients }} -->
-
-      <form class="inner-container" @submit.prevent="createProject">
+      <form class="inner-container" @submit.prevent="createProject" v-else>
 
         <div class="form-block">
             <div class="form-details">
@@ -23,7 +20,6 @@
                 </div>
                 <div>
                     <label for="status">Status</label>
-                    <!-- <input v-model="project.status" id="status" type="text" /> -->
                     <select v-model="project.status" id="status">
                       <option value="0">Not started</option>
                       <option value="1">Active</option>
@@ -51,6 +47,8 @@
         </div>
         
       </form>
+
+      <WizardBar v-if="!loading" />
     </template>
   </AppPanel>
 </template>
@@ -64,7 +62,7 @@ const router = useRouter();
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
-const loading = ref(false)
+const loading = ref(true)
 
 const project = reactive({
   name: 'Name your project',
