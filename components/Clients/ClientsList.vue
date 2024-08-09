@@ -26,16 +26,10 @@
 
 import { onMounted, ref } from 'vue'
 
-const clients = ref([]);
-
 // Fetch clients
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-
-// Define the base URL of your Supabase bucket
-const bucketUrl = 'https://yjminriwrqtsyzafsfsj.supabase.co/storage/v1/object/sign/logos/';
-
-
+const clients = ref([])
 const loading = ref(true)
 
 async function fetchClients() {
