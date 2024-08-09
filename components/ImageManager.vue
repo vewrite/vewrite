@@ -92,11 +92,7 @@ watch(path, () => {
   justify-content: flex-start;
   gap: $spacing-sm;
   width: 100%;
-
-  div {
-      width: 100%;
-  }
-
+  
   label {
       margin: $spacing-xs 0 $spacing-xs 0;
   }

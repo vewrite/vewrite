@@ -9,6 +9,7 @@
     </div>
     <div class="clients-list" v-else>
       <router-link :to="'/client/' + client.id" class="client-card" v-for="client in clients" :key="client.id">
+        <img :src="client.logo_url" alt="Client avatar" />
         <h3>{{ client.name }}</h3>
       </router-link>
     </div>
@@ -25,6 +26,10 @@ const clients = ref([]);
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
+// Define the base URL of your Supabase bucket
+const bucketUrl = 'https://yjminriwrqtsyzafsfsj.supabase.co/storage/v1/object/sign/logos/';
+
+
 const loading = ref(true)
 
 async function fetchClients() {
@@ -38,8 +43,39 @@ async function fetchClients() {
     return
   }
 
+  // add the clients to the clients ref
   clients.value = data
+
+  // Add the clients to the clients ref
+  clients.value = await Promise.all(data.map(async client => {
+    const logoBlob = await downloadImage(client.logo_url);
+    return {
+      ...client,
+      logo_url: URL.createObjectURL(logoBlob)
+    };
+  }));
+
   loading.value = false
+}
+
+// Method to construct the full URL for the avatar
+// function getAvatarUrl(filename) {
+//   downloadImage()
+  
+//   return `${bucketUrl}${filename}`;
+// }
+
+const downloadImage = async (path) => {
+  try {
+    const { data, error } = await supabase.storage
+          .from('logos')
+          .download(path)
+      if (error) throw error
+      // console.log(data)
+      return data
+  } catch (error) {
+      console.error("Error downloading image: ", error.message)
+  }
 }
 
 onMounted(() => {
