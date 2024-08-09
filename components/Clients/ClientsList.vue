@@ -33,8 +33,6 @@ async function fetchClients() {
     .select('*')
     .eq('created_by', user.value.id)
 
-  console.log(data)
-
   if (error) {
     console.error('Error fetching clients:', error.message)
     return

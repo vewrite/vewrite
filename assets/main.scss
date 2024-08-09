@@ -86,6 +86,15 @@ p.details {
     color: rgba($black, 0.5);
 }
 
+pre {
+    background-color: rgba($black, 0.1);
+    padding: $spacing-sm;
+    margin: 0 0 $spacing-md 0;
+    overflow-x: auto;
+    max-height: 400px;
+    font-size: $font-size-xs;
+}
+
 /* Table */
 
 table {
@@ -166,6 +175,11 @@ textarea {
 
 .form-group {
     margin: 0 0 $spacing-sm 0;
+    position: relative;
+
+    div {
+        position: relative;
+    }
 
     div:first-child label {
         margin: 0 0 $spacing-xs 0;
@@ -203,6 +217,19 @@ textarea {
 
 .form-group-footer {
     padding: $spacing-md 0;
+}
+
+.form-error {
+    color: $red;
+    background-color: rgba($red, 0.1);
+    padding: $spacing-xxs;
+    border-radius: $br-md;
+    font-size: $font-size-xs;
+    margin: -$spacing-xs 0;
+    display: inline-block;
+    position: absolute;
+    top:0;
+    right:0;
 }
 
 /* Button */

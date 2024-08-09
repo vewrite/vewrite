@@ -4,6 +4,8 @@
       <div class="app-panel-header">Create a new project</div>
     </template>
     <template v-slot:body>
+      <!-- <pre>{{ $v }}</pre> -->
+
       <Loading v-if="loading" />
       <form class="inner-container" @submit.prevent="createProject" v-else>
 
@@ -16,7 +18,8 @@
               <div class="form-group">
                 <div>
                     <label for="name">Name</label>
-                    <input v-model="project.name" id="name" type="text" />
+                    <input v-model="project.name" id="name" type="text" placeholder="Name your project"  />
+                    <span class="form-error" v-if="$v.$errors.length !== 0 && $v.project.name.required">Name is required</span>
                 </div>
                 <div>
                     <label for="status">Status</label>
@@ -25,6 +28,7 @@
                       <option value="1">Active</option>
                       <option value="2">Archived</option>
                     </select>
+                    <span v-if="!$v.project.status.required">Status is required</span>
                 </div>
 
                 <div>
@@ -32,7 +36,7 @@
                     <select v-model="project.client" id="client">
                       <option v-for="client in clients" :value="client.id">{{ client.name }}</option>
                     </select>
-                    
+                    <span v-if="!$v.project.client.required">Client is required</span>
                 </div>
                 
 
@@ -56,7 +60,9 @@
 <script setup>
 
 import { useRouter } from 'vue-router';
-import { onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 
 const router = useRouter();
 const supabase = useSupabaseClient()
@@ -65,8 +71,8 @@ const user = useSupabaseUser()
 const loading = ref(true)
 
 const project = reactive({
-  name: 'Name your project',
-  status: 0,
+  name: '',
+  status: 1,
   client: 0,
   workflow: 0,
   created_at: new Date(),
@@ -76,6 +82,16 @@ const project = reactive({
                   "stakeholders": "1"
                 }
 })
+
+const rules = {
+  project: {
+    name: { required },
+    status: { required },
+    client: { required }
+  }
+}
+
+const $v = useVuelidate(rules, { project })
 
 // Get the list of clients
 const clients = ref([])
@@ -96,10 +112,23 @@ async function fetchClients() {
 
   clients.value = data
 
+  // set the v-model to the first client in the list
+  if (clients.value.length > 0) {
+    project.client = clients.value[0].id
+  }
+
   loading.value = false
 }
 
 async function createProject() {
+  $v.value.$touch()
+  if ($v.value.$invalid) {
+    console.log(project)
+    console.log($v.value)
+    console.log('Form is invalid')
+    return
+  }
+  
   try {
     loading.value = true
 
