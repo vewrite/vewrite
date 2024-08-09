@@ -8,7 +8,6 @@
           </div>
           <div class="form-content">
               <ImageManager size="medium" table="logos" v-model:path="logo_url" /> 
-              <!-- @upload="updateProfile" -->
           </div>
       </div>
 
@@ -23,22 +22,12 @@
                 <input v-model="client.name" id="name" type="text" />
             </div>
 
-            <!-- <div>
-                <label for="client">Client</label>
-                <input v-model="client.client" id="client" type="text" />
-            </div> -->
-            
-
             <div class="form-group-footer">
               <button type="submit" class="button block primary" :disabled="loading">
                   <span v-if="loading">Updating...</span>
                   <span v-else>Create</span>
               </button>
             </div>
-
-            {{ client }}
-            <hr>
-            {{ logo_url }}
         </div>     
       </div>
     </form>
