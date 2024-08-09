@@ -153,15 +153,17 @@ onMounted(() => {
     .project-card {
       padding: $spacing-md;
       background-color: $white;
-      border-radius: $br-md;
+      border-radius: $br-lg;
       border: 1px solid rgba($black, 0.1);
       transition: border 0.18s ease;
       text-decoration: none;
+      min-height: 300px;
+      color: $black;
 
       .project-card-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         margin-bottom: $spacing-md;
         flex-direction: row;
 
@@ -169,10 +171,9 @@ onMounted(() => {
           width: 80px;
           min-height: 54px;
           height: 54px;
-          border-radius: $br-sm;
+          border-radius: $br-md;
           overflow: hidden;
           background-color: $gray-light;
-          border: 1px solid rgba($black, 0.1);
           display: flex;
           justify-content: center;
           align-items: center;

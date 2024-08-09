@@ -147,10 +147,9 @@ onMounted(() => {
         width: 80px;
         min-height: 54px;
         height: 54px;
-        border-radius: $br-sm;
+        border-radius: $br-md;
         overflow: hidden;
         background-color: $gray-light;
-        border: 1px solid rgba($black, 0.1);
         display: flex;
         justify-content: center;
         align-items: center;
