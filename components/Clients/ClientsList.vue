@@ -11,7 +11,7 @@
     </div>
 
     <!-- Client list -->
-    <div class="clients-list inner-container" v-else>
+    <div class="clients-list inner-container" v-if="!loading">
       <router-link :to="'/client/' + client.id" class="client-card" v-for="client in clients" :key="client.id">
         <div class="image-wrapper">
           <img :src="client.logo_url" alt="Client avatar" />
@@ -128,6 +128,8 @@ onMounted(() => {
     gap: $spacing-sm;
     align-items: flex-start;
     width: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
 
     a {
       display: flex;
@@ -149,18 +151,19 @@ onMounted(() => {
 
       .image-wrapper {
         width: 80px;
+        min-height: 54px;
         height: 54px;
         border-radius: $br-sm;
         overflow: hidden;
+        background-color: $gray-light;
+        border: 1px solid rgba($black, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         img {
-          width: 100%;
-          height: auto;
-          min-height: 100%;
-          background-color: $gray-light;
-          border: 1px solid rgba($black, 0.1);
-          outline: 0;
-          border-radius: $br-sm;
+          width: auto;
+          height: 100%;
         }
 
       }
