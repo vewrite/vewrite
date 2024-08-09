@@ -36,7 +36,7 @@ body,
 .inner-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: $spacing-md 0;
+    padding: $spacing-lg $spacing-md;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -123,9 +123,9 @@ textarea,
 select {
     border-radius: 5px;
     border: 1px solid rgba($blue, 0.3);
-    padding: $spacing-xs;
-    background-color: var(--custom-bg-color);
-    color: var(--custom-color);
+    padding: $spacing-xs $spacing-sm;
+    background-color: $white;
+    color: $black;
     border-radius: $br-md;
     font-size: $font-size-sm;
     font-weight: 400;

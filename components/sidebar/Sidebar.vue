@@ -76,7 +76,7 @@ const uuid = ref(user.value?.id);
     padding: $spacing-lg $spacing-md;
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: 2px;
     border-right: 1px solid rgba($black, 0.1);
     height: calc(100% - 75px - 116px);
     overflow-y: auto;

@@ -65,7 +65,7 @@ const uploadlogo = async (evt) => {
 
 const clearlogo = async () => {
   try {
-      await supabase.storage.from("logos").remove([path.value])
+      await supabase.storage.from(table.value).remove([path.value])
       emit("update:path", "")
   } catch (error) {
       console.error("Error removing image: ", error.message)
