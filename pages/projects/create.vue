@@ -8,8 +8,10 @@
 
       <Loading v-if="loading" />
       <form class="inner-container" @submit.prevent="createProject" v-else>
+        
+        {{ wizardBar.currentStep }}
 
-        <div class="form-block">
+        <div class="form-block" v-if="wizardBar.currentStep == 1">
             <div class="form-details">
                 <h3>Project Details</h3>
               <p class="details">Your project's details.</p>
@@ -38,7 +40,6 @@
                     </select>
                     <span v-if="!$v.project.client.required">Client is required</span>
                 </div>
-                
 
                 <div class="form-group-footer">
                   <button type="submit" class="button block primary" :disabled="loading">
@@ -52,7 +53,7 @@
         
       </form>
 
-      <WizardBar v-if="!loading" />
+      <WizardBar totalSteps="3" v-if="!loading" />
     </template>
   </AppPanel>
 </template>
@@ -61,9 +62,16 @@
 
 import { useRouter } from 'vue-router';
 import { ref, reactive, onMounted } from 'vue'
+
+// Vuelidate
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 
+// Wizard Bar Store
+import { useWizardBar } from '@/stores/wizardbar'
+const wizardBar = useWizardBar()
+
+// Supabase
 const router = useRouter();
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()

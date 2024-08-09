@@ -6,11 +6,15 @@ export const useWizardBar = defineStore('wizardbar', {
     currentStep: 1,
   }),
   actions: {
-    nextStep() {
-      this.currentStep++
+    nextStep(totalSteps) {
+      if (this.currentStep < totalSteps) {
+        this.currentStep++
+      }
     },
     prevStep() {
-      this.currentStep--
+      if (this.currentStep > 1) {
+        this.currentStep--
+      }
     },
   },
 })

@@ -1,10 +1,16 @@
 <template>
   <aside id="WizardBar">
-    <button class="" @click="prevStep">Back</button>
-    <div class="wizard-steps">
-      {{ wizardBar.currentStep }}
+    <div>
+      <button v-if="wizardBar.currentStep > 1" class="" @click="prevStep">Back</button>
     </div>
-    <button class="primary" @click="nextStep">Next</button>
+    <div class="wizard-steps">
+      {{ wizardBar.currentStep }} of {{ totalSteps }}
+    </div>
+    <!-- <button class="primary" @click="nextStep">Next</button> -->
+
+    <div>
+      <button v-if="wizardBar.currentStep < totalSteps" class="" @click="nextStep">Next</button>
+    </div>
   </aside>
 </template>
 
@@ -12,9 +18,25 @@
 
 import { useWizardBar } from '@/stores/wizardbar'
 
-const wizardBar = useWizardBar()
+// Define the props
+const props = defineProps({
+  totalSteps: {
+    type: Number,
+    required: true
+  }
+})
 
-const { nextStep, prevStep } = wizardBar
+const wizardBar = useWizardBar()
+const totalSteps = computed(() => props.totalSteps)
+
+// Example usage: Ensure currentStep does not exceed totalSteps
+const nextStep = () => {
+  wizardBar.nextStep(totalSteps.value)
+}
+
+const prevStep = () => {
+  wizardBar.prevStep()
+}
 
 </script>
 
