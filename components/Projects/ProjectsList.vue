@@ -14,13 +14,28 @@
             <img :src="project.client_logos" :alt="'Client id:' + project.client" />
           </div>
           <div class="project-card-buttons">
-            <button class="button">Edit</button>
+            <button class="button" @click="edit">Edit</button>
           </div>
         </div>
-        <!-- <h3>{{ project.id }}</h3> -->
         <h3>{{ project.name }}</h3>
-        <!-- <p>{{ project.stakeholders }}</p> -->
-        <!-- <p>{{ project.client }}</p> -->
+        <div class="project-deliverables-status">
+          <div class="progress-status">
+            <span>Progress</span>
+            <span>{{ project.complete }} / {{ project.deliverables.length }}</span>
+          </div>
+          <div class="progress-content">
+            <div class="empty-deliverables" v-if="project.deliverables.length == 0">
+              <span>No deliverables</span>
+            </div>
+            <div class="deliverables" v-else>
+              <div class="progress-bar">
+                <div class="progress" :style="{ width: (project.complete / project.deliverables.length) * 100 + '%' }"></div>
+              </div>
+              <!-- <span>{{ project.deliverables.length }} deliverables</span> -->
+            </div>
+            <!-- {{ project.deliverables  }} -->
+          </div>
+        </div>
       </router-link>
     </div>
   </main>
@@ -31,8 +46,17 @@
 const projects = ref([]);
 const loading = ref(true);
 
+// Supabase
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
+
+// Modal
+import { useModal } from '~/stores/modal';
+const modal = useModal();
+
+const edit = () => {
+  modal.visible = 1;
+};
 
 async function fetchProjects() {
   const { data, error } = await supabase
@@ -45,11 +69,25 @@ async function fetchProjects() {
     return
   }
 
+  // Deal with client logos
   projects.value = await Promise.all(data.map(async project => {
     const clientLogos = await fetchClientLogo(project.client);
     return {
       ...project,
       client_logos: clientLogos
+    };
+  }));
+
+  // Deal with deliverables from a separate table
+  // Calculate the progress of each project
+  // Update the project object with the deliverables and progress
+  projects.value = await Promise.all(projects.value.map(async project => {
+    const deliverables = await fetchDeliverables(project.id);
+    const complete = deliverables.filter(deliverable => deliverable.status == 1).length;
+    return {
+      ...project,
+      deliverables: deliverables,
+      complete: complete
     };
   }));
 
@@ -75,6 +113,21 @@ async function fetchClientLogo(client) {
   const logoBlob = await downloadImage(data.logo_url);
   return URL.createObjectURL(logoBlob);
 
+}
+
+async function fetchDeliverables(projectId) {
+
+  const { data, error } = await supabase
+    .from('deliverables')
+    .select('*')
+    .eq('project', projectId)
+
+  if (error) {
+    console.error('Error fetching deliverables:', error.message)
+    return
+  }
+
+  return data
 }
 
 const downloadImage = async (path) => {
@@ -106,7 +159,10 @@ onMounted(() => {
   align-items: flex-start;
   justify-content: flex-start;
   height: 100%;
-  padding: $spacing-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  overflow-y: auto;
+  // background-color: rgba($gray-light, 0.2);
 
   .empty-state {
     display: flex;
@@ -159,6 +215,7 @@ onMounted(() => {
       text-decoration: none;
       min-height: 300px;
       color: $black;
+      position: relative;
 
       .project-card-header {
         display: flex;
@@ -210,6 +267,49 @@ onMounted(() => {
         font-size: $font-size-sm;
         font-weight: 400;
         color: $gray-dark;
+      }
+
+      .project-deliverables-status {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: absolute;
+        bottom: $spacing-md;
+        width: calc(100% - #{$spacing-md * 2});
+
+        .progress-status {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $spacing-sm;
+          width: 100%;
+
+          span {
+            font-size: $font-size-sm;
+            font-weight: 400;
+            color: $gray-dark;
+          }
+        }
+
+        .progress-content {
+          width: 100%;
+
+          .progress-bar {
+            width: 100%;
+            padding: 2px;
+            min-height: 10px;
+            border-radius: $br-md;
+            background-color: $white;
+            border: 1px solid $gray-light;
+
+            .progress {
+              height: 6px;
+              border-radius: $br-md;
+              background-color: $purple;
+            }
+
+          }
+        }
       }
     }
   }

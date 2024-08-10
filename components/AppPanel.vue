@@ -59,7 +59,7 @@ export default {
 
   .body {
     height: calc(100% - 75px);
-    overflow-y: auto;
+    overflow-y: hidden;
     position: relative;
   }
 }

@@ -23,6 +23,7 @@ import { useModal } from '~/stores/modal'
   flex-direction: row;
   height: 100%;
   width: 100%;
+  perspective: 1000em;
 }
 
 </style>
