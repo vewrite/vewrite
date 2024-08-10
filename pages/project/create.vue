@@ -1,15 +1,14 @@
 <template>
   <AppPanel>
     <template v-slot:header>
+      <router-link to="/projects/" class="button dark">Back</router-link>
       <div class="app-panel-header">Create a new project</div>
+      <div></div>
     </template>
     <template v-slot:body>
-      <!-- <pre>{{ $v }}</pre> -->
 
       <Loading v-if="loading" />
       <form class="inner-container" @submit.prevent="createProject" v-else>
-        
-        {{ wizardBar.currentStep }}
 
         <div class="form-block" v-if="wizardBar.currentStep == 1">
             <div class="form-details">
@@ -82,6 +81,7 @@ const project = reactive({
   name: '',
   status: 1,
   client: 0,
+  deliverables: ["1"],
   workflow: 0,
   created_at: new Date(),
   updated_at: new Date(),
@@ -144,6 +144,7 @@ async function createProject() {
       name: project.name,
       status: project.status,
       client: project.client,
+      deliverables: project.deliverables,
       workflow: project.workflow,
       created_at: project.created_at,
       updated_at: project.updated_at,

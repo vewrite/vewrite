@@ -5,7 +5,7 @@
       <img src="/images/projects-empty-state.svg" alt="No projects found" />
       <h3>You haven’t created a project yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
-      <button class="button primary">Create a project</button>
+      <router-link to="/project/create" class="button primary">Create a project</router-link>
     </div>
     <div class="projects-list" v-else>
       <router-link :to="'/project/' + project.id" class="project-card" v-for="project in projects" :key="project.id">

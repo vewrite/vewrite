@@ -3,7 +3,7 @@
     <template v-slot:header>
       <div></div>
       <div class="app-panel-header">Projects</div>
-      <router-link to="/projects/create" class="button dark">Create a project</router-link>
+      <router-link to="/project/create" class="button dark">Create a project</router-link>
     </template>
     <template v-slot:body>
       <ProjectsList />
@@ -19,8 +19,13 @@ export default {
     AppPanel
   }
 }
+
+// TODO: deal with hiding create project button if there are no projects
+
 </script>
 
 <style scoped>
-/* Your styles here */
+
+@import 'assets/_variables.scss';
+
 </style>

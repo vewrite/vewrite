@@ -22,6 +22,7 @@ const { path } = toRefs(props)
   align-items: center;
   height: 100%;
   width: 100%;
+  z-index: 10;
   
   .spinner {
     width: 40px;
