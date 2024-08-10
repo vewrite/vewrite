@@ -1,6 +1,6 @@
 <template>
   <main id="Modal" :class="visibleClass">
-    <div class="modal-body">
+    <div class="modal-body" :class="visibleClass">
       <div class="header">
         <slot name="header"></slot>
         <div class="modal-close" @click="close"></div>
@@ -41,6 +41,20 @@ computed(() => {
 
 @import 'assets/_variables.scss';
 
+@keyframes scaleBounce {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.005);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 #Modal {
   display: flex;
   flex-direction: column;
@@ -55,10 +69,13 @@ computed(() => {
   background-color: rgba($black, 0.25);
   backdrop-filter: blur(8px);
   z-index: 1000;
-  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
 
   &.visible {
-    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
   }
 
   .modal-body {
@@ -67,6 +84,10 @@ computed(() => {
     overflow: auto;
     width: 100%;
     height: 100%;
+
+    &.visible {
+      animation: scaleBounce 0.4s both 0.2s;
+    }
 
     .header {
       background-color: $purple;
