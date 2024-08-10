@@ -1,17 +1,39 @@
 <template>
-  <main id="Modal">
+  <main id="Modal" :class="visibleClass">
     <div class="modal-body">
       <div class="header">
         <slot name="header"></slot>
+        <div class="modal-close" @click="close"></div>
       </div>
       <div class="body">
         <slot name="body"></slot>
+        {{ visibleClass }}
       </div>
     </div>
   </main>
 </template>
 
 <script setup>
+
+import { useModal } from '~/stores/modal'
+
+const modal = useModal()
+
+const visibleClass = computed(() => {
+  return modal.visible ? 'visible' : ''
+})
+
+const close = () => {
+  modal.visible = false
+}
+
+computed(() => {
+  if (modal.visible) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = 'auto'
+  }
+})
 
 </script>
 
@@ -33,6 +55,11 @@
   background-color: rgba($black, 0.25);
   backdrop-filter: blur(8px);
   z-index: 1000;
+  visibility: hidden;
+
+  &.visible {
+    visibility: visible;
+  }
 
   .modal-body {
     background-color: white;
@@ -55,6 +82,19 @@
       font-size: $font-size-lg;
       font-family: $font-family-secondary;
       font-weight: 400;
+
+      .modal-close {
+        cursor: pointer;
+        position: absolute;
+        right: $spacing-md;
+        top: 50%;
+        transform: translateY(-50%);
+        
+        &:before {
+          content: '×';
+          font-size: $font-size-xl;
+        }
+      }
 
       .app-panel-header-buttons {
         display: flex;

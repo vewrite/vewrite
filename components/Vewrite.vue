@@ -2,11 +2,15 @@
   <div id="vewrite">
     <Sidebar />
     <NuxtPage />
-    <!-- <Modal /> -->
+    <Modal />
   </div>
 </template>
 
 <script setup>
+
+import { useModal } from '~/stores/modal'
+
+
 
 </script>
 

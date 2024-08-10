@@ -7,10 +7,9 @@
         <span v-else>{{ client.name }}</span>
       </div>
       <div class="app-panel-header-buttons">
-        <router-link :to="`/client/${clientId}/edit`" class="button dark">Edit</router-link>
-        <router-link :to="`/client/${clientId}/delete`" class="button dark">Delete</router-link>
+        <button class="button dark" @click="edit">Edit</button>
+        <!-- <router-link :to="`/client/${clientId}/delete`" class="button dark">Delete</router-link> -->
       </div>
-      
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
@@ -73,6 +72,10 @@ const clientId = route.params.id;
 const client = ref(null);
 const creator = ref(null);
 
+// Modal
+import { useModal } from '~/stores/modal';
+const modal = useModal();
+
 async function getclient(id) {
   try {
     const { data, error } = await supabase
@@ -108,6 +111,10 @@ async function getCreator(uuid) {
     alert(error.message);
   }
 }
+
+const edit = () => {
+  modal.visible = 1;
+};
 
 // Fetch the client data when the component is mounted
 onMounted(() => {
