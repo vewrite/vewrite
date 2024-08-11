@@ -90,7 +90,7 @@ async function fetchProjects() {
     };
   }));
 
-  console.log(projects.value)
+  // console.log(projects.value)
 
   loading.value = false
 }

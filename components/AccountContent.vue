@@ -78,6 +78,10 @@ if (data) {
 }
 loading.value = false
 
+// User store
+import { useUser } from '@/stores/user'
+const userStore = useUser()
+
 async function updateProfile() {
     try {
         loading.value = true
@@ -89,6 +93,7 @@ async function updateProfile() {
             avatar_url: avatar_path.value,
             updated_at: new Date(),
         }
+        userStore.setUser(updates)
         let { error } = await supabase.from('profiles').upsert(updates, {
             returning: 'minimal', // Don't return the value after inserting
         })

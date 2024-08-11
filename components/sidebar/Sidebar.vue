@@ -23,10 +23,10 @@
       </div>
     </div>
     <div class="user-section">
-      <router-link to="/account" class="button">
+      <router-link to="/account" class="button" v-if="userStore">
         <div class="user-identity">
-          <Avatar :uuid="uuid" to="/account" />
-          <p>{{ user.username }}</p>
+          <Avatar :uuid="userStore.uuid" />
+          <p>{{ userStore.username }}</p>
         </div>
         <Icon type="rightArrow" />
       </router-link>
@@ -35,9 +35,32 @@
 </template>
 
 <script setup>
-
+import { onMounted } from 'vue'
+const supabase = useSupabaseClient();
 const user = useSupabaseUser();
-const uuid = ref(user.value?.id);
+
+// User store
+import { useUser } from '@/stores/user'
+const userStore = useUser()
+
+// Setup the User for the app
+const fetchUser = async () => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.value.id)
+
+  if (error) {
+    console.error('Error fetching user:', error.message)
+    return
+  }
+
+  userStore.setUser(data[0])
+}
+
+onMounted(() => {
+  fetchUser()
+})
 
 </script>
 
@@ -137,6 +160,7 @@ const uuid = ref(user.value?.id);
       font-weight: 400;
       color: $black;
       margin:0 0 0 $spacing-sm;
+      text-transform: capitalize;
     }
 
     .user-identity {
