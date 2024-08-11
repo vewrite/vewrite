@@ -24,10 +24,14 @@ export default {
   flex-direction: column;
   width: 100%;
   background-color: rgba($white-dark, .5);
+  margin: $spacing-md;
+  border-radius: $br-xl;
+  overflow: hidden;
+  border: 1px solid rgba($purple, 0.1);
 
   .header {
-    background-color: $purple;
-    color: white;
+    background-color: rgba($white-dark, 1);
+    color: $black;
     display: flex;
     flex-direction: row;
     align-items: center;

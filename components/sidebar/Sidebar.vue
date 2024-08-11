@@ -60,31 +60,27 @@ const uuid = ref(user.value?.id);
   }
 
   .sidebar-header {
-    background-color: $purple;
-    background: linear-gradient(130.9deg, #540095 -13.18%, $purple 47.75%);
-    color: white;
-    padding: 0 $spacing-md;
+    color: $black;
+    padding: 0 0 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-right: 1px solid rgba($purple-light, 1);
-    height: 75px;
+    height: 135px;
   }
 
   .sidebar-content {
-    padding: $spacing-lg $spacing-md;
+    padding: 0 $spacing-md $spacing-lg ;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    border-right: 1px solid rgba($black, 0.1);
-    height: calc(100% - 75px - 116px);
+    height: calc(100% - 135px - 116px);
     overflow-y: auto;
 
     .link-group {
       display: flex;
       flex-direction: column;
-      gap: $spacing-xxs;
+      gap: 2px;
       margin-bottom: $spacing-md;
 
       a {
@@ -92,7 +88,7 @@ const uuid = ref(user.value?.id);
         flex-direction: row;
         align-items: center;
         gap: $spacing-xs;
-        padding: $spacing-xs;
+        padding: $spacing-xxs $spacing-xs;
         border-radius: $br-md;
         transition: background-color 0.18s ease;
         color: $black;
@@ -110,10 +106,9 @@ const uuid = ref(user.value?.id);
       }
 
       .title {
-        font-size: $font-size-xs;
+        font-size: $font-size-sm;
         font-family: $font-family-main;
-        font-weight: 600;
-        text-transform: uppercase;
+        font-weight: 500;
         color: $gray-dark;
         margin-bottom: $spacing-xs;
       }
@@ -126,7 +121,6 @@ const uuid = ref(user.value?.id);
     justify-content: center;
     align-items: center;
     padding: $spacing-md;
-    border-right: 1px solid rgba($black, 0.1);
     backdrop-filter: blur(10px);
     position: absolute;
     bottom: 0;
