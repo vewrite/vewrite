@@ -17,12 +17,12 @@
             </div>
             <div class="form-content">
               <div class="form-group">
-                <div>
+                <div class="form-input">
                     <label for="name">Name</label>
                     <input v-model="project.name" id="name" type="text" placeholder="Name your project"  />
                     <span class="form-error" v-if="$v.$errors.length !== 0 && $v.project.name.required">Name is required</span>
                 </div>
-                <div>
+                <div class="form-input">
                     <label for="status">Status</label>
                     <select v-model="project.status" id="status">
                       <option value="0">Not started</option>
@@ -32,7 +32,7 @@
                     <span v-if="!$v.project.status.required">Status is required</span>
                 </div>
 
-                <div>
+                <div class="form-input">
                     <label for="client">Client</label>
                     <select v-model="project.client" id="client">
                       <option v-for="client in clients" :value="client.id">{{ client.name }}</option>

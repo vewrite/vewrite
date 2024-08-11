@@ -5,38 +5,34 @@
 
             <div class="form-block">
                 <div class="form-details">
-                    <h3>Avatar</h3>
-                    <p class="details">Manage your profile picture.</p>
-                </div>
-                <div class="form-content">
-                    <ImageManager size="medium" table="avatars" v-model:path="avatar_path" @upload="updateProfile" />
-                </div>
-            </div>
-
-            <div class="form-block">
-                <div class="form-details">
                     <h3>User details</h3>
                     <p class="details">Update your user details.</p>
                 </div>
                 <div class="form-content">
                     <div class="form-group">
-                        <div>
+                        <div class="form-input">
                             <label for="email">Email</label>
                             <input id="email" type="text" :value="user.email" disabled />
                         </div>
-                        <div>
+                        <div class="form-input">
                             <label for="username">Name</label>
                             <input id="username" type="text" v-model="username" />
                         </div>
-                        <div>
+                        <div class="form-input">
                             <label for="website">Website</label>
                             <input id="website" type="website" v-model="website" />
                         </div>
-
-                        <div class="form-group-footer">
-                            
-                        </div>
                     </div>                    
+                </div>
+            </div>
+
+            <div class="form-block">
+                <div class="form-details">
+                    <h3>Avatar</h3>
+                    <p class="details">Manage your profile picture.</p>
+                </div>
+                <div class="form-content">
+                    <ImageManager size="medium" table="avatars" v-model:path="avatar_path" @upload="updateProfile" />
                 </div>
             </div>
 

@@ -130,17 +130,17 @@ tr:last-child td {
 
 label {
     display: block;
-    margin: $spacing-md 0 $spacing-xs;
-    color: $black;
-    font-weight: 600;
+    font-size: $font-size-xs;
+    color: rgba($black,0.5);
+    font-weight: 400;
+    padding: $spacing-xs $spacing-xs 0 $spacing-xs;
 }
 
 input,
 textarea,
 select {
-    border-radius: 5px;
-    border: 1px solid rgba($blue, 0.3);
-    padding: $spacing-xs $spacing-sm;
+    border: 1px solid transparent;
+    padding: $spacing-xs;
     background-color: $white;
     color: $black;
     border-radius: $br-md;
@@ -166,7 +166,7 @@ select:focus,
 input:hover,
 textarea:hover,
 select:hover {
-    border: 1px solid rgba($purple, 0.9);
+    // border: 1px solid rgba($purple, 0.9);
     outline: none;
 }
 
@@ -188,9 +188,19 @@ textarea {
     div {
         position: relative;
     }
+}
 
-    div:first-child label {
-        margin: 0 0 $spacing-xs 0;
+.form-input {
+    border: 1px solid rgba($purple, 0.3);
+    border-radius: $br-md;
+    margin-bottom: $spacing-sm;
+    transition: all 0.2s ease;
+
+    &:focus,
+    &:hover,
+    &:focus-within,
+    &:active {
+        border: 1px solid rgba($purple, 0.9);
     }
 }
 
@@ -202,6 +212,7 @@ textarea {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+    gap: $spacing-md;
 
     &:last-of-type {
         border-bottom: none;

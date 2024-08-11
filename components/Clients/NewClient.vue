@@ -3,6 +3,19 @@
 
       <div class="form-block">
           <div class="form-details">
+              <h3>Client Details</h3>
+              <p class="details">Your client's basic details.</p>
+          </div>
+          <div class="form-content">
+            <div class="form-input">
+                <label for="name">Name</label>
+                <input v-model="client.name" id="name" type="text" placeholder="Input your client's name" />
+            </div>
+          </div>
+      </div>
+
+      <div class="form-block">
+          <div class="form-details">
               <h3>Client Logo</h3>
               <p class="details">Make your client identifiable. If this is a company, use their logo!</p>
           </div>
@@ -11,16 +24,8 @@
           </div>
       </div>
 
-      <div class="form-details">
-          <h3>client Details</h3>
-          <p class="details">Your client's details.</p>
-      </div>
       <div class="form-content">
         <div class="form-group">
-            <div>
-                <label for="name">Name</label>
-                <input v-model="client.name" id="name" type="text" />
-            </div>
 
             <div class="form-group-footer">
               <button type="submit" class="button block primary" :disabled="loading">

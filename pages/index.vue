@@ -3,7 +3,7 @@
     <template v-slot:header>
       <div></div>
       <div class="app-panel-header">Projects</div>
-      <router-link to="/projects/create" class="button primary">Create a project</router-link>
+      <router-link to="/project/create" class="button primary">Create a project</router-link>
     </template>
     <template v-slot:body>
       <ProjectsList />
