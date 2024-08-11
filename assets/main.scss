@@ -35,11 +35,15 @@ body,
 
 .inner-container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: $spacing-lg auto;
     padding: $spacing-lg $spacing-md;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background-color: $white;
+    border-radius: $br-lg;
+    border: 1px solid rgba($black, 0.1);
+    box-shadow: $main-shadow;
 }
 
 /* Typography */
@@ -247,16 +251,16 @@ textarea {
 
 button,
 .button {
-    color: $blue;
+    color: $black;
     border: 1px solid rgba($purple, 0.1);
     background-color: rgba($purple, 0);
     text-align: center;
     text-decoration: none;
     border-radius: $br-md;
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-xxs $spacing-sm;
     cursor: pointer;
     text-align: center;
-    font-size: $font-size-sm;
+    font-size: $font-size-xs;
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
@@ -273,8 +277,8 @@ button,
 
 button.primary,
 .button.primary {
-    border: 1px solid rgba($purple, 0.9);
-    background-color: rgba($purple, 0.85);
+    border: 1px solid rgba($purple-light, 0.9);
+    background-color: rgba($purple-light, 0.85);
     color: $white;
 }
 

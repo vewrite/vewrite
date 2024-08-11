@@ -7,17 +7,14 @@
       <p>That’s ok, It’s easy and we’ll do it together</p>
       <router-link to="/project/create" class="button primary">Create a project</router-link>
     </div>
-    <div class="projects-list" v-else>
-      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in projects" :key="project.id">
+    <div class="projects-list" v-if="!loading">
+      <div class="project-card" v-for="project in projects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
             <img :src="project.client_logos" :alt="'Client id:' + project.client" />
           </div>
-          <div class="project-card-buttons">
-            <button class="button" @click="edit">Edit</button>
-          </div>
         </div>
-        <h3>{{ project.name }}</h3>
+        <h3><router-link :to="'/project/' + project.id">{{ project.name }}</router-link></h3>
         <div class="project-deliverables-status">
           <div class="progress-status">
             <span>Progress</span>
@@ -31,12 +28,14 @@
               <div class="progress-bar">
                 <div class="progress" :style="{ width: (project.complete / project.deliverables.length) * 100 + '%' }"></div>
               </div>
-              <!-- <span>{{ project.deliverables.length }} deliverables</span> -->
             </div>
-            <!-- {{ project.deliverables  }} -->
           </div>
         </div>
-      </router-link>
+        <div class="project-card-buttons">
+          <button class="button dark" @click="edit">Edit</button>
+          <router-link :to="'/project/' + project.id" class="button dark">View</router-link>
+        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -162,7 +161,11 @@ onMounted(() => {
   padding: $spacing-lg;
   margin-bottom: $spacing-lg;
   overflow-y: auto;
-  // background-color: rgba($gray-light, 0.2);
+  transition: padding 0.2s ease;
+
+  @media (max-width: 1000px) {
+    padding: $spacing-md;
+  }
 
   .empty-state {
     display: flex;
@@ -211,11 +214,13 @@ onMounted(() => {
       background-color: $white;
       border-radius: $br-lg;
       border: 1px solid rgba($black, 0.1);
-      transition: border 0.18s ease;
+      transition: all 0.18s ease;
       text-decoration: none;
       min-height: 300px;
       color: $black;
       position: relative;
+      overflow: hidden;
+      box-shadow: $main-shadow;
 
       .project-card-header {
         display: flex;
@@ -241,19 +246,6 @@ onMounted(() => {
           }
         }
 
-        .project-card-buttons {
-          opacity: 0;
-          transition: opacity 0.2s ease;
-        }
-
-      }
-
-      &:hover {
-        border: 1px solid rgba($purple, 1);
-
-        .project-card-buttons {
-          opacity: 1;
-        }
       }
 
       h3 {
@@ -261,12 +253,53 @@ onMounted(() => {
         font-family: $font-family-secondary;
         font-weight: 500;
         margin: 0 0 $spacing-sm;
+        
+        a {
+          color: $purple;
+          text-decoration: none;
+        }
       }
 
       p {
         font-size: $font-size-sm;
         font-weight: 400;
         color: $gray-dark;
+      }
+
+      .project-card-buttons {
+        opacity: 0;
+        transition: all 0.2s ease;
+        z-index: 10;
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-xs;
+        padding: $spacing-sm $spacing-md;
+        background-color: $purple;
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba($black, 0.1);
+        border-radius: $br-lg $br-lg 0 0;
+
+        a, button {
+          width: 50%;
+          justify-content: center;
+        }
+      }
+
+      &:hover {
+        border: 1px solid rgba($purple, 0.21);
+
+        .project-card-buttons {
+          opacity: 1;
+          bottom: 0;
+        }
+
+        .project-deliverables-status {
+          bottom: calc($spacing-md + 40px);
+        }
       }
 
       .project-deliverables-status {
@@ -276,6 +309,7 @@ onMounted(() => {
         position: absolute;
         bottom: $spacing-md;
         width: calc(100% - #{$spacing-md * 2});
+        transition: all 0.2s ease;
 
         .progress-status {
           display: flex;

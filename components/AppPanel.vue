@@ -23,6 +23,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: rgba($white-dark, .5);
 
   .header {
     background-color: $purple;

@@ -122,8 +122,6 @@ onMounted(() => {
     gap: $spacing-sm;
     align-items: flex-start;
     width: 100%;
-    padding-top: 0;
-    padding-bottom: 0;
 
     a {
       display: flex;
@@ -132,7 +130,7 @@ onMounted(() => {
       gap: $spacing-md;
       text-decoration: none;
       width: 100%;
-      border: 1px solid $gray-light;
+      border: 1px solid transparent;
       background-color: $white;
       padding: $spacing-xxs;
       border-radius: $br-md;
