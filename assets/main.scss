@@ -256,15 +256,16 @@ textarea {
 button,
 .button {
     color: $black;
+    background-color: $white;
+    border-radius: $br-lg;
     border: 1px solid rgba($purple, 0.1);
-    background-color: rgba($purple, 0);
     text-align: center;
     text-decoration: none;
-    border-radius: $br-md;
-    padding: $spacing-xxs $spacing-sm;
+    padding: calc($spacing-xxs + 2px) $spacing-sm $spacing-xxs;
     cursor: pointer;
     text-align: center;
-    font-size: $font-size-xs;
+    font-size: $font-size-xxs;
+    text-transform: uppercase;
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
@@ -273,6 +274,7 @@ button,
     justify-content: space-between;
     gap: $spacing-sm;
     align-items: center;
+    box-shadow: $main-shadow;
 
     &:hover {
         border: 1px solid rgba($purple, 1);
@@ -281,21 +283,13 @@ button,
 
 button.primary,
 .button.primary {
-    border: 1px solid rgba($purple-light, 0.9);
-    background-color: rgba($purple-light, 0.85);
-    color: $white;
-}
-
-button.dark,
-.button.dark {
-    border: 1px solid rgba($purple-light, 0.7);
-    background-color:rgba($purple-light, 0.7);
-    text-decoration: none;
+    border: 1px solid rgba($purple-dark, 0.9);
+    background-color: rgba($purple, 0.75);
     color: $white;
 
     &:hover {
-        border: 1px solid rgba($white, 0.2);
-        background-color:rgba($purple-light, 1);
+        border: 1px solid rgba($purple-dark, 1);
+        background-color: rgba($purple, 1);
     }
 }
 

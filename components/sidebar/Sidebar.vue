@@ -70,7 +70,7 @@ const uuid = ref(user.value?.id);
   }
 
   .sidebar-content {
-    padding: 0 $spacing-md $spacing-lg ;
+    padding: 0 0 $spacing-lg $spacing-md;
     display: flex;
     flex-direction: column;
     gap: 2px;

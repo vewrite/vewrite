@@ -213,7 +213,7 @@ onMounted(() => {
       padding: $spacing-md;
       background-color: $white;
       border-radius: $br-lg;
-      border: 1px solid rgba($black, 0.1);
+      border: 1px solid rgba($purple, 0.1);
       transition: all 0.18s ease;
       text-decoration: none;
       min-height: 300px;
