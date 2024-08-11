@@ -65,8 +65,8 @@ computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  padding: $spacing-lg;
-  background-color: rgba($black, 0.25);
+  padding: $spacing-md;
+  background-color: rgba($white, .2);
   backdrop-filter: blur(8px);
   z-index: 1000;
   opacity: 0;
@@ -79,19 +79,21 @@ computed(() => {
   }
 
   .modal-body {
-    background-color: white;
-    border-radius: $br-md;
+    background-color: #F8F7FE;
+    border: 1px solid #EFE5FD;
+    border-radius: $br-xl;
     overflow: auto;
     width: 100%;
     height: 100%;
+    box-shadow: $main-shadow;
 
     &.visible {
       animation: scaleBounce 0.4s both 0.2s;
     }
 
     .header {
-      background-color: $purple;
-      color: white;
+      background-color: #F1F0FB;
+      color: $black;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -124,6 +126,13 @@ computed(() => {
         justify-content: flex-end;
         gap: $spacing-xs;
       }
+    }
+
+    .body {
+      height: calc(100% - 75px);
+      overflow-y: auto;
+      position: relative;
+      padding: $spacing-lg;
     }
   }
 }
