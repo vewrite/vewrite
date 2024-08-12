@@ -1,16 +1,26 @@
 <template>
   <div id="vewrite">
-    <Sidebar />
-    <NuxtPage />
-    <Modal />
+    <main v-if="userStore.firstTime == true">
+      <FirstTime />
+    </main>
+    <main v-else>
+      <Sidebar />
+      <NuxtPage />
+      <Modal />
+    </main>
   </div>
 </template>
 
 <script setup>
 
+import FirstTime from '~/components/Onboarding/Firsttime.vue'
 import { useModal } from '~/stores/modal'
 
+// User store
+import { useUser } from '@/stores/user'
+const userStore = useUser()
 
+console.log(userStore)
 
 </script>
 
@@ -23,7 +33,13 @@ import { useModal } from '~/stores/modal'
   flex-direction: row;
   height: 100%;
   width: 100%;
-  perspective: 1000em;
+
+  main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
 }
 
 </style>

@@ -31,6 +31,7 @@ export default {
 
   .header {
     background-color: rgba($white-dark, 1);
+    border-bottom: 1px solid rgba($purple, 0.1);
     color: $black;
     display: flex;
     flex-direction: row;

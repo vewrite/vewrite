@@ -6,6 +6,7 @@ export const useUser = defineStore('userStore', {
     email: '',
     uuid: '',
     tier: '',
+    firstTime: true
   }),
   actions: {
     setUser(user) {
@@ -13,6 +14,10 @@ export const useUser = defineStore('userStore', {
       this.email = user.email;
       this.uuid = user.id;
       this.tier = 'free';
+      this.firstTime = user.firstTime;
+    },
+    setFirstTime(set) {
+      this.firstTime = set;
     }
   }
 })

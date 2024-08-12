@@ -69,7 +69,7 @@ async function createClient() {
       logo_url: logo_url.value,
     }
 
-    console.log(updates)
+    // console.log(updates)
 
     let { error } = await supabase.from('clients').upsert(updates, {
         returning: 'minimal', // Don't return the value after inserting

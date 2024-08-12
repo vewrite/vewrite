@@ -49,13 +49,12 @@ const prevStep = () => {
   bottom:0;
   width: 100%;
   padding: $spacing-md;
-  background-color: rgba($white,0.1);
-  backdrop-filter: blur(10px);
+  background-color: $white;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba($black, 0.1);
+  border-top: 1px solid rgba($purple, 0.1);
 }
 
 </style>

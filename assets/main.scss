@@ -140,7 +140,7 @@ input,
 textarea,
 select {
     border: 1px solid transparent;
-    padding: $spacing-xs;
+    padding: $spacing-xxs $spacing-xs $spacing-xs $spacing-xs;
     background-color: $white;
     color: $black;
     border-radius: $br-md;

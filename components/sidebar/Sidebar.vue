@@ -115,8 +115,8 @@ onMounted(() => {
         border-radius: $br-md;
         transition: background-color 0.18s ease;
         color: $black;
-        font-size: $font-size-md;
-        font-family: $font-family-secondary;
+        font-size: $font-size-sm;
+        font-family: $font-family-main;
         font-weight: 400;
         text-decoration: none;
 
@@ -155,18 +155,26 @@ onMounted(() => {
     }
 
     p {
-      font-size: $font-size-md;
-      font-family: $font-family-secondary;
+      font-size: $font-size-sm;
+      font-family: $font-family-main;
       font-weight: 400;
-      color: $black;
+      color: rgba($black, 0.5);
       margin:0 0 0 $spacing-sm;
       text-transform: capitalize;
+      transition: color 0.22s ease-in-out;
     }
 
     .user-identity {
       display: flex;
       flex-direction: row;
       align-items: center;
+    }
+
+    &:hover {
+      
+      p {
+        color: $black;
+      }
     }
   }
 }

@@ -61,7 +61,7 @@ $br-lg: 0.8rem;
 $br-xl: 1.6rem;
 
 /* Spacing */
-$spacing-xxs: 0.35rem;
+$spacing-xxs: 0.425rem;
 $spacing-xs: .85rem;
 $spacing-sm: 1rem;
 $spacing-md: 2rem;
@@ -83,3 +83,4 @@ $width-xl: 90rem;
 /* Shadows */
 // $main-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05), 0px 24px 24px rgba(0, 0, 0, 0.06);
 $main-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05), 0px 4px 4px rgba($purple, 0.02);
+$main-shadow-up: 0px 0px 2px rgba(0, 0, 0, 0.05), 0px -4px 4px rgba($purple, 0.02);
