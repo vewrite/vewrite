@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="user-section">
-      <router-link to="/account" class="button" v-if="userStore">
+      <router-link to="/account" class="button user" v-if="userStore">
         <div class="user-identity">
           <Avatar :uuid="userStore.uuid" />
           <p>{{ userStore.username }}</p>
@@ -152,6 +152,9 @@ onMounted(() => {
 
     .button {
       width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
 
     p {

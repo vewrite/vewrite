@@ -35,15 +35,16 @@ body,
 
 .inner-container {
     max-width: 800px;
+    width: 100%;
     margin: $spacing-md auto 0;
-    padding: $spacing-lg $spacing-md;
+    padding: $spacing-lg;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     background-color: $white;
     border-radius: $br-lg;
     border: 1px solid rgba($black, 0.1);
     box-shadow: $main-shadow;
+    color: $black;
 
     @media (max-width: 1000px) {
         margin: 0;
@@ -88,6 +89,7 @@ h5 {
 
 p {
     margin: 0 0 $spacing-sm 0;
+    line-height: 1.5;
 }
 
 p.details {
@@ -195,6 +197,7 @@ textarea {
     border-radius: $br-md;
     margin-bottom: $spacing-sm;
     transition: all 0.2s ease;
+    width: 100%;
 
     &:focus,
     &:hover,
@@ -205,9 +208,7 @@ textarea {
 }
 
 .form-block {
-    margin: 0 0 $spacing-md 0;
     padding: 0 0 $spacing-md 0;
-    border-bottom: 1px solid rgba($black, 0.1);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -227,10 +228,6 @@ textarea {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-
-        button {
-            margin: 0 0 0 auto;
-        }
     }
 }
 
@@ -274,15 +271,13 @@ button,
     text-decoration: none;
     padding: calc($spacing-xxs + 2px) $spacing-sm $spacing-xxs;
     cursor: pointer;
-    text-align: center;
     font-size: $font-size-xxs;
     text-transform: uppercase;
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     gap: $spacing-sm;
     align-items: center;
     box-shadow: $main-shadow;
@@ -290,6 +285,13 @@ button,
     &:hover {
         border: 1px solid rgba($purple, 1);
     }
+}
+
+button.large,
+.button.large {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    text-transform: capitalize;
 }
 
 button.primary,
