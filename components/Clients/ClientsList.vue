@@ -86,7 +86,6 @@ onMounted(() => {
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: $spacing-lg;
 
   .empty-state {
     display: flex;
@@ -122,6 +121,7 @@ onMounted(() => {
     gap: $spacing-sm;
     align-items: flex-start;
     width: 100%;
+    overflow-y: auto;
 
     a {
       display: flex;

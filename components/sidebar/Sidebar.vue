@@ -143,8 +143,7 @@ onMounted(() => {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: $spacing-md;
-    backdrop-filter: blur(10px);
+    padding: $spacing-md 0 $spacing-md $spacing-md;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -155,6 +154,7 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      border-radius: $br-xl;
     }
 
     p {

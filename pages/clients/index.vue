@@ -3,7 +3,7 @@
     <template v-slot:header>
       <div></div>
       <div class="app-panel-header">Clients</div>
-      <router-link to="/clients/create" class="button dark">Create a client</router-link>
+      <router-link to="/clients/create" class="button primary">Create a client</router-link>
     </template>
     <template v-slot:body>
       <ClientsList />

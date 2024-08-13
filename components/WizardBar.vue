@@ -74,7 +74,7 @@ const prevStep = () => {
     pointer-events: none;
 
     .wizard-step {
-      border: 1px solid rgba($black, 0.1);
+      border: 1px solid rgba($black, 0);
       background: $white;
       border-radius: $br-lg;
       padding: $spacing-xxs $spacing-xs;

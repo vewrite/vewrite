@@ -56,19 +56,27 @@
                 </div>
 
                 <div class="form-input">
+                    <label for="client">Workflow</label>
+                    <select v-model="project.workflow" id="client">
+                      <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
+                    </select>
+                    <span v-if="!$v.project.workflow.required">Workflow is required</span>
+                </div>
+
+                <!-- <div class="form-input">
                     <label for="client">Client</label>
                     <select v-model="project.client" id="client">
                       <option v-for="client in clients" :value="client.id">{{ client.name }}</option>
                     </select>
                     <span v-if="!$v.project.client.required">Client is required</span>
-                </div>
+                </div> -->
 
-                <div class="form-group-footer">
+                <!-- <div class="form-group-footer">
                   <button type="submit" class="button block primary" :disabled="loading">
                       <span v-if="loading">Updating...</span>
                       <span v-else>Create</span>
                   </button>
-                </div>
+                </div> -->
               </div>     
             </div>
         </div>
@@ -118,7 +126,8 @@ const rules = {
   project: {
     name: { required },
     status: { required },
-    client: { required }
+    client: { required },
+    workflow: { required }
   }
 }
 
@@ -166,6 +175,23 @@ const downloadImage = async (path) => {
   }
 }
 
+// Workflows
+const workflows = ref([])
+
+async function fetchWorkflows() {
+  const { data, error } = await supabase
+    .from('workflows')
+    .select('*')
+    .eq('created_by', user.value.id)
+
+  if (error) {
+    console.error('Error fetching workflows:', error.message)
+    return
+  }
+
+  workflows.value = data
+}
+
 async function createProject() {
   $v.value.$touch()
   if ($v.value.$invalid) {
@@ -208,6 +234,7 @@ async function createProject() {
 
 onMounted(() => {
   fetchClients()
+  fetchWorkflows()
 })
 
 </script>

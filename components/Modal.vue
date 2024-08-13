@@ -79,7 +79,7 @@ computed(() => {
   }
 
   .modal-body {
-    background-color: #F8F7FE;
+    background-color: $white;
     border: 1px solid #EFE5FD;
     border-radius: $br-xl;
     overflow: auto;
@@ -92,7 +92,7 @@ computed(() => {
     }
 
     .header {
-      background-color: #F1F0FB;
+      background-color: rgba($white-dark, 0.25);
       color: $black;
       display: flex;
       flex-direction: row;

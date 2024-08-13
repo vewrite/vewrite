@@ -1,6 +1,6 @@
 <template>
   <div id="vewrite">
-    <Loading class="on-top" v-if="loading" />
+    <Loading class="on-top" :hasLogo="true" v-if="loading" />
     <main v-if="userStore.firstTime == false">
       <Sidebar />
       <NuxtPage />
@@ -35,8 +35,7 @@ const fetchUser = async () => {
     .eq('id', user.value.id)
 
   if (error) throw error
-
-  console.log(data[0])
+  
   userStore.setUser(data[0])
 }
 

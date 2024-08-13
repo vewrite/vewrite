@@ -1,12 +1,13 @@
 <template>
   <main id="Loading">
+    <Logo v-if="hasLogo" />
     <div :class="['spinner', type]"></div>
   </main>
 </template>
 
 <script setup>
 
-const props = defineProps(['type'])
+const props = defineProps(['type', 'hasLogo'])
 const { path } = toRefs(props)
 
 </script>
@@ -18,6 +19,7 @@ const { path } = toRefs(props)
 #Loading {
   display: flex;
   flex-direction: column;
+  gap: $spacing-sm;
   justify-content: center;
   align-items: center;
   height: 100%;
