@@ -64,7 +64,7 @@ const avatar_path = ref('')
 
 let { data } = await supabase
     .from('profiles')
-    .select(`username, website, avatar_url`)
+    .select('*')
     .eq('id', user.value.id)
     .single()
 if (data) {
@@ -83,9 +83,13 @@ async function updateProfile() {
         loading.value = true
         const user = useSupabaseUser();
         const updates = {
-            id: user.value.id,
+            // must include all user properties or this breaks
             username: username.value,
+            id: user.value.id,
+            tier: user.value.tier,
+            firstTime: user.value.firstTime,
             website: website.value,
+            persona: user.value.persona,
             avatar_url: avatar_path.value,
             updated_at: new Date(),
         }

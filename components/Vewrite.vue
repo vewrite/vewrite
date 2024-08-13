@@ -36,6 +36,7 @@ const fetchUser = async () => {
 
   if (error) throw error
 
+  console.log(data[0])
   userStore.setUser(data[0])
 }
 

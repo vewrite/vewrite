@@ -7,7 +7,7 @@ export const useUser = defineStore('userStore', {
     uuid: '',
     tier: '',
     persona: '',
-    firstTime: true,
+    firstTime: null,
     website: ''
   }),
   actions: {
