@@ -73,24 +73,24 @@
 
 <script setup>
 
-// User store
-import { useUser } from '@/stores/user'
-const userStore = useUser()
+// Supabase setup
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
+// User store
+import { useUser } from '@/stores/user'
+const userStore = useUser()
+
 const loading = ref(false)
 
+// Onboarding state
 const onboardingStep = ref(1);
 
 // First time users will see this onboarding screen
 // After they see it, we should set in the database that they have seen it
 // and then they will see the main screen
 
-const prevStep = () => {
-  onboardingStep.value = onboardingStep.value - 1
-}
-
+// STEP 1 - set the user's persona
 const setPersona = async (persona) => {
   // Set the user's persona
   userStore.setPersona(persona)
@@ -107,6 +107,7 @@ const setPersona = async (persona) => {
   if (error) throw error
 }
 
+// STEP 2 - set the user's name and website
 const onboardUserDetails = async () => {
   // Set the user's name and website
   setUserDetails(user)
@@ -116,30 +117,39 @@ const onboardUserDetails = async () => {
 
 }
 
-const setUserDetails = async (user) => {
-  // Set the user's name and website
-  userStore.setUsername(user.value.username)
-  userStore.setWebsite(user.value.website)
+    const setUserDetails = async (user) => {
+      // Set the user's name and website
+      userStore.setUsername(user.value.username)
+      userStore.setWebsite(user.value.website)
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .update({ username: user.value.username, website: user.value.website })
-    .eq('id', userStore.uuid)
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({ username: user.value.username, website: user.value.website })
+        .eq('id', userStore.uuid)
 
-  if (error) throw error
-}
+      if (error) throw error
+    }
 
-const setFirstTime = async (set) => {
-  // Set the user's firstTime to false
-  userStore.setFirstTime(set)
-  
-  // Update the user in the database
-  const { data, error } = await supabase
-    .from('profiles')
-    .update({ firstTime: set })
-    .eq('id', userStore.uuid)
+    const setFirstTime = async (set) => {
+      // Set the user's firstTime to false
+      userStore.setFirstTime(set)
 
-  if (error) throw error
+      console.log(set)
+      console.log(userStore.firstTime)
+      console.log(userStore.uuid)
+      
+      // Update the user in the database
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({ firstTime: set })
+        .eq('id', userStore.uuid)
+
+      if (error) throw error
+    }
+
+// Just in case they want to go back
+const prevStep = () => {
+  onboardingStep.value = onboardingStep.value - 1
 }
 
 </script>

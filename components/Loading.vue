@@ -23,6 +23,14 @@ const { path } = toRefs(props)
   height: 100%;
   width: 100%;
   z-index: 10;
+
+  &.on-top {
+    position: fixed;
+    z-index: 9999;
+    background-color: rgba($white, 1);
+    width: 100%;
+    height: 100%;
+  }
   
   .spinner {
     width: 40px;

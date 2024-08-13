@@ -12,6 +12,12 @@ export const useUser = defineStore('userStore', {
   }),
   actions: {
     setUser(user) {
+
+      if (!user) {
+        console.error('setUser called with undefined user')
+        return
+      }
+
       // expects an object with username, email, id, and firstTime
       this.username = user.username;
       this.email = user.email;

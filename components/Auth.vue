@@ -3,8 +3,11 @@
         <div class="col-6 form-widget">
             <h2 class="header">Sign in</h2>
             <p class="description">Sign in via magic link with your email below</p>
-            <div>
-                <input class="inputField" type="email" placeholder="Your email" v-model="email" />
+            <div class="form-group">
+                <div class="form-input">
+                    <label for="email">Your email address</label>
+                    <input class="inputField" type="email" placeholder="you@home.com" v-model="email" />
+                </div>
             </div>
             <div>
                 <input type="submit" class="button block" :value="loading ? 'Loading' : 'Send magic link'"
