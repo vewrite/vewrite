@@ -52,7 +52,7 @@
         
       </form>
 
-      <WizardBar totalSteps="3" v-if="!loading" />
+      <WizardBar :totalSteps="3" :labels="['Select a Client', 'Project Details', 'Deliverables']" v-if="!loading" />
     </template>
   </AppPanel>
 </template>
