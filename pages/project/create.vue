@@ -8,9 +8,32 @@
     <template v-slot:body>
 
       <Loading v-if="loading" />
-      <form class="inner-container" @submit.prevent="createProject" v-else>
-
-        <div class="form-block" v-if="wizardBar.currentStep == 1">
+      <div class="inner-container" v-if="!loading && wizardBar.currentStep == 1">
+        <div class="form-block" >
+          <div class="form-details">
+            <h3>Select the Client</h3>
+            <p class="details">Choose a client from the list.</p>
+            <p class="or-select">OR</p>
+            <p class="details">If you haven't created a client for this project, you can do so here.</p>
+            <router-link to="/clients/create" class="button primary">Create a client</router-link>
+          </div>
+          <div class="form-content">
+            <div class="form-group">
+              <div class="client-select" v-for="client in clients">
+                <input type="radio" :id="client.id" name="drone" :value="client.name" />
+                <label :for="client.id">
+                  <div class="image-wrapper">
+                    <img :src="client.logo_url" alt="Client avatar" />
+                  </div>
+                  {{ client.name }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="inner-container" @submit.prevent="createProject" v-if="!loading && wizardBar.currentStep == 2">
+        <div class="form-block" >
             <div class="form-details">
                 <h3>Project Details</h3>
               <p class="details">Your project's details.</p>
@@ -105,9 +128,6 @@ const $v = useVuelidate(rules, { project })
 const clients = ref([])
 
 async function fetchClients() {
-
-  loading.value = true
-
   const { data, error } = await supabase
     .from('clients')
     .select('*')
@@ -118,14 +138,32 @@ async function fetchClients() {
     return
   }
 
+  // add the clients to the clients ref
   clients.value = data
 
-  // set the v-model to the first client in the list
-  if (clients.value.length > 0) {
-    project.client = clients.value[0].id
-  }
+  // Add the clients to the clients ref
+  clients.value = await Promise.all(data.map(async client => {
+    const logoBlob = await downloadImage(client.logo_url);
+    return {
+      ...client,
+      logo_url: URL.createObjectURL(logoBlob)
+    };
+  }));
 
   loading.value = false
+}
+
+const downloadImage = async (path) => {
+  try {
+    const { data, error } = await supabase.storage
+          .from('logos')
+          .download(path)
+      if (error) throw error
+      // console.log(data)
+      return data
+  } catch (error) {
+      console.error("Error downloading image: ", error.message)
+  }
 }
 
 async function createProject() {
@@ -174,6 +212,59 @@ onMounted(() => {
 
 </script>
 
-<style scoped>
-/* Your styles here */
+<style lang="scss" scoped>
+
+@import 'assets/_variables.scss';
+
+.client-select {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  border: 1px solid rgba($purple, 0.3);
+  border-radius: $br-md;
+  padding: $spacing-xxs;
+
+  &:hover {
+    background-color: rgba($purple, 0.1);
+    border-color: $purple;
+  }
+
+  .image-wrapper {
+      width: 80px;
+      min-height: 54px;
+      height: 54px;
+      border-radius: $br-md;
+      overflow: hidden;
+      background-color: $gray-light;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: auto;
+        height: 100%;
+      }
+
+    }
+
+  input[type="radio"] {
+    margin-right: 0.5rem;
+    width: 18px;
+    height: 18px;
+  }
+
+  label {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-sm;
+    align-items: center;
+    cursor: pointer;
+    justify-content: flex-start;
+    font-size: $font-size-sm;
+    color: $black;
+    padding: 0 $spacing-sm;
+    width: 100%;
+  }
+}
+
 </style>

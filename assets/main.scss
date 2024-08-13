@@ -34,16 +34,11 @@ body,
 }
 
 .inner-container {
-    max-width: 800px;
     width: 100%;
     margin: $spacing-md auto 0;
     padding: $spacing-lg;
     display: flex;
     flex-direction: column;
-    background-color: $white;
-    border-radius: $br-lg;
-    border: 1px solid rgba($black, 0.1);
-    box-shadow: $main-shadow;
     color: $black;
 
     @media (max-width: 1000px) {
@@ -94,6 +89,36 @@ p {
 
 p.details {
     color: rgba($black, 0.5);
+    font-size: $font-size-xs;
+}
+
+p.or-select {
+    margin: $spacing-md 0;
+    color: rgba($black, 0.5);
+    font-size: $font-size-xxs;
+    width: 100%;
+    text-align: center;
+    position: relative;
+
+    &:before {
+        width: 35%;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        border-top: 1px solid rgba($black, 0.1);
+    }
+
+    &:after {
+        width: 35%;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        border-top: 1px solid rgba($black, 0.1);
+    }
 }
 
 pre {
@@ -213,7 +238,7 @@ textarea {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    gap: $spacing-md;
+    gap: $spacing-lg;
 
     &:last-of-type {
         border-bottom: none;

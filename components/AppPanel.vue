@@ -23,14 +23,15 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: rgba($white-dark, .5);
+  background-color: rgba($white, 1);
   border: 1px solid rgba($purple, 0.1);
   margin: $spacing-md;
   border-radius: $br-xl;
   overflow: hidden;
+  box-shadow: $main-shadow;
 
   .header {
-    background-color: rgba($white-dark, 1);
+    background-color: rgba($white-dark, 0.25);
     border-bottom: 1px solid rgba($purple, 0.1);
     color: $black;
     display: flex;

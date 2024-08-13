@@ -4,17 +4,13 @@
       <button v-if="wizardBar.currentStep > 1" class="" @click="prevStep">Back</button>
     </div>
     <div class="wizard-steps">
-      <!-- {{ wizardBar.currentStep }} of {{ totalSteps }} -->
       <div v-for="step in totalSteps" :key="step" :class="['wizard-step', { 'active': wizardBar.currentStep === step }]">
-        <!-- {{ step }} -->
-        <div >
-          <span class="step-num">{{ step }}</span>
-          <span class="step-label">{{ props.labels[step - 1] }}</span>
-        </div>
+        <span class="step-num">{{ step }}</span>
+        <span class="step-label">{{ props.labels[step - 1] }}</span>
       </div>
     </div>
     <div>
-      <button v-if="wizardBar.currentStep < totalSteps" class="" @click="nextStep">Next</button>
+      <button v-if="wizardBar.currentStep < totalSteps" class="primary" @click="nextStep">Next</button>
     </div>
   </aside>
 </template>
@@ -79,8 +75,10 @@ const prevStep = () => {
 
     .wizard-step {
       border: 1px solid rgba($black, 0.1);
+      background: $white;
       border-radius: $br-lg;
       padding: $spacing-xxs $spacing-xs;
+      transition: all 0.3s ease-in-out;
 
       .step-num {
         padding: 0 $spacing-xs 0 0;
