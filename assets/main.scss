@@ -36,7 +36,7 @@ body,
 .inner-container {
     width: 100%;
     margin: 0 auto;
-    padding: $spacing-lg;
+    padding: $spacing-md;
     display: flex;
     flex-direction: column;
     color: $black;
@@ -207,6 +207,27 @@ input[disabled] {
 textarea {
     width: 100%;
     margin: 0 0 $spacing-sm 0;
+}
+
+.search-bar {
+    width: 100%;
+    margin-bottom: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    border-bottom: 1px solid rgba($black, 0.1);
+    background-color: rgba($white-dark, 0.25);
+
+    input {
+        border: 1px solid rgba($black, 0.1);
+        padding: $spacing-xs;
+        width: 100%;
+        font-size: $font-size-sm;
+        font-weight: 400;
+        font-family: $font-family-main;
+
+        &:focus-within {
+            border: 1px solid rgba($purple, 0.9);
+        }
+    }
 }
 
 .form-group {

@@ -1,14 +1,20 @@
 <template>
   <main id="ProjectsList">
     <Loading v-if="loading" />
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search project titles" v-model="searchQuery" />
+    </div>
+
     <div class="empty-state" v-if="projects.length === 0 && !loading">
       <img src="/images/projects-empty-state.svg" alt="No projects found" />
       <h3>You haven’t created a project yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
       <router-link to="/project/create" class="button primary">Create a project</router-link>
     </div>
+
     <div class="projects-list" v-if="!loading">
-      <div class="project-card" v-for="project in projects" :key="project.id">
+      <div class="project-card" v-for="project in filteredProjects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
             <img :src="project.client_logos" :alt="'Client id:' + project.client" />
@@ -44,6 +50,7 @@
 
 const projects = ref([]);
 const loading = ref(true);
+const searchQuery = ref('')
 
 // Supabase
 const supabase = useSupabaseClient();
@@ -145,6 +152,14 @@ onMounted(() => {
   fetchProjects()
 })
 
+const filteredProjects = computed(() => {
+  if (!searchQuery.value) {
+    return projects.value
+  }
+  return projects.value.filter(project =>
+    project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+})
 
 </script>
 
@@ -158,14 +173,9 @@ onMounted(() => {
   align-items: flex-start;
   justify-content: flex-start;
   height: 100%;
-  padding: $spacing-lg;
   margin-bottom: $spacing-lg;
   overflow-y: auto;
   transition: padding 0.2s ease;
-
-  @media (max-width: 1000px) {
-    padding: $spacing-md;
-  }
 
   .empty-state {
     display: flex;
@@ -200,6 +210,7 @@ onMounted(() => {
     grid-template-columns: repeat(3, 1fr);
     gap: $spacing-md;
     width: 100%;
+    padding: $spacing-md;
 
     @media (max-width: 1200px) {
       grid-template-columns: repeat(2, 1fr);

@@ -2,6 +2,10 @@
   <main id="Clients">
     <Loading v-if="loading" />
 
+    <div class="search-bar">
+      <input type="text" placeholder="Search projects" v-model="searchQuery" />
+    </div>
+
     <!-- Empty state -->
     <div class="empty-state" v-if="clients.length === 0 && !loading">
       <img src="/images/clients-empty-state.svg" alt="No clients found" />
@@ -12,7 +16,7 @@
 
     <!-- Client list -->
     <div class="clients-list inner-container" v-if="!loading">
-      <router-link :to="'/client/' + client.id" class="client-card" v-for="client in clients" :key="client.id">
+      <router-link :to="'/client/' + client.id" class="client-card" v-for="client in filteredClients" :key="client.id">
         <div class="image-wrapper">
           <img :src="client.logo_url" alt="Client avatar" />
         </div>
@@ -31,6 +35,7 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const clients = ref([])
 const loading = ref(true)
+const searchQuery = ref('')
 
 async function fetchClients() {
   const { data, error } = await supabase
@@ -73,6 +78,15 @@ const downloadImage = async (path) => {
 
 onMounted(() => {
   fetchClients()
+})
+
+const filteredClients = computed(() => {
+  if (!searchQuery.value) {
+    return clients.value
+  }
+  return clients.value.filter(client =>
+    client.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
 })
 
 </script>
