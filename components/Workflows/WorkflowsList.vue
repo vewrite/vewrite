@@ -48,7 +48,6 @@ async function fetchWorkflows() {
 
 onMounted(() => {
   fetchWorkflows()
-  // const states = computed(() => workflows.states.map(workflow => workflow.state))
 })
 
 </script>
@@ -58,16 +57,18 @@ onMounted(() => {
 @import "./assets/variables.scss";
 
 #Workflows {
+  width: 100%;
+  height: 100%;
 
   .states-list {
     display: flex;
     gap: 1rem;
-
-    .state {
-      padding: 1rem;
-      border: 1px solid $gray-300;
-      border-radius: 0.5rem;
-    }
+    border: 1px solid rgba($black, 0.1);
+    background-color: rgba($white-dark, 0.25);
+    padding: $spacing-md;
+    border-radius: $br-md;
+    margin: $spacing-md 0;
+    overflow-x: auto;
   }
 }
 

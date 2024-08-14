@@ -160,6 +160,7 @@ label {
     font-size: $font-size-xs;
     color: rgba($black,0.5);
     font-weight: 400;
+    background-color: $white;
     padding: $spacing-xs $spacing-xs 0 $spacing-xs;
 }
 
@@ -223,6 +224,7 @@ textarea {
     margin-bottom: $spacing-sm;
     transition: all 0.2s ease;
     width: 100%;
+    overflow: hidden;
 
     &:focus,
     &:hover,
