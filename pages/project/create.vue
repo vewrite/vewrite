@@ -9,6 +9,8 @@
 
       <Loading v-if="loading" />
 
+      <!-- {{ project }} -->
+
       <main class="scrollable has-wizard">
 
         <!-- STEP 1 -->
@@ -24,7 +26,7 @@
             <div class="form-content">
               <div class="form-group">
                 <div class="client-select" v-for="client in clients">
-                  <input type="radio" :id="client.id" name="drone" :value="client.name" />
+                  <input type="radio" :id="client.id" name="drone" :value="client.id" v-model="project.client" />
                   <label :for="client.id">
                     <div class="image-wrapper">
                       <img :src="client.logo_url" alt="Client avatar" />
@@ -77,12 +79,12 @@
                       <span v-if="!$v.project.client.required">Client is required</span>
                   </div> -->
 
-                  <!-- <div class="form-group-footer">
+                  <div class="form-group-footer">
                     <button type="submit" class="button block primary" :disabled="loading">
                         <span v-if="loading">Updating...</span>
                         <span v-else>Create</span>
                     </button>
-                  </div> -->
+                  </div>
                 </div>     
               </div>
           </div>
@@ -90,7 +92,7 @@
         </form> 
       </main>
 
-      <WizardBar :totalSteps="3" :labels="['Select a Client', 'Project Details', 'Deliverables']" v-if="!loading" />
+      <WizardBar :totalSteps="2" :labels="['Select a Client', 'Project Details']" v-if="!loading" />
     </template>
   </AppPanel>
 </template>
@@ -229,6 +231,10 @@ async function createProject() {
 
     // When complete, load /projects
     router.push('/projects')
+
+    // Reset the create form
+    loading.value = false
+    wizardBar.currentStep == 1
 
     if (error) throw error
 

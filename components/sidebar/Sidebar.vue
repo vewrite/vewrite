@@ -171,7 +171,7 @@ onMounted(() => {
         font-size: $font-size-sm;
         font-family: $font-family-main;
         font-weight: 400;
-        color: $black;
+        color: $mint-dark;
         margin: 0 0 0 $spacing-sm;
       }
 
