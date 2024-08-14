@@ -292,6 +292,13 @@ onMounted(() => {
     padding: 0 $spacing-sm;
     width: 100%;
   }
+
+  &:hover {
+
+    label {
+      background: transparent;
+    }
+  }
 }
 
 </style>

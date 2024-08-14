@@ -2,7 +2,7 @@
   <main id="ProjectsList">
     <Loading v-if="loading" />
 
-    <div class="search-bar">
+    <div class="search-bar" v-if="projects.length > 0 && !loading">
       <input type="text" placeholder="Search project titles" v-model="searchQuery" />
     </div>
 
