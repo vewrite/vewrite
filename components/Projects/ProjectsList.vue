@@ -3,7 +3,26 @@
     <Loading v-if="loading" />
 
     <div class="search-bar" v-if="projects.length > 0 && !loading">
-      <input type="text" placeholder="Search project titles" v-model="searchQuery" />
+      <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" />
+      <div class="list-buttons">
+        <button :class="['list-icon', viewMode == 'grid' ? 'active' : '']" @click="listToggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.5 18L10.5 15C10.5 14.1716 9.82843 13.5 9 13.5L5 13.5C4.17157 13.5 3.5 14.1716 3.5 15L3.5 18C3.5 18.8284 4.17157 19.5 5 19.5L9 19.5C9.82843 19.5 10.5 18.8284 10.5 18Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M20.5 18L20.5 15C20.5 14.1716 19.8284 13.5 19 13.5L15 13.5C14.1716 13.5 13.5 14.1716 13.5 15L13.5 18C13.5 18.8284 14.1716 19.5 15 19.5L19 19.5C19.8284 19.5 20.5 18.8284 20.5 18Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M10.5 9L10.5 6C10.5 5.17157 9.82843 4.5 9 4.5L5 4.5C4.17157 4.5 3.5 5.17157 3.5 6L3.5 9C3.5 9.82843 4.17157 10.5 5 10.5L9 10.5C9.82843 10.5 10.5 9.82843 10.5 9Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M20.5 9L20.5 6C20.5 5.17157 19.8284 4.5 19 4.5L15 4.5C14.1716 4.5 13.5 5.17157 13.5 6L13.5 9C13.5 9.82843 14.1716 10.5 15 10.5L19 10.5C19.8284 10.5 20.5 9.82843 20.5 9Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button :class="['list-icon', viewMode == 'list' ? 'active' : '']" @click="listToggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 5H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M4 19H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M4 12H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+          </svg>
+
+
+        </button>
+      </div>
     </div>
 
     <div class="empty-state" v-if="projects.length === 0 && !loading">
@@ -13,7 +32,7 @@
       <router-link to="/project/create" class="button primary">Create a project</router-link>
     </div>
 
-    <div class="projects-list" v-if="!loading">
+    <div :class="['projects-list', viewMode]" v-if="!loading">
       <div class="project-card" v-for="project in filteredProjects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
@@ -62,6 +81,12 @@ const modal = useModal();
 
 const edit = () => {
   modal.visible = 1;
+};
+
+const viewMode = ref('grid');
+
+const listToggle = () => {
+  viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid';
 };
 
 async function fetchProjects() {
@@ -206,157 +231,333 @@ const filteredProjects = computed(() => {
   }
 
   .projects-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-md;
-    width: 100%;
-    padding: $spacing-md;
 
-    @media (max-width: 1200px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    &.grid {
 
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-
-    .project-card {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-md;
+      width: 100%;
       padding: $spacing-md;
-      background-color: $white;
-      border-radius: $br-lg;
-      border: 1px solid rgba($purple, 0.1);
-      transition: all 0.18s ease;
-      text-decoration: none;
-      min-height: 300px;
-      color: $black;
-      position: relative;
-      overflow: hidden;
-      box-shadow: $main-shadow;
 
-      .project-card-header {
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card {
+        padding: $spacing-md;
+        background-color: $white;
+        border-radius: $br-lg;
+        border: 1px solid rgba($purple, 0.1);
+        text-decoration: none;
+        min-height: 220px;
+        color: $black;
+        position: relative;
+        overflow: hidden;
+        box-shadow: $main-shadow;
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: $spacing-md;
         flex-direction: row;
+        gap: $spacing-md;
+        justify-content: space-between;
 
-        .image-wrapper {
-          width: 80px;
-          min-height: 54px;
-          height: 54px;
-          border-radius: $br-md;
-          overflow: hidden;
-          background-color: $gray-light;
+        .project-card-header {
           display: flex;
-          justify-content: center;
-          align-items: center;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: $spacing-md;
+          flex-direction: row;
 
-          img {
-            width: auto;
-            height: 100%;
+          .image-wrapper {
+            width: 80px;
+            min-height: 54px;
+            height: 54px;
+            border-radius: $br-md;
+            overflow: hidden;
+            background-color: $gray-light;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+              width: auto;
+              height: 100%;
+            }
+          }
+
+        }
+
+        h3 {
+          font-size: $font-size-lg;
+          font-family: $font-family-secondary;
+          font-weight: 500;
+          margin: 0 0 $spacing-sm;
+          
+          a {
+            color: $purple;
+            text-decoration: none;
           }
         }
 
-      }
-
-      h3 {
-        font-size: $font-size-lg;
-        font-family: $font-family-secondary;
-        font-weight: 500;
-        margin: 0 0 $spacing-sm;
-        
-        a {
-          color: $purple;
-          text-decoration: none;
+        p {
+          font-size: $font-size-sm;
+          font-weight: 400;
+          color: $gray-dark;
         }
-      }
-
-      p {
-        font-size: $font-size-sm;
-        font-weight: 400;
-        color: $gray-dark;
-      }
-
-      .project-card-buttons {
-        opacity: 0;
-        transition: all 0.2s ease;
-        z-index: 10;
-        position: absolute;
-        bottom: -40px;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: flex-end;
-        gap: $spacing-xs;
-        padding: $spacing-sm $spacing-md;
-        background-color: $purple;
-        backdrop-filter: blur(10px);
-        border-top: 1px solid rgba($black, 0.1);
-        border-radius: $br-lg $br-lg 0 0;
-
-        a, button {
-          width: 50%;
-          justify-content: center;
-        }
-      }
-
-      &:hover {
-        border: 1px solid rgba($purple, 0.21);
 
         .project-card-buttons {
-          opacity: 1;
-          bottom: 0;
+          opacity: 0;
+          transition: bottom 0.2s ease;
+          z-index: 10;
+          position: absolute;
+          bottom: -80px;
+          left: 0;
+          right: 0;
+          display: flex;
+          justify-content: flex-end;
+          gap: $spacing-xs;
+          padding: $spacing-sm $spacing-md;
+          background-color: $purple;
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba($black, 0.1);
+          border-radius: $br-lg $br-lg 0 0;
+
+          a, button {
+            width: 50%;
+            justify-content: center;
+          }
+        }
+
+        &:hover {
+          border: 1px solid rgba($purple, 0.21);
+
+          .project-card-buttons {
+            opacity: 1;
+            bottom: 0;
+          }
+
+          .project-deliverables-status {
+            bottom: calc($spacing-md + 40px);
+          }
         }
 
         .project-deliverables-status {
-          bottom: calc($spacing-md + 40px);
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          position: absolute;
+          bottom: $spacing-md;
+          width: calc(100% - #{$spacing-md * 2});
+          transition: bottom 0.2s ease;
+
+          .progress-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $spacing-sm;
+            width: 100%;
+
+            span {
+              font-size: $font-size-sm;
+              font-weight: 400;
+              color: $gray-dark;
+            }
+          }
+
+          .progress-content {
+            width: 100%;
+
+            .progress-bar {
+              width: 100%;
+              padding: 2px;
+              min-height: 10px;
+              border-radius: $br-md;
+              background-color: $white;
+              border: 1px solid $gray-light;
+
+              .progress {
+                height: 6px;
+                border-radius: $br-md;
+                background-color: $purple;
+              }
+
+            }
+          }
         }
       }
 
-      .project-deliverables-status {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        position: absolute;
-        bottom: $spacing-md;
-        width: calc(100% - #{$spacing-md * 2});
-        transition: all 0.2s ease;
+    }
 
-        .progress-status {
+    &.list {
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      width: 100%;
+
+      .project-card {
+        padding: $spacing-sm $spacing-md;
+        background-color: $white;
+        border-bottom: 1px solid rgba($purple, 0.1);
+        transition: background-color 0.18s ease;
+        text-decoration: none;
+        width: 100%;
+        color: $black;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-md;
+        justify-content: space-between;
+
+        .project-card-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          margin-bottom: $spacing-sm;
-          width: 100%;
+          align-items: flex-start;
+          flex-direction: row;
+          width: 80px;
 
-          span {
-            font-size: $font-size-sm;
-            font-weight: 400;
-            color: $gray-dark;
+          .image-wrapper {
+            width: 80px;
+            min-height: 54px;
+            height: 54px;
+            border-radius: $br-md;
+            overflow: hidden;
+            background-color: $gray-light;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+              width: auto;
+              height: 100%;
+            }
+          }
+
+        }
+
+        h3 {
+          font-size: $font-size-lg;
+          font-family: $font-family-secondary;
+          font-weight: 500;
+          margin: 0;
+          align-self: center;
+          width: 35%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          
+          a {
+            color: $purple;
+            text-decoration: none;
           }
         }
 
-        .progress-content {
-          width: 100%;
+        p {
+          font-size: $font-size-sm;
+          font-weight: 400;
+          color: $gray-dark;
+        }
 
-          .progress-bar {
+        .project-card-buttons {
+          transition: none;
+          display: flex;
+          justify-content: flex-end;
+          gap: $spacing-xs;
+          padding: $spacing-sm 0;
+          align-self: flex-end;
+
+          a, button {
+            justify-content: center;
+          }
+        }
+
+        &:hover {
+          background-color: rgba($purple, 0.05);
+
+          .project-card-buttons {
+
+          }
+
+          .project-deliverables-status {
+            
+          }
+        }
+
+        .project-deliverables-status {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          transition: all 0.2s ease;
+          width: 35%;
+          gap: $spacing-md;
+
+          .progress-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 50%;
+
+            span {
+              font-size: $font-size-sm;
+              font-weight: 400;
+              color: $gray-dark;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+
+              &:first-child {
+                display: none;
+              }
+            }
+          }
+
+          .progress-content {
             width: 100%;
-            padding: 2px;
-            min-height: 10px;
-            border-radius: $br-md;
-            background-color: $white;
-            border: 1px solid $gray-light;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
 
-            .progress {
-              height: 6px;
-              border-radius: $br-md;
-              background-color: $purple;
+            .empty-deliverables {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: $gray-dark;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
+            .deliverables {
+              width: 100%;
+            }
+
+            .progress-bar {
+              width: 100%;
+              padding: 2px;
+              min-height: 10px;
+              border-radius: $br-md;
+              background-color: $white;
+              border: 1px solid $gray-light;
+
+              .progress {
+                height: 6px;
+                border-radius: $br-md;
+                background-color: $purple;
+              }
+
+            }
           }
         }
       }
-    }
+
+      }
   }
 }
 

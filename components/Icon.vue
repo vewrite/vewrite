@@ -41,6 +41,14 @@ defineProps({
     background-image: url('/icons/folder.svg');
   }
 
+  &.grid {
+    background-image: url('/icons/grid.svg');
+  }
+
+  &.list {
+    background-image: url('/icons/list.svg');
+  }
+
   &.rightArrow {
     background-image: url('/icons/right-arrow.svg');
   }

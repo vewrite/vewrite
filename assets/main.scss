@@ -214,6 +214,11 @@ textarea {
     padding: $spacing-sm $spacing-md;
     border-bottom: 1px solid rgba($black, 0.1);
     background-color: rgba($white-dark, 0.25);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-md;
 
     input {
         border: 1px solid rgba($black, 0.1);
@@ -225,6 +230,37 @@ textarea {
 
         &:focus-within {
             border: 1px solid rgba($purple, 0.9);
+        }
+    }
+
+    .list-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: $spacing-xxs;
+        height: 100%;
+
+        button {
+            box-shadow: none;
+            border-color: transparent;
+            border-radius: 0;
+            background-color: transparent;
+            padding: 0;
+            height: 100%;
+            width: 36px;
+        }
+
+        .active {
+            border-bottom: 1px solid $purple;
+
+            svg {
+
+                path,
+                mask path {
+                    stroke: $purple;
+                    stroke-opacity: 1;
+                }
+            }
         }
     }
 }
