@@ -23,10 +23,16 @@
       </div>
     </div>
     <div class="user-section">
+      <aside class="tier-type">
+        <div class="tier">
+          <p>You are on the Free tier</p>
+        </div>
+        <router-link to="/settings" class="button green">Upgrade</router-link>
+      </aside>
       <router-link to="/account" class="button user" v-if="userStore">
         <div class="user-identity">
           <Avatar :uuid="userStore.uuid" />
-          <p>{{ userStore.username }}</p>
+          <p class="user">{{ userStore.username }}</p>
         </div>
         <Icon type="rightArrow" />
       </router-link>
@@ -97,7 +103,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    height: calc(100% - 135px - 116px);
+    height: calc(100% - 135px - 180px);
     overflow-y: auto;
 
     .link-group {
@@ -140,24 +146,49 @@ onMounted(() => {
 
   .user-section {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: $spacing-md 0 $spacing-md $spacing-md;
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 116px;
+    height: 180px;
 
-    .button {
-      width: 100%;
+    .tier-type {
       display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-xs;
+      margin-bottom: $spacing-xs;
+      justify-content: space-between;
+      width: 100%;
+      background-color: rgba($mint, 0.25);
+      padding: $spacing-xs;
+      border-radius: $br-xl;
+
+      p {
+        font-size: $font-size-sm;
+        font-family: $font-family-main;
+        font-weight: 400;
+        color: $black;
+        margin: 0 0 0 $spacing-sm;
+      }
+
+      button {
+        width: auto;
+        display: inline-block;
+      }
+    }
+
+    .button.user {
+      width: 100%;
       flex-direction: row;
       justify-content: space-between;
       border-radius: $br-xl;
     }
 
-    p {
+    p.user {
       font-size: $font-size-sm;
       font-family: $font-family-main;
       font-weight: 400;
@@ -175,7 +206,7 @@ onMounted(() => {
 
     &:hover {
       
-      p {
+      p.user {
         color: $black;
       }
     }

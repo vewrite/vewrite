@@ -53,6 +53,7 @@ const prevStep = () => {
   position: absolute;
   bottom:0;
   width: 100%;
+  height: 85px;
   padding: $spacing-md;
   background-color: $white;
   display: flex;

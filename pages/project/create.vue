@@ -8,80 +8,87 @@
     <template v-slot:body>
 
       <Loading v-if="loading" />
-      <div class="inner-container" v-if="!loading && wizardBar.currentStep == 1">
-        <div class="form-block" >
-          <div class="form-details">
-            <h3>Select the Client</h3>
-            <p class="details">Choose a client from the list.</p>
-            <p class="or-select">OR</p>
-            <p class="details">If you haven't created a client for this project, you can do so here.</p>
-            <router-link to="/clients/create" class="button primary">Create a client</router-link>
-          </div>
-          <div class="form-content">
-            <div class="form-group">
-              <div class="client-select" v-for="client in clients">
-                <input type="radio" :id="client.id" name="drone" :value="client.name" />
-                <label :for="client.id">
-                  <div class="image-wrapper">
-                    <img :src="client.logo_url" alt="Client avatar" />
-                  </div>
-                  {{ client.name }}
-                </label>
+
+      <main class="scrollable has-wizard">
+
+        <!-- STEP 1 -->
+        <div class="inner-container" v-if="!loading && wizardBar.currentStep == 1">
+          <div class="form-block" >
+            <div class="form-details">
+              <h3>Select the Client</h3>
+              <p class="details">Choose a client from the list.</p>
+              <p class="or-select">OR</p>
+              <p class="details">If you haven't created a client for this project, you can do so here.</p>
+              <router-link to="/clients/create" class="button primary">Create a client</router-link>
+            </div>
+            <div class="form-content">
+              <div class="form-group">
+                <div class="client-select" v-for="client in clients">
+                  <input type="radio" :id="client.id" name="drone" :value="client.name" />
+                  <label :for="client.id">
+                    <div class="image-wrapper">
+                      <img :src="client.logo_url" alt="Client avatar" />
+                    </div>
+                    {{ client.name }}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <form class="inner-container" @submit.prevent="createProject" v-if="!loading && wizardBar.currentStep == 2">
-        <div class="form-block" >
-            <div class="form-details">
-                <h3>Project Details</h3>
-              <p class="details">Your project's details.</p>
-            </div>
-            <div class="form-content">
-              <div class="form-group">
-                <div class="form-input">
-                    <label for="name">Name</label>
-                    <input v-model="project.name" id="name" type="text" placeholder="Name your project"  />
-                    <span class="form-error" v-if="$v.$errors.length !== 0 && $v.project.name.required">Name is required</span>
-                </div>
-                <div class="form-input">
-                    <label for="status">Status</label>
-                    <select v-model="project.status" id="status">
-                      <option value="0">Not started</option>
-                      <option value="1">Active</option>
-                      <option value="2">Archived</option>
-                    </select>
-                    <span v-if="!$v.project.status.required">Status is required</span>
-                </div>
 
-                <div class="form-input">
-                    <label for="client">Workflow</label>
-                    <select v-model="project.workflow" id="client">
-                      <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
-                    </select>
-                    <span v-if="!$v.project.workflow.required">Workflow is required</span>
-                </div>
+        <!-- STEP 2 -->
+        <form class="inner-container" @submit.prevent="createProject" v-if="!loading && wizardBar.currentStep == 2">
+          <div class="form-block" >
+              <div class="form-details">
+                  <h3>Project Details</h3>
+                <p class="details">Your project's details.</p>
+              </div>
+              <div class="form-content">
+                <div class="form-group">
+                  <div class="form-input">
+                      <label for="name">Name</label>
+                      <input v-model="project.name" id="name" type="text" placeholder="Name your project"  />
+                      <span class="form-error" v-if="$v.$errors.length !== 0 && $v.project.name.required">Name is required</span>
+                  </div>
+                  <div class="form-input">
+                      <label for="status">Status</label>
+                      <select v-model="project.status" id="status">
+                        <option value="0">Not started</option>
+                        <option value="1">Active</option>
+                        <option value="2">Archived</option>
+                      </select>
+                      <span v-if="!$v.project.status.required">Status is required</span>
+                  </div>
 
-                <!-- <div class="form-input">
-                    <label for="client">Client</label>
-                    <select v-model="project.client" id="client">
-                      <option v-for="client in clients" :value="client.id">{{ client.name }}</option>
-                    </select>
-                    <span v-if="!$v.project.client.required">Client is required</span>
-                </div> -->
+                  <div class="form-input">
+                      <label for="client">Workflow</label>
+                      <select v-model="project.workflow" id="client">
+                        <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
+                      </select>
+                      <span v-if="!$v.project.workflow.required">Workflow is required</span>
+                  </div>
 
-                <!-- <div class="form-group-footer">
-                  <button type="submit" class="button block primary" :disabled="loading">
-                      <span v-if="loading">Updating...</span>
-                      <span v-else>Create</span>
-                  </button>
-                </div> -->
-              </div>     
-            </div>
-        </div>
-        
-      </form>
+                  <!-- <div class="form-input">
+                      <label for="client">Client</label>
+                      <select v-model="project.client" id="client">
+                        <option v-for="client in clients" :value="client.id">{{ client.name }}</option>
+                      </select>
+                      <span v-if="!$v.project.client.required">Client is required</span>
+                  </div> -->
+
+                  <!-- <div class="form-group-footer">
+                    <button type="submit" class="button block primary" :disabled="loading">
+                        <span v-if="loading">Updating...</span>
+                        <span v-else>Create</span>
+                    </button>
+                  </div> -->
+                </div>     
+              </div>
+          </div>
+          
+        </form> 
+      </main>
 
       <WizardBar :totalSteps="3" :labels="['Select a Client', 'Project Details', 'Deliverables']" v-if="!loading" />
     </template>

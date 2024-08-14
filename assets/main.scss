@@ -46,6 +46,15 @@ body,
     }
 }
 
+.scrollable {
+    overflow-y: auto;
+    max-height: 100%;
+
+    &.has-wizard {
+        max-height: calc(100% - 85px);
+    }
+}
+
 /* Typography */
 
 h1,
@@ -386,6 +395,18 @@ button.primary,
     &:hover {
         border: 1px solid rgba($purple-dark, 1);
         background-color: rgba($purple, 1);
+    }
+}
+
+button.green,
+.button.green {
+    border: 1px solid rgba($mint-dark, 0.9);
+    background-color: rgba($mint, 0.75);
+    color: $black;
+
+    &:hover {
+        border: 1px solid rgba($mint-dark, 1);
+        background-color: rgba($mint, 1);
     }
 }
 
