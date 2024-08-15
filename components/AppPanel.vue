@@ -24,11 +24,9 @@ export default {
   flex-direction: column;
   width: 100%;
   background-color: rgba($white, 1);
-  border: 1px solid rgba($purple, 0.1);
-  margin: $spacing-md;
-  border-radius: $br-xl;
+  border-left: 1px solid rgba($purple, 0.1);
+  margin: 0 0 0 $spacing-md;
   overflow: hidden;
-  box-shadow: $main-shadow;
 
   .header {
     background-color: rgba($white-dark, 0.25);

@@ -10,10 +10,11 @@
         <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link>
         <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link>
       </div>
-      
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
+      <ProjectOverview v-if="project && !loading" :project="project" />
+      <!-- :creator="creator" :client="client" -->
       <div class="inner-container" v-if="project && !loading">
         <div class="form-block">
           <div class="form-details">
@@ -51,12 +52,24 @@
             <p>{{ creator.username }}</p>
           </div>
         </div>
+
+        <div class="form-block" v-if="client && !loading">
+          <div class="form-details">
+            <h3>Client</h3>
+            <p>Who is this for?</p>
+          </div>
+          <div class="form-content">
+            <p>{{ client }}</p>
+          </div>
+        </div>
       </div>
     </template>
   </AppPanel>
 </template>
 
 <script setup>
+
+import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 
@@ -72,6 +85,9 @@ const projectId = route.params.id;
 // Fetch the project data from supabase
 const project = ref(null);
 const creator = ref(null);
+const client = ref(null);
+
+const path = ref("")
 
 async function getProject(id) {
   try {
@@ -86,14 +102,15 @@ async function getProject(id) {
     project.value = data;
 
     // Cool, now go get the creator data
-    getCreator(project.value.created_by);
+    fetchCreator(project.value.created_by);
+    fetchClient(project.value.client);
 
   } catch (error) {
     alert(error.message);
   }
 }
 
-async function getCreator(uuid) {
+async function fetchCreator(uuid) {
   try {
     const { data, error } = await supabase
       .from('profiles')
@@ -109,11 +126,56 @@ async function getCreator(uuid) {
   }
 }
 
+async function fetchClient(clientId) {
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .eq('id', clientId)
+
+  if (error) {
+    console.error('Error fetching clients:', error.message)
+    return
+  }
+
+  // add the clients to the clients ref
+  client.value = data
+
+  // Add the clients to the clients ref
+  client.value = await Promise.all(data.map(async client => {
+    const logoBlob = await downloadImage(client.logo_url);
+    return {
+      ...client,
+      logo_url: URL.createObjectURL(logoBlob)
+    };
+  }));
+
+  loading.value = false
+}
+
+const downloadImage = async (path) => {
+  try {
+    const { data, error } = await supabase.storage
+          .from('logos')
+          .download(path)
+      if (error) throw error
+      // console.log(data)
+      return data
+  } catch (error) {
+      console.error("Error downloading image: ", error.message)
+  }
+}
+
 // Fetch the project data when the component is mounted
 onMounted(() => {
   getProject(projectId);
   loading.value = false;
 });
+
+watch(path, () => {
+    if (path.value) {
+        downloadImage()
+    }
+})
 
 </script>
 

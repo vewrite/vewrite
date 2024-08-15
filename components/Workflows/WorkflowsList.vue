@@ -1,9 +1,15 @@
 <template>
   <main id="Workflows">
     <Loading v-if="loading" />
-    <div class="inner-container" v-if="!loading && workflows.length > 0">
+    <div class="workflow-select" v-if="!loading && workflows.length > 0">
+      <div class="workflow-group">
+        <div class="title">Workflows</div>
+        <div class="single-workflow" v-for="workflow in workflows">{{ workflow.name }}</div>
+      </div>
+    </div>
+    <div class="workflow-preview scrollable" v-if="!loading && workflows.length > 0">
       <div v-for="workflow in workflows" key="workflow.id">
-        <h2>{{ workflow.name }}</h2>
+        <h3>{{ workflow.name }}</h3>
         <p>{{ workflow.description }}</p>
         <aside class="states-list">
           <State v-for="state in workflow.states" key="state.id" :state="state" />
@@ -59,9 +65,68 @@ onMounted(() => {
 #Workflows {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: row;
+
+  .workflow-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 280px;
+    height: 100%;
+    border-right: 1px solid rgba($black, 0.1);
+    padding: $spacing-md;
+
+    .workflow-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: $spacing-md;
+
+      .single-workflow {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-xs;
+        padding: $spacing-xxs $spacing-xs;
+        border-radius: $br-md;
+        transition: background-color 0.18s ease;
+        color: $black;
+        font-size: $font-size-sm;
+        font-family: $font-family-main;
+        font-weight: 400;
+        text-decoration: none;
+        min-height: 36px;
+        cursor: pointer;
+
+        &:hover,
+        &.router-link-active,
+        &.router-link-exact-active {
+          background-color: rgba($purple, 0.05);
+          color: $purple;
+        }
+      }
+
+      .title {
+          font-size: $font-size-sm;
+          font-family: $font-family-main;
+          font-weight: 500;
+          color: $gray-dark;
+          margin-bottom: $spacing-xs;
+        }
+    }
+  }
+
+  .workflow-preview {
+    width: calc(100% - 200px);
+    display: flex;
+    flex-direction: column;
+    padding:  $spacing-md;
+  }
 
   .states-list {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     border: 1px solid rgba($black, 0.1);
     background-color: rgba($white-dark, 0.25);
