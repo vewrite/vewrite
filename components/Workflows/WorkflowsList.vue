@@ -3,8 +3,12 @@
     <Loading v-if="loading" />
     <div class="workflow-select" v-if="!loading && workflows.length > 0">
       <div class="workflow-group">
-        <div class="title">Workflows</div>
-        <div class="single-workflow" v-for="workflow in workflows">{{ workflow.name }}</div>
+        <div class="title">Default</div>
+        <div class="single-workflow" v-for="workflow in defaultWorkflows">{{ workflow.name }}</div>
+      </div>
+      <div class="workflow-group">
+        <div class="title">Custom</div>
+        <div class="single-workflow" v-for="workflow in customWorkflows">{{ workflow.name }}</div>
       </div>
     </div>
     <div class="workflow-preview scrollable" v-if="!loading && workflows.length > 0">
@@ -32,6 +36,8 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
 const workflows = ref([])
+const defaultWorkflows = ref([])
+const customWorkflows = ref([])
 const loading = ref(true)
 const states = ref([])
 
@@ -44,6 +50,12 @@ async function fetchWorkflows() {
     if (error) throw error
 
     workflows.value = data
+
+    // Set default workflows (where type == 1)
+    defaultWorkflows.value = data.filter(workflow => workflow.type === 1)
+
+    // Set custom workflows (where type == 2)
+    customWorkflows.value = data.filter(workflow => workflow.type === 2)
 
     loading.value = false
 
