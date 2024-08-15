@@ -4,15 +4,15 @@
     <div class="workflow-select" v-if="!loading && workflows.length > 0">
       <div class="workflow-group">
         <div class="title">Default</div>
-        <div class="single-workflow" v-for="workflow in defaultWorkflows">{{ workflow.name }}</div>
+        <div class="single-workflow" v-for="workflow in defaultWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
       </div>
       <div class="workflow-group">
         <div class="title">Custom</div>
-        <div class="single-workflow" v-for="workflow in customWorkflows">{{ workflow.name }}</div>
+        <div class="single-workflow" v-for="workflow in customWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
       </div>
     </div>
-    <div class="workflow-preview scrollable" v-if="!loading && workflows.length > 0">
-      <div v-for="workflow in workflows" key="workflow.id">
+    <div :class="['workflow-preview', 'scrollable']" v-if="!loading && workflows.length > 0">
+      <div :class="['single-workflow-preview', visibleWorkflow == workflow.id ? 'active' : '' ]" v-for="workflow in workflows" key="workflow.id" :id="`workflow-${workflow.id}`">
         <h3>{{ workflow.name }}</h3>
         <p>{{ workflow.description }}</p>
         <aside class="states-list">
@@ -33,13 +33,13 @@ import State from '/components/Workflows/State.vue'
 
 // Supabase
 const supabase = useSupabaseClient()
-const user = useSupabaseUser()
+const user = supabase.auth.user()
 
 const workflows = ref([])
 const defaultWorkflows = ref([])
 const customWorkflows = ref([])
 const loading = ref(true)
-const states = ref([])
+const visibleWorkflow = ref(1)
 
 async function fetchWorkflows() {
   try {
@@ -54,14 +54,19 @@ async function fetchWorkflows() {
     // Set default workflows (where type == 1)
     defaultWorkflows.value = data.filter(workflow => workflow.type === 1)
 
-    // Set custom workflows (where type == 2)
-    customWorkflows.value = data.filter(workflow => workflow.type === 2)
+    // Set custom workflows (where type == 2, and belongs to this authenticated user)
+    customWorkflows.value = data.filter(workflow => workflow.type === 2 && workflow.user_id === supabase.auth.user.id)
 
     loading.value = false
 
   } catch (error) {
     console.error("Error fetching workflows: ", error.message)
   }
+}
+
+function showWorkflowPreview(workflowId) {
+  visibleWorkflow.value = workflowId
+  console.log('showWorkflowPreview', workflowId)
 }
 
 onMounted(() => {
@@ -134,6 +139,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     padding:  $spacing-md;
+
+    .single-workflow-preview {
+      display: none;
+
+      &.active {
+        display: block;
+      }
+    }
   }
 
   .states-list {
