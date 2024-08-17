@@ -260,7 +260,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
-  border: 1px solid rgba($purple, 0.3);
+  border: 1px solid rgba($purple, 0);
   border-radius: $br-md;
   padding: $spacing-xxs;
 

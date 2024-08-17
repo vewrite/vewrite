@@ -17,15 +17,16 @@ const props = defineProps(['state'])
 @import "./assets/variables.scss";
 
 .state {
-  padding: $spacing-md;
+  padding: $spacing-sm;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: $spacing-sm;
   border: 1px solid rgba($black, 0.1);
   background: $white;
   border-radius: $br-md;
   min-width: 180px;
+  box-shadow: $main-shadow;
 
   .icon {
     width: 40px;

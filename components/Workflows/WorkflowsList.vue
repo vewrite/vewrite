@@ -4,11 +4,11 @@
     <div class="workflow-select" v-if="!loading && workflows.length > 0">
       <div class="workflow-group">
         <div class="title">Default</div>
-        <div class="single-workflow" v-for="workflow in defaultWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
+        <div :class="['single-workflow', visibleWorkflow == workflow.id ? 'active' : '']" v-for="workflow in defaultWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
       </div>
       <div class="workflow-group">
         <div class="title">Custom</div>
-        <div class="single-workflow" v-for="workflow in customWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
+        <div :class="['single-workflow', visibleWorkflow == workflow.id ? 'active' : '']" v-for="workflow in customWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
       </div>
     </div>
     <div :class="['workflow-preview', 'scrollable']" v-if="!loading && workflows.length > 0">
@@ -117,8 +117,7 @@ onMounted(() => {
         cursor: pointer;
 
         &:hover,
-        &.router-link-active,
-        &.router-link-exact-active {
+        &.active {
           background-color: rgba($purple, 0.05);
           color: $purple;
         }
@@ -153,12 +152,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border: 1px solid rgba($black, 0.1);
-    background-color: rgba($white-dark, 0.25);
-    padding: $spacing-md;
-    border-radius: $br-md;
     margin: $spacing-md 0;
-    overflow-x: auto;
   }
 }
 
