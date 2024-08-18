@@ -1,7 +1,7 @@
 <template>
   <div class="state">
-    <div class="icon"></div>
-    {{ state }}
+    <div class="icon">{{ stateDetails(props.state).icon }}</div>
+    {{ stateDetails(props.state).name }}
   </div>
 </template>
 
@@ -9,6 +9,29 @@
 
 const props = defineProps(['state'])
 
+function stateDetails(stateId) {
+  const details = {};
+
+  switch (stateId) {
+    case 1:
+      details.icon = '🚀';
+      details.name = 'In Progress';
+      break;
+    case 2:
+      details.icon = '🚦';
+      details.name = 'Pending';
+      break;
+    case 3:
+      details.icon = '🏁';
+      details.name = 'Completed';
+      break;
+    default:
+      details.icon = '❓';
+      details.name = 'Unknown';
+  }
+
+  return details;
+}
 
 </script>
 
@@ -33,6 +56,10 @@ const props = defineProps(['state'])
     height: 40px;
     border-radius: 50%;
     border: 1px solid rgba($black, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 }
 
