@@ -24,19 +24,16 @@ export default {
   flex-direction: column;
   width: 100%;
   background-color: rgba($white, 1);
-  border-left: 1px solid rgba($purple, 0.1);
-  margin: 0 0 0 $spacing-md;
   overflow: hidden;
 
   .header {
-    background-color: rgba($white-dark, 0.25);
-    border-bottom: 1px solid rgba($purple, 0.1);
-    color: $black;
+    background: $purple url('/images/top-bar.jpg') no-repeat center right;
+    color: $white;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 54px;
+    height: 88px;
     width: 100%;
     padding: 0 $spacing-md;
     position: relative;
@@ -63,7 +60,7 @@ export default {
   }
 
   .body {
-    height: calc(100% - 54px);
+    height: calc(100% - 88px);
     overflow-y: hidden;
     position: relative;
   }

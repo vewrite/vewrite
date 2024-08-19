@@ -20,7 +20,6 @@ const user = useSupabaseUser()
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: rgba($white-dark, .5);
 }
 
 </style>

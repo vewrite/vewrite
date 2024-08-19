@@ -220,9 +220,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-sm $spacing-md;
-    border-bottom: 1px solid rgba($black, 0.1);
-    background-color: rgba($white-dark, 0.25);
+    padding: $spacing-md $spacing-md 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -372,7 +370,6 @@ button,
     justify-content: center;
     gap: $spacing-sm;
     align-items: center;
-    box-shadow: $main-shadow;
 
     &:hover {
         border: 1px solid rgba($purple, 1);

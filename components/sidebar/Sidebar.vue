@@ -89,21 +89,22 @@ onMounted(() => {
   }
 
   .sidebar-header {
-    color: $black;
+    color: $white;
+    background: $purple url('/images/top-bar.jpg') no-repeat center left;
     padding: 0 0 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 135px;
+    height: 88px;
   }
 
   .sidebar-content {
-    padding: 0 0 $spacing-lg $spacing-md;
+    padding: $spacing-md $spacing-md $spacing-lg $spacing-md;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    height: calc(100% - 135px - 180px);
+    height: calc(100% - 54px - 180px);
     overflow-y: auto;
 
     .link-group {
@@ -149,7 +150,7 @@ onMounted(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: $spacing-md 0 $spacing-md $spacing-md;
+    padding: $spacing-md $spacing-md $spacing-md $spacing-md;
     position: absolute;
     bottom: 0;
     width: 100%;

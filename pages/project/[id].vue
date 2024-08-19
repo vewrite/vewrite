@@ -13,9 +13,9 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <ProjectOverview v-if="project && !loading" :project="project" />
+      <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
       <!-- :creator="creator" :client="client" -->
-      <div class="inner-container" v-if="project && !loading">
+      <!-- <div class="inner-container" v-if="project && !loading">
         <div class="form-block">
           <div class="form-details">
             <h3>Overview</h3>
@@ -53,6 +53,17 @@
           </div>
         </div>
 
+        <div class="form-block" v-if="creator && !loading">
+          <div class="form-details">
+            <h3>Deliverables</h3>
+          </div>
+          <div class="form-content">
+            <div v-for="deliverable in deliverables">
+              {{ deliverable.id }}
+            </div>
+          </div>
+        </div>
+
         <div class="form-block" v-if="client && !loading">
           <div class="form-details">
             <h3>Client</h3>
@@ -62,7 +73,7 @@
             <p>{{ client }}</p>
           </div>
         </div>
-      </div>
+      </div> -->
     </template>
   </AppPanel>
 </template>
@@ -86,6 +97,7 @@ const projectId = route.params.id;
 const project = ref(null);
 const creator = ref(null);
 const client = ref(null);
+const deliverables = ref(null);
 
 const path = ref("")
 
@@ -104,6 +116,7 @@ async function getProject(id) {
     // Cool, now go get the creator data
     fetchCreator(project.value.created_by);
     fetchClient(project.value.client);
+    fetchDeliverables(project.value.id);
 
   } catch (error) {
     alert(error.message);
@@ -124,6 +137,23 @@ async function fetchCreator(uuid) {
   } catch (error) {
     alert(error.message);
   }
+}
+
+async function fetchDeliverables(projectId) {
+
+  const { data, error } = await supabase
+    .from('deliverables')
+    .select('*')
+    .eq('project', projectId)
+
+  deliverables.value = data;
+
+  if (error) {
+    console.error('Error fetching deliverables:', error.message)
+    return
+  }
+
+  return data
 }
 
 async function fetchClient(clientId) {

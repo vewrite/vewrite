@@ -397,12 +397,13 @@ const filteredProjects = computed(() => {
       flex-direction: column;
       justify-content: center;
       align-content: center;
-      width: 100%;
+      width: calc(100% - $spacing-md - $spacing-md);
+      margin: $spacing-md;
 
       .project-card {
-        padding: $spacing-sm $spacing-md;
+        padding: $spacing-sm;
         background-color: $white;
-        border-bottom: 1px solid rgba($purple, 0.1);
+        border-radius: $br-md;
         transition: background-color 0.18s ease;
         text-decoration: none;
         width: 100%;
