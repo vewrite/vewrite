@@ -18,7 +18,8 @@
     <div class="clients-list inner-container" v-if="!loading">
       <router-link :to="'/client/' + client.id" class="client-card" v-for="client in filteredClients" :key="client.id">
         <div class="image-wrapper">
-          <img :src="client.logo_url" alt="Client avatar" />
+          <!-- <img :src="client.logo_url" alt="Client avatar" /> -->
+          <ClientImage :client="client" size="medium" table="logos" />
         </div>
         <h3>{{ client.name }}</h3>
       </router-link>

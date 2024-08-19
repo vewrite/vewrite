@@ -4,7 +4,7 @@
       <router-link to="/projects/" class="button dark">Back</router-link>
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading" />
-        <span v-else>{{ project.name }}</span>
+        <!-- <span v-else>{{ project.name }}</span> -->
       </div>
       <div class="app-panel-header-buttons">
         <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link>
@@ -168,16 +168,7 @@ async function fetchClient(clientId) {
   }
 
   // add the clients to the clients ref
-  client.value = data
-
-  // Add the clients to the clients ref
-  client.value = await Promise.all(data.map(async client => {
-    const logoBlob = await downloadImage(client.logo_url);
-    return {
-      ...client,
-      logo_url: URL.createObjectURL(logoBlob)
-    };
-  }));
+  client.value = data[0]
 
   loading.value = false
 }

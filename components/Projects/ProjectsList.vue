@@ -36,7 +36,10 @@
       <div class="project-card" v-for="project in filteredProjects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
-            <img :src="project.client_logos" :alt="'Client id:' + project.client" />
+            <!-- <img :src="project.client_logos" :alt="'Client id:' + project.client" /> -->
+            <ClientImage :client="project.client" size="medium" table="logos" />
+            <!-- {{ project.client }} --> 
+              <!-- right now this is only an id -->
           </div>
         </div>
         <h3><router-link :to="'/project/' + project.id">{{ project.name }}</router-link></h3>
@@ -100,16 +103,18 @@ async function fetchProjects() {
     return
   }
 
-  // Deal with client logos
+  // The clientimage component expects a client object with an id
   projects.value = await Promise.all(data.map(async project => {
-    const clientLogos = await fetchClientLogo(project.client);
+    const clientLogo = await fetchClientLogo(project.client);
     return {
       ...project,
-      client_logos: clientLogos
+      client: {
+        id: project.client,
+      }
     };
   }));
 
-  // Deal with deliverables from a separate table
+  // Get the deliverables from a separate table
   // Calculate the progress of each project
   // Update the project object with the deliverables and progress
   projects.value = await Promise.all(projects.value.map(async project => {

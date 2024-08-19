@@ -1,17 +1,23 @@
 <template>
-  <div class="user-logo">
-      <img v-if="src" :src="src" alt="logo" :class="['logo', 'image', size]" />
-      <div v-else class="logo no-image" :class="size" />
+  <div :class="['client-logo', 'image', size]">
+    <Loading v-if="loading" type="small" />
+    <img v-if="!loading" :src="src" alt="logo" :class="['client-logo', 'image', size]" />
   </div>
 </template>
 
 <script setup>
 
+// ClientImage component
+// ===
+// expects a client object with an id
+
 const props = defineProps(['client', 'size', 'table'])
 const { client, size, table } = toRefs(props)
 
-const supabase = useSupabaseClient()
+console.log(client)
 
+const supabase = useSupabaseClient()
+const loading = ref(true)
 const src = ref("")
 
 async function fetchClientLogo(client) {
@@ -32,6 +38,7 @@ async function fetchClientLogo(client) {
 
   const logoBlob = await downloadImage(data.logo_url);
   src.value = URL.createObjectURL(logoBlob);
+  loading.value = false
 
 }
 
@@ -50,7 +57,8 @@ const downloadImage = async (path) => {
 // Watch for changes to the client prop
 watch(() => props.client, (newClient) => {
   if (newClient) {
-    fetchClientLogo(newClient[0].id);
+    // fetchClientLogo(newClient[0].id); this works in the single project view
+    fetchClientLogo(newClient.id); // this works in the client list
   }
 }, { immediate: true });
 
@@ -60,25 +68,8 @@ watch(() => props.client, (newClient) => {
 
 @import 'assets/_variables.scss';
 
-.user-logo {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: $spacing-sm;
-  width: 100%;
-  
-  label {
-      margin: $spacing-xs 0 $spacing-xs 0;
-  }
-
-  input {
-      width: 100%;
-  }
-}
-
-.logo {
-  border-radius: 50%;
+.client-logo {
+  border-radius: $br-md;
   background-color: $gray-light;
   display: flex;
   justify-content: center;
@@ -87,19 +78,19 @@ watch(() => props.client, (newClient) => {
   position: relative;
 
   &.small {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 30px;
       border-radius: $br-sm;
   }
 
   &.medium {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 60px;
       border-radius: $br-md;
   }
 
   &.large {
-      width: 120px;
+      width: 200px;
       height: 120px;
       border-radius: $br-lg;
   }
