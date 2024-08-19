@@ -14,6 +14,14 @@
     <template v-slot:body>
       <Loading v-if="loading" />
       <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
+      <!-- <DeliverablesProgress v-if="deliverables" :deliverables="deliverables" /> -->
+
+      <div v-if="deliverables.length < 1">
+        <p>No deliverables found for this project</p>
+      </div>
+      <div v-else v-for="deliverable in deliverables">
+        <router-link :to="'/deliverable/' + deliverable.id">{{ deliverable.id }}</router-link>
+      </div>
       <!-- :creator="creator" :client="client" -->
       <!-- <div class="inner-container" v-if="project && !loading">
         <div class="form-block">
@@ -141,12 +149,16 @@ async function fetchCreator(uuid) {
 
 async function fetchDeliverables(projectId) {
 
+  console.log("Fetching deliverables for project: ", projectId)
+
   const { data, error } = await supabase
     .from('deliverables')
     .select('*')
     .eq('project', projectId)
 
   deliverables.value = data;
+
+  console.log("Deliverables: ", deliverables)
 
   if (error) {
     console.error('Error fetching deliverables:', error.message)
@@ -179,7 +191,6 @@ const downloadImage = async (path) => {
           .from('logos')
           .download(path)
       if (error) throw error
-      // console.log(data)
       return data
   } catch (error) {
       console.error("Error downloading image: ", error.message)

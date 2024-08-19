@@ -1,9 +1,11 @@
 <template>
   <aside class="project-overview">
+    <div class="project-summary">
+      <h2>{{ project.name }}</h2>
+      <!-- <p>Created by: {{ creator.username }}</p> -->
+    </div>
     <div class="client-summary">
-      <!-- <ClientImage :client="client" size="small" table="logos" /> -->
       <ClientImage :client="client" size="medium" table="logos" />
-      <!-- <ClientImage :client="client" size="large" table="logos" /> -->
     </div>
     <!-- {{ client }} -->
     <!-- <img :src="client.logo_url" :alt="client.name" /> -->
@@ -45,6 +47,24 @@ const { client } = toRefs(props)
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
+
+  .project-summary {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+
+    h2 {
+      font-family: $font-family-secondary;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    p {
+      font-size: $font-size-sm;
+      font-weight: 400;
+      margin: 0;
+    }
+  }
 }
 
 </style>

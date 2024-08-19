@@ -19,8 +19,6 @@
             <path d="M4 19H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
             <path d="M4 12H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
           </svg>
-
-
         </button>
       </div>
     </div>
@@ -36,10 +34,7 @@
       <div class="project-card" v-for="project in filteredProjects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
-            <!-- <img :src="project.client_logos" :alt="'Client id:' + project.client" /> -->
             <ClientImage :client="project.client" size="medium" table="logos" />
-            <!-- {{ project.client }} --> 
-              <!-- right now this is only an id -->
           </div>
         </div>
         <h3><router-link :to="'/project/' + project.id">{{ project.name }}</router-link></h3>

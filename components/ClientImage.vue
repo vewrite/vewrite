@@ -8,21 +8,16 @@
 <script setup>
 
 // ClientImage component
-// ===
-// expects a client object with an id
+// expects a client object with an id!
 
 const props = defineProps(['client', 'size', 'table'])
 const { client, size, table } = toRefs(props)
-
-console.log(client)
 
 const supabase = useSupabaseClient()
 const loading = ref(true)
 const src = ref("")
 
 async function fetchClientLogo(client) {
-
-  console.log("fetchClientLogo", client)
 
   // get one logo based on the client id
   const { data, error } = await supabase
@@ -57,8 +52,7 @@ const downloadImage = async (path) => {
 // Watch for changes to the client prop
 watch(() => props.client, (newClient) => {
   if (newClient) {
-    // fetchClientLogo(newClient[0].id); this works in the single project view
-    fetchClientLogo(newClient.id); // this works in the client list
+    fetchClientLogo(newClient.id);
   }
 }, { immediate: true });
 
