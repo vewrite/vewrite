@@ -2,7 +2,6 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <div class="app-panel-header">Account</div>
       <button class="dark" @click="logout">Logout</button>
     </template>
     <template v-slot:body>

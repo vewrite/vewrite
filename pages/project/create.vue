@@ -2,7 +2,7 @@
   <AppPanel>
     <template v-slot:header>
       <router-link to="/projects/" class="button dark">Back</router-link>
-      <div class="app-panel-header">Create a new project</div>
+
       <div></div>
     </template>
     <template v-slot:body>

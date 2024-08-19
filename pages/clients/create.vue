@@ -2,7 +2,6 @@
   <AppPanel>
     <template v-slot:header>
       <router-link to="/clients/" class="button dark">Back</router-link>
-      <div class="app-panel-header">Create a new client</div>
     </template>
     <template v-slot:body>
       <NewClient />

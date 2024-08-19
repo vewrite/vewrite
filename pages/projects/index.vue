@@ -2,7 +2,6 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <div class="app-panel-header">Projects</div>
       <router-link to="/project/create" class="button primary">Create a project</router-link>
     </template>
     <template v-slot:body>

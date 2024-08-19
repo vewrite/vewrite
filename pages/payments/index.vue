@@ -1,7 +1,6 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <div class="app-panel-header">Payments</div>
     </template>
     <template v-slot:body>
       

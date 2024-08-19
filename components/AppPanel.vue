@@ -36,7 +36,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 75px;
+    height: 54px;
     width: 100%;
     padding: 0 $spacing-md;
     position: relative;
@@ -63,7 +63,7 @@ export default {
   }
 
   .body {
-    height: calc(100% - 75px);
+    height: calc(100% - 54px);
     overflow-y: hidden;
     position: relative;
   }
