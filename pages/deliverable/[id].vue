@@ -1,7 +1,7 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/projects/" class="button dark">Back</router-link>
+      <router-link :to="'/project/' + projectId" class="button dark">Back</router-link>
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading" />
       </div>

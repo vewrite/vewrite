@@ -16,7 +16,7 @@
       <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
       <!-- <DeliverablesProgress v-if="deliverables" :deliverables="deliverables" /> -->
 
-      <div v-if="deliverables.length < 1">
+      <div v-if="!deliverables || deliverables.length < 1">
         <p>No deliverables found for this project</p>
       </div>
       <div v-else v-for="deliverable in deliverables">
@@ -157,8 +157,6 @@ async function fetchDeliverables(projectId) {
     .eq('project', projectId)
 
   deliverables.value = data;
-
-  console.log("Deliverables: ", deliverables)
 
   if (error) {
     console.error('Error fetching deliverables:', error.message)
