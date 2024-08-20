@@ -16,10 +16,12 @@
       <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
       <!-- <DeliverablesProgress v-if="deliverables" :deliverables="deliverables" /> -->
 
-      <div v-if="!deliverables || deliverables.length < 1">
+      
+      <Loading v-if="loadingDeliverables" />
+      <div v-if="!loadingDeliverables && deliverables.length < 1">
         <p>No deliverables found for this project</p>
       </div>
-      <div v-else class="project-deliverables">
+      <div v-if="!loadingDeliverables" class="project-deliverables">
         <div class="single-deliverable" v-for="deliverable in deliverables">
           <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
           <!-- <span class="deliverable-status">{{ deliverable.status }}</span> -->
@@ -98,6 +100,7 @@ import AppPanel from '~/components/AppPanel.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
+const loadingDeliverables = ref(true);
 
 // Get the route object
 const route = useRoute();
@@ -161,6 +164,7 @@ async function fetchDeliverables(projectId) {
     .eq('project', projectId)
 
   deliverables.value = data;
+  loadingDeliverables.value = false;
 
   if (error) {
     console.error('Error fetching deliverables:', error.message)
