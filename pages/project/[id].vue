@@ -19,8 +19,12 @@
       <div v-if="!deliverables || deliverables.length < 1">
         <p>No deliverables found for this project</p>
       </div>
-      <div v-else v-for="deliverable in deliverables">
-        <router-link :to="'/deliverable/' + deliverable.id">{{ deliverable.id }}</router-link>
+      <div v-else class="project-deliverables">
+        <div class="single-deliverable" v-for="deliverable in deliverables">
+          <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
+          <!-- <span class="deliverable-status">{{ deliverable.status }}</span> -->
+          <span class="deliverable-duedate">Due {{ deliverable.due_date }}</span>
+        </div>
       </div>
       <!-- :creator="creator" :client="client" -->
       <!-- <div class="inner-container" v-if="project && !loading">
@@ -209,6 +213,48 @@ watch(path, () => {
 
 </script>
 
-<style scoped>
-/* Your styles here */
+<style lang="scss" scoped>
+
+@import "./assets/_variables.scss";
+
+.project-deliverables {
+  margin: $spacing-md;
+
+  .single-deliverable {
+    padding: $spacing-sm;
+    border-bottom: 1px solid $gray;
+    width: 100%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+
+    &:hover {
+      background-color: rgba($purple, 0.05);
+    }
+
+    .deliverable-title {
+      color: $black;
+      text-decoration: none;
+    }
+
+    .deliverable-status {
+      padding: $spacing-xxs $spacing-xs;
+      background-color: $purple;
+      color: $white;
+      border-radius: $br-lg;
+      font-size: $font-size-xs;
+    }
+
+    .deliverable-duedate {
+      padding: $spacing-xxs $spacing-xs;
+      background-color: $purple;
+      color: $white;
+      border-radius: $br-lg;
+      font-size: $font-size-xs;
+    }
+  }
+}
+
 </style>
