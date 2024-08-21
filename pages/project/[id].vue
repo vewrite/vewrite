@@ -26,9 +26,12 @@
           <div class="single-deliverable" v-for="deliverable in deliverables">
             <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
             <!-- <span class="deliverable-status">{{ deliverable.status }}</span> -->
-            <span class="deliverable-duedate">Due {{ deliverable.due_date }}</span>
-            <VDatePicker :attributes="deliverable.attrs" />
-            {{ attrs }}
+            <div class="deliverable-calendar">
+              <span class="deliverable-duedate button primary" @click="toggleCalendar">Due {{ deliverable.formattedDueDate }}</span>
+              <div class="deliverable-calendar-popup" :id="'deliverable-calendar-' + deliverable.id">
+                <VDatePicker :attributes="deliverable.attrs" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -40,7 +43,7 @@
 
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
 import { useRoute } from 'vue-router';
-import { parseISO } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import AppPanel from '~/components/AppPanel.vue';
 
 const supabase = useSupabaseClient();
@@ -135,6 +138,10 @@ async function fetchDeliverables(projectId) {
       console.error('Invalid date:', deliverable.due_date);
       return;
     }
+
+    // Format the due date into something nicer
+    deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
+
     if (!deliverable.attrs) {
       deliverable.attrs = [];
     }
@@ -149,6 +156,12 @@ async function fetchDeliverables(projectId) {
   });
 
   loadingDeliverables.value = false;
+}
+
+function toggleCalendar(event) {
+  const id = event.target.parentElement.querySelector('.deliverable-calendar-popup').id;
+  const popup = document.getElementById(id);
+  popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
 }
 
 async function fetchClient(clientId) {
@@ -218,12 +231,21 @@ onMounted(() => {
       font-size: $font-size-xs;
     }
 
-    .deliverable-duedate {
-      padding: $spacing-xxs $spacing-xs;
-      background-color: $purple;
-      color: $white;
-      border-radius: $br-lg;
-      font-size: $font-size-xs;
+    .deliverable-calendar {
+      display: flex;
+      position: relative;
+    
+      .deliverable-duedate {
+        cursor: pointer;
+      }
+
+      .deliverable-calendar-popup {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 1000;
+        display: none;
+      }
     }
   }
 }
