@@ -12,82 +12,26 @@
       </div>
     </template>
     <template v-slot:body>
-      <Loading v-if="loading" />
-      <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
-      <!-- <DeliverablesProgress v-if="deliverables" :deliverables="deliverables" /> -->
+      <div class="deliverables-list">
+        <Loading v-if="loading" />
+        <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
+        <!-- <DeliverablesProgress v-if="deliverables" :deliverables="deliverables" /> -->
 
       
-      <Loading v-if="loadingDeliverables" />
-      <div v-if="!loadingDeliverables && deliverables.length < 1">
-        <p>No deliverables found for this project</p>
-      </div>
-      <div v-if="!loadingDeliverables" class="project-deliverables">
-        <div class="single-deliverable" v-for="deliverable in deliverables">
-          <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
-          <!-- <span class="deliverable-status">{{ deliverable.status }}</span> -->
-          <span class="deliverable-duedate">Due {{ deliverable.due_date }}</span>
+        <Loading v-if="loadingDeliverables" />
+        <div v-if="!loadingDeliverables && deliverables.length < 1">
+          <p>No deliverables found for this project</p>
+        </div>
+        <div v-if="!loadingDeliverables" class="project-deliverables">
+          <div class="single-deliverable" v-for="deliverable in deliverables">
+            <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
+            <!-- <span class="deliverable-status">{{ deliverable.status }}</span> -->
+            <span class="deliverable-duedate">Due {{ deliverable.due_date }}</span>
+            <VDatePicker :attributes="deliverable.attrs" />
+            {{ attrs }}
+          </div>
         </div>
       </div>
-      <!-- :creator="creator" :client="client" -->
-      <!-- <div class="inner-container" v-if="project && !loading">
-        <div class="form-block">
-          <div class="form-details">
-            <h3>Overview</h3>
-            <p>Just a quick list of all available details</p>
-          </div>
-          <div class="form-content">
-            <table>
-              <tr>
-                <td>Name</td>
-                <td>{{ project.name }}</td>
-              </tr>
-              <tr>
-                <td>Description</td>
-                <td>{{ project.description }}</td>
-              </tr>
-              <tr>
-                <td>Created at</td>
-                <td>{{ new Date(project.created_at).toLocaleString() }}</td>
-              </tr>
-              <tr>
-                <td>Updated at</td>
-                <td>{{ new Date(project.updated_at).toLocaleString() }}</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-
-        <div class="form-block" v-if="creator && !loading">
-          <div class="form-details">
-            <h3>Creator</h3>
-            <p>Who made this?</p>
-          </div>
-          <div class="form-content">
-            <p>{{ creator.username }}</p>
-          </div>
-        </div>
-
-        <div class="form-block" v-if="creator && !loading">
-          <div class="form-details">
-            <h3>Deliverables</h3>
-          </div>
-          <div class="form-content">
-            <div v-for="deliverable in deliverables">
-              {{ deliverable.id }}
-            </div>
-          </div>
-        </div>
-
-        <div class="form-block" v-if="client && !loading">
-          <div class="form-details">
-            <h3>Client</h3>
-            <p>Who is this for?</p>
-          </div>
-          <div class="form-content">
-            <p>{{ client }}</p>
-          </div>
-        </div>
-      </div> -->
     </template>
   </AppPanel>
 </template>
@@ -96,11 +40,24 @@
 
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
 import { useRoute } from 'vue-router';
+import { parseISO } from 'date-fns';
 import AppPanel from '~/components/AppPanel.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
 const loadingDeliverables = ref(true);
+const date = ref(null);
+
+const attrs = ref([
+  {
+    key: 'today',
+    highlight: {
+      color: 'green',
+      fillMode: 'solid'
+    },
+    dates: new Date()
+  }
+])
 
 // Get the route object
 const route = useRoute();
@@ -112,7 +69,7 @@ const projectId = route.params.id;
 const project = ref(null);
 const creator = ref(null);
 const client = ref(null);
-const deliverables = ref(null);
+const deliverables = ref([]);
 
 const path = ref("")
 
@@ -155,23 +112,43 @@ async function fetchCreator(uuid) {
 }
 
 async function fetchDeliverables(projectId) {
-
-  console.log("Fetching deliverables for project: ", projectId)
+  console.log("Fetching deliverables for project: ", projectId);
 
   const { data, error } = await supabase
     .from('deliverables')
     .select('*')
-    .eq('project', projectId)
-
-  deliverables.value = data;
-  loadingDeliverables.value = false;
+    .eq('project', projectId);
 
   if (error) {
-    console.error('Error fetching deliverables:', error.message)
-    return
+    console.error('Error fetching deliverables:', error.message);
+    return;
   }
 
-  return data
+  deliverables.value = data;
+
+  // Update attrs with deliverables' duedate
+  deliverables.value.forEach(deliverable => {
+    console.log(deliverable.due_date);
+    const dueDate = parseISO(deliverable.due_date);
+    console.log('Due date:', dueDate);
+    if (isNaN(dueDate)) {
+      console.error('Invalid date:', deliverable.due_date);
+      return;
+    }
+    if (!deliverable.attrs) {
+      deliverable.attrs = [];
+    }
+    deliverable.attrs.push({
+      key: deliverable.id,
+      highlight: {
+        color: 'red',
+        fillMode: 'solid'
+      },
+      dates: dueDate
+    });
+  });
+
+  loadingDeliverables.value = false;
 }
 
 async function fetchClient(clientId) {
@@ -191,35 +168,25 @@ async function fetchClient(clientId) {
   loading.value = false
 }
 
-const downloadImage = async (path) => {
-  try {
-    const { data, error } = await supabase.storage
-          .from('logos')
-          .download(path)
-      if (error) throw error
-      return data
-  } catch (error) {
-      console.error("Error downloading image: ", error.message)
-  }
-}
-
 // Fetch the project data when the component is mounted
 onMounted(() => {
   getProject(projectId);
   loading.value = false;
 });
 
-watch(path, () => {
-    if (path.value) {
-        downloadImage()
-    }
-})
-
 </script>
 
 <style lang="scss" scoped>
 
 @import "./assets/_variables.scss";
+
+.deliverables-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
 
 .project-deliverables {
   margin: $spacing-md;

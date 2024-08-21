@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@nuxtjs/supabase": "^0.1.23",
+    "@samk-dev/nuxt-vcalendar": "^1.0.4",
     "nuxt": "^3.11.2"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@pinia/nuxt": "^0.5.3",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
+    "date-fns": "^2.30.0",
     "pinia": "^2.2.1",
     "sass": "^1.77.8"
   },

@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
+    "@samk-dev/nuxt-vcalendar"
   ],
 
   css: [
