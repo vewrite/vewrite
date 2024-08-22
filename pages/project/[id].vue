@@ -29,7 +29,7 @@
             <div class="deliverable-calendar">
               <span class="deliverable-duedate button primary" @click="toggleCalendar">Due {{ deliverable.formattedDueDate }}</span>
               <div class="deliverable-calendar-popup" :id="'deliverable-calendar-' + deliverable.id">
-                <VDatePicker :attributes="deliverable.attrs" />
+                <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
               </div>
             </div>
           </div>
@@ -49,7 +49,14 @@ import AppPanel from '~/components/AppPanel.vue';
 const supabase = useSupabaseClient();
 const loading = ref(true);
 const loadingDeliverables = ref(true);
-const date = ref(null);
+const selectedDate = ref(null);
+
+const onDateSelect = (deliverableId, newDate) => {
+  console.log('Selected date:', deliverableId, newDate);
+  // Update the database
+  loading.value = true;
+  
+};
 
 const attrs = ref([
   {
@@ -131,9 +138,9 @@ async function fetchDeliverables(projectId) {
 
   // Update attrs with deliverables' duedate
   deliverables.value.forEach(deliverable => {
-    console.log(deliverable.due_date);
+    // console.log(deliverable.due_date);
     const dueDate = parseISO(deliverable.due_date);
-    console.log('Due date:', dueDate);
+    // console.log('Due date:', dueDate);
     if (isNaN(dueDate)) {
       console.error('Invalid date:', deliverable.due_date);
       return;
@@ -162,6 +169,20 @@ function toggleCalendar(event) {
   const id = event.target.parentElement.querySelector('.deliverable-calendar-popup').id;
   const popup = document.getElementById(id);
   popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+}
+
+function onDateSelected(deliverableId, selectedDate) {
+  console.log(`Date selected for deliverable ${deliverableId}:`, selectedDate);
+  const deliverable = deliverables.value.find(d => d.id === deliverableId);
+  if (deliverable) {
+    deliverable.due_date = selectedDate;
+    deliverable.formattedDueDate = format(selectedDate, 'MMMM do, yyyy');
+    // Optionally, you can update the deliverable in the database here
+  }
+}
+
+function testConsole() {
+  console.log("Test console");
 }
 
 async function fetchClient(clientId) {
