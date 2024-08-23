@@ -25,11 +25,19 @@
         <div v-if="!loadingDeliverables" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
             <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
-            <!-- <span class="deliverable-status">{{ deliverable.status }}</span> -->
-            <div class="deliverable-calendar">
-              <span class="deliverable-duedate button primary" @click="toggleCalendar">Due {{ deliverable.formattedDueDate }}</span>
-              <div class="deliverable-calendar-popup" :id="'deliverable-calendar-' + deliverable.id">
-                <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
+            <div class="deliverable-actions">
+              <div class="deliverable-status">
+                <span class="deliverable-status-bubble button primary no-uppercase" @click="toggleStatus">{{ deliverable.status }}</span>
+                <div class="deliverable-status-popup popup right list" :id="'deliverable-status-' + deliverable.id">
+                  <span v-for="status in workflow" class="deliverable-status-option" @click="updateStatus(deliverable.id, status.id)">{{ status.name }}</span>
+                </div>
+              </div>
+              
+              <div class="deliverable-calendar">
+                <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar">Due {{ deliverable.formattedDueDate }}</span>
+                <div class="deliverable-calendar-popup popup right clean" :id="'deliverable-calendar-' + deliverable.id">
+                  <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
+                </div>
               </div>
             </div>
           </div>
@@ -50,11 +58,20 @@ const supabase = useSupabaseClient();
 const loading = ref(true);
 const loadingDeliverables = ref(true);
 const selectedDate = ref(null);
+const workflow = ref([
+  { id: 1, name: 'Not Started' },
+  { id: 2, name: 'In Progress' },
+  { id: 3, name: 'Completed' }
+]);
 
 const onDateSelect = (deliverableId, newDate) => {
   console.log('Selected date:', deliverableId, newDate);
   // Update the database
-  loading.value = true;
+  // loading.value = true;
+
+  // Toggle the calendar popup
+  const popup = document.getElementById(`deliverable-calendar-${deliverableId}`);
+  popup.style.display = 'none';
   
 };
 
@@ -168,7 +185,7 @@ async function fetchDeliverables(projectId) {
 function toggleCalendar(event) {
   const id = event.target.parentElement.querySelector('.deliverable-calendar-popup').id;
   const popup = document.getElementById(id);
-  popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+  popup.style.visibility = popup.style.visibility === 'visible' ? 'hidden' : 'visible';
 }
 
 function onDateSelected(deliverableId, selectedDate) {
@@ -181,8 +198,10 @@ function onDateSelected(deliverableId, selectedDate) {
   }
 }
 
-function testConsole() {
-  console.log("Test console");
+function toggleStatus(event) {
+  const id = event.target.parentElement.querySelector('.deliverable-status-popup').id;
+  const popup = document.getElementById(id);
+  popup.style.visibility = popup.style.visibility === 'visible' ? 'hidden' : 'visible';
 }
 
 async function fetchClient(clientId) {
@@ -244,28 +263,35 @@ onMounted(() => {
       text-decoration: none;
     }
 
-    .deliverable-status {
-      padding: $spacing-xxs $spacing-xs;
-      background-color: $purple;
-      color: $white;
-      border-radius: $br-lg;
-      font-size: $font-size-xs;
-    }
-
-    .deliverable-calendar {
+    .deliverable-actions {
       display: flex;
-      position: relative;
-    
-      .deliverable-duedate {
+      align-items: center;
+      gap: $spacing-xs;
+
+      .deliverable-status {
+        position: relative;
         cursor: pointer;
+
+        .deliverable-status-bubble {
+          background-color: $gray;
+        }
+
+        .deliverable-status-popup {
+          position: absolute;
+          top: calc(100% + 2px);
+          right: 0;
+          z-index: 1000;
+          display: none;
+        }
       }
 
-      .deliverable-calendar-popup {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        z-index: 1000;
-        display: none;
+      .deliverable-calendar {
+        display: flex;
+        position: relative;
+      
+        .deliverable-duedate {
+          cursor: pointer;
+        }
       }
     }
   }

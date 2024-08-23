@@ -55,6 +55,42 @@ body,
     }
 }
 
+/* Popups */
+
+.popup {
+    position: absolute;
+    top: calc(100% + 2px);
+    z-index: 1000;
+    visibility: hidden;
+    background-color: $white;
+    box-shadow: 0 0 10px rgba($black, 0.1);
+    padding: $spacing-sm;
+    border-radius: $br-md;
+    border: 1px solid rgba($black, 0.2);
+
+    &.clean {
+        box-shadow: none;
+        padding: 0;
+        border: none;
+    }
+
+    &.list {
+        width: 240px;
+        max-height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.right {
+        right: 0;
+    }
+
+    &.left {
+        left: 0;
+    }
+}
+
 /* Typography */
 
 h1,
@@ -355,7 +391,7 @@ button,
 .button {
     color: $black;
     background: $white;
-    border-radius: $br-lg;
+    border-radius: $br-xl;
     border: 1px solid rgba($purple, 0.1);
     text-align: center;
     text-decoration: none;
@@ -370,6 +406,11 @@ button,
     justify-content: center;
     gap: $spacing-sm;
     align-items: center;
+
+    &.no-uppercase {
+        text-transform: none;
+        font-size: $font-size-xs;
+    }
 
     &:hover {
         border: 1px solid rgba($purple, 1);
