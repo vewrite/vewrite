@@ -19,6 +19,7 @@
           <h2>Workflow</h2>
           <div v-if="loading.global == false">
             <div v-for="state in states">
+              <img :src="'/states/' + state.icon" />
               <div>{{ state.name }}</div>
             </div>
           </div>
