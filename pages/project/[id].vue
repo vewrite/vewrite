@@ -3,8 +3,7 @@
     <template v-slot:header>
       <router-link to="/projects/" class="button dark">Back</router-link>
       <div class="app-panel-header" v-if="project">
-        <Loading type="header" v-if="loading" />
-        <!-- <span v-else>{{ project.name }}</span> -->
+        <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons">
         <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link>
@@ -13,23 +12,21 @@
     </template>
     <template v-slot:body>
       <div class="deliverables-list">
-        <Loading v-if="loading" />
-        <ProjectOverview v-if="project && !loading" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
-        <!-- <DeliverablesProgress v-if="deliverables" :deliverables="deliverables" /> -->
-
+        <Loading v-if="loading.global == true" />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
       
-        <Loading v-if="loadingDeliverables" />
-        <div v-if="!loadingDeliverables && deliverables.length < 1">
+        <Loading v-if="loading.deliverables" />
+        <div v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
         </div>
-        <div v-if="!loadingDeliverables" class="project-deliverables">
+        <div v-if="loading.deliverables == false" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
             <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
             <div class="deliverable-actions">
-              <div class="deliverable-status">
-                <span class="deliverable-status-bubble button primary no-uppercase" @click="toggleStatus">{{ deliverable.status }}</span>
-                <div class="deliverable-status-popup popup right list" :id="'deliverable-status-' + deliverable.id">
-                  <span v-for="status in workflow" class="deliverable-status-option" @click="updateStatus(deliverable.id, status.id)">{{ status.name }}</span>
+              <div class="deliverable-workflow-state">
+                <span class="deliverable-workflow-state-bubble button primary no-uppercase" @click="toggleWorkflowState">{{ deliverable.workflow_state }}</span>
+                <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
+                  <span v-for="state in workflow" class="deliverable-workflow-state-option" @click="updateWorkflowState(deliverable.id, state.id)">{{ state.name }}</span>
                 </div>
               </div>
               
@@ -55,25 +52,16 @@ import { parseISO, format } from 'date-fns';
 import AppPanel from '~/components/AppPanel.vue';
 
 const supabase = useSupabaseClient();
-const loading = ref(true);
-const loadingDeliverables = ref(true);
-const selectedDate = ref(null);
-const workflow = ref([
-  { id: 1, name: 'Not Started' },
-  { id: 2, name: 'In Progress' },
-  { id: 3, name: 'Completed' }
-]);
+const loading = ref({
+  global: true,
+  deliverables: true
+});
 
-const onDateSelect = (deliverableId, newDate) => {
-  console.log('Selected date:', deliverableId, newDate);
-  // Update the database
-  // loading.value = true;
-
-  // Toggle the calendar popup
-  const popup = document.getElementById(`deliverable-calendar-${deliverableId}`);
-  popup.style.display = 'none';
-  
-};
+// const workflow = ref([
+//   { id: 1, name: 'Not Started' },
+//   { id: 2, name: 'In Progress' },
+//   { id: 3, name: 'Completed' }
+// ]);
 
 const attrs = ref([
   {
@@ -97,8 +85,8 @@ const project = ref(null);
 const creator = ref(null);
 const client = ref(null);
 const deliverables = ref([]);
-
-const path = ref("")
+const workflow = ref([]);
+const states = ref([]);
 
 async function getProject(id) {
   try {
@@ -116,6 +104,9 @@ async function getProject(id) {
     fetchCreator(project.value.created_by);
     fetchClient(project.value.client);
     fetchDeliverables(project.value.id);
+    fetchWorkflow(project.value.workflow);
+    
+
 
   } catch (error) {
     alert(error.message);
@@ -133,6 +124,36 @@ async function fetchCreator(uuid) {
     if (error) throw error;
 
     creator.value = data;
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function fetchWorkflow(workflowId) {
+  try {
+    const { data, error } = await supabase
+      .from('workflows')
+      .select('*')
+      .eq('id', workflowId);
+
+    if (error) throw error;
+
+    workflow.value = data;
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function fetchState(workflowId) {
+  try {
+    const { data, error } = await supabase
+      .from('states')
+      .select('*')
+      .eq('workflow', workflowId);
+
+    if (error) throw error;
+
+    states.value = data;
   } catch (error) {
     alert(error.message);
   }
@@ -179,30 +200,85 @@ async function fetchDeliverables(projectId) {
     });
   });
 
-  loadingDeliverables.value = false;
+  loading.value.deliverables = false;
 }
 
 function toggleCalendar(event) {
   const id = event.target.parentElement.querySelector('.deliverable-calendar-popup').id;
   const popup = document.getElementById(id);
-  popup.style.visibility = popup.style.visibility === 'visible' ? 'hidden' : 'visible';
+  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
-function onDateSelected(deliverableId, selectedDate) {
-  console.log(`Date selected for deliverable ${deliverableId}:`, selectedDate);
+const onDateSelect = async (deliverableId, newDate) => {
+  await updateDeliverableDate(deliverableId, newDate);
+  const popup = document.getElementById(`deliverable-calendar-${deliverableId}`);
+  popup.style.display = 'none';
+
+  // Get the date and update the deliverable
   const deliverable = deliverables.value.find(d => d.id === deliverableId);
   if (deliverable) {
-    deliverable.due_date = selectedDate;
-    deliverable.formattedDueDate = format(selectedDate, 'MMMM do, yyyy');
-    // Optionally, you can update the deliverable in the database here
+    deliverable.due_date = newDate;
+    deliverable.formattedDueDate = format(newDate, 'MMMM do, yyyy');
   }
+  
+};
+
+const updateDeliverableDate = async (deliverableId, newDate) => {
+  try {
+    const { data, error } = await supabase
+      .from('deliverables')
+      .update({ due_date: newDate })
+      .eq('id', deliverableId);
+
+    if (error) throw error;
+
+    console.log('Deliverable updated:', data);
+  } catch (error) {
+    console.error('Error updating deliverable:', error.message);
+  }
+};
+
+/**
+ * WORKFLOW STATE
+ */ 
+
+function toggleWorkflowState(event) {
+  const id = event.target.parentElement.querySelector('.deliverable-workflow-state-popup').id;
+  const popup = document.getElementById(id);
+  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
-function toggleStatus(event) {
-  const id = event.target.parentElement.querySelector('.deliverable-status-popup').id;
-  const popup = document.getElementById(id);
-  popup.style.visibility = popup.style.visibility === 'visible' ? 'hidden' : 'visible';
-}
+const onWorkflowStateSelect = async (deliverableId, newWorkflowState) => {
+  await updateDeliverableWorkflowState(deliverableId, newWorkflowState);
+  const popup = document.getElementById(`deliverable-workflow-state-${deliverableId}`);
+  popup.style.display = 'none';
+
+  // Get the date and update the deliverable
+  const deliverable = deliverables.value.find(d => d.id === deliverableId);
+  if (deliverable) {
+    deliverable.workflow_state = newWorkflowState;
+  }
+  
+};
+
+const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) => {
+  try {
+    const { data, error } = await supabase
+      .from('deliverables')
+      .update({ workflow_state: newWorkflowState })
+      .eq('id', deliverableId);
+
+    if (error) throw error;
+
+    console.log('Deliverable updated:', data);
+  } catch (error) {
+    console.error('Error updating deliverable:', error.message);
+  }
+};
+
+/**
+ * CLIENT
+ */
 
 async function fetchClient(clientId) {
   const { data, error } = await supabase
@@ -218,13 +294,13 @@ async function fetchClient(clientId) {
   // add the clients to the clients ref
   client.value = data[0]
 
-  loading.value = false
+  loading.value.global = false
 }
 
 // Fetch the project data when the component is mounted
 onMounted(() => {
   getProject(projectId);
-  loading.value = false;
+  loading.value.global = false;
 });
 
 </script>
@@ -268,15 +344,15 @@ onMounted(() => {
       align-items: center;
       gap: $spacing-xs;
 
-      .deliverable-status {
+      .deliverable-workflow-state {
         position: relative;
         cursor: pointer;
 
-        .deliverable-status-bubble {
+        .deliverable-workflow-state-bubble {
           background-color: $gray;
         }
 
-        .deliverable-status-popup {
+        .deliverable-workflow-state-popup {
           position: absolute;
           top: calc(100% + 2px);
           right: 0;

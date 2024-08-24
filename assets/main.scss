@@ -61,7 +61,7 @@ body,
     position: absolute;
     top: calc(100% + 2px);
     z-index: 1000;
-    visibility: hidden;
+    display: none;
     background-color: $white;
     box-shadow: 0 0 10px rgba($black, 0.1);
     padding: $spacing-sm;
