@@ -6,8 +6,8 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons">
-        <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link>
-        <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link>
+        <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
+        <!-- <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link> -->
       </div>
     </template>
     <template v-slot:body>
@@ -15,6 +15,16 @@
         <Loading v-if="loading.global == true" />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
       
+        <div>
+          <h2>Workflow</h2>
+          <div v-if="loading.global == false">
+            <div v-for="state in states">
+              <div>{{ state.name }}</div>
+            </div>
+          </div>
+        </div>
+        <!-- {{ states }} -->
+
         <Loading v-if="loading.deliverables" />
         <div v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
@@ -57,12 +67,6 @@ const loading = ref({
   deliverables: true
 });
 
-// const workflow = ref([
-//   { id: 1, name: 'Not Started' },
-//   { id: 2, name: 'In Progress' },
-//   { id: 3, name: 'Completed' }
-// ]);
-
 const attrs = ref([
   {
     key: 'today',
@@ -100,12 +104,15 @@ async function getProject(id) {
 
     project.value = data;
 
-    // Cool, now go get the creator data
-    fetchCreator(project.value.created_by);
+    // fetchCreator(project.value.created_by);
     fetchClient(project.value.client);
     fetchDeliverables(project.value.id);
-    fetchWorkflow(project.value.workflow);
+    fetchProjectWorkflow(project.value.workflow);
+    fetchWorkflowStates(project.value.workflow);
     
+    // 1. fetch the project
+    // 2. fetch the workflow from the project
+    // 3. fetch the states from the workflow states (array of states)
 
 
   } catch (error) {
@@ -129,7 +136,7 @@ async function fetchCreator(uuid) {
   }
 }
 
-async function fetchWorkflow(workflowId) {
+async function fetchProjectWorkflow(workflowId) {
   try {
     const { data, error } = await supabase
       .from('workflows')
@@ -144,16 +151,43 @@ async function fetchWorkflow(workflowId) {
   }
 }
 
-async function fetchState(workflowId) {
+async function fetchWorkflowStates(workflowId) {
+  try {
+    const { data, error } = await supabase
+      .from('workflows')
+      .select('states')
+      .eq('id', workflowId);
+
+    // Fetch the states as an array of integers
+    states.value = data[0].states;
+
+    // Fetch the states as an array of objects from the states table
+    states.value = await Promise.all(states.value.map(async state => {
+      // return await fetchState(state);
+      const fetchedState = await fetchState(state);
+      console.log(fetchedState);
+      return {
+        ...fetchedState
+      }
+    }));
+
+    if (error) throw error;
+
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function fetchState(stateId) {
   try {
     const { data, error } = await supabase
       .from('states')
       .select('*')
-      .eq('workflow', workflowId);
+      .eq('id', stateId);
 
     if (error) throw error;
 
-    states.value = data;
+    return data[0];
   } catch (error) {
     alert(error.message);
   }
