@@ -15,7 +15,7 @@
         <Loading v-if="loading.global == true" />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
       
-        <div>
+        <div class="deliverables-workflow-preview">
           <h2>Workflow</h2>
           <div v-if="loading.global == false">
             <div v-for="state in states">
@@ -23,7 +23,6 @@
             </div>
           </div>
         </div>
-        <!-- {{ states }} -->
 
         <Loading v-if="loading.deliverables" />
         <div v-if="loading.deliverables == false && deliverables.length < 1">
@@ -34,9 +33,12 @@
             <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
             <div class="deliverable-actions">
               <div class="deliverable-workflow-state">
-                <span class="deliverable-workflow-state-bubble button primary no-uppercase" @click="toggleWorkflowState">{{ deliverable.workflow_state }}</span>
+                <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState">{{ renderStateName(deliverable.workflow_state) }}</span>
                 <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
-                  <span v-for="state in workflow" class="deliverable-workflow-state-option" @click="updateWorkflowState(deliverable.id, state.id)">{{ state.name }}</span>
+                  <!-- <span v-for="state in workflow" class="deliverable-workflow-state-option" @click="updateWorkflowState(deliverable.id, state.id)">{{ state.name }}</span> -->
+                    <div v-for="state in states" :class="deliverable.workflow_state == state.id ? 'active' : ''">
+                      {{ state.name }}
+                    </div>
                 </div>
               </div>
               
@@ -149,6 +151,11 @@ async function fetchProjectWorkflow(workflowId) {
   } catch (error) {
     alert(error.message);
   }
+}
+
+function renderStateName(stateId) {
+  const state = states.value.find(s => s.id === stateId);
+  return state ? state.name : 'Unknown';
 }
 
 async function fetchWorkflowStates(workflowId) {
@@ -383,7 +390,7 @@ onMounted(() => {
         cursor: pointer;
 
         .deliverable-workflow-state-bubble {
-          background-color: $gray;
+          color: $purple;
         }
 
         .deliverable-workflow-state-popup {
