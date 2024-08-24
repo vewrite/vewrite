@@ -40,8 +40,6 @@ const { client } = toRefs(props)
 .project-overview {
   width: calc(100% - 2 * $spacing-md);
   margin: $spacing-md;
-  padding: $spacing-md;
-  background-color: rgba($white-dark, 0.25);
   display: flex;
   flex-direction: row;
   justify-content: space-between;

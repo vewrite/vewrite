@@ -14,7 +14,8 @@
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
-      
+        <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
+
         <!-- <div class="deliverables-workflow-preview">
           <h2>Workflow</h2>
           <div v-if="loading.global == false">
@@ -31,7 +32,11 @@
         </div>
         <div v-if="loading.deliverables == false" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
-            <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.id }} - {{ deliverable.title }}</router-link>
+            <div class="deliverable-details">
+              <span class="deliverable-id">{{ deliverable.id }}</span>
+              <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
+            </div>
+            
             <div class="deliverable-actions">
               <div class="deliverable-workflow-state">
                 <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState">
@@ -39,7 +44,6 @@
                   {{ renderStateName(deliverable.workflow_state) }}
                 </span>
                 <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
-                  <!-- <span v-for="state in workflow" class="deliverable-workflow-state-option" @click="updateWorkflowState(deliverable.id, state.id)">{{ state.name }}</span> -->
                     <div v-for="state in states" :class="deliverable.workflow_state == state.id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state.id)">
                       {{ state.name }}
                     </div>
@@ -97,6 +101,7 @@ const client = ref(null);
 const deliverables = ref([]);
 const workflow = ref([]);
 const states = ref([]);
+const completedDeliverables = ref(0);
 
 async function getProject(id) {
   try {
@@ -348,6 +353,11 @@ onMounted(() => {
   loading.value.global = false;
 });
 
+watchEffect(() => {
+  // TODO this is hard-coding the approved state for now
+  completedDeliverables.value = deliverables.value.filter(d => d.workflow_state === 6).length;
+});
+
 </script>
 
 <style lang="scss" scoped>
@@ -364,16 +374,37 @@ onMounted(() => {
 
 .project-deliverables {
   margin: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 
   .single-deliverable {
     padding: $spacing-sm;
-    border-bottom: 1px solid $gray;
     width: 100%;
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    border-radius: $br-md;
 
+    .deliverable-details {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      .deliverable-id {
+        color: $gray-dark;
+        font-size: $font-size-sm;
+        border-right: 1px solid $gray;
+        padding-right: $spacing-sm;
+      }
+
+      .deliverable-title {
+        color: $black;
+        text-decoration: none;
+        font-size: $font-size-sm;
+      }
+    }
 
     &:hover {
       background-color: rgba($purple, 0.05);

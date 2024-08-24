@@ -2,15 +2,15 @@
   <div class="project-deliverables-status">
     <div class="progress-status">
       <span>Progress</span>
-      <span>{{ project.complete }} / {{ project.deliverables.length }}</span>
+      <span>{{ completedDeliverables }} / {{ totalDeliverables }}</span>
     </div>
     <div class="progress-content">
-      <div class="empty-deliverables" v-if="project.deliverables.length == 0">
+      <div class="empty-deliverables" v-if="totalDeliverables == 0">
         <span>No deliverables</span>
       </div>
       <div class="deliverables" v-else>
         <div class="progress-bar">
-          <div class="progress" :style="{ width: (project.complete / project.deliverables.length) * 100 + '%' }"></div>
+          <div class="progress" :style="{ width: (completedDeliverables / totalDeliverables) * 100 + '%' }"></div>
         </div>
       </div>
     </div>
@@ -18,6 +18,13 @@
 </template>
 
 <script setup>
+import { ref, watchEffect } from 'vue';
+
+const props = defineProps({
+  completedDeliverables: Number,
+  totalDeliverables: Number,
+  deliverables: Array
+});
 
 </script>
 
@@ -29,8 +36,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  position: absolute;
-  bottom: $spacing-md;
+  margin: 0 $spacing-md;
   width: calc(100% - #{$spacing-md * 2});
   transition: bottom 0.2s ease;
 
