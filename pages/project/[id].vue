@@ -16,7 +16,8 @@
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
-        <SingleWorkflow :workflow="1" />
+        <!-- {{ project.workflow }} -->
+        <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
 
         <Loading v-if="loading.deliverables" />
         <div v-if="loading.deliverables == false && deliverables.length < 1">
