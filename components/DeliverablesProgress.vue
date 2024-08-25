@@ -10,7 +10,7 @@
       </div>
       <div class="deliverables" v-else>
         <div class="progress-bar">
-          <div class="progress" :style="{ width: (completedDeliverables / totalDeliverables) * 100 + '%' }"></div>
+          <div class="progress" :class="completedDeliverables == totalDeliverables ? 'completed' : ''" :style="{ width: (completedDeliverables / totalDeliverables) * 100 + '%' }"></div>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@ const props = defineProps({
   width: calc(100% - #{$spacing-md * 2});
   transition: bottom 0.2s ease;
 
-  .progress-status {
+  .progress-status { 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -69,6 +69,11 @@ const props = defineProps({
         height: 6px;
         border-radius: $br-md;
         background-color: $purple;
+        transition: width 0.42s ease-in-out;
+
+        &.completed {
+          background-color: $mint;
+        }
       }
 
     }

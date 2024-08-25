@@ -16,15 +16,7 @@
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
-        <!-- <div class="deliverables-workflow-preview">
-          <h2>Workflow</h2>
-          <div v-if="loading.global == false">
-            <div v-for="state in states">
-              <img :src="'/states/' + state.icon" />
-              <div>{{ state.name }}</div>
-            </div>
-          </div>
-        </div> -->
+        <SingleWorkflow :workflow="1" />
 
         <Loading v-if="loading.deliverables" />
         <div v-if="loading.deliverables == false && deliverables.length < 1">
@@ -67,6 +59,8 @@
 <script setup>
 
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
+import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
+import SingleWorkflow from '~/components/Workflows/SingleWorkflow.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';
 import AppPanel from '~/components/AppPanel.vue';
@@ -181,7 +175,7 @@ async function fetchWorkflowStates(workflowId) {
     states.value = await Promise.all(states.value.map(async state => {
       // return await fetchState(state);
       const fetchedState = await fetchState(state);
-      console.log(fetchedState);
+      // console.log(fetchedState);
       return {
         ...fetchedState
       }
@@ -210,7 +204,7 @@ async function fetchState(stateId) {
 }
 
 async function fetchDeliverables(projectId) {
-  console.log("Fetching deliverables for project: ", projectId);
+  // console.log("Fetching deliverables for project: ", projectId);
 
   const { data, error } = await supabase
     .from('deliverables')
