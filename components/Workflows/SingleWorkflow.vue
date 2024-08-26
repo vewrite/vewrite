@@ -47,7 +47,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: space-between;
   gap: $spacing-sm;
-  margin: $spacing-md $spacing-md 0 $spacing-md;
+  margin: $spacing-md;
   padding: $spacing-md;
   border-radius: $br-md;
   border: 1px solid rgba($black, 0.1);

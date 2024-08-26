@@ -187,6 +187,12 @@ onMounted(() => {
       flex-direction: row;
       justify-content: space-between;
       border-radius: $br-xl;
+      background-color: $white;
+      border: 1px solid rgba($black, 0.1);
+
+      &:hover {
+        border-color: $purple;
+      }
     }
 
     p.user {

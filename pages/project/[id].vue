@@ -15,15 +15,16 @@
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
+        
+        <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <!-- {{ project.workflow }} -->
-        <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
 
         <Loading v-if="loading.deliverables" />
         
         <div v-if="loading.deliverables == false" class="new-deliverable">
-          <button class="button" @click="createDeliverableModal(project.id)">+</button>
+          <button class="button" @click="createDeliverableModal(project.id)">Create new deliverable</button>
         </div>
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
@@ -382,7 +383,6 @@ watchEffect(() => {
   margin: $spacing-md $spacing-md 0 $spacing-md;
 
   button {
-    font-size: $font-size-md;
     padding: $spacing-sm;
     width: 100%;
   }

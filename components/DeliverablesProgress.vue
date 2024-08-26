@@ -6,7 +6,7 @@
     </div>
     <div class="progress-content">
       <div class="empty-deliverables" v-if="totalDeliverables == 0">
-        <span>No deliverables</span>
+        No deliverables
       </div>
       <div class="deliverables" v-else>
         <div class="progress-bar">
@@ -56,6 +56,16 @@ const props = defineProps({
 
   .progress-content {
     width: 100%;
+
+    .empty-deliverables {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      border-radius: $br-md;
+      background-color: rgba($orange-light, 0.2);
+      color: $orange;
+    }
 
     .progress-bar {
       width: 100%;

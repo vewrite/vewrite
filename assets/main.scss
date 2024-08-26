@@ -415,16 +415,15 @@ textarea {
 
 button,
 .button {
-    color: $black;
-    background: $white;
+    color: $purple;
+    background: rgba($purple, 0.1);
     border-radius: $br-xl;
-    border: 1px solid rgba($purple, 0.1);
+    border: 1px solid rgba($purple, 0);
     text-align: center;
     text-decoration: none;
     padding: calc($spacing-xxs + 2px) $spacing-sm $spacing-xxs;
     cursor: pointer;
-    font-size: $font-size-xxs;
-    text-transform: uppercase;
+    font-size: $font-size-sm;
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
@@ -439,7 +438,8 @@ button,
     }
 
     &:hover {
-        border: 1px solid rgba($purple, 1);
+        border: 1px solid rgba($purple, 0.2);
+        background: rgba($purple, 0.15);
     }
 }
 
@@ -448,6 +448,19 @@ button.large,
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     text-transform: capitalize;
+}
+
+
+button.dark,
+.button.dark {
+    border: 1px solid rgba($purple-dark, 0.9);
+    background-color: rgba($purple-light, 0.75);
+    color: $white;
+
+    &:hover {
+        border: 1px solid rgba($purple-dark, 1);
+        background-color: rgba($purple, 1);
+    }
 }
 
 button.primary,
