@@ -113,7 +113,7 @@ export default function useDeliverables() {
   }
 
   function createDeliverableModal(projectId) {
-    useModal().setType('small');
+    useModal().setType('medium');
     useModal().setHeader('Create Deliverable');
     useModal().setContent('CreateDeliverableModal');
     useModal().toggleVisibility();

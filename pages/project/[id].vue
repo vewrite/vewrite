@@ -393,6 +393,7 @@ watchEffect(() => {
   justify-content: center;
   align-items: center;
   height: 100%;
+  color: $gray;
 }
 
 .project-deliverables {

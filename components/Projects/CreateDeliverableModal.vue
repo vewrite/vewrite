@@ -1,11 +1,39 @@
 <template>
   <div id="CreateDeliverableModal">
     <div class="modal-body">
-      <p>{{ projectId }}</p>
+      <!-- <p>{{ projectId }}</p> -->
+      <form class="inner-container" @submit.prevent="createDeliverable(projectId, deliverable)">
+
+        <div class="form-block">
+            <div class="form-details">
+                <h3>Deliverable Details</h3>
+                <p class="details"></p>
+            </div>
+            <div class="form-content">
+              <div class="form-input">
+                  <label for="name">Name</label>
+                  <input v-model="deliverable.title" id="name" type="text" placeholder="Input your deliverables's title" />
+              </div>
+            </div>
+        </div>
+
+        <div class="form-content">
+          <div class="form-group">
+
+              <div class="form-group-footer">
+                
+              </div>
+          </div>     
+        </div>
+        </form>
     </div>
     
     <div class="buttons">
-      <button @click="createDeliverable(projectId, deliverable)" class="primary">Create</button>
+      <!-- <button @click="createDeliverable(projectId, deliverable)" class="primary">Create</button> -->
+      <button type="submit" class="button block primary" :disabled="loading">
+          <span v-if="loading">Updating...</span>
+          <span v-else>Create</span>
+      </button>
     </div>
   </div>
 </template>
@@ -27,6 +55,14 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const projectId = route.params.id;
 
+const loading = ref(false);
+const deliverable = reactive({
+  title: 'Deliverable title',
+  created_at: new Date(),
+  updated_at: new Date(),
+  project_id: projectId,
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -41,7 +77,6 @@ const projectId = route.params.id;
   width: 100%;
 
   .modal-body {
-    padding: $spacing-md;
     width: 100%;
 
     p {

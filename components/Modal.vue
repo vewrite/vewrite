@@ -110,6 +110,11 @@ computed(() => {
       height: auto;
     }
 
+    &.medium {
+      width: 600px;
+      height: auto;
+    }
+
     &.visible {
       animation: scaleBounce 0.4s both 0.2s;
     }
