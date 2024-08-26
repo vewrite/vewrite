@@ -112,10 +112,34 @@ export default function useDeliverables() {
     }
   }
 
+  function createDeliverableModal(projectId) {
+    useModal().setType('small');
+    useModal().setHeader('Create Deliverable');
+    useModal().setContent('CreateDeliverableModal');
+    useModal().toggleVisibility();
+  }
+
+  async function createDeliverable(projectId, deliverable) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .insert(deliverable);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
   return {
     DeliverableData,
     DeliverableError,
     DeliverableStates,
+    createDeliverableModal,
+    createDeliverable,
     fetchSingleProjectDeliverable,
     fetchProjectDeliverables,
     fetchDeliverableStates,

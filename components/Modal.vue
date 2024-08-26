@@ -18,6 +18,7 @@
 import { useModal } from '~/stores/modal'
 
 import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
+import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
 
 const modal = useModal()
 
@@ -35,7 +36,8 @@ const header = computed(() => {
 
 const contentComponent = computed(() => {
   const components = {
-    'DeleteProjectModal': DeleteProjectModal
+    'DeleteProjectModal': DeleteProjectModal,
+    'CreateDeliverableModal': CreateDeliverableModal,
   }
   return components[modal.content]
 })

@@ -21,6 +21,10 @@
         <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
 
         <Loading v-if="loading.deliverables" />
+        
+        <div v-if="loading.deliverables == false" class="new-deliverable">
+          <button class="button" @click="createDeliverableModal(project.id)">+</button>
+        </div>
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
         </div>
@@ -70,6 +74,10 @@ import AppPanel from '~/components/AppPanel.vue';
 // Project composable
 import useProject from '~/composables/useProject';
 const { deleteProjectModal } = useProject();
+
+// Deliverables composable
+import useDeliverables from '~/composables/useDeliverables';
+const { createDeliverableModal } = useDeliverables();
 
 const supabase = useSupabaseClient();
 const loading = ref({
@@ -366,6 +374,18 @@ watchEffect(() => {
   height: 100%;
   width: 100%;
   overflow-y: auto;
+}
+
+.new-deliverable {
+  display: flex;
+  justify-content: flex-end;
+  margin: $spacing-md $spacing-md 0 $spacing-md;
+
+  button {
+    font-size: $font-size-md;
+    padding: $spacing-sm;
+    width: 100%;
+  }
 }
 
 .no-deliverables {
