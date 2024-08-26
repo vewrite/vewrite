@@ -29,11 +29,7 @@
     </div>
     
     <div class="buttons">
-      <!-- <button @click="createDeliverable(projectId, deliverable)" class="primary">Create</button> -->
-      <button type="submit" class="button block primary" :disabled="loading">
-          <span v-if="loading">Updating...</span>
-          <span v-else>Create</span>
-      </button>
+      <button @click="createDeliverable(projectId, deliverable)" class="primary">Create</button>
     </div>
   </div>
 </template>
@@ -60,7 +56,9 @@ const deliverable = reactive({
   title: 'Deliverable title',
   created_at: new Date(),
   updated_at: new Date(),
-  project_id: projectId,
+  project: projectId,
+  status: 0,
+  workflow_state: 0,
 })
 
 </script>

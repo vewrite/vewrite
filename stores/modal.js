@@ -21,6 +21,12 @@ export const useModal = defineStore('modal', {
     setContent(content) {
       this.content = content
       // console.log(this.$state);
+    },
+    reset() {
+      this.visible = 0
+      this.content = ''
+      this.type = ''
+      this.header = ''
     }
   },
 })

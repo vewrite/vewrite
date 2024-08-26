@@ -120,10 +120,14 @@ export default function useDeliverables() {
   }
 
   async function createDeliverable(projectId, deliverable) {
+
+    console.log('Creating deliverable for project: ', projectId);
     try {
       const { data, error } = await supabase
         .from('deliverables')
         .insert(deliverable);
+
+      useModal().reset();
 
       if (error) throw error;
 
