@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useModal } from '~/stores/modal'
+import useDeliverables from '~/composables/useDeliverables'
 
 export default function useProject() {
 
@@ -8,6 +9,7 @@ export default function useProject() {
   const projectError = ref(null)
   const supabase = useSupabaseClient();
   const router = useRouter();
+  const { deleteProjectDeliverables } = useDeliverables();
 
   function deleteProjectModal(projectId) {
     useModal().setType('small');
@@ -28,7 +30,8 @@ export default function useProject() {
       projectError.value = error.message
     }
 
-    // TODO - remove all associate deliverables
+    // Remove all associate deliverables
+    deleteProjectDeliverables(projectId);
 
     // Reset the modal
     useModal().setType('');
@@ -51,7 +54,7 @@ export default function useProject() {
       if (error) throw error;
 
       return data[0];
-      
+
     } catch (error) {
       projectError.value = error.message
     }

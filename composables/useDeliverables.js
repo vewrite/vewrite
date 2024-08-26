@@ -7,7 +7,43 @@ export default function useDeliverables() {
   const supabase = useSupabaseClient();
   const DeliverableStates = ref([]);
 
-  async function fetchProjectDeliverable(deliverableId) {
+  async function fetchProjectDeliverables(projectId) {
+    
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .select('*')
+        .eq('project', projectId);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
+  async function deleteProjectDeliverables(projectId) {
+    console.log('Deleting all deliverables for project: ', projectId);
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .delete()
+        .eq('project', projectId);
+
+      if (error) throw error;
+
+      console.log(data);
+
+      return data;
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+  
+  async function fetchSingleProjectDeliverable(deliverableId) {
 
     console.log('fetchProjectDeliverable', deliverableId);
 
@@ -80,9 +116,11 @@ export default function useDeliverables() {
     DeliverableData,
     DeliverableError,
     DeliverableStates,
-    fetchProjectDeliverable,
+    fetchSingleProjectDeliverable,
+    fetchProjectDeliverables,
     fetchDeliverableStates,
-    renderStateName
+    renderStateName,
+    deleteProjectDeliverables
   }
 
 }

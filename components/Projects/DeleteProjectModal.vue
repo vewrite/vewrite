@@ -2,12 +2,16 @@
   <div id="DeleteProjectModal">
     <div class="modal-body">
       <p>This is an irreversible action. All data associated with this project, <strong>{{ project.name }}</strong>, will be permanently deleted.</p>
-      {{ deliverables }}
+      <br><br>
+      <p><strong>These deliverables will also be deleted</strong></p>
+      <ul>
+        <li v-for="deliverable in deliverables" :key="deliverable.id">{{ deliverable.title }}</li>
+      </ul>
     </div>
     
     <div class="buttons">
       <span class="modal-confirmation">I understand that all data will be lost.</span>
-      <button @click="deleteProject" class="primary red">Delete</button>
+      <button @click="deleteProject(projectId)" class="primary red">Delete</button>
     </div>
   </div>
 </template>
@@ -20,7 +24,7 @@ const { deleteProject, getProjectDetails, projectData, projectError } = useProje
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchProjectDeliverable } = useDeliverables();
+const { fetchProjectDeliverables } = useDeliverables();
 
 const project = ref({});
 const deliverables = ref([]);
@@ -32,7 +36,7 @@ const projectId = route.params.id;
 
 onMounted(async () => {
   project.value = await getProjectDetails(projectId);
-  // deliverables.value = await fetchProjectDeliverable(projectId);
+  deliverables.value = await fetchProjectDeliverables(projectId);
 });
 
 </script>
