@@ -38,10 +38,14 @@
             
             <div class="deliverable-actions">
               <div class="deliverable-workflow-state">
-                <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState">
+                <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-if="deliverable.workflow_state">
                   <Loading v-if="!deliverable" />
                   {{ renderStateName(deliverable.workflow_state) }}
                 </span>
+                <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-else>
+                  Set state
+                </span>
+
                 <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
                     <div v-for="state in states" :class="deliverable.workflow_state == state.id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state.id)">
                       {{ state.name }}
@@ -50,7 +54,9 @@
               </div>
               
               <div class="deliverable-calendar">
-                <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar">Due {{ deliverable.formattedDueDate }}</span>
+                <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar" v-if="deliverable.formattedDueDate">Due {{ deliverable.formattedDueDate }}</span>
+                <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar"v-else>Set due date</span>
+
                 <div class="deliverable-calendar-popup popup right clean" :id="'deliverable-calendar-' + deliverable.id">
                   <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
                 </div>
@@ -381,11 +387,6 @@ watchEffect(() => {
   display: flex;
   justify-content: flex-end;
   margin: $spacing-md $spacing-md 0 $spacing-md;
-
-  button {
-    padding: $spacing-sm;
-    width: 100%;
-  }
 }
 
 .no-deliverables {
@@ -419,8 +420,8 @@ watchEffect(() => {
       .deliverable-id {
         color: $gray-dark;
         font-size: $font-size-sm;
-        border-right: 1px solid $gray;
         padding-right: $spacing-sm;
+        min-width: 44px;
       }
 
       .deliverable-title {
