@@ -1,27 +1,31 @@
 import { ref } from 'vue';
 
-export function useWorkflow() {
+export default function useDeliverables() {
 
-  const WorkflowData = ref(null);
-  const WorkflowError = ref(null);
+  const DeliverableData = ref(null);
+  const DeliverableError = ref(null);
   const supabase = useSupabaseClient();
-  const WorkflowStates = ref([]);
+  const DeliverableStates = ref([]);
 
-  async function fetchProjectWorkflow(workflowId) {
+  async function fetchProjectDeliverable(deliverableId) {
 
-    // console.log('fetchProjectWorkflow', workflowId);
+    console.log('fetchProjectDeliverable', deliverableId);
 
     try {
       const { data, error } = await supabase
-        .from('workflows')
+        .from('deliverables')
         .select('*')
-        .eq('id', workflowId);
+        .eq('id', deliverableId);
 
       if (error) throw error;
 
-      WorkflowData.value = data[0];
+      // DeliverableData.value = data[0];
+      console.log(data[0]);
+      
+      return data[0];
+
     } catch (error) {
-      WorkflowError.value = error.message;
+      DeliverableError.value = error.message;
     }
   }
 
@@ -30,18 +34,18 @@ export function useWorkflow() {
     return state ? state.name : '';
   }
 
-  async function fetchWorkflowStates(workflowId) {
+  async function fetchDeliverableStates(deliverableId) {
     try {
       const { data, error } = await supabase
-        .from('workflows')
+        .from('deliverables')
         .select('states')
-        .eq('id', workflowId);
+        .eq('id', deliverableId);
 
       // Fetch the states as an array of integers
-      WorkflowStates.value = data[0].states;
+      DeliverableStates.value = data[0].states;
 
       // Fetch the states as an array of objects from the states table
-      WorkflowStates.value = await Promise.all(WorkflowStates.value.map(async state => {
+      DeliverableStates.value = await Promise.all(DeliverableStates.value.map(async state => {
         // return await fetchState(state);
         const fetchedState = await fetchState(state);
         // console.log(fetchedState);
@@ -73,11 +77,11 @@ export function useWorkflow() {
   }
 
   return {
-    fetchProjectWorkflow,
-    WorkflowError,
-    WorkflowData,
-    WorkflowStates,
-    fetchWorkflowStates,
+    DeliverableData,
+    DeliverableError,
+    DeliverableStates,
+    fetchProjectDeliverable,
+    fetchDeliverableStates,
     renderStateName
   }
 

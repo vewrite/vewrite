@@ -1,13 +1,13 @@
 <template>
   <main id="Modal" :class="visibleClass">
-    <div class="modal-body" :class="visibleClass">
+    <div class="modal-body" :class="[visibleClass, typeClass]">
       <div class="header">
-        <slot name="header"></slot>
+        <!-- <slot name="header"></slot> -->
+         {{ header }}
         <div class="modal-close" @click="close"></div>
       </div>
       <div class="body">
-        <slot name="body"></slot>
-        {{ visibleClass }}
+        <component :is="contentComponent" />
       </div>
     </div>
   </main>
@@ -17,10 +17,27 @@
 
 import { useModal } from '~/stores/modal'
 
+import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
+
 const modal = useModal()
 
 const visibleClass = computed(() => {
   return modal.visible ? 'visible' : ''
+})
+
+const typeClass = computed(() => {
+  return modal.type
+})
+
+const header = computed(() => {
+  return modal.header
+})
+
+const contentComponent = computed(() => {
+  const components = {
+    'DeleteProjectModal': DeleteProjectModal
+  }
+  return components[modal.content]
 })
 
 const close = () => {
@@ -66,7 +83,7 @@ computed(() => {
   width: 100%;
   height: 100%;
   padding: $spacing-md;
-  background-color: rgba($white, .2);
+  background-color: rgba($black, .2);
   backdrop-filter: blur(8px);
   z-index: 1000;
   opacity: 0;
@@ -80,31 +97,34 @@ computed(() => {
 
   .modal-body {
     background-color: $white;
-    border: 1px solid #EFE5FD;
     border-radius: $br-xl;
     overflow: auto;
     width: 100%;
     height: 100%;
     box-shadow: $main-shadow;
 
+    &.small {
+      width: 400px;
+      height: auto;
+    }
+
     &.visible {
       animation: scaleBounce 0.4s both 0.2s;
     }
 
     .header {
-      background-color: rgba($white-dark, 0.25);
-      color: $black;
+      background-color: rgba($purple, 1);
+      color: $white;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      height: 75px;
+      height: 74px;
       width: 100%;
       padding: 0 $spacing-md;
       position: relative;
-      font-size: $font-size-lg;
-      font-family: $font-family-secondary;
-      font-weight: 400;
+      font-size: $font-size-sm;
+      font-weight: 600;
 
       .modal-close {
         cursor: pointer;
@@ -112,10 +132,11 @@ computed(() => {
         right: $spacing-md;
         top: 50%;
         transform: translateY(-50%);
+        color: $white;
         
         &:before {
           content: '×';
-          font-size: $font-size-xl;
+          font-size: $font-size-lg;
         }
       }
 
@@ -132,7 +153,6 @@ computed(() => {
       height: calc(100% - 75px);
       overflow-y: auto;
       position: relative;
-      padding: $spacing-lg;
     }
   }
 }

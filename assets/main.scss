@@ -474,6 +474,18 @@ button.green,
     }
 }
 
+button.red,
+.button.red {
+    border: 1px solid rgba($red-dark, 0.3);
+    background-color: rgba($red, 0.75);
+    color: $white;
+
+    &:hover {
+        border: 1px solid rgba($red-dark, 1);
+        background-color: rgba($red, 1);
+    }
+}
+
 /* Widgets */
 
 .card {

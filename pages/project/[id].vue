@@ -8,7 +8,7 @@
       <div class="app-panel-header-buttons">
         <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
         <!-- <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link> -->
-        <button class="button dark" @click="deleteProject(project.id)">Delete</button> 
+        <button class="button dark" @click="deleteProjectModal(project.id)">Delete</button> 
       </div>
     </template>
     <template v-slot:body>
@@ -69,7 +69,7 @@ import AppPanel from '~/components/AppPanel.vue';
 
 // Project composable
 import useProject from '~/composables/useProject';
-const { deleteProject } = useProject();
+const { deleteProjectModal } = useProject();
 
 const supabase = useSupabaseClient();
 const loading = ref({
@@ -120,10 +120,6 @@ async function getProject(id) {
     fetchDeliverables(project.value.id);
     fetchProjectWorkflow(project.value.workflow);
     fetchWorkflowStates(project.value.workflow);
-    
-    // 1. fetch the project
-    // 2. fetch the workflow from the project
-    // 3. fetch the states from the workflow states (array of states)
 
 
   } catch (error) {

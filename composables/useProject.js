@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
+import { useModal } from '~/stores/modal'
 
 export default function useProject() {
 
@@ -8,11 +9,14 @@ export default function useProject() {
   const supabase = useSupabaseClient();
   const router = useRouter();
 
-  async function deleteProject(projectId) {
-    // First get confirmation from the user
-    const confirmDelete = confirm('Are you sure you want to delete this project?');
-    if (!confirmDelete) return;
+  function deleteProjectModal(projectId) {
+    useModal().setType('small');
+    useModal().setHeader('Delete Project');
+    useModal().setContent('DeleteProjectModal');
+    useModal().toggleVisibility();
+  }
 
+  async function deleteProject(projectId) {
     try {
       const { error } = await supabase
         .from('projects')
@@ -24,10 +28,40 @@ export default function useProject() {
       projectError.value = error.message
     }
 
+    // TODO - remove all associate deliverables
+
+    // Reset the modal
+    useModal().setType('');
+    useModal().setHeader('');
+    useModal().setContent('');
+    useModal().toggleVisibility();
+    
+    // Redirect the user to the projects
     router.push('/projects');
   }
 
+  async function getProjectDetails(projectId) {
+
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', projectId);
+
+      if (error) throw error;
+
+      return data[0];
+      
+    } catch (error) {
+      projectError.value = error.message
+    }
+  }
+
   return {
-    deleteProject
+    deleteProject,
+    deleteProjectModal,
+    getProjectDetails,
+    projectData,
+    projectError
   }
 }
