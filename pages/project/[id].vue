@@ -8,6 +8,7 @@
       <div class="app-panel-header-buttons">
         <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
         <!-- <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link> -->
+        <button class="button dark" @click="deleteProject(project.id)">Delete</button> 
       </div>
     </template>
     <template v-slot:body>
@@ -20,7 +21,7 @@
         <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
 
         <Loading v-if="loading.deliverables" />
-        <div v-if="loading.deliverables == false && deliverables.length < 1">
+        <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
         </div>
         <div v-if="loading.deliverables == false" class="project-deliverables">
@@ -65,6 +66,10 @@ import SingleWorkflow from '~/components/Workflows/SingleWorkflow.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';
 import AppPanel from '~/components/AppPanel.vue';
+
+// Project composable
+import useProject from '~/composables/useProject';
+const { deleteProject } = useProject();
 
 const supabase = useSupabaseClient();
 const loading = ref({
@@ -365,6 +370,13 @@ watchEffect(() => {
   height: 100%;
   width: 100%;
   overflow-y: auto;
+}
+
+.no-deliverables {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .project-deliverables {
