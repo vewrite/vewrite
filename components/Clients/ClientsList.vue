@@ -7,7 +7,7 @@
     </div>
 
     <!-- Empty state -->
-    <div class="empty-state" v-if="clientsData.length === 0 && !loading">
+    <div class="empty-state" v-if="clientsData && clientsData.length === 0 && !loading">
       <img src="/images/clients-empty-state.svg" alt="No clients found" />
       <h3>You haven’t created a client yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
@@ -18,7 +18,6 @@
     <div class="clients-list inner-container" v-if="!loading">
       <router-link :to="'/client/' + client.id" class="client-card" v-for="client in filteredClients" :key="client.id">
         <div class="image-wrapper">
-          <!-- <img :src="client.logo_url" alt="Client avatar" /> -->
           <ClientImage :client="client" size="medium" table="logos" />
         </div>
         <h3>{{ client.name }}</h3>
@@ -35,6 +34,7 @@ import { onMounted, ref } from 'vue'
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const clients = ref([])
+const test = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
 
@@ -43,8 +43,14 @@ import useClient from '~/composables/useClient';
 const { fetchClients, clientsData } = useClient();
 
 onMounted(async () => {
-  fetchClients(user.value.id)
-  loading.value = false
+  try {
+    await fetchClients(user.value.id)
+  } catch (error) {
+    console.error('Failed to fetch clients:', error)
+  } finally {
+    loading.value = false
+  }
+  
 })
 
 const filteredClients = computed(() => {

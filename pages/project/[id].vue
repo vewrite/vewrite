@@ -14,7 +14,7 @@
     <template v-slot:body>
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" />
-        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="client" :creator="creator" />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         
         <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
@@ -116,7 +116,7 @@ const projectId = route.params.id;
 // Fetch the project data from supabase
 const project = ref(null);
 const creator = ref(null);
-const client = ref(clientData);
+const client = ref(null);
 const deliverables = ref([]);
 const workflow = ref([]);
 const states = ref([]);
@@ -135,11 +135,10 @@ async function getProject(id) {
     project.value = data;
 
     // fetchCreator(project.value.created_by);
-    client.value = fetchClient(project.value.client);
+    fetchClient(project.value.client);
     fetchDeliverables(project.value.id);
     fetchProjectWorkflow(project.value.workflow);
     fetchWorkflowStates(project.value.workflow);
-
 
   } catch (error) {
     alert(error.message);

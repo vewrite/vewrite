@@ -20,8 +20,6 @@ export default function useClient() {
     }
 
     clientData.value = data[0]
-
-    console.log('clientData', clientData.value);
   
     // add the clients to the clients ref
     return data[0]
@@ -51,7 +49,7 @@ export default function useClient() {
       };
     }));
 
-    console.log('clientsData', clientsData.value);
+    // console.log('clientsData', clientsData.value);
 
     return clientsData.value
   

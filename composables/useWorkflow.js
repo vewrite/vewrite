@@ -9,8 +9,6 @@ export function useWorkflow() {
 
   async function fetchProjectWorkflow(workflowId) {
 
-    // console.log('fetchProjectWorkflow', workflowId);
-
     try {
       const { data, error } = await supabase
         .from('workflows')
