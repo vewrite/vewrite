@@ -42,7 +42,7 @@
                   <Loading v-if="!deliverable" />
                   {{ renderStateName(deliverable.workflow_state) }}
                 </span>
-                <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-else>
+                <span class="deliverable-workflow-state-bubble button red no-uppercase" @click="toggleWorkflowState" v-else>
                   Set state
                 </span>
 
@@ -55,7 +55,7 @@
               
               <div class="deliverable-calendar">
                 <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar" v-if="deliverable.formattedDueDate">Due {{ deliverable.formattedDueDate }}</span>
-                <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar"v-else>Set due date</span>
+                <span class="deliverable-duedate button red no-uppercase" @click="toggleCalendar"v-else>Set due date</span>
 
                 <div class="deliverable-calendar-popup popup right clean" :id="'deliverable-calendar-' + deliverable.id">
                   <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
@@ -86,6 +86,10 @@ const { deleteProjectModal } = useProject();
 import useDeliverables from '~/composables/useDeliverables';
 const { createDeliverableModal } = useDeliverables();
 
+// Client composable
+import useClient from '~/composables/useClient';
+const { fetchClient, clientData } = useClient();
+
 const supabase = useSupabaseClient();
 const loading = ref({
   global: true,
@@ -112,7 +116,7 @@ const projectId = route.params.id;
 // Fetch the project data from supabase
 const project = ref(null);
 const creator = ref(null);
-const client = ref(null);
+const client = ref(clientData);
 const deliverables = ref([]);
 const workflow = ref([]);
 const states = ref([]);
@@ -131,7 +135,7 @@ async function getProject(id) {
     project.value = data;
 
     // fetchCreator(project.value.created_by);
-    fetchClient(project.value.client);
+    client.value = fetchClient(project.value.client);
     fetchDeliverables(project.value.id);
     fetchProjectWorkflow(project.value.workflow);
     fetchWorkflowStates(project.value.workflow);
@@ -341,22 +345,22 @@ const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) =
  * CLIENT
  */
 
-async function fetchClient(clientId) {
-  const { data, error } = await supabase
-    .from('clients')
-    .select('*')
-    .eq('id', clientId)
+// async function fetchClient(clientId) {
+//   const { data, error } = await supabase
+//     .from('clients')
+//     .select('*')
+//     .eq('id', clientId)
 
-  if (error) {
-    console.error('Error fetching clients:', error.message)
-    return
-  }
+//   if (error) {
+//     console.error('Error fetching clients:', error.message)
+//     return
+//   }
 
-  // add the clients to the clients ref
-  client.value = data[0]
+//   // add the clients to the clients ref
+//   client.value = data[0]
 
-  loading.value.global = false
-}
+//   loading.value.global = false
+// }
 
 // Fetch the project data when the component is mounted
 onMounted(() => {
@@ -448,10 +452,6 @@ watchEffect(() => {
       .deliverable-workflow-state {
         position: relative;
         cursor: pointer;
-
-        .deliverable-workflow-state-bubble {
-          color: $purple;
-        }
 
         .deliverable-workflow-state-popup {
           position: absolute;

@@ -38,6 +38,10 @@ const clients = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
 
+// Client composable
+import useClient from '~/composables/useClient';
+const { fetchClient, clientData } = useClient();
+
 async function fetchClients() {
   const { data, error } = await supabase
     .from('clients')

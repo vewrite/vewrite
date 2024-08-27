@@ -30,6 +30,7 @@ const loading = ref(true);
 const props = defineProps(['project', 'creator', 'client', 'deliverables'])
 const { client } = toRefs(props)
 
+console.log('Project Overview receives: ', client.value)
 
 </script>
 
