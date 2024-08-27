@@ -32,6 +32,7 @@
 
     <div :class="['projects-list', viewMode]" v-if="!loading">
       <div class="project-card" v-for="project in filteredProjects" :key="project.id">
+        <!-- <pre>{{ project }}</pre> -->
         <div class="project-card-header">
           <div class="image-wrapper">
             <ClientImage :client="project.client" size="medium" table="logos" />
@@ -41,7 +42,7 @@
         <div class="project-deliverables-status">
           <div class="progress-status">
             <span>Progress</span>
-            <span>{{ project.complete }} / {{ project.deliverables.length }}</span>
+            <span>{{ project.completedDeliverables }} / {{ project.deliverables.length }}</span>
           </div>
           <div class="progress-content">
             <div class="empty-deliverables" v-if="project.deliverables.length == 0">
@@ -49,7 +50,7 @@
             </div>
             <div class="deliverables" v-else>
               <div class="progress-bar">
-                <div class="progress" :style="{ width: (project.complete / project.deliverables.length) * 100 + '%' }"></div>
+                <div class="progress" :style="{ width: (project.completedDeliverables / project.deliverables.length) * 100 + '%' }"></div>
               </div>
             </div>
           </div>
@@ -114,11 +115,13 @@ async function fetchProjects() {
   // Update the project object with the deliverables and progress
   projects.value = await Promise.all(projects.value.map(async project => {
     const deliverables = await fetchDeliverables(project.id);
-    const complete = deliverables.filter(deliverable => deliverable.status == 1).length;
+
+    // TODO: Calculate the progress of the project based on the deliverable status 
+    const completedDeliverables = deliverables.filter(deliverable => deliverable.workflow_state == 6).length;
     return {
       ...project,
       deliverables: deliverables,
-      complete: complete
+      completedDeliverables: completedDeliverables
     };
   }));
 
