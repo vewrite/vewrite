@@ -54,6 +54,11 @@
                       <span class="form-error" v-if="$v.$errors.length !== 0 && $v.project.name.required">Name is required</span>
                   </div>
                   <div class="form-input">
+                      <label for="name">Description</label>
+                      <textarea v-model="project.description" id="name" type="text" placeholder="Describe your project and its objective"  />
+                      <span class="form-error" v-if="$v.$errors.length !== 0 && $v.project.name.required">Description is required</span>
+                  </div>
+                  <div class="form-input">
                       <label for="status">Status</label>
                       <select v-model="project.status" id="status">
                         <option value="0">Not started</option>
@@ -119,6 +124,7 @@ const loading = ref(true)
 
 const project = reactive({
   name: '',
+  description: '',
   status: 1,
   client: 0,
   deliverables: ["1"],
@@ -134,6 +140,7 @@ const project = reactive({
 const rules = {
   project: {
     name: { required },
+    description: { required },
     status: { required },
     client: { required },
     workflow: { required }
@@ -215,6 +222,7 @@ async function createProject() {
 
     const updates = {
       name: project.name,
+      description: project.description,
       status: project.status,
       client: project.client,
       deliverables: project.deliverables,

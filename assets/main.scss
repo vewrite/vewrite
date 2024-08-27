@@ -416,9 +416,9 @@ textarea {
 button,
 .button {
     color: $purple;
-    background: rgba($purple, 0.1);
+    background: rgba($purple, 0);
     border-radius: $br-xl;
-    border: 1px solid rgba($purple, 0);
+    border: 1px solid rgba($purple, 0.1);
     text-align: center;
     text-decoration: none;
     padding: calc($spacing-xxs + 2px) $spacing-sm $spacing-xxs;
@@ -438,8 +438,8 @@ button,
     }
 
     &:hover {
-        border: 1px solid rgba($purple, 0.2);
-        background: rgba($purple, 0.15);
+        border: 1px solid rgba($purple, 1);
+        background: rgba($purple, 0);
     }
 }
 
@@ -448,6 +448,13 @@ button.large,
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     text-transform: capitalize;
+}
+
+button.wide,
+.button.wide {
+    padding: $spacing-xs;
+    text-transform: capitalize;
+    width: 100%;
 }
 
 

@@ -2,7 +2,7 @@
   <aside class="project-overview">
     <div class="project-summary">
       <h2>{{ project.name }}</h2>
-      <!-- <p>Created by: {{ creator.username }}</p> -->
+      <p>{{ project.description }}</p>
     </div>
     <div class="client-summary">
       <ClientImage :client="client" size="medium" table="logos" />

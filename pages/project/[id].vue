@@ -16,19 +16,21 @@
         <Loading v-if="loading.global == true" />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         
-        <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" />
+        <!-- <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" /> -->
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <!-- {{ project.workflow }} -->
 
         <Loading v-if="loading.deliverables" />
         
-        <div v-if="loading.deliverables == false" class="new-deliverable">
-          <button class="button" @click="createDeliverableModal(project.id)">Create new deliverable</button>
-        </div>
-        <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
+        <!-- <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
+        </div> -->
+
+        <div v-if="loading.deliverables == false" class="new-deliverable">
+          <button class="button wide" @click="createDeliverableModal(project.id)">Create new deliverable</button>
         </div>
+
         <div v-if="loading.deliverables == false" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
             <div class="deliverable-details">
@@ -64,6 +66,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </template>
   </AppPanel>
@@ -133,6 +136,8 @@ async function getProject(id) {
     if (error) throw error;
 
     project.value = data;
+
+    console.log('Project:', project.value);
 
     // fetchCreator(project.value.created_by);
     fetchClient(project.value.client);
@@ -339,27 +344,6 @@ const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) =
     console.error('Error updating deliverable:', error.message);
   }
 };
-
-/**
- * CLIENT
- */
-
-// async function fetchClient(clientId) {
-//   const { data, error } = await supabase
-//     .from('clients')
-//     .select('*')
-//     .eq('id', clientId)
-
-//   if (error) {
-//     console.error('Error fetching clients:', error.message)
-//     return
-//   }
-
-//   // add the clients to the clients ref
-//   client.value = data[0]
-
-//   loading.value.global = false
-// }
 
 // Fetch the project data when the component is mounted
 onMounted(() => {
