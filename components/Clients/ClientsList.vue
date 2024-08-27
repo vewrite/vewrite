@@ -7,7 +7,7 @@
     </div>
 
     <!-- Empty state -->
-    <div class="empty-state" v-if="clients.length === 0 && !loading">
+    <div class="empty-state" v-if="clientsData.length === 0 && !loading">
       <img src="/images/clients-empty-state.svg" alt="No clients found" />
       <h3>You haven’t created a client yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
@@ -40,56 +40,18 @@ const searchQuery = ref('')
 
 // Client composable
 import useClient from '~/composables/useClient';
-const { fetchClient, clientData } = useClient();
+const { fetchClients, clientsData } = useClient();
 
-async function fetchClients() {
-  const { data, error } = await supabase
-    .from('clients')
-    .select('*')
-    .eq('created_by', user.value.id)
-
-  if (error) {
-    console.error('Error fetching clients:', error.message)
-    return
-  }
-
-  // add the clients to the clients ref
-  clients.value = data
-
-  // Add the clients to the clients ref
-  clients.value = await Promise.all(data.map(async client => {
-    const logoBlob = await downloadImage(client.logo_url);
-    return {
-      ...client,
-      logo_url: URL.createObjectURL(logoBlob)
-    };
-  }));
-
+onMounted(async () => {
+  fetchClients(user.value.id)
   loading.value = false
-}
-
-const downloadImage = async (path) => {
-  try {
-    const { data, error } = await supabase.storage
-          .from('logos')
-          .download(path)
-      if (error) throw error
-      // console.log(data)
-      return data
-  } catch (error) {
-      console.error("Error downloading image: ", error.message)
-  }
-}
-
-onMounted(() => {
-  fetchClients()
 })
 
 const filteredClients = computed(() => {
   if (!searchQuery.value) {
-    return clients.value
+    return clientsData.value
   }
-  return clients.value.filter(client =>
+  return clientsData.value.filter(client =>
     client.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
