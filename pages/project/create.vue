@@ -9,19 +9,15 @@
 
       <Loading v-if="loading" />
 
-      <!-- {{ project }} -->
-
       <main class="scrollable has-wizard">
 
         <!-- STEP 1 -->
         <div class="inner-container" v-if="!loading && wizardBar.currentStep == 1">
-          <div class="form-block" >
+          <div class="form-block">
             <div class="form-details">
               <h3>Select the Client</h3>
               <p class="details">Choose a client from the list.</p>
-              <p class="or-select">OR</p>
-              <p class="details">If you haven't created a client for this project, you can do so here.</p>
-              <router-link to="/clients/create" class="button primary">Create a client</router-link>
+              <p class="details">If you haven't created a client for this project, <router-link to="/clients/create">you can do so here</router-link>.</p>
             </div>
             <div class="form-content">
               <div class="form-group">

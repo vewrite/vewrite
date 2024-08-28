@@ -33,8 +33,10 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 0 $spacing-md;
-  width: calc(100% - #{$spacing-md * 2});
+  padding: $spacing-md;
+  background-color: rgba($gray, 0.15);
+  border-bottom: 1px solid $gray-light;
+  width: calc(100%);
   transition: bottom 0.2s ease;
 
   .progress-status { 

@@ -7,15 +7,6 @@
     <div class="client-summary">
       <ClientImage :client="client" size="medium" table="logos" />
     </div>
-    <!-- {{ client }} -->
-    <!-- <img :src="client.logo_url" :alt="client.name" /> -->
-    <!-- {{ project }} -->
-    <!-- {{ deliverables }} -->
-    <!-- <div>
-      <h3>{{ project.name }}</h3>
-      <p>{{ project.description }}</p>
-    </div> -->
-    <!-- {{ creator }} -->
   </aside>
 </template>
 
@@ -37,8 +28,10 @@ const { client } = toRefs(props)
 @import 'assets/_variables.scss';
 
 .project-overview {
-  width: calc(100% - 2 * $spacing-md);
-  margin: $spacing-md;
+  width: calc(100%);
+  padding: $spacing-md $spacing-md 0 $spacing-md;
+  background-color: rgba($gray, 0.15);
+  border-radius: $br-md;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

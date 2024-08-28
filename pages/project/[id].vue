@@ -22,13 +22,13 @@
         <!-- {{ project.workflow }} -->
 
         <Loading v-if="loading.deliverables" />
-        
-        <!-- <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
-          <p>No deliverables found for this project</p>
-        </div> -->
 
         <div v-if="loading.deliverables == false" class="new-deliverable">
           <button class="button wide" @click="createDeliverableModal(project.id)">Create new deliverable</button>
+        </div>
+
+        <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
+          <p>No deliverables found for this project</p>
         </div>
 
         <div v-if="loading.deliverables == false" class="project-deliverables">

@@ -97,6 +97,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     height: 88px;
+    border-right: 1px solid rgba($black, 0.1);
   }
 
   .sidebar-content {
@@ -106,6 +107,7 @@ onMounted(() => {
     gap: 2px;
     height: calc(100% - 54px - 180px);
     overflow-y: auto;
+    border-right: 1px solid rgba($black, 0.1);
 
     .link-group {
       display: flex;
@@ -155,6 +157,7 @@ onMounted(() => {
     bottom: 0;
     width: 100%;
     height: 180px;
+    border-right: 1px solid rgba($black, 0.1);
 
     .tier-type {
       display: flex;
