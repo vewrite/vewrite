@@ -19,8 +19,6 @@ const src = ref("")
 
 async function fetchClientLogo(client) {
 
-  console.log('clientImage receives', client)
-
   // get one logo based on the client id
   const { data, error } = await supabase
     .from('clients')

@@ -1,21 +1,25 @@
 <template>
   <div id="vewrite">
     <Loading class="on-top" :hasLogo="true" v-if="loading" />
-    <main v-if="userStore.firstTime == false">
-      <Sidebar />
-      <NuxtPage />
-      <Modal />
-    </main>
-    <main v-else>
-      <FirstTime v-if="!loading && userStore.firstTime == true" />
-    </main>
+    <div class="app" v-if="user">
+      <main v-if="userStore.firstTime == false">
+        <Sidebar />
+        <NuxtPage />
+        <Modal />
+      </main>
+      <main v-else>
+        <FirstTime v-if="!loading && userStore.firstTime == true" />
+      </main>
+    </div>
+    <div class="app" v-else>
+      <Auth />
+    </div>
   </div>
 </template>
 
 <script setup>
 
 import FirstTime from '~/components/Onboarding/Firsttime.vue'
-import { useModal } from '~/stores/modal'
 
 // Supabase setup
 const supabase = useSupabaseClient()
@@ -44,6 +48,8 @@ onMounted(() => {
   if (user.value) {
     fetchUser()
     loading.value = false
+  } else {
+    loading.value = false
   }
 })
 
@@ -59,7 +65,7 @@ onMounted(() => {
   height: 100%;
   width: 100%;
 
-  main {
+  .app, main {
     width: 100%;
     height: 100%;
     display: flex;

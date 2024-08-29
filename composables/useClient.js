@@ -7,7 +7,6 @@ export default function useClient() {
   const supabase = useSupabaseClient();
 
   async function fetchClient(clientId) {
-    console.log('fetchClient', clientId)
 
     const { data, error } = await supabase
       .from('clients')

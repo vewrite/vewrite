@@ -137,8 +137,6 @@ async function getProject(id) {
 
     project.value = data;
 
-    console.log('Project:', project.value);
-
     // fetchCreator(project.value.created_by);
     fetchClient(project.value.client);
     fetchDeliverables(project.value.id);
