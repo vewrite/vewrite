@@ -15,7 +15,9 @@
           <p>{{ deliverable.description }}</p>
         </div>
       </aside>
-      <div v-if="!loading" v-html="deliverable.markdown"></div>
+      <div class="deliverable-editor" v-if="deliverable && !loading">
+        <textarea v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" @input="updateDeliverable" />
+      </div>
     </template>
   </AppPanel>
 </template>
@@ -49,18 +51,50 @@ async function getDeliverable(id) {
     if (error) throw error;
 
     deliverable.value = data;
-
     projectId.value = data.project;
-
   } catch (error) {
     alert(error.message);
+  } finally {
+    loading.value = false;
   }
 }
 
+// Manual debounce function
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+// Save deliverable function
+async function saveDeliverable() {
+  if (deliverable.value) {
+    try {
+      const { error } = await supabase
+        .from('deliverables')
+        .update({ markdown: deliverable.value.markdown })
+        .eq('id', deliverableId);
+
+      if (error) throw error;
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+}
+
+// Debounced save function
+const debouncedSaveDeliverable = debounce(saveDeliverable, 1000); // 1 second debounce
+
+// Update deliverable function
+function updateDeliverable() {
+  debouncedSaveDeliverable();
+}
+
 // Fetch the deliverable data when the component is mounted
-onMounted(() => {
-  getDeliverable(deliverableId);
-  loading.value = false;
+onMounted(async () => {
+  await getDeliverable(deliverableId);
 });
 
 </script>
@@ -71,7 +105,7 @@ onMounted(() => {
 
 .deliverable-overview {
   width: calc(100%);
-  padding: $spacing-md $spacing-md 0 $spacing-md;
+  padding: $spacing-md;
   background-color: rgba($gray, 0.15);
   border-radius: $br-md;
   display: flex;
@@ -96,6 +130,23 @@ onMounted(() => {
       font-weight: 400;
       margin: 0;
     }
+  }
+}
+
+.deliverable-editor {
+  width: 100%;
+  height: calc(100% - 100px);
+  padding: $spacing-md;
+  background-color: $white;
+  border-radius: $br-md;
+
+  textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: $font-size-md;
   }
 }
 
