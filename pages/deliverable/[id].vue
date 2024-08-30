@@ -1,10 +1,7 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link :to="'/project/' + projectId" class="button dark">Back</router-link>
-      <div class="app-panel-header" v-if="project">
-        <Loading type="header" v-if="loading" />
-      </div>
+      <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button dark">Back</router-link>
       <div class="app-panel-header-buttons">
         <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
         <!-- <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link> -->
@@ -12,9 +9,13 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <div v-if="deliverable && !loading">
-        {{ deliverable.id }}
-      </div>
+      <aside class="deliverable-overview" v-if="deliverable && !loading">
+        <div class="deliverable-summary">
+          <h2>{{ deliverable.title }}</h2>
+          <p>{{ deliverable.description }}</p>
+        </div>
+      </aside>
+      <div v-if="!loading" v-html="deliverable.markdown"></div>
     </template>
   </AppPanel>
 </template>
@@ -51,8 +52,6 @@ async function getDeliverable(id) {
 
     projectId.value = data.project;
 
-    console.log(data);
-
   } catch (error) {
     alert(error.message);
   }
@@ -66,6 +65,39 @@ onMounted(() => {
 
 </script>
 
-<style scoped>
-/* Your styles here */
+<style lang="scss" scoped>
+
+@import 'assets/_variables.scss';
+
+.deliverable-overview {
+  width: calc(100%);
+  padding: $spacing-md $spacing-md 0 $spacing-md;
+  background-color: rgba($gray, 0.15);
+  border-radius: $br-md;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+
+  .deliverable-summary {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+
+    h2 {
+      font-family: $font-family-secondary;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    p {
+      font-size: $font-size-sm;
+      font-weight: 400;
+      margin: 0;
+    }
+  }
+}
+
+
 </style>
