@@ -85,6 +85,7 @@ const deliverable = reactive({
   workflow_state: 1,
   type: 'markdown',
   due_date: new Date(),
+  markdown: '# Hello World',
   link: '',
   file: '',
 })
