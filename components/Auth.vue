@@ -24,10 +24,10 @@
                         :disabled="loading" />
                 </div>
                 <div v-if="errorbox">
-                    <p class="error">{{ errorbox }}</p>
+                    <p class="notification error">{{ errorbox }}</p>
                 </div>
                 <div v-if="!notification == ''">
-                    <p class="notification">{{ notification }}</p>
+                    <p class="notification success">{{ notification }}</p>
                 </div>
                 
                 
@@ -103,24 +103,7 @@ const handleLogin = async () => {
                 width: 100%;
             }
 
-            .notification {
-                padding: $spacing-md;
-                background: rgba($purple, 0.1);
-                border-radius: $br-md;
-                color: $purple;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
             .error {
-                padding: $spacing-md;
-                background: rgba($red, 0.1);
-                border-radius: $br-md;
-                color: $red;
-                display: flex;
-                justify-content: center;
-                align-items: center;
                 margin-top: $spacing-md;
             }
         }

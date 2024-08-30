@@ -119,9 +119,53 @@ export default function useDeliverables() {
     useModal().toggleVisibility();
   }
 
-  async function createDeliverable(projectId, deliverable) {
+  async function createDeliverable(deliverable) {
 
-    console.log('Creating deliverable for project: ', projectId);
+    console.log('Creating deliverable for project: ', deliverable.project);
+    console.log(deliverable);
+
+    console.log('Deliverable type: ', deliverable.type);
+
+    if(deliverable.type === 'markdown') {
+      console.log('Markdown');
+      deliverable.markdown = '';
+      delete deliverable.type;
+    }
+
+    if(deliverable.type === 'file') {
+      console.log('File');
+      deliverable.file = '';
+      delete deliverable.type;
+    }
+
+    if(deliverable.type === 'link') {
+      console.log('Link');
+      deliverable.link = deliverable.link;
+      delete deliverable.type;
+    }
+
+    // switch (deliverable.type) {
+    //   case 0:
+    //     console.log('Markdown');
+    //     deliverable.markdown = '';
+    //     delete deliverable.type;
+    //     break;
+    //   case 1:
+    //     console.log('File');
+    //     deliverable.file = '';
+    //     delete deliverable.type;
+    //     break;
+    //   case 2:
+    //     console.log('Link');
+    //     deliverable.link = '';
+    //     delete deliverable.type;
+    //     break;
+      
+    //   default:
+    //     deliverable.markdown = '';
+    //     delete deliverable.type;
+    // }
+
     try {
       const { data, error } = await supabase
         .from('deliverables')

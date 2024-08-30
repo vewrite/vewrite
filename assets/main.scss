@@ -55,6 +55,32 @@ body,
     }
 }
 
+/* Notifications */
+
+.notification {
+    padding: $spacing-md;
+    border-radius: $br-md;
+    color: $purple;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.info {
+        background: rgba($purple, 0.1);
+        color: $purple;
+    }
+
+    &.success {
+        background: rgba($mint, 0.1);
+        color: $mint;
+    }
+
+    &.error {
+        background: rgba($red, 0.1);
+        color: $red;
+    }
+}
+
 /* Popups */
 
 .popup {
@@ -124,7 +150,7 @@ h2,
 h3,
 h4,
 h5 {
-    font-family: $font-family-secondary;
+    font-family: $font-family-main;
     font-weight: 500;
 }
 
@@ -373,10 +399,25 @@ textarea {
 
     .form-details {
         width: 33%;
+
+        h4 {
+            margin: 0 0 $spacing-xs 0;
+        }
     }
     
     .form-content {
         width: 66%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        .vc-container {
+            align-self: flex-end;
+        }
+    }
+
+    .form-content-full {
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
