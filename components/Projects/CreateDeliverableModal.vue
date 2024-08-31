@@ -1,8 +1,8 @@
 <template>
   <div id="CreateDeliverableModal">
     <div class="modal-body">
-      <!-- <p>{{ projectId }}</p> -->
-      <form class="inner-container" @submit.prevent="createDeliverable(deliverable)">
+      <Loading v-if="loading" />
+      <form class="inner-container" v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
 
         <div class="form-block">
           <div class="form-content-full">
@@ -45,9 +45,9 @@
           <div class="form-content">
             <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.due_date" />
           </div>
-      </div>
-          
+        </div>
       </form>
+          
     </div>
     
     <div class="buttons">

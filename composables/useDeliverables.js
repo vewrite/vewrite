@@ -121,6 +121,8 @@ export default function useDeliverables() {
 
   async function createDeliverable(deliverable) {
 
+    useModal().toggleLoading();
+
     if(deliverable.type === 'markdown') {
       console.log('Deliverable is Markdown');
       deliverable.markdown = deliverable.markdown;

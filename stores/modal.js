@@ -6,11 +6,15 @@ export const useModal = defineStore('modal', {
     visible: 0,
     content: '',
     type: '',
-    header: ''
+    header: '',
+    loading: 0
   }),
   actions: {
     toggleVisibility() {
       this.visible = !this.visible
+    },
+    toggleLoading() {
+      this.loading = !this.loading
     },
     setType(type) {
       this.type = type
@@ -27,6 +31,7 @@ export const useModal = defineStore('modal', {
       this.content = ''
       this.type = ''
       this.header = ''
+      this.loading = 0
     }
   },
 })

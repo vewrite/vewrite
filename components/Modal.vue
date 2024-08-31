@@ -7,7 +7,8 @@
         <div class="modal-close" @click="close"></div>
       </div>
       <div class="body">
-        <component :is="contentComponent" />
+        <Loading v-if="loading" type="small" class="padded-loader" />
+        <component v-if="!loading" :is="contentComponent" />
       </div>
     </div>
   </main>
@@ -32,6 +33,10 @@ const typeClass = computed(() => {
 
 const header = computed(() => {
   return modal.header
+})
+
+const loading = computed(() => {
+  return modal.loading
 })
 
 const contentComponent = computed(() => {
@@ -160,6 +165,10 @@ computed(() => {
       height: calc(100% - 75px);
       overflow-y: auto;
       position: relative;
+
+      .padded-loader {
+        padding: $spacing-xxl;
+      }
     }
   }
 }
