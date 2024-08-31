@@ -11,13 +11,18 @@
       <Loading v-if="loading" />
       <aside class="deliverable-overview" v-if="deliverable && !loading">
         <div class="deliverable-summary">
-          <!-- <h2>{{ deliverable.title }}</h2> -->
           <input class="deliverable-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
           <p>{{ deliverable.description }}</p>
         </div>
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
-        <textarea v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" @input="updateDeliverable" />
+        <Toolbar :textareaRef="$refs.textarea" />
+        <textarea 
+          ref="textareaRef" 
+          v-if="deliverable.markdown !== ''" 
+          v-model="deliverable.markdown" 
+          @input="updateDeliverable" 
+        />
       </div>
     </template>
   </AppPanel>
@@ -25,12 +30,15 @@
 
 <script setup>
 
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
+import Toolbar from '~/components/Toolbar.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
 const projectId = ref(null);
+const textareaRef = ref(null);
 
 // Get the route object
 const route = useRoute();
@@ -73,16 +81,7 @@ function debounce(func, wait) {
   };
 }
 
-// Insert text at cursor position in textarea
-function insertTextAtCursor(textarea, text) {
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-  const before = textarea.value.substring(0, start);
-  const after = textarea.value.substring(end);
-  textarea.value = before + text + after;
-  textarea.selectionStart = textarea.selectionEnd = start + text.length;
-  textarea.focus();
-}
+
 
 // Debounced save function
 const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
