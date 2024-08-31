@@ -11,6 +11,10 @@
               <input v-model="deliverable.title" id="name" type="text" placeholder="Input your deliverables's title" />
             </div>
             <div class="form-input">
+              <label for="description">Description</label>
+              <input v-model="deliverable.description" id="description" type="text" placeholder="Quickly summarize your deliverable" />
+            </div>
+            <div class="form-input">
               <label for="name">Type</label>
               <select v-model="deliverable.type" id="type">
                 <option value="markdown">Markdown</option>
@@ -78,6 +82,7 @@ const loading = ref(false);
 // Set some sane defaults for the deliverable
 const deliverable = reactive({
   title: 'Deliverable title',
+  description: 'Quickly summarize your deliverable',
   created_at: new Date(),
   updated_at: new Date(),
   project: projectId,
