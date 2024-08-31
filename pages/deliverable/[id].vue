@@ -16,7 +16,7 @@
         </div>
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
-        <Toolbar :textareaRef="$refs.textarea" />
+        <Toolbar :textareaRef="$refs.textareaRef" />
         <textarea 
           ref="textareaRef" 
           v-if="deliverable.markdown !== ''" 
