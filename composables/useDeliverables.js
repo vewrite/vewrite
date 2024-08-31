@@ -27,6 +27,22 @@ export default function useDeliverables() {
     }
   }
 
+  async function updateDeliverableTitle(deliverableId, title) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .update({ title: title })
+        .eq('id', deliverableId);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
   async function deleteProjectDeliverables(projectId) {
     console.log('Deleting all deliverables for project: ', projectId);
     try {
@@ -183,6 +199,7 @@ export default function useDeliverables() {
     DeliverableError,
     DeliverableStates,
     deleteDeliverable,
+    updateDeliverableTitle,
     createDeliverableModal,
     createDeliverable,
     fetchSingleProjectDeliverable,

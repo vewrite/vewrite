@@ -11,7 +11,8 @@
       <Loading v-if="loading" />
       <aside class="deliverable-overview" v-if="deliverable && !loading">
         <div class="deliverable-summary">
-          <h2>{{ deliverable.title }}</h2>
+          <!-- <h2>{{ deliverable.title }}</h2> -->
+          <input class="deliverable-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
           <p>{{ deliverable.description }}</p>
         </div>
       </aside>
@@ -42,7 +43,7 @@ const deliverable = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { deleteDeliverable } = useDeliverables();
+const { deleteDeliverable, updateDeliverableTitle } = useDeliverables();
 
 async function getDeliverable(id) {
   try {
@@ -122,11 +123,22 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
+    width: 100%;
 
-    h2 {
+    .deliverable-title-input {
       font-family: $font-family-secondary;
+      font-size: $font-size-lg;
       font-weight: 500;
       margin: 0;
+      background-color: transparent;
+      border-radius: 0;
+      padding: $spacing-sm 0 $spacing-xs 0;
+      width: 100%;
+
+      &:focus,
+      &:active {
+        border-bottom: 2px solid $purple;
+      }
     }
 
     p {
@@ -151,6 +163,7 @@ onMounted(async () => {
     outline: none;
     resize: none;
     font-size: $font-size-md;
+    padding: 0;
   }
 }
 
