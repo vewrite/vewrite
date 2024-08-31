@@ -12,7 +12,7 @@
       <aside class="deliverable-overview" v-if="deliverable && !loading">
         <div class="deliverable-summary">
           <input class="deliverable-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
-          <p>{{ deliverable.description }}</p>
+          <input class="deliverable-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
@@ -51,7 +51,7 @@ const deliverable = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, deleteDeliverable, updateDeliverableTitle } = useDeliverables();
+const { saveDeliverable, deleteDeliverable, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
 
 async function getDeliverable(id) {
   try {
@@ -63,7 +63,12 @@ async function getDeliverable(id) {
 
     if (error) throw error;
 
+    if(data.description === null) {
+      data.description = 'No description provided';
+    }
+
     deliverable.value = data;
+
     projectId.value = data.project;
   } catch (error) {
     alert(error.message);
@@ -116,7 +121,7 @@ onMounted(async () => {
   .deliverable-summary {
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
+    gap: 2px;
     width: 100%;
 
     .deliverable-title-input {
@@ -125,13 +130,31 @@ onMounted(async () => {
       font-weight: 500;
       margin: 0;
       background-color: transparent;
-      border-radius: 0;
-      padding: $spacing-sm 0 $spacing-xs 0;
       width: 100%;
+      padding: $spacing-xs;
 
       &:focus,
       &:active {
-        border-bottom: 2px solid $purple;
+        border: 1px solid $purple;
+        background: $white;
+      }
+    }
+
+    .deliverable-title-description {
+      font-family: $font-family-main;
+      font-size: $font-size-sm;
+      color: $gray-dark;
+      font-weight: 400;
+      margin: 0;
+      background-color: transparent;
+      width: 100%;
+      padding: $spacing-xs;
+
+      &:focus,
+      &:active {
+        border: 1px solid $purple;
+        background: $white;
+        color: $black;
       }
     }
 
