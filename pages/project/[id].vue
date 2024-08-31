@@ -39,6 +39,11 @@
             </div>
             
             <div class="deliverable-actions">
+
+              <div class="deliverable-updated-at">
+                Last updated {{ deliverable.formattedUpdatedAt }}
+              </div>
+
               <div class="deliverable-workflow-state">
                 <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-if="deliverable.workflow_state">
                   <Loading v-if="!deliverable" />
@@ -253,6 +258,7 @@ async function fetchDeliverables(projectId) {
 
     // Format the due date into something nicer
     deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
+    deliverable.formattedUpdatedAt = format(parseISO(deliverable.updated_at), 'MMMM do, yyyy');
 
     if (!deliverable.attrs) {
       deliverable.attrs = [];
@@ -429,6 +435,11 @@ watchEffect(() => {
       display: flex;
       align-items: center;
       gap: $spacing-xs;
+
+      .deliverable-updated-at {
+        color: $gray-dark;
+        font-size: $font-size-xs;
+      }
 
       .deliverable-workflow-state {
         position: relative;

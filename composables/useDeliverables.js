@@ -1,4 +1,6 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useModal } from '~/stores/modal'
 
 export default function useDeliverables() {
 
@@ -6,6 +8,7 @@ export default function useDeliverables() {
   const DeliverableError = ref(null);
   const supabase = useSupabaseClient();
   const DeliverableStates = ref([]);
+  const router = useRouter();
 
   async function fetchProjectDeliverables(projectId) {
     
@@ -119,6 +122,24 @@ export default function useDeliverables() {
     useModal().toggleVisibility();
   }
 
+  async function deleteDeliverable(deliverableId, projectId) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .delete()
+        .eq('id', deliverableId);
+
+      if (error) throw error;
+
+      router.push('/project/' + projectId);
+
+      return data;
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
   async function createDeliverable(deliverable) {
 
     useModal().toggleLoading();
@@ -161,6 +182,7 @@ export default function useDeliverables() {
     DeliverableData,
     DeliverableError,
     DeliverableStates,
+    deleteDeliverable,
     createDeliverableModal,
     createDeliverable,
     fetchSingleProjectDeliverable,

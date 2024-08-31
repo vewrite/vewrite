@@ -4,7 +4,7 @@
       <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button dark">Back</router-link>
       <div class="app-panel-header-buttons">
         <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
-        <!-- <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link> -->
+        <span class="button dark" @click="deleteDeliverable(deliverable.id, projectId)">Delete</span>
       </div>
     </template>
     <template v-slot:body>
@@ -40,6 +40,10 @@ const deliverableId = route.params.id;
 // Fetch the project data from supabase
 const deliverable = ref(null);
 
+// useDeliverable composable
+import useDeliverables from '~/composables/useDeliverables';
+const { deleteDeliverable } = useDeliverables();
+
 async function getDeliverable(id) {
   try {
     const { data, error } = await supabase
@@ -74,7 +78,7 @@ async function saveDeliverable() {
     try {
       const { error } = await supabase
         .from('deliverables')
-        .update({ markdown: deliverable.value.markdown })
+        .update({ markdown: deliverable.value.markdown, updated_at: new Date() })
         .eq('id', deliverableId);
 
       if (error) throw error;
