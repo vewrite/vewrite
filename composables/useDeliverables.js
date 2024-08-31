@@ -27,6 +27,26 @@ export default function useDeliverables() {
     }
   }
 
+  async function saveDeliverable(deliverable) {
+
+    console.log('Saving deliverable', deliverable);
+
+
+      
+    try {
+      console.log('Updating deliverable', deliverable);
+      
+      const { error } = await supabase
+        .from('deliverables')
+        .update({ markdown: deliverable.markdown, updated_at: new Date() })
+        .eq('id', deliverable.id);
+
+      if (error) throw error;
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function updateDeliverableTitle(deliverableId, title) {
     try {
       const { data, error } = await supabase
@@ -198,6 +218,7 @@ export default function useDeliverables() {
     DeliverableData,
     DeliverableError,
     DeliverableStates,
+    saveDeliverable,
     deleteDeliverable,
     updateDeliverableTitle,
     createDeliverableModal,

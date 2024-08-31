@@ -43,7 +43,7 @@ const deliverable = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { deleteDeliverable, updateDeliverableTitle } = useDeliverables();
+const { saveDeliverable, deleteDeliverable, updateDeliverableTitle } = useDeliverables();
 
 async function getDeliverable(id) {
   try {
@@ -73,24 +73,19 @@ function debounce(func, wait) {
   };
 }
 
-// Save deliverable function
-async function saveDeliverable() {
-  if (deliverable.value) {
-    try {
-      const { error } = await supabase
-        .from('deliverables')
-        .update({ markdown: deliverable.value.markdown, updated_at: new Date() })
-        .eq('id', deliverableId);
-
-      if (error) throw error;
-    } catch (error) {
-      alert(error.message);
-    }
-  }
+// Insert text at cursor position in textarea
+function insertTextAtCursor(textarea, text) {
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const before = textarea.value.substring(0, start);
+  const after = textarea.value.substring(end);
+  textarea.value = before + text + after;
+  textarea.selectionStart = textarea.selectionEnd = start + text.length;
+  textarea.focus();
 }
 
 // Debounced save function
-const debouncedSaveDeliverable = debounce(saveDeliverable, 1000); // 1 second debounce
+const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
 
 // Update deliverable function
 function updateDeliverable() {
