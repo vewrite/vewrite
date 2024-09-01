@@ -31,14 +31,14 @@
     </div>
 
     <div :class="['projects-list', viewMode]" v-if="!loading">
-      <div class="project-card" v-for="project in filteredProjects" :key="project.id">
+      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id">
         <!-- <pre>{{ project }}</pre> -->
         <div class="project-card-header">
           <div class="image-wrapper">
             <ClientImage :client="project.client" size="medium" table="logos" />
           </div>
         </div>
-        <h3><router-link :to="'/project/' + project.id">{{ project.name }}</router-link></h3>
+        <h3>{{ project.name }}</h3>
         <div class="project-deliverables-status">
           <div class="progress-status">
             <span>Progress</span>
@@ -55,11 +55,7 @@
             </div>
           </div>
         </div>
-        <div class="project-card-buttons">
-          <button class="button dark" @click="edit">Edit</button>
-          <router-link :to="'/project/' + project.id" class="button dark">View</router-link>
-        </div>
-      </div>
+      </router-link>
     </div>
   </main>
 </template>
@@ -254,18 +250,22 @@ const filteredProjects = computed(() => {
       .project-card {
         padding: $spacing-md;
         background-color: $white;
-        border-radius: $br-lg;
+        border-radius: $br-md;
         border: 1px solid rgba($purple, 0.1);
         text-decoration: none;
         min-height: 220px;
         color: $black;
         position: relative;
         overflow: hidden;
-        box-shadow: $main-shadow;
         display: flex;
         flex-direction: row;
         gap: $spacing-md;
         justify-content: space-between;
+        transition: border 0.18s ease;
+
+        &:hover {
+          border: 1px solid rgba($purple, 1);
+        }
 
         .project-card-header {
           display: flex;
@@ -331,19 +331,6 @@ const filteredProjects = computed(() => {
           a, button {
             width: 50%;
             justify-content: center;
-          }
-        }
-
-        &:hover {
-          border: 1px solid rgba($purple, 0.21);
-
-          .project-card-buttons {
-            opacity: 1;
-            bottom: 0;
-          }
-
-          .project-deliverables-status {
-            bottom: calc($spacing-md + 40px);
           }
         }
 

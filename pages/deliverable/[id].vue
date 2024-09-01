@@ -145,7 +145,7 @@ onMounted(async () => {
       font-size: $font-size-sm;
       color: $gray-dark;
       font-weight: 400;
-      margin: 0;
+      margin: -10px 0 0 0;
       background-color: transparent;
       width: 100%;
       padding: $spacing-xs;
