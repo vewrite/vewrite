@@ -18,8 +18,6 @@
         <!-- <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" /> -->
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
-        <Loading v-if="loading.deliverables" />
-
         <div v-if="loading.deliverables == false" class="new-deliverable">
           <button class="button wide" @click="createDeliverableModal(project.id)">Create new deliverable</button>
         </div>
