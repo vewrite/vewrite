@@ -110,13 +110,13 @@ onMounted(async () => {
 .deliverable-overview {
   width: calc(100%);
   padding: $spacing-md;
-  background-color: rgba($gray, 0.15);
   border-radius: $br-md;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
+  height: 140px;
 
   .deliverable-summary {
     display: flex;
@@ -128,7 +128,7 @@ onMounted(async () => {
       font-family: $font-family-secondary;
       font-size: $font-size-lg;
       font-weight: 500;
-      margin: 0;
+      margin: 0 -0.85rem;
       background-color: transparent;
       width: 100%;
       padding: $spacing-xs;
@@ -145,7 +145,7 @@ onMounted(async () => {
       font-size: $font-size-sm;
       color: $gray-dark;
       font-weight: 400;
-      margin: -10px 0 0 0;
+      margin: -10px -0.85rem 0 -0.85rem;
       background-color: transparent;
       width: 100%;
       padding: $spacing-xs;
@@ -168,10 +168,10 @@ onMounted(async () => {
 
 .deliverable-editor {
   width: 100%;
-  height: calc(100% - 100px);
-  padding: $spacing-md;
+  height: calc(100% - 140px);
+  padding: 0 $spacing-md $spacing-md $spacing-md;
+  border-top: 1px solid rgba($black, 0.1);
   background-color: $white;
-  border-radius: $br-md;
 
   textarea {
     width: 100%;
@@ -180,7 +180,7 @@ onMounted(async () => {
     outline: none;
     resize: none;
     font-size: $font-size-md;
-    padding: 0;
+    padding: $spacing-sm 0 0 0;
   }
 }
 

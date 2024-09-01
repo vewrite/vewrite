@@ -45,7 +45,7 @@ export default {
   display: flex;
   flex-direction: row;
   gap: -1px;
-  margin: 0 0 $spacing-md 0;
+  margin: $spacing-sm 0 0 0;
 
   button {
     border: 1px solid transparent;
