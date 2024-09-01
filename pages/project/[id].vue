@@ -7,7 +7,6 @@
       </div>
       <div class="app-panel-header-buttons">
         <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
-        <!-- <router-link :to="`/project/${projectId}/delete`" class="button dark">Delete</router-link> -->
         <button class="button dark" @click="deleteProjectModal(project.id)">Delete</button> 
       </div>
     </template>
@@ -18,8 +17,6 @@
         
         <!-- <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" /> -->
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
-
-        <!-- {{ project.workflow }} -->
 
         <Loading v-if="loading.deliverables" />
 
@@ -79,6 +76,7 @@
 
 <script setup>
 
+import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
 import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import SingleWorkflow from '~/components/Workflows/SingleWorkflow.vue';
@@ -148,22 +146,6 @@ async function getProject(id) {
     fetchProjectWorkflow(project.value.workflow);
     fetchWorkflowStates(project.value.workflow);
 
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-async function fetchCreator(uuid) {
-  try {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('id', uuid)
-      .single();
-
-    if (error) throw error;
-
-    creator.value = data;
   } catch (error) {
     alert(error.message);
   }
@@ -349,9 +331,25 @@ const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) =
   }
 };
 
-// Fetch the project data when the component is mounted
-onMounted(() => {
-  getProject(projectId);
+onMounted(async () => {
+  // Register onUnmounted before any await statements
+  const subscription = supabase
+    .from('deliverables')
+    .on('INSERT', payload => {
+      console.log('New deliverable:', payload.new);
+      deliverables.value.push(payload.new);
+      // This is to update the dates after a new deliverable is added
+      fetchDeliverables(projectId);
+    })
+    .subscribe();
+
+  onUnmounted(() => {
+    supabase.removeSubscription(subscription);
+  });
+
+  await getProject(projectId);
+  await fetchDeliverables(projectId);
+
   loading.value.global = false;
 });
 
