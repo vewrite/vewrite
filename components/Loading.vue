@@ -1,5 +1,5 @@
 <template>
-  <main id="Loading">
+  <main id="Loading" :class="[zeroHeight]">
     <Logo v-if="hasLogo" />
     <div :class="['spinner', type]"></div>
   </main>
@@ -7,7 +7,7 @@
 
 <script setup>
 
-const props = defineProps(['type', 'hasLogo'])
+const props = defineProps(['type', 'hasLogo', 'zeroHeight'])
 const { path } = toRefs(props)
 
 </script>
@@ -25,6 +25,11 @@ const { path } = toRefs(props)
   height: 100%;
   width: 100%;
   z-index: 10;
+
+  &.zero-height {
+    height: auto;
+    padding: $spacing-lg;
+  }
 
   &.on-top {
     position: fixed;

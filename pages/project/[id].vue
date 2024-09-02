@@ -12,7 +12,7 @@
     </template>
     <template v-slot:body>
       <div class="deliverables-list">
-        <Loading v-if="loading.global == true" />
+        <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         
         <!-- <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" /> -->
