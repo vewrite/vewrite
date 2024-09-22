@@ -49,6 +49,7 @@ const fetchUser = async () => {
     return
   }
   userStore.setUser(data[0])
+  console.log("fetchUser returns: ", data)
 }
 
 async function createProfile(user) {
@@ -80,15 +81,33 @@ async function createProfile(user) {
 }
 
 // Call the user store and set the user using the Supabase user
-onMounted(() => {
+// onMounted(() => {
   
-  if (user.value) {
-    fetchUser()
-    loading.value = false
-  } else {
-    loading.value = false
+//   if (user.value) {
+//     fetchUser()
+//     loading.value = false
+//   } else {
+//     loading.value = false
+//   }
+// })
+
+// Watch for changes in the user object
+watch(user, async (newUser) => {
+  if (newUser) {
+    await fetchUser();
+    loading.value = false;
   }
-})
+});
+
+onMounted(async () => {
+  if (user.value) {
+    await fetchUser();
+    loading.value = false;
+  } else {
+    // because we are not logged in
+    loading.value = false;
+  }
+});
 
 </script>
 
