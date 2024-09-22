@@ -80,17 +80,6 @@ async function createProfile(user) {
   }
 }
 
-// Call the user store and set the user using the Supabase user
-// onMounted(() => {
-  
-//   if (user.value) {
-//     fetchUser()
-//     loading.value = false
-//   } else {
-//     loading.value = false
-//   }
-// })
-
 // Watch for changes in the user object
 watch(user, async (newUser) => {
   if (newUser) {
@@ -99,12 +88,13 @@ watch(user, async (newUser) => {
   }
 });
 
+// Call the user store and set the user using the Supabase user
 onMounted(async () => {
   if (user.value) {
     await fetchUser();
     loading.value = false;
   } else {
-    // because we are not logged in
+    // because we are not logged in, and now need to show the auth component
     loading.value = false;
   }
 });
