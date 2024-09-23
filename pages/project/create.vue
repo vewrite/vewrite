@@ -264,13 +264,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
-  border: 1px solid rgba($purple, 0);
+  border: 1px solid rgba($brand, 0);
   border-radius: $br-md;
   padding: $spacing-xxs;
 
   &:hover {
-    background-color: rgba($purple, 0.1);
-    border-color: $purple;
+    background-color: rgba($brand, 0.1);
+    border-color: $brand;
   }
 
   .image-wrapper {

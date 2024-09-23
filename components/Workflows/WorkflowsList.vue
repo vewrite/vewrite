@@ -118,8 +118,8 @@ onMounted(() => {
 
         &:hover,
         &.active {
-          background-color: rgba($purple, 0.05);
-          color: $purple;
+          background-color: rgba($brand, 0.05);
+          color: $brand;
         }
       }
 

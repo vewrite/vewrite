@@ -90,14 +90,14 @@ onMounted(() => {
 
   .sidebar-header {
     color: $white;
-    background: $purple url('/images/top-bar.jpg') no-repeat center left;
+    background: rgba($brand, 0.05);
     padding: 0 0 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 88px;
-    border-right: 1px solid rgba($black, 0.1);
+    border-right: 1px solid rgba($brand, 0.1);
   }
 
   .sidebar-content {
@@ -107,7 +107,7 @@ onMounted(() => {
     gap: 2px;
     height: calc(100% - 54px - 180px);
     overflow-y: auto;
-    border-right: 1px solid rgba($black, 0.1);
+    border-right: 1px solid rgba($brand, 0.1);
 
     .link-group {
       display: flex;
@@ -132,8 +132,8 @@ onMounted(() => {
         &:hover,
         &.router-link-active,
         &.router-link-exact-active {
-          background-color: rgba($purple, 0.05);
-          color: $purple;
+          background-color: rgba($brand, 0.05);
+          color: $brand;
         }
       }
 
@@ -157,7 +157,7 @@ onMounted(() => {
     bottom: 0;
     width: 100%;
     height: 180px;
-    border-right: 1px solid rgba($black, 0.1);
+    border-right: 1px solid rgba($brand, 0.1);
 
     .tier-type {
       display: flex;
@@ -194,7 +194,7 @@ onMounted(() => {
       border: 1px solid rgba($black, 0.1);
 
       &:hover {
-        border-color: $purple;
+        border-color: $brand;
       }
     }
 

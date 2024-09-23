@@ -125,7 +125,7 @@ computed(() => {
     }
 
     .header {
-      background-color: rgba($purple, 1);
+      background-color: rgba($brand, 1);
       color: $white;
       display: flex;
       flex-direction: row;

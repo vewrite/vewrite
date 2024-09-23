@@ -43,8 +43,8 @@ const { path } = toRefs(props)
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 4px solid rgba($purple, .1);
-    border-top-color: $purple;
+    border: 4px solid rgba($brand, .1);
+    border-top-color: $brand;
     animation: spin .5s linear infinite;
     display: block;
     padding: 0;
@@ -52,8 +52,8 @@ const { path } = toRefs(props)
     &.small {
       width: 20px;
       height: 20px;
-      border: 2px solid rgba($purple, .1);
-      border-top-color: $purple;
+      border: 2px solid rgba($brand, .1);
+      border-top-color: $brand;
     }
 
     &.header {

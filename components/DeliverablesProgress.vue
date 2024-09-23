@@ -67,7 +67,7 @@ const props = defineProps({
       .progress {
         height: 6px;
         border-radius: $br-md;
-        background-color: $purple;
+        background-color: $brand;
         transition: width 0.42s ease-in-out;
 
         &.completed {

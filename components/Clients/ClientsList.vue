@@ -124,8 +124,8 @@ const filteredClients = computed(() => {
       transition: all 0.2s ease;
 
       &:hover {
-        background-color: rgba($purple, 0.1);
-        border-color: $purple;
+        background-color: rgba($brand, 0.1);
+        border-color: $brand;
       }
 
       .image-wrapper {

@@ -27,8 +27,8 @@ export default {
   overflow: hidden;
 
   .header {
-    background: $purple url('/images/top-bar.jpg') no-repeat center right;
-    color: $white;
+    background: rgba($brand, 0.05);
+    color: $brand;
     display: flex;
     flex-direction: row;
     align-items: center;

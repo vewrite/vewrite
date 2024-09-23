@@ -251,7 +251,7 @@ const filteredProjects = computed(() => {
         padding: $spacing-md;
         background-color: $white;
         border-radius: $br-md;
-        border: 1px solid rgba($purple, 0.1);
+        border: 1px solid rgba($brand, 0.1);
         text-decoration: none;
         min-height: 220px;
         color: $black;
@@ -264,7 +264,7 @@ const filteredProjects = computed(() => {
         transition: border 0.18s ease;
 
         &:hover {
-          border: 1px solid rgba($purple, 1);
+          border: 1px solid rgba($brand, 1);
         }
 
         .project-card-header {
@@ -300,7 +300,7 @@ const filteredProjects = computed(() => {
           margin: 0 0 $spacing-sm;
           
           a {
-            color: $purple;
+            color: $brand;
             text-decoration: none;
           }
         }
@@ -323,7 +323,7 @@ const filteredProjects = computed(() => {
           justify-content: flex-end;
           gap: $spacing-xs;
           padding: $spacing-sm $spacing-md;
-          background-color: $purple;
+          background-color: $brand;
           backdrop-filter: blur(10px);
           border-top: 1px solid rgba($black, 0.1);
           border-radius: $br-lg $br-lg 0 0;
@@ -371,7 +371,7 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background-color: $purple;
+                background-color: $brand;
               }
 
             }
@@ -443,7 +443,7 @@ const filteredProjects = computed(() => {
           text-overflow: ellipsis;
           
           a {
-            color: $purple;
+            color: $brand;
             text-decoration: none;
           }
         }
@@ -468,7 +468,7 @@ const filteredProjects = computed(() => {
         }
 
         &:hover {
-          background-color: rgba($purple, 0.05);
+          background-color: rgba($brand, 0.05);
 
           .project-card-buttons {
 
@@ -540,7 +540,7 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background-color: $purple;
+                background-color: $brand;
               }
 
             }

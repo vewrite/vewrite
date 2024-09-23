@@ -419,7 +419,7 @@ watchEffect(() => {
     }
 
     &:hover {
-      background-color: rgba($purple, 0.05);
+      background-color: rgba($brand, 0.05);
     }
 
     .deliverable-title {

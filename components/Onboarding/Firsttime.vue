@@ -217,7 +217,7 @@ const prevStep = () => {
 
           path,
           circle {
-            stroke: $purple;
+            stroke: $brand;
             stroke-opacity: 1;
           }
 
@@ -242,7 +242,7 @@ const prevStep = () => {
           }
 
           svg circle {
-            fill: $purple;
+            fill: $brand;
           }
         }
 
@@ -268,7 +268,7 @@ const prevStep = () => {
     width: 40%;
     height: 100%;
     color: $white;
-    background: $purple url('/images/on-board-main.jpg') center center no-repeat;
+    background: $brand url('/images/on-board-main.jpg') center center no-repeat;
     background-size: cover;
   }
 }

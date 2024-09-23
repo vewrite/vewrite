@@ -135,7 +135,7 @@ onMounted(async () => {
 
       &:focus,
       &:active {
-        border: 1px solid $purple;
+        border: 1px solid $brand;
         background: $white;
       }
     }
@@ -152,7 +152,7 @@ onMounted(async () => {
 
       &:focus,
       &:active {
-        border: 1px solid $purple;
+        border: 1px solid $brand;
         background: $white;
         color: $black;
       }

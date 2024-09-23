@@ -60,7 +60,7 @@ const prevStep = () => {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba($purple, 0.1);
+  border-top: 1px solid rgba($brand, 0.1);
 
   .wizard-steps {
     position: absolute;
@@ -95,14 +95,14 @@ const prevStep = () => {
       }
 
       &.active {
-        background-color: rgba($purple, 0.1);
-        border: 1px solid rgba($purple, 0.1);
+        background-color: rgba($brand, 0.1);
+        border: 1px solid rgba($brand, 0.1);
 
         .step-num {
-          color: $purple;
+          color: $brand;
         }
         .step-label {
-          color: $purple;
+          color: $brand;
         }
       }
     }

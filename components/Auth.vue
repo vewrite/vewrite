@@ -114,7 +114,7 @@ const handleLogin = async () => {
         width: 40%;
         height: 100%;
         color: $white;
-        background: $purple url('/images/on-board-main.jpg') center center no-repeat;
+        background: $brand url('/images/on-board-main.jpg') center center no-repeat;
         background-size: cover;
     }
 }
