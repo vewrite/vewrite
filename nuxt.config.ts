@@ -14,8 +14,8 @@ export default defineNuxtConfig({
   ],
   googleFonts: {
     families: {
-      Roboto: true,
-      Judson: true,
+      'Noto Sans': true,
+      'Noto Serif': true,
     }
   },
   compatibilityDate: '2024-08-08',

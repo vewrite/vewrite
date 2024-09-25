@@ -1,5 +1,26 @@
 import { ref } from 'vue';
 
+/*
+
+WORKFLOWS
+
+A workflow is a collection of states that a project can be in. Each state is a step in the workflow.
+
+Workflows can have actions associated with each state, which means that we should be able to select an action and run it when a project is in that state.
+
+States are assigned to a specific user.
+
+This means we need: 
+
+- A way to create a workflow, delete a workflow, update a workflow
+- A way to create a state, delete a state, update a state
+- A way to assign a state to a user
+- A way to assign an action to a state
+- A way to create an action, delete an action, update an action
+
+
+*/
+
 export function useWorkflow() {
 
   const WorkflowData = ref(null);

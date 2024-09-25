@@ -104,7 +104,7 @@ computed(() => {
 
   .modal-body {
     background-color: $white;
-    border-radius: $br-xl;
+    border-radius: $br-md;
     overflow: auto;
     width: 100%;
     height: 100%;

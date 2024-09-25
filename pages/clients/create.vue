@@ -1,7 +1,7 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/clients/" class="button dark">Back</router-link>
+      <router-link to="/clients/" class="button primary">Back</router-link>
     </template>
     <template v-slot:body>
       <NewClient />

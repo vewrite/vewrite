@@ -1,6 +1,6 @@
 <template>
   <div id="HeaderButtons">
-    <router-link class="button dark" to="/account">Account</router-link>  
+    <router-link class="button primary" to="/account">Account</router-link>  
   </div>
 </template>
 

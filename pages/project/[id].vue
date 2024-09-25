@@ -1,13 +1,13 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/projects/" class="button dark">Back</router-link>
+      <router-link to="/projects/" class="button">Back</router-link>
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons">
-        <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
-        <button class="button dark" @click="deleteProjectModal(project.id)">Delete</button> 
+        <!-- <router-link :to="`/project/${projectId}/edit`" class="button primary">Edit</router-link> -->
+        <button class="button red" @click="deleteProjectModal(project.id)">Delete</button> 
       </div>
     </template>
     <template v-slot:body>
@@ -56,8 +56,8 @@
               </div>
               
               <div class="deliverable-calendar">
-                <span class="deliverable-duedate button primary no-uppercase" @click="toggleCalendar" v-if="deliverable.formattedDueDate">Due {{ deliverable.formattedDueDate }}</span>
-                <span class="deliverable-duedate button red no-uppercase" @click="toggleCalendar"v-else>Set due date</span>
+                <span class="deliverable-duedate button" @click="toggleCalendar" v-if="deliverable.formattedDueDate">Due {{ deliverable.formattedDueDate }}</span>
+                <span class="deliverable-duedate button red" @click="toggleCalendar"v-else>Set due date</span>
 
                 <div class="deliverable-calendar-popup popup right clean" :id="'deliverable-calendar-' + deliverable.id">
                   <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />

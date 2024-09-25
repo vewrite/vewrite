@@ -1,10 +1,10 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button dark">Back</router-link>
+      <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button primary">Back</router-link>
       <div class="app-panel-header-buttons">
-        <!-- <router-link :to="`/project/${projectId}/edit`" class="button dark">Edit</router-link> -->
-        <span class="button dark" @click="deleteDeliverable(deliverable.id, projectId)">Delete</span>
+        <!-- <router-link :to="`/project/${projectId}/edit`" class="button primary">Edit</router-link> -->
+        <span class="button primary" @click="deleteDeliverable(deliverable.id, projectId)">Delete</span>
       </div>
     </template>
     <template v-slot:body>

@@ -34,7 +34,6 @@ const props = defineProps({
   flex-direction: column;
   justify-content: flex-start;
   padding: $spacing-md;
-  background-color: rgba($gray, 0.15);
   border-bottom: 1px solid $gray-light;
   width: calc(100%);
   transition: bottom 0.2s ease;

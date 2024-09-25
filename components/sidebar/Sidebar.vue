@@ -169,7 +169,7 @@ onMounted(() => {
       width: 100%;
       background-color: rgba($mint, 0.25);
       padding: $spacing-xs;
-      border-radius: $br-xl;
+      border-radius: $br-md;
 
       p {
         font-size: $font-size-sm;
@@ -189,7 +189,7 @@ onMounted(() => {
       width: 100%;
       flex-direction: row;
       justify-content: space-between;
-      border-radius: $br-xl;
+      border-radius: $br-md;
       background-color: $white;
       border: 1px solid rgba($black, 0.1);
 

@@ -1,14 +1,14 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/clients/" class="button dark">Back</router-link>
+      <router-link to="/clients/" class="button primary">Back</router-link>
       <div class="app-panel-header" v-if="client">
         <Loading type="header" v-if="loading" />
         <span v-else>{{ client.name }}</span>
       </div>
       <div class="app-panel-header-buttons">
-        <button class="button dark" @click="edit">Edit</button>
-        <!-- <router-link :to="`/client/${clientId}/delete`" class="button dark">Delete</router-link> -->
+        <button class="button primary" @click="edit">Edit</button>
+        <!-- <router-link :to="`/client/${clientId}/delete`" class="button primary">Delete</router-link> -->
       </div>
     </template>
     <template v-slot:body>

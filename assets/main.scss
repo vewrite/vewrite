@@ -458,28 +458,24 @@ button,
 .button {
     color: $brand;
     background: rgba($brand, 0);
-    border-radius: $br-xl;
+    border-radius: $br-md;
     border: 1px solid rgba($brand, 0.1);
     text-align: center;
     text-decoration: none;
-    padding: calc($spacing-xxs + 2px) $spacing-sm $spacing-xxs;
+    padding: $spacing-xxs $spacing-sm $spacing-xxs;
     cursor: pointer;
-    font-size: $font-size-sm;
-    font-weight: 400;
+    font-size: $font-size-xs;
+    font-weight: 500;
     transition: all 0.2s ease;
     font-family: $font-family-main;
     display: flex;
     justify-content: center;
     gap: $spacing-sm;
     align-items: center;
-
-    &.no-uppercase {
-        text-transform: capitalize;
-        font-size: $font-size-xs;
-    }
+    text-transform: capitalize;
 
     &:hover {
-        border: 1px solid rgba($brand, 1);
+        border: 1px solid rgba($brand, 0.4);
         background: rgba($brand, 0);
     }
 }
@@ -487,39 +483,23 @@ button,
 button.large,
 .button.large {
     padding: $spacing-sm $spacing-md;
-    font-size: $font-size-sm;
-    text-transform: capitalize;
 }
 
 button.wide,
 .button.wide {
     padding: $spacing-xs;
-    text-transform: capitalize;
     width: 100%;
-}
-
-
-button.dark,
-.button.dark {
-    border: 1px solid rgba($brand-dark, 0.9);
-    background-color: rgba($brand-light, 0.75);
-    color: $white;
-
-    &:hover {
-        border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 1);
-    }
 }
 
 button.primary,
 .button.primary {
-    border: 1px solid rgba($brand-dark, 0.9);
-    background-color: rgba($brand, 0.75);
+    border: 1px solid rgba($brand, .1);
+    background-color: rgba($brand, 1);
     color: $white;
 
     &:hover {
-        border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 1);
+        border: 1px solid rgba($brand, 0.4);
+        background-color: lighten($brand, 10%);
     }
 }
 
@@ -538,12 +518,12 @@ button.green,
 button.red,
 .button.red {
     border: 1px solid rgba($red-dark, 0.3);
-    background-color: rgba($red, 0.75);
-    color: $white;
+    background-color: rgba($red, 0.05);
+    color: $red;
 
     &:hover {
         border: 1px solid rgba($red-dark, 1);
-        background-color: rgba($red, 1);
+        background-color: rgba($red, 0.1);
     }
 }
 

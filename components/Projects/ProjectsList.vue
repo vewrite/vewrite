@@ -259,7 +259,7 @@ const filteredProjects = computed(() => {
         overflow: hidden;
         display: flex;
         flex-direction: row;
-        gap: $spacing-md;
+        gap: $spacing-sm;
         justify-content: space-between;
         transition: border 0.18s ease;
 
@@ -294,9 +294,9 @@ const filteredProjects = computed(() => {
         }
 
         h3 {
-          font-size: $font-size-lg;
-          font-family: $font-family-secondary;
-          font-weight: 500;
+          font-size: $font-size-md;
+          font-family: $font-family-main;
+          font-weight: 600;
           margin: 0 0 $spacing-sm;
           
           a {
