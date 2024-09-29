@@ -34,6 +34,17 @@ export function useTalent() {
   const TalentClients = ref([]);
   const TalentDeliverables = ref([]);
 
+  /*
+  createTalent
+  - Creates a new talent
+  - Accepts an object with the following properties:
+    - name: string
+    - story: string
+    - types: array of strings
+    - rate: numeric
+    - clients: array of ids
+    - status: numeric, 0 = available, 1 = engaged, 2 = unavailable
+  */
   async function createTalent(talent) {
     try {
       const { data, error } = await supabase
@@ -48,6 +59,18 @@ export function useTalent() {
     }
   }
 
+  /*
+  updateTalent
+  - Updates an existing talent
+  - Accepts an object with the following properties:
+    - id: uuid
+    - name: string
+    - story: string
+    - types: array of strings
+    - rate: numeric
+    - clients: array of ids
+    - status: numeric, 0 = available, 1 = engaged, 2 = unavailable
+  */
   async function updateTalent(talent) {
     try {
       const { data, error } = await supabase
@@ -63,6 +86,11 @@ export function useTalent() {
     }
   }
 
+  /*
+  deleteTalent
+  - Deletes a talent
+  - Accepts a talentId
+  */
   async function deleteTalent(talent) {
     try {
       const { data, error } = await supabase
@@ -78,6 +106,11 @@ export function useTalent() {
     }
   }
 
+  /*
+  listTalent
+  - Lists all talent of a certain status
+  - Accepts a status (integer)
+  */
   async function listTalent(status) {
     try {
       const { data, error } = await supabase
@@ -93,34 +126,22 @@ export function useTalent() {
     }
   }
 
+  /*
+  listTalentClients
+  - Lists all clients of a talent as an object with client details ready for use
+  - Accepts a talentId
+  */
   async function listTalentClients(talentId) {
-    try {
-      const { data, error } = await supabase
-        .from('talent')
-        .select('clients')
-        .eq('id', talentId);
-
-      if (error) throw error;
-
-      TalentClients.value = data;
-    } catch (error) {
-      alert(error.message);
-    }
+    // TODO, requires the useClient composable
   }
 
+  /*
+  listTalentDeliverables
+  - Lists all deliverables of a talent as an object with deliverable details ready for use
+  - Accepts a talentId
+  */
   async function listTalentDeliverables(talentId) {
-    try {
-      const { data, error } = await supabase
-        .from('talent')
-        .select('deliverables')
-        .eq('id', talentId);
-
-      if (error) throw error;
-
-      TalentDeliverables.value = data;
-    } catch (error) {
-      alert(error.message);
-    }
+    // TODO, requires the useDeliverable composable
   }
 
   return {
