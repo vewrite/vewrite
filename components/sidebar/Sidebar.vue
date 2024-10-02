@@ -11,15 +11,15 @@
       </div>
       <div class="link-group">
         <div class="title">People</div>
-        <router-link to="/talent" class="link"><Icon type="star" /> Talent</router-link>
-        <router-link to="/stakeholders" class="link"><Icon type="approve" /> Stakeholders</router-link>
+        <!-- <router-link to="/talent" class="link"><Icon type="star" /> Talent</router-link> -->
+        <router-link to="/team" class="link"><Icon type="approve" /> Team</router-link>
       </div>
       <div class="link-group">
         <div class="title">Business</div>
         <router-link to="/clients" class="link"><Icon type="client" /> Clients</router-link>
-        <router-link to="/payments" class="link"><Icon type="wallet" /> Payments</router-link>
-        <router-link to="/invoices" class="link"><Icon type="doc" /> Invoices</router-link>
-        <router-link to="/analytics" class="link"><Icon type="chart" /> Analytics</router-link>
+        <!-- <router-link to="/payments" class="link"><Icon type="wallet" /> Payments</router-link> -->
+        <!-- <router-link to="/invoices" class="link"><Icon type="doc" /> Invoices</router-link> -->
+        <!-- <router-link to="/analytics" class="link"><Icon type="chart" /> Analytics</router-link> -->
       </div>
     </div>
     <div class="user-section">
@@ -90,14 +90,14 @@ onMounted(() => {
 
   .sidebar-header {
     color: $white;
-    background: rgba($brand, 0.05);
+    // background: rgba($brand, 0.05);
     padding: 0 0 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 88px;
-    border-right: 1px solid rgba($brand, 0.1);
+    border-bottom: 1px solid rgba($brand, 0.1);
   }
 
   .sidebar-content {
@@ -107,7 +107,7 @@ onMounted(() => {
     gap: 2px;
     height: calc(100% - 54px - 180px);
     overflow-y: auto;
-    border-right: 1px solid rgba($brand, 0.1);
+    // border-right: 1px solid rgba($brand, 0.1);
 
     .link-group {
       display: flex;
@@ -157,7 +157,7 @@ onMounted(() => {
     bottom: 0;
     width: 100%;
     height: 180px;
-    border-right: 1px solid rgba($brand, 0.1);
+    // border-right: 1px solid rgba($brand, 0.1);
 
     .tier-type {
       display: flex;

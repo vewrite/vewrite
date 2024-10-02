@@ -27,7 +27,8 @@ export default {
   overflow: hidden;
 
   .header {
-    background: rgba($brand, 0.05);
+    // background: rgba($brand, 0.05);
+    border-bottom: 1px solid rgba($brand, 0.1);
     color: $brand;
     display: flex;
     flex-direction: row;
@@ -37,6 +38,10 @@ export default {
     width: 100%;
     padding: 0 $spacing-md;
     position: relative;
+
+    @media (max-width: 768px) {
+      height: 54px;
+    }
 
     .app-panel-header {
       margin:0;
