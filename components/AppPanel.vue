@@ -27,7 +27,6 @@ export default {
   overflow: hidden;
 
   .header {
-    // background: rgba($brand, 0.05);
     border-bottom: 1px solid rgba($brand, 0.1);
     color: $brand;
     display: flex;
@@ -36,7 +35,7 @@ export default {
     justify-content: space-between;
     height: 88px;
     width: 100%;
-    padding: 0 $spacing-md;
+    padding: 0 $spacing-md 0 0;
     position: relative;
 
     @media (max-width: 768px) {

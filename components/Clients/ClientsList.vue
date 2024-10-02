@@ -3,7 +3,7 @@
     <Loading v-if="loading" />
 
     <div class="search-bar">
-      <input type="text" placeholder="Search projects" v-model="searchQuery" />
+      <input type="text" placeholder="Search clients" v-model="searchQuery" />
     </div>
 
     <!-- Empty state -->

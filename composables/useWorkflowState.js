@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { useModal } from '~/stores/modal'
 
 /*
 

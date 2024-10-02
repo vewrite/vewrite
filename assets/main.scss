@@ -493,13 +493,13 @@ button.wide,
 
 button.primary,
 .button.primary {
-    border: 1px solid rgba($brand, .1);
-    background-color: rgba($brand, 1);
-    color: $white;
+    border: 1px solid rgba($brand-dark, 0.3);
+    background-color: rgba($brand, 0.05);
+    color: $brand;
 
     &:hover {
-        border: 1px solid rgba($brand, 0.4);
-        background-color: lighten($brand, 10%);
+        border: 1px solid rgba($brand-dark, 1);
+        background-color: rgba($brand, 0.1);
     }
 }
 

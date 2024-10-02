@@ -2,7 +2,7 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <router-link to="/clients/create" class="button primary">Create a client</router-link>
+      <router-link to="/clients/create" class="button primary">Create client</router-link>
     </template>
     <template v-slot:body>
       <ClientsList />

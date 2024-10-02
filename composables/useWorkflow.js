@@ -21,7 +21,7 @@ This means we need:
 
 */
 
-export function useWorkflow() {
+export default function useWorkflow() {
 
   const WorkflowData = ref(null);
   const WorkflowError = ref(null);
@@ -40,10 +40,15 @@ export function useWorkflow() {
     - completion_step: numeric, the state that the workflow ends on
   */
   async function createWorkflow(workflow) {
+
+    useModal().toggleLoading();
+
     try {
       const { data, error } = await supabase
         .from('workflows')
         .insert(workflow);
+
+      useModal().reset();
 
       if (error) throw error;
 
@@ -163,11 +168,20 @@ export function useWorkflow() {
     }
   }
 
+  function createWorkflowModal() {
+    useModal().setType('medium');
+    useModal().setHeader('Create Workflow');
+    useModal().setContent('CreateWorkflowModal');
+    useModal().toggleVisibility();
+  }
+
   return {
     fetchProjectWorkflow,
     WorkflowError,
     WorkflowData,
     WorkflowStates,
+    createWorkflow,
+    createWorkflowModal,
     fetchWorkflowStates,
     renderStateName
   }

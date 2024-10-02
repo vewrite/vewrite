@@ -1,6 +1,8 @@
 <template>
   <AppPanel>
     <template v-slot:header>
+      <div></div>
+      <button class="button primary" @click="createWorkflowModal()">Create Workflow</button> 
     </template>
     <template v-slot:body>
       <WorkflowsList />
@@ -8,15 +10,12 @@
   </AppPanel>
 </template>
 
-<script>
-import AppPanel from '~/components/AppPanel.vue';
-import WorkflowsList from '~/components/Workflows/WorkflowsList.vue';
+<script setup>
 
-export default {
-  components: {
-    AppPanel
-  }
-}
+// Workflow composable
+import useWorkflow from '~/composables/useWorkflow';
+const { createWorkflowModal } = useWorkflow();
+
 </script>
 
 <style scoped>

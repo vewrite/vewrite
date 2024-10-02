@@ -1,5 +1,6 @@
 <template>
   <main id="Modal" :class="visibleClass">
+    <div class="shade" @click="close()"></div>
     <div class="modal-body" :class="[visibleClass, typeClass]">
       <div class="header">
         <!-- <slot name="header"></slot> -->
@@ -20,6 +21,7 @@ import { useModal } from '~/stores/modal'
 
 import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
 import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
+import CreateWorkflowModal from '~/components/Workflows/CreateWorkflowModal.vue'
 
 const modal = useModal()
 
@@ -43,6 +45,7 @@ const contentComponent = computed(() => {
   const components = {
     'DeleteProjectModal': DeleteProjectModal,
     'CreateDeliverableModal': CreateDeliverableModal,
+    'CreateWorkflowModal': CreateWorkflowModal,
   }
   return components[modal.content]
 })
@@ -90,12 +93,23 @@ computed(() => {
   width: 100%;
   height: 100%;
   padding: $spacing-md;
-  background-color: rgba($black, .2);
-  backdrop-filter: blur(8px);
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
   transition: all 0.2s ease-in-out;
+
+  .shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($black, .2);
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease-in-out;
+    animation: fadeIn 0.2s both;
+    animation-delay: 1.2s;
+  }
 
   &.visible {
     opacity: 1;
