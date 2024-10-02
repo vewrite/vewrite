@@ -92,7 +92,7 @@ onMounted(() => {
     width: 280px;
     height: 100%;
     border-right: 1px solid rgba($black, 0.1);
-    padding: $spacing-md;
+    padding: $spacing-md $spacing-md $spacing-md 0;
 
     .workflow-group {
       display: flex;

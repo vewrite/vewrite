@@ -49,7 +49,6 @@ function stateDetails(stateId) {
   background: $white;
   border-radius: $br-md;
   min-width: 180px;
-  box-shadow: $main-shadow;
 
   .icon {
     width: 40px;
