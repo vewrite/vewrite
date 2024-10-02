@@ -1,5 +1,6 @@
 <template>
   <div class="state">
+    {{ props.state }}
     <div v-if="stateDetails" class="details">
       <div class="icon">
         <img :src="'/states/' + stateDetails.icon" alt="State icon" />
@@ -24,14 +25,14 @@ import { ref } from 'vue'
 const props = defineProps(['state'])
 
 // State composable
-import useState from '~/composables/useState';
-const { fetchState, StateData } = useState();
+import useWorkflowState from '~/composables/useWorkflowState';
+const { fetchSingleState, StateData } = useWorkflowState();
 
 const stateDetails = ref(null);
 
 onMounted( async () => {
   try {
-    const state = await fetchState(props.state);
+    const state = await fetchSingleState(props.state);
     stateDetails.value = StateData.value;
   } catch (error) {
     console.error('Error fetching state:', error.message);

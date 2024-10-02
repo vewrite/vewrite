@@ -18,7 +18,7 @@ This means we need:
 
 */
 
-export default function useState() {
+export default function useWorkflowState() {
 
   const StateData = ref(null);
   const StateError = ref(null);
@@ -98,7 +98,7 @@ export default function useState() {
 
   /*
   listStates
-  - Lists all states
+  - Fetches all states
   */
   async function listStates() {
     try {
@@ -115,11 +115,12 @@ export default function useState() {
   }
 
   /*
-  fetchState
+  fetchSingleState
   - Fetches a state by id
   - Accepts a stateId
   */
-  async function fetchState(stateId) {
+  async function fetchSingleState(stateId) {
+    console.log('fetchSingleState', stateId);
     try {
       const { data, error } = await supabase
         .from('states')
@@ -129,6 +130,8 @@ export default function useState() {
       if (error) throw error;
 
       StateData.value = data[0];
+      // console.log(data[0]);
+      // return data[0];
     } catch (error) {
       StateError.value = error;
     }
@@ -142,7 +145,7 @@ export default function useState() {
     updateState,
     deleteState,
     listStates,
-    fetchState
+    fetchSingleState
   }
 
 }
