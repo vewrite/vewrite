@@ -1,37 +1,43 @@
 <template>
   <div class="state">
-    <div class="icon">{{ stateDetails(props.state).icon }}</div>
-    {{ stateDetails(props.state).name }}
+    <div v-if="stateDetails" class="details">
+      <div class="icon">
+        <img :src="'/states/' + stateDetails.icon" alt="State icon" />
+      </div>
+      <div class="text">
+        <p class="name">{{ stateDetails.name }}</p>
+        <p class="description">{{ stateDetails.description }}</p>
+      </div>
+    </div>
+    <div v-else>
+      <Loading type="small" />
+    </div>
+    <!-- <div class="icon">{{ stateDetails(props.state).icon }}</div> -->
+    <!-- {{ stateDetails(props.state).name }} -->
   </div>
 </template>
 
 <script setup>
 
+import { ref } from 'vue'
+
 const props = defineProps(['state'])
 
-function stateDetails(stateId) {
-  const details = {};
+// State composable
+import useState from '~/composables/useState';
+const { fetchState, StateData } = useState();
 
-  switch (stateId) {
-    case 1:
-      details.icon = '🚀';
-      details.name = 'In Progress';
-      break;
-    case 2:
-      details.icon = '🚦';
-      details.name = 'Pending';
-      break;
-    case 3:
-      details.icon = '🏁';
-      details.name = 'Completed';
-      break;
-    default:
-      details.icon = '❓';
-      details.name = 'Unknown';
+const stateDetails = ref(null);
+
+onMounted( async () => {
+  try {
+    const state = await fetchState(props.state);
+    stateDetails.value = StateData.value;
+  } catch (error) {
+    console.error('Error fetching state:', error.message);
   }
+})
 
-  return details;
-}
 
 </script>
 
@@ -50,15 +56,40 @@ function stateDetails(stateId) {
   border-radius: $br-md;
   min-width: 180px;
 
-  .icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba($black, 0.1);
+  .details {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    gap: $spacing-sm;
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: $brand;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xxs;
+
+      .name {
+        text-transform: capitalize;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .description {
+        font-size: $font-size-sm;
+        color: $gray-dark;
+        margin: 0;
+      }
+    }
   }
 }
 

@@ -18,7 +18,7 @@ This means we need:
 
 */
 
-export function useState() {
+export default function useState() {
 
   const StateData = ref(null);
   const StateError = ref(null);
@@ -31,6 +31,7 @@ export function useState() {
   - Accepts an object with the following properties:
     - created_at: timestamp
     - name: string
+    - description: string
     - actions: array of action ids
     - icon: string
     - is_default: boolean
@@ -54,6 +55,7 @@ export function useState() {
   - Updates an existing state
   - Accepts an object with the following properties:
     - name: string
+    - description: string
     - actions: array of action ids
     - icon: string
     - is_default: boolean

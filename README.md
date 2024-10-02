@@ -147,6 +147,7 @@ create policy "Enable read access for all users"
 create table states (
   id uuid int8,
   name text,
+  description text,
   icon text,
   is_default boolean,
 
