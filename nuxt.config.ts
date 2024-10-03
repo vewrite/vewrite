@@ -8,16 +8,25 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     "@samk-dev/nuxt-vcalendar"
   ],
+
   css: [
     '@/assets/main.scss',
     '@/assets/_variables.scss',
   ],
+
   googleFonts: {
     families: {
       'Noto Sans': true,
       'Noto Serif': true,
     }
   },
+
   compatibilityDate: '2024-08-08',
   pages: true,
+
+  devtools: {
+    timeline: {
+      enabled: true,
+    },
+  },
 })

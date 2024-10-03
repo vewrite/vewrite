@@ -15,7 +15,6 @@
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         
-        <!-- <SingleWorkflow v-if="project && loading.global == false" :workflow="project.workflow" /> -->
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <div v-if="loading.deliverables == false" class="new-deliverable">
@@ -77,7 +76,6 @@
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
 import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
-import SingleWorkflow from '~/components/Workflows/SingleWorkflow.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';
 import AppPanel from '~/components/AppPanel.vue';

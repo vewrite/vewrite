@@ -25,8 +25,6 @@ import FirstTime from '~/components/Onboarding/Firsttime.vue'
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
-console.log("supabase user is: ", user.value)
-
 const loading = ref(true)
 
 // User store
