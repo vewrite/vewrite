@@ -7,6 +7,7 @@ export const useModal = defineStore('modal', {
     content: '',
     type: '',
     header: '',
+    workflowId: '',
     loading: 0
   }),
   actions: {
@@ -26,12 +27,16 @@ export const useModal = defineStore('modal', {
       this.content = content
       // console.log(this.$state);
     },
+    setWorkflowId(workflowId) {
+      this.workflowId = workflowId
+    },
     reset() {
       this.visible = 0
       this.content = ''
       this.type = ''
       this.header = ''
       this.loading = 0
+      this.workflowId = ''
     }
   },
 })

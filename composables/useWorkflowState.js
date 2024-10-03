@@ -121,7 +121,6 @@ export default function useWorkflowState() {
   - Accepts a stateId
   */
   async function fetchSingleState(stateId) {
-    console.log('fetchSingleState', stateId);
     try {
       const { data, error } = await supabase
         .from('states')

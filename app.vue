@@ -38,8 +38,6 @@ const fetchUser = async () => {
     .select('*')
     .eq('id', user.value.id)
 
-  console.log("fetchUser returns: ", data)
-
   if (error) throw error
   
   if(data.length == 0) {
@@ -47,7 +45,6 @@ const fetchUser = async () => {
     return
   }
   userStore.setUser(data[0])
-  console.log("fetchUser returns: ", data)
 }
 
 async function createProfile(user) {

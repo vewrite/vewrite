@@ -58,7 +58,7 @@ body,
 /* Notifications */
 
 .notification {
-    padding: $spacing-md;
+    padding: $spacing-sm $spacing-md;
     border-radius: $br-md;
     color: $brand;
     display: flex;
@@ -66,17 +66,22 @@ body,
     align-items: center;
 
     &.info {
-        background: rgba($brand, 0.1);
-        color: $brand;
+        background: rgba($brand, 0.05);
+        color: $black-light;
+    }
+
+    &.warning {
+        background: rgba($orange, 0.05);
+        color: $orange-dark;
     }
 
     &.success {
-        background: rgba($mint, 0.1);
+        background: rgba($mint, 0.05);
         color: $mint;
     }
 
     &.error {
-        background: rgba($red, 0.1);
+        background: rgba($red, 0.05);
         color: $red;
     }
 }

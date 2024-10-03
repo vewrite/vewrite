@@ -3,7 +3,6 @@
     <div class="shade" @click="close()"></div>
     <div class="modal-body" :class="[visibleClass, typeClass]">
       <div class="header">
-        <!-- <slot name="header"></slot> -->
          {{ header }}
         <div class="modal-close" @click="close"></div>
       </div>
@@ -22,6 +21,7 @@ import { useModal } from '~/stores/modal'
 import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
 import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
 import CreateWorkflowModal from '~/components/Workflows/CreateWorkflowModal.vue'
+import DeleteWorkflowModal from '~/components/Workflows/DeleteWorkflowModal.vue'
 
 const modal = useModal()
 
@@ -46,12 +46,14 @@ const contentComponent = computed(() => {
     'DeleteProjectModal': DeleteProjectModal,
     'CreateDeliverableModal': CreateDeliverableModal,
     'CreateWorkflowModal': CreateWorkflowModal,
+    'DeleteWorkflowModal': DeleteWorkflowModal
   }
   return components[modal.content]
 })
 
 const close = () => {
   modal.visible = false
+  modal.reset()
 }
 
 computed(() => {

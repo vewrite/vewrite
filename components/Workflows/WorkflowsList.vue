@@ -13,8 +13,18 @@
     </div>
     <div :class="['workflow-preview', 'scrollable']" v-if="!loading && workflows.length > 0">
       <div :class="['single-workflow-preview', visibleWorkflow == workflow.id ? 'active' : '' ]" v-for="workflow in workflows" key="workflow.id" :id="`workflow-${workflow.id}`">
-        <h3>{{ workflow.name }}</h3>
-        <p>{{ workflow.description }}</p>
+        <div class="single-workflow-preview-header">
+          <div class="header-title">
+            <h3>{{ workflow.name }}</h3>
+            <p>{{ workflow.description }}</p>
+          </div>
+          <div class="header-actions" v-if="workflow.type == 2">
+            <button class="button red" @click="deleteWorkflowModal(workflow.id)">Delete workflow {{ workflow.id }}</button>
+          </div>
+        </div>
+        <div class="notification info" v-if="workflow.type == 1">
+          This is a default workflow. You can't edit or delete this workflow.
+        </div>
         <aside class="states-list">
           <State v-for="state in workflow.states" key="state.id" :state="state" />
         </aside>
@@ -41,6 +51,11 @@ const customWorkflows = ref([])
 const loading = ref(true)
 const visibleWorkflow = ref(1)
 
+import useWorkflow from '~/composables/useWorkflow'
+const { deleteWorkflowModal } = useWorkflow()
+
+
+// TODO - move this to the composable
 async function fetchWorkflows() {
   try {
     const { data, error } = await supabase
@@ -66,7 +81,6 @@ async function fetchWorkflows() {
 
 function showWorkflowPreview(workflowId) {
   visibleWorkflow.value = workflowId
-  console.log('showWorkflowPreview', workflowId)
 }
 
 onMounted(() => {

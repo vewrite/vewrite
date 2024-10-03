@@ -17,7 +17,7 @@ This means we need:
 - A way to create a workflow, delete a workflow, update a workflow
 - A way to fetch a workflow and its states
 - A way to create an action, delete an action, update an action
-
+- A way to get all projects that use a specific workflow
 
 */
 
@@ -89,6 +89,7 @@ export default function useWorkflow() {
   deleteWorkflow
   - Deletes a workflow
   - Accepts a workflowId
+  - Sets all projects that use the workflow to the default workflow
   */
   async function deleteWorkflow(workflowId) {
     try {
@@ -96,6 +97,8 @@ export default function useWorkflow() {
         .from('workflows')
         .delete()
         .eq('id', workflowId);
+
+      // TODO - Set all projects that use the workflow to the default workflow
 
       if (error) throw error;
 
@@ -168,10 +171,35 @@ export default function useWorkflow() {
     }
   }
 
+  async function fetchAssociatedProjects(workflowId) {
+    console.log(workflowId.value);
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('workflow', workflowId.value);
+
+      if (error) throw error;
+
+      console.log(data);
+      return data;
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   function createWorkflowModal() {
     useModal().setType('medium');
     useModal().setHeader('Create Workflow');
     useModal().setContent('CreateWorkflowModal');
+    useModal().toggleVisibility();
+  }
+
+  function deleteWorkflowModal(workflowId) {
+    useModal().setType('medium');
+    useModal().setWorkflowId(workflowId);
+    useModal().setHeader('Delete Workflow');
+    useModal().setContent('DeleteWorkflowModal');
     useModal().toggleVisibility();
   }
 
@@ -182,8 +210,11 @@ export default function useWorkflow() {
     WorkflowStates,
     createWorkflow,
     createWorkflowModal,
+    deleteWorkflowModal,
+    deleteWorkflow,
     fetchWorkflowStates,
-    renderStateName
+    renderStateName,
+    fetchAssociatedProjects
   }
 
 }

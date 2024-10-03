@@ -1,17 +1,20 @@
 <template>
   <div id="DeleteWorkflowModal">
-    <div class="modal-body">
-      <p>This is an irreversible action. All data associated with this project, <strong>{{ project.name }}</strong>, will be permanently deleted.</p>
-      <br><br>
-      <p><strong>These deliverables will also be deleted</strong></p>
+    <div class="modal-body" v-if="projects.length > 0">
+      <p class="notification warning">The following projects use this workflow and will have the default workflow assigned to them instead.</p>
       <ul>
-        <li v-for="deliverable in deliverables" :key="deliverable.id">{{ deliverable.title }}</li>
+        <li v-for="project in projects" :key="project.id">{{ project.name }}</li>
       </ul>
+    </div>
+
+    <div class="modal-body" v-else>
+      <p class="notification info">No projects are using this workflow and it is safe to delete.</p>
     </div>
     
     <div class="buttons">
-      <span class="modal-confirmation">I understand that all data will be lost.</span>
-      <button @click="deleteProject(projectId)" class="primary red">Delete</button>
+      <span class="modal-confirmation" v-if="projects.length > 0">I understand deletion may cause workflow issues.</span>
+      <span v-else>Are you sure you want to delete this workflow?</span>
+      <button @click="deleteWorkflow(workflowId)" class="primary red">Delete</button>
     </div>
   </div>
 </template>
@@ -20,23 +23,20 @@
 
 // Project composable
 import useProject from '~/composables/useProject';
-const { deleteProject, getProjectDetails, projectData, projectError } = useProject();
+const { getProjectDetails, projectData, projectError } = useProject();
 
 // Deliverables composable
-import useDeliverables from '~/composables/useDeliverables';
-const { fetchProjectDeliverables } = useDeliverables();
+import useWorkflow from '~/composables/useWorkflow';
+const { deleteWorkflow, fetchAssociatedProjects } = useWorkflow();
 
-const project = ref({});
-const deliverables = ref([]);
+import { useModal } from '~/stores/modal';
 
-// Get the project id from the route
-import { useRoute } from 'vue-router';
-const route = useRoute();
-const projectId = route.params.id;
+const workflowId = ref({});
+const projects = ref([]);
 
 onMounted(async () => {
-  project.value = await getProjectDetails(projectId);
-  deliverables.value = await fetchProjectDeliverables(projectId);
+  workflowId.value = useModal().workflowId;
+  projects.value = await fetchAssociatedProjects(workflowId);
 });
 
 </script>
@@ -45,7 +45,7 @@ onMounted(async () => {
 
 @import 'assets/_variables.scss';
 
-#DeleteProjectModal {
+#DeleteWorkflowModal {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
