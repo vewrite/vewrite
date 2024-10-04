@@ -52,7 +52,7 @@ onMounted( async () => {
   flex-direction: row;
   align-items: center;
   gap: $spacing-sm;
-  border: 1px solid rgba($black, 0.1);
+  box-shadow: $soft-shadow;
   background: $white;
   border-radius: $br-md;
   min-width: 180px;

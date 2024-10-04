@@ -27,7 +27,7 @@ export default {
   overflow: hidden;
 
   .header {
-    border-bottom: 1px solid rgba($brand, 0.1);
+    // border-bottom: 1px solid rgba($brand, 0.1);
     color: $brand;
     display: flex;
     flex-direction: row;
@@ -60,9 +60,13 @@ export default {
   }
 
   .body {
-    height: calc(100% - 88px);
+    height: calc(100% - 66px);
     overflow-y: hidden;
     position: relative;
+    background: rgba($brand, 0.025) linear-gradient(125deg, rgba($brand, 0.05) 0%, rgba($brand, 0.015) 10%);
+    border-radius: $br-xl 0 0 0;
+    border-left: 1px solid rgba($brand, 0.15);
+    border-top: 1px solid rgba($brand, 0.15);
   }
 }
 

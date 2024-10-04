@@ -97,7 +97,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     height: 66px;
-    border-bottom: 1px solid rgba($brand, 0.1);
+    // border-bottom: 1px solid rgba($brand, 0.1);
   }
 
   .sidebar-content {
@@ -138,10 +138,11 @@ onMounted(() => {
       }
 
       .title {
-        font-size: $font-size-sm;
+        font-size: $font-size-xxs;
+        text-transform: uppercase;
         font-family: $font-family-main;
-        font-weight: 500;
-        color: $gray-dark;
+        font-weight: bold;
+        color: rgba($black,0.5);
         margin-bottom: $spacing-xs;
       }
     }

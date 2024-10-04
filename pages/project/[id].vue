@@ -7,7 +7,8 @@
       </div>
       <div class="app-panel-header-buttons">
         <!-- <router-link :to="`/project/${projectId}/edit`" class="button primary">Edit</router-link> -->
-        <button class="button red" @click="deleteProjectModal(project.id)">Delete</button> 
+        <button class="button red" @click="deleteProjectModal(project.id)">Delete Project</button>
+        <button class="button primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
       </div>
     </template>
     <template v-slot:body>
@@ -17,9 +18,9 @@
         
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
-        <div v-if="loading.deliverables == false" class="new-deliverable">
-          <button class="button wide" @click="createDeliverableModal(project.id)">Create new deliverable</button>
-        </div>
+        <!-- <div v-if="loading.deliverables == false" class="new-deliverable">
+          <button class="button wide primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
+        </div> -->
 
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
@@ -396,6 +397,7 @@ watchEffect(() => {
     justify-content: space-between;
     align-items: center;
     border-radius: $br-md;
+    border: 1px solid rgba($brand, 0);
 
     .deliverable-details {
       display: flex;
@@ -417,7 +419,8 @@ watchEffect(() => {
     }
 
     &:hover {
-      background-color: rgba($brand, 0.05);
+      background-color: rgba($white, 1);
+      border: 1px solid rgba($brand, .15);
     }
 
     .deliverable-title {

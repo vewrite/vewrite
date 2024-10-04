@@ -21,6 +21,8 @@ const loading = ref(true);
 const props = defineProps(['project', 'creator', 'client', 'deliverables'])
 const { client } = toRefs(props)
 
+// TODO - project.name and project.description should be editable
+
 </script>
 
 <style lang="scss" scoped>
@@ -35,6 +37,7 @@ const { client } = toRefs(props)
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
+  background-color: rgba($white, 0.65);
 
   .project-summary {
     display: flex;

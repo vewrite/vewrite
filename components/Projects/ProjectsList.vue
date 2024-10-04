@@ -190,6 +190,17 @@ const filteredProjects = computed(() => {
 
 @import 'assets/_variables.scss';
 
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 #ProjectsList {
   display: flex;
   flex-direction: column;
@@ -231,7 +242,6 @@ const filteredProjects = computed(() => {
   .projects-list {
 
     &.grid {
-
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: $spacing-md;
@@ -258,7 +268,8 @@ const filteredProjects = computed(() => {
         padding: $spacing-md;
         background-color: $white;
         border-radius: $br-md;
-        border: 1px solid rgba($brand, 0.1);
+        border: 1px solid rgba($brand, 0);
+        box-shadow: $soft-shadow;
         text-decoration: none;
         min-height: 220px;
         color: $black;
@@ -268,10 +279,25 @@ const filteredProjects = computed(() => {
         flex-direction: row;
         gap: $spacing-sm;
         justify-content: space-between;
-        transition: border 0.18s ease;
+        transition: border, transform 0.18s ease;
+        animation: cardAppear 0.2s ease;
+        animation-fill-mode: forwards;
+        animation-delay: 0s;
+        opacity: 0;
+        transform: scale(0.9);
+
+        $project-cards: ();
+
+        // generate the colors with an HSL model
+        @for $i from 0 through 60 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * .1}s;
+          }
+        }
 
         &:hover {
           border: 1px solid rgba($brand, 1);
+          transform: scale(1.05);
         }
 
         .project-card-header {
@@ -301,7 +327,7 @@ const filteredProjects = computed(() => {
         }
 
         h3 {
-          font-size: $font-size-md;
+          font-size: $font-size-sm;
           font-family: $font-family-main;
           font-weight: 600;
           margin: 0 0 $spacing-sm;

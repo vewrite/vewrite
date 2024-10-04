@@ -25,7 +25,7 @@
             <button class="button red" @click="deleteWorkflowModal(workflow.id)">Delete workflow {{ workflow.id }}</button>
           </div>
         </div>
-        <div class="notification info" v-if="workflow.type == 1">
+        <div class="" v-if="workflow.type == 1">
           This is a default workflow. You can't edit or delete this workflow.
         </div>
         <aside class="states-list">
@@ -33,7 +33,7 @@
         </aside>
       </div>
     </div>
-    <div class="inner-container" v-else>
+    <div class="inner-container" v-if="!loading && workflows.length < 1">
       <p>No workflows found.</p>
     </div>
   </main>
@@ -137,8 +137,9 @@ onMounted(() => {
     gap: 0;
     width: 280px;
     height: 100%;
-    border-right: 1px solid rgba($black, 0.1);
-    padding: $spacing-md $spacing-md $spacing-md 0;
+    border-right: 1px solid rgba($brand, 0.15);
+    background-color: rgba($white, 0.5);
+    padding: $spacing-md $spacing-md $spacing-md $spacing-md;
 
     .workflow-group {
       display: flex;
@@ -150,8 +151,9 @@ onMounted(() => {
         display: block;
         padding: 0 $spacing-xs;
         border-radius: $br-md;
+        border: 1px solid rgba($brand, 0);
         transition: background-color 0.18s ease;
-        color: $black;
+        color: $brand;
         font-size: $font-size-sm;
         font-family: $font-family-main;
         font-weight: 400;
@@ -164,16 +166,18 @@ onMounted(() => {
 
         &:hover,
         &.active {
-          background-color: rgba($brand, 0.05);
+          background-color: rgba($white, 1);
+          border: 1px solid rgba($brand, .15);
           color: $brand;
         }
       }
 
       .title {
-          font-size: $font-size-sm;
+          font-size: $font-size-xxs;
+          text-transform: uppercase;
           font-family: $font-family-main;
-          font-weight: 500;
-          color: $gray-dark;
+          font-weight: bold;
+          color: rgba($black,0.5);
           margin-bottom: $spacing-xs;
         }
     }

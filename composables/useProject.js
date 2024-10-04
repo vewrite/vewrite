@@ -12,7 +12,7 @@ export default function useProject() {
   const { deleteProjectDeliverables } = useDeliverables();
 
   function deleteProjectModal(projectId) {
-    useModal().setType('small');
+    useModal().setType('medium');
     useModal().setHeader('Delete Project');
     useModal().setContent('DeleteProjectModal');
     useModal().toggleVisibility();
