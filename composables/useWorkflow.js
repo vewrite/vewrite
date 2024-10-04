@@ -92,16 +92,40 @@ export default function useWorkflow() {
   - Sets all projects that use the workflow to the default workflow
   */
   async function deleteWorkflow(workflowId) {
+    const DEFAULT_WORKFLOW_ID = 1; // Replace with your actual default workflow ID
+
+    useModal().toggleLoading();
+  
     try {
-      const { data, error } = await supabase
+      // Fetch all projects that use the workflow
+      const { data: projects, error: fetchError } = await supabase
+        .from('projects')
+        .select('id')
+        .eq('workflow', workflowId);
+  
+      if (fetchError) throw fetchError;
+  
+      // Update all projects to use the default workflow
+      const projectIds = projects.map(project => project.id);
+      if (projectIds.length > 0) {
+        const { error: updateError } = await supabase
+          .from('projects')
+          .update({ workflow: DEFAULT_WORKFLOW_ID })
+          .in('id', projectIds);
+  
+        if (updateError) throw updateError;
+      }
+  
+      // Delete the workflow
+      const { data, error: deleteError } = await supabase
         .from('workflows')
         .delete()
         .eq('id', workflowId);
 
-      // TODO - Set all projects that use the workflow to the default workflow
-
-      if (error) throw error;
-
+      useModal().reset();
+  
+      if (deleteError) throw deleteError;
+  
       return data;
     } catch (error) {
       alert(error.message);
