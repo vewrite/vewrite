@@ -98,7 +98,6 @@ computed(() => {
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.2s ease-in-out;
 
   .shade {
     position: absolute;
@@ -108,9 +107,6 @@ computed(() => {
     height: 100%;
     background-color: rgba($black, .2);
     backdrop-filter: blur(8px);
-    transition: all 0.2s ease-in-out;
-    animation: fadeIn 0.2s both;
-    animation-delay: 1.2s;
   }
 
   &.visible {

@@ -12,6 +12,9 @@
       </div>
     </div>
     <div :class="['workflow-preview', 'scrollable']" v-if="!loading && workflows.length > 0">
+      <div class="notification warning" v-if="!visibleWorkflow">
+        Your workflow has been deleted
+      </div>
       <div :class="['single-workflow-preview', visibleWorkflow == workflow.id ? 'active' : '' ]" v-for="workflow in workflows" key="workflow.id" :id="`workflow-${workflow.id}`">
         <div class="single-workflow-preview-header">
           <div class="header-title">
@@ -93,6 +96,14 @@ onMounted(async () => {
       // This is to update the dates after a new deliverable is added
       fetchWorkflows();
     })
+    .on('DELETE', payload => {
+      console.log('Deleted workflow:', payload.old);
+      workflows.value = workflows.value.filter(workflow => workflow.id !== payload.old.id);
+      defaultWorkflows.value = defaultWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
+      customWorkflows.value = customWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
+      // After deletion, reset the visible workflow to null to show the empty state
+      visibleWorkflow.value = null;
+    })
     .subscribe();
 
   onUnmounted(() => {
@@ -101,7 +112,7 @@ onMounted(async () => {
 
   await fetchWorkflows();
 
-  loading.value.global = false;
+  loading.value = false;
 });
 
 onMounted(() => {
@@ -136,11 +147,8 @@ onMounted(() => {
       margin-bottom: $spacing-md;
 
       .single-workflow {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: $spacing-xs;
-        padding: $spacing-xxs $spacing-xs;
+        display: block;
+        padding: 0 $spacing-xs;
         border-radius: $br-md;
         transition: background-color 0.18s ease;
         color: $black;
@@ -148,7 +156,10 @@ onMounted(() => {
         font-family: $font-family-main;
         font-weight: 400;
         text-decoration: none;
-        min-height: 36px;
+        line-height: 36px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         cursor: pointer;
 
         &:hover,

@@ -96,7 +96,7 @@ onMounted(() => {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 88px;
+    height: 66px;
     border-bottom: 1px solid rgba($brand, 0.1);
   }
 

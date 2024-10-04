@@ -33,14 +33,10 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 88px;
+    height: 66px;
     width: 100%;
     padding: 0 $spacing-md 0 0;
     position: relative;
-
-    @media (max-width: 768px) {
-      height: 54px;
-    }
 
     .app-panel-header {
       margin:0;

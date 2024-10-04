@@ -167,7 +167,6 @@ export default function useWorkflow() {
       WorkflowStates.value = await Promise.all(WorkflowStates.value.map(async state => {
         // return await fetchState(state);
         const fetchedState = await fetchState(state);
-        // console.log(fetchedState);
         return {
           ...fetchedState
         }
@@ -196,7 +195,6 @@ export default function useWorkflow() {
   }
 
   async function fetchAssociatedProjects(workflowId) {
-    console.log(workflowId.value);
     try {
       const { data, error } = await supabase
         .from('projects')
@@ -205,7 +203,6 @@ export default function useWorkflow() {
 
       if (error) throw error;
 
-      console.log(data);
       return data;
     } catch (error) {
       alert(error.message);
