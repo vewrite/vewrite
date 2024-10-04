@@ -83,6 +83,27 @@ function showWorkflowPreview(workflowId) {
   visibleWorkflow.value = workflowId
 }
 
+onMounted(async () => {
+  // Register onUnmounted before any await statements
+  const subscription = supabase
+    .from('workflows')
+    .on('INSERT', payload => {
+      console.log('New workflows:', payload.new);
+      workflows.value.push(payload.new);
+      // This is to update the dates after a new deliverable is added
+      fetchWorkflows();
+    })
+    .subscribe();
+
+  onUnmounted(() => {
+    supabase.removeSubscription(subscription);
+  });
+
+  await fetchWorkflows();
+
+  loading.value.global = false;
+});
+
 onMounted(() => {
   fetchWorkflows()
 })

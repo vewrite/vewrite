@@ -76,8 +76,8 @@ body,
     }
 
     &.success {
-        background: rgba($mint, 0.05);
-        color: $mint;
+        background: rgba($mint, 0.1);
+        color: $mint-dark;
     }
 
     &.error {

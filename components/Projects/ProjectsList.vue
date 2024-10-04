@@ -32,7 +32,6 @@
 
     <div :class="['projects-list', viewMode]" v-if="!loading">
       <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id">
-        <!-- <pre>{{ project }}</pre> -->
         <div class="project-card-header">
           <div class="image-wrapper">
             <ClientImage :client="project.client" size="medium" table="logos" />
