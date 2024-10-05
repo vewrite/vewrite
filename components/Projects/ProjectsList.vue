@@ -171,9 +171,30 @@ const downloadImage = async (path) => {
   }
 }
 
-onMounted(() => {
-  fetchProjects()
-})
+// onMounted(() => {
+//   fetchProjects()
+// })
+
+onMounted(async () => {
+  // Register onUnmounted before any await statements
+  const subscription = supabase
+    .from('projects')
+    .on('INSERT', payload => {
+      console.log('New project:', payload.new);
+      projects.value.push(payload.new);
+      // This is to update the dates after a new deliverable is added
+      fetchProjects();
+    })
+    .subscribe();
+
+  onUnmounted(() => {
+    supabase.removeSubscription(subscription);
+  });
+
+  await fetchProjects();
+
+  loading.value.global = false;
+});
 
 const filteredProjects = computed(() => {
   if (!searchQuery.value) {
