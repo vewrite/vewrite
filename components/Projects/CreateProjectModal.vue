@@ -2,7 +2,14 @@
   <div id="CreateWorkflowModal">
     <div class="modal-body">
       <Loading v-if="loading" />
-      <form class="inner-container" v-if="!loading" @submit.prevent="createProject(project)">
+      <section class="inner-container" v-if="clients.length < 1">
+        <div class="empty">
+          <h3>No Clients Found</h3>
+          <p>You do not have a client to assign a project to. You must first add a client to Vewrite.</p>
+          <nuxt-link class="button primary" to="/clients" @click="useModal().reset()">Add a client</nuxt-link>
+        </div>
+      </section>
+      <form class="inner-container" v-if="!loading && clients.length > 0" @submit.prevent="createProject(project)">
 
         <div class="form-block">
           <div class="form-details">
@@ -54,6 +61,7 @@
                 <select v-model="project.workflow" id="client">
                   <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
                 </select>
+                <!-- TODO: Add validation -->
                 <!-- <span v-if="!$v.project.workflow.required">Workflow is required</span> -->
             </div>
           </div>
@@ -62,7 +70,7 @@
           
     </div>
     
-    <div class="buttons">
+    <div class="buttons" v-if="clients.length > 1">
       <button @click="createProject(project)" class="primary wide">Create</button>
     </div>
   </div>
@@ -81,6 +89,9 @@ const { fetchClients } = useClient();
 // Workflow composable
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchWorkflows } = useWorkflow();
+
+// Modal
+import { useModal } from '~/stores/modal'
 
 const loading = ref(false);
 const user = useSupabaseUser();

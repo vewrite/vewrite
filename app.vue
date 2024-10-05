@@ -40,6 +40,8 @@ const fetchUser = async () => {
 
   if (error) throw error
   
+  console.log('Data:', data)
+
   if(data.length == 0) {
     createProfile(user.value)
     return
@@ -48,25 +50,33 @@ const fetchUser = async () => {
 }
 
 async function createProfile(user) {
+
+  console.log('Creating new user:', user)
+
   try {
     loading.value = true
 
-    const updates = {
+    const newUser = {
       id: user.id,
       email: user.email,
-      username: user.email.split('@')[0],
-      website: '',
-      avatar_url: '',
-      tier: 'free',
+      username: '',
       firstTime: true,
+      avatar_url: '',
+      website: '',
       persona: '',
-      created_at: new Date(),
-      updated_at: new Date(),
     }
 
-    let { error } = await supabase.from('clients').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
-    })
+    // let { error } = await supabase.from('clients').upsert(updates, {
+    //     returning: 'minimal', // Don't return the value after inserting
+    // })
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert(newUser)
+
+    if (error) throw error
+
+    return data
 
   } catch (error) {
     console.error('Error creating new user:', error)
@@ -85,6 +95,7 @@ watch(user, async (newUser) => {
 
 // Call the user store and set the user using the Supabase user
 onMounted(async () => {
+  console.log('User:', user.value)
   if (user.value) {
     await fetchUser();
     loading.value = false;

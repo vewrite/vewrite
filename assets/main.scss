@@ -84,6 +84,20 @@ body,
         background: rgba($red, 0.05);
         color: $red;
     }
+
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-md 0;
+
+    * {
+        margin: 0;
+    }
 }
 
 /* Popups */
