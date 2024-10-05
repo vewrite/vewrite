@@ -55,7 +55,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createDeliverable(deliverable)" class="primary">Create</button>
+      <button @click="createDeliverable(deliverable)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
