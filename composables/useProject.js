@@ -2,6 +2,12 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useModal } from '~/stores/modal'
 import useDeliverables from '~/composables/useDeliverables'
+import useClient from '~/composables/useClient'
+
+// Vuelidate
+// TODO - Implement vuelidate again within the composable
+// import { useVuelidate } from '@vuelidate/core'
+// import { required, email } from '@vuelidate/validators'
 
 export default function useProject() {
 
@@ -10,6 +16,56 @@ export default function useProject() {
   const supabase = useSupabaseClient();
   const router = useRouter();
   const { deleteProjectDeliverables } = useDeliverables();
+  // const { fetchClients } = useClient();
+
+  function createProjectModal() {
+    useModal().setType('large');
+    useModal().setHeader('Create Project');
+    useModal().setContent('CreateProjectModal');
+    useModal().toggleVisibility();
+  }
+
+  async function createProject(project) {
+
+    // const $v = useVuelidate(rules, { project })
+
+    // $v.value.$touch()
+
+    // if ($v.value.$invalid) {
+    //   console.log(project)
+    //   console.log($v.value)
+    //   console.log('Form is invalid')
+    //   return
+    // }
+    
+    try {
+      useModal().toggleLoading();
+
+      const updates = {
+        name: project.name,
+        description: project.description,
+        status: project.status,
+        client: project.client,
+        deliverables: project.deliverables,
+        workflow: project.workflow,
+        created_at: project.created_at,
+        updated_at: project.updated_at,
+        created_by: project.created_by,
+        stakeholders: project.stakeholders
+      }
+
+      let { error } = await supabase.from('projects').upsert(updates, {
+          returning: 'minimal', // Don't return the value after inserting
+      })
+
+      useModal().reset();
+
+      if (error) throw error
+
+    } catch (error) {
+      console.error('Error creating project:', error)
+    } 
+  }
 
   function deleteProjectModal(projectId) {
     useModal().setType('medium');
@@ -61,6 +117,8 @@ export default function useProject() {
   }
 
   return {
+    createProject,
+    createProjectModal,
     deleteProject,
     deleteProjectModal,
     getProjectDetails,

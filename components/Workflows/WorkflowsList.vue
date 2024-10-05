@@ -138,7 +138,7 @@ onMounted(() => {
     width: 280px;
     height: 100%;
     border-right: 1px solid rgba($brand, 0.15);
-    background-color: rgba($white, 0.5);
+    background-color: rgba($white, 0.65);
     padding: $spacing-md $spacing-md $spacing-md $spacing-md;
 
     .workflow-group {

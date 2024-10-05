@@ -2,7 +2,8 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <router-link to="/project/create" class="button primary">Create project</router-link>
+      <!-- <router-link to="/project/create" class="button primary">Create project</router-link> -->
+      <div class="button primary" @click="createProjectModal()">Create project</div>
     </template>
     <template v-slot:body>
       <ProjectsList />
@@ -10,16 +11,9 @@
   </AppPanel>
 </template>
 
-<script>
-import AppPanel from '~/components/AppPanel.vue';
+<script setup>
 
-export default {
-  components: {
-    AppPanel
-  }
-}
+import useProject from '~/composables/useProject';
+const { createProjectModal } = useProject();
+
 </script>
-
-<style scoped>
-/* Your styles here */
-</style>

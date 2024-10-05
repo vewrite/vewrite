@@ -108,6 +108,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 
 // Wizard Bar Store
+// TODO - remove wizard bar store when I've migrated to use a modal
 import { useWizardBar } from '@/stores/wizardbar'
 const wizardBar = useWizardBar()
 
@@ -190,64 +191,67 @@ const downloadImage = async (path) => {
 // Workflows
 const workflows = ref([])
 
-async function fetchWorkflows() {
-  const { data, error } = await supabase
-    .from('workflows')
-    .select('*')
-    .eq('created_by', user.value.id)
+// TODO - MOVED TO COMPOSABLE
+// async function fetchWorkflows() {
+//   const { data, error } = await supabase
+//     .from('workflows')
+//     .select('*')
+//     .eq('created_by', user.value.id)
 
-  if (error) {
-    console.error('Error fetching workflows:', error.message)
-    return
-  }
+//   if (error) {
+//     console.error('Error fetching workflows:', error.message)
+//     return
+//   }
 
-  workflows.value = data
-}
+//   workflows.value = data
+// }
 
-async function createProject() {
-  $v.value.$touch()
-  if ($v.value.$invalid) {
-    console.log(project)
-    console.log($v.value)
-    console.log('Form is invalid')
-    return
-  }
+
+// TODO - Moved to composable
+// async function createProject() {
+//   $v.value.$touch()
+//   if ($v.value.$invalid) {
+//     console.log(project)
+//     console.log($v.value)
+//     console.log('Form is invalid')
+//     return
+//   }
   
-  try {
-    loading.value = true
+//   try {
+//     loading.value = true
 
-    const updates = {
-      name: project.name,
-      description: project.description,
-      status: project.status,
-      client: project.client,
-      deliverables: project.deliverables,
-      workflow: project.workflow,
-      created_at: project.created_at,
-      updated_at: project.updated_at,
-      created_by: project.created_by,
-      stakeholders: project.stakeholders
-    }
+//     const updates = {
+//       name: project.name,
+//       description: project.description,
+//       status: project.status,
+//       client: project.client,
+//       deliverables: project.deliverables,
+//       workflow: project.workflow,
+//       created_at: project.created_at,
+//       updated_at: project.updated_at,
+//       created_by: project.created_by,
+//       stakeholders: project.stakeholders
+//     }
 
-    let { error } = await supabase.from('projects').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
-    })
+//     let { error } = await supabase.from('projects').upsert(updates, {
+//         returning: 'minimal', // Don't return the value after inserting
+//     })
 
-    // When complete, load /projects
-    router.push('/projects')
+//     // When complete, load /projects
+//     router.push('/projects')
 
-    // Reset the create form
-    loading.value = false
-    wizardBar.currentStep == 1
+//     // Reset the create form
+//     loading.value = false
+//     wizardBar.currentStep == 1
 
-    if (error) throw error
+//     if (error) throw error
 
-  } catch (error) {
-    console.error('Error creating project:', error)
-  } finally {
-    loading.value = false
-  }
-}
+//   } catch (error) {
+//     console.error('Error creating project:', error)
+//   } finally {
+//     loading.value = false
+//   }
+// }
 
 onMounted(() => {
   fetchClients()

@@ -132,6 +132,21 @@ export default function useWorkflow() {
     }
   }
 
+  async function fetchWorkflows(uuid) {
+    try {
+      const { data, error } = await supabase
+        .from('workflows')
+        .select('*')
+        .eq('created_by', uuid);
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function fetchProjectWorkflow(workflowId) {
 
     try {
@@ -225,6 +240,7 @@ export default function useWorkflow() {
   }
 
   return {
+    fetchWorkflows,
     fetchProjectWorkflow,
     WorkflowError,
     WorkflowData,

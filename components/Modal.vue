@@ -3,7 +3,7 @@
     <div class="shade" @click="close()"></div>
     <div class="modal-body" :class="[visibleClass, typeClass]">
       <div class="header">
-         {{ header }}
+        <h3>{{ header }}</h3>
         <div class="modal-close" @click="close"></div>
       </div>
       <div class="body">
@@ -18,8 +18,14 @@
 
 import { useModal } from '~/stores/modal'
 
+// Project modals
+import CreateProjectModal from '~/components/Projects/CreateProjectModal.vue'
 import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
+
+// Delivery modals
 import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
+
+// Workflow modals
 import CreateWorkflowModal from '~/components/Workflows/CreateWorkflowModal.vue'
 import DeleteWorkflowModal from '~/components/Workflows/DeleteWorkflowModal.vue'
 
@@ -43,6 +49,7 @@ const loading = computed(() => {
 
 const contentComponent = computed(() => {
   const components = {
+    'CreateProjectModal': CreateProjectModal,
     'DeleteProjectModal': DeleteProjectModal,
     'CreateDeliverableModal': CreateDeliverableModal,
     'CreateWorkflowModal': CreateWorkflowModal,
@@ -132,6 +139,11 @@ computed(() => {
       height: auto;
     }
 
+    &.large {
+      width: 1000px;
+      height: auto;
+    }
+
     &.visible {
       animation: scaleBounce 0.4s both 0.2s;
     }
@@ -147,8 +159,10 @@ computed(() => {
       width: 100%;
       padding: 0 $spacing-md;
       position: relative;
-      font-size: $font-size-sm;
-      font-weight: 600;
+
+      h3 {
+        margin: 0;
+      }
 
       .modal-close {
         cursor: pointer;
