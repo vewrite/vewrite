@@ -1,10 +1,43 @@
 import { ref } from 'vue';
+import { useModal } from '~/stores/modal'
 
 export default function useClient() {
 
   const clientData = ref(null)
   const clientsData = ref(null)
   const supabase = useSupabaseClient();
+
+
+  async function createClient(client, logo_url) {
+
+    console.log('logo_url', logo_url.value);
+
+    // try {
+
+    //   useModal().toggleLoading();
+
+    //   const newClient = {
+    //     name: client.name,
+    //     created_at: client.created_at,
+    //     updated_at: client.updated_at,
+    //     created_by: client.created_by,
+    //     logo_url: logo_url.value,
+    //   }
+  
+    //   // console.log(updates)
+  
+    //   let { error } = await supabase.from('clients').upsert(newClient, {
+    //       returning: 'minimal', // Don't return the value after inserting
+    //   })
+  
+    //   useModal().reset();
+
+    //   if (error) throw error
+  
+    // } catch (error) {
+    //   console.error('Error creating client:', error)
+    // } 
+  }
 
   async function fetchClient(clientId) {
 
@@ -67,9 +100,18 @@ export default function useClient() {
     }
   }
 
+  function createClientModal(projectId) {
+    useModal().setType('right');
+    useModal().setHeader('Create Client');
+    useModal().setContent('CreateClientModal');
+    useModal().toggleVisibility();
+  }
+
   return {
     clientData,
     clientsData,
+    createClient,
+    createClientModal,  
     fetchClient,
     fetchClients
   }

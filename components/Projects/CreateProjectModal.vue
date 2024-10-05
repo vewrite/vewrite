@@ -2,7 +2,7 @@
   <div id="CreateWorkflowModal">
     <div class="modal-body">
       <Loading v-if="loading" />
-      <section class="inner-container" v-if="clients.length < 1">
+      <section class="inner-container" v-if="!loading && clients.length < 1">
         <div class="empty">
           <h3>No Clients Found</h3>
           <p>You do not have a client to assign a project to. You must first add a client to Vewrite.</p>

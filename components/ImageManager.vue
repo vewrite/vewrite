@@ -55,6 +55,7 @@ const uploadlogo = async (evt) => {
           .upload(filePath, file)
       if (uploadError) throw uploadError
       emit("update:path", filePath)
+      emit("update:logo_url", filePath)
       emit("upload")
   } catch (error) {
       alert(error.message)
@@ -79,6 +80,10 @@ watch(path, () => {
       downloadImage()
   }
 })
+
+watch(() => props.logo_url, (newValue) => {
+  logo_url.value = newValue;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -94,7 +99,7 @@ watch(path, () => {
   width: 100%;
   
   label {
-      margin: $spacing-xs 0 $spacing-xs 0;
+      margin: 0 0 $spacing-xs 0;
   }
 
   input {

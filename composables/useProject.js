@@ -16,10 +16,9 @@ export default function useProject() {
   const supabase = useSupabaseClient();
   const router = useRouter();
   const { deleteProjectDeliverables } = useDeliverables();
-  // const { fetchClients } = useClient();
 
   function createProjectModal() {
-    useModal().setType('large');
+    useModal().setType('right');
     useModal().setHeader('Create Project');
     useModal().setContent('CreateProjectModal');
     useModal().toggleVisibility();

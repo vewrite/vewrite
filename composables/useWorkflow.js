@@ -142,6 +142,7 @@ export default function useWorkflow() {
       if (error) throw error;
 
       return data;
+      
     } catch (error) {
       alert(error.message);
     }
@@ -225,7 +226,7 @@ export default function useWorkflow() {
   }
 
   function createWorkflowModal() {
-    useModal().setType('medium');
+    useModal().setType('right');
     useModal().setHeader('Create Workflow');
     useModal().setContent('CreateWorkflowModal');
     useModal().toggleVisibility();

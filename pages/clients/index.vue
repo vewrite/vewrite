@@ -2,7 +2,8 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <router-link to="/clients/create" class="button primary">Create client</router-link>
+      <!-- <router-link to="/clients/create" class="button primary">Create client</router-link> -->
+      <div class="button primary" @click="createClientModal()">Create client</div>
     </template>
     <template v-slot:body>
       <ClientsList />
@@ -10,14 +11,14 @@
   </AppPanel>
 </template>
 
-<script>
-import AppPanel from '~/components/AppPanel.vue';
+<script setup>
 
-export default {
-  components: {
-    AppPanel
-  }
-}
+// Clients composable
+import useClient from '~/composables/useClient';
+const { createClientModal } = useClient();
+
+
+
 </script>
 
 <style scoped>

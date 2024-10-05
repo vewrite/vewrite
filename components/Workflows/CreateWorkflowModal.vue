@@ -31,7 +31,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createWorkflow(workflow)" class="primary">Create</button>
+      <button @click="createWorkflow(workflow)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
@@ -66,6 +66,7 @@ const workflow = reactive({
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
   height: 100%;
   width: 100%;
 

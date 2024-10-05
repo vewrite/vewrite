@@ -29,6 +29,10 @@ import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal
 import CreateWorkflowModal from '~/components/Workflows/CreateWorkflowModal.vue'
 import DeleteWorkflowModal from '~/components/Workflows/DeleteWorkflowModal.vue'
 
+// Client modals
+import CreateClientModal from '~/components/Clients/CreateClientModal.vue'
+import DeleteClientModal from '~/components/Clients/DeleteClientModal.vue'
+
 const modal = useModal()
 
 const visibleClass = computed(() => {
@@ -53,7 +57,9 @@ const contentComponent = computed(() => {
     'DeleteProjectModal': DeleteProjectModal,
     'CreateDeliverableModal': CreateDeliverableModal,
     'CreateWorkflowModal': CreateWorkflowModal,
-    'DeleteWorkflowModal': DeleteWorkflowModal
+    'DeleteWorkflowModal': DeleteWorkflowModal,
+    'CreateClientModal': CreateClientModal,
+    'DeleteClientModal': DeleteClientModal,
   }
   return components[modal.content]
 })
@@ -91,6 +97,20 @@ computed(() => {
   }
 }
 
+@keyframes rightSlide {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 #Modal {
   display: flex;
   flex-direction: column;
@@ -101,7 +121,6 @@ computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  padding: $spacing-md;
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
@@ -144,24 +163,37 @@ computed(() => {
       height: auto;
     }
 
+    &.right {
+      width: 600px;
+      height: 100%;
+      border-radius: 0;
+      align-self: flex-end;
+
+      &.visible {
+        animation: rightSlide 0.4s both 0.2s;
+      }
+    }
+
     &.visible {
       animation: scaleBounce 0.4s both 0.2s;
     }
 
     .header {
-      background-color: rgba($brand, 1);
-      color: $white;
+      background: rgba($brand, 0.025) linear-gradient(125deg, rgba($brand, 0.05) 0%, rgba($brand, 0.015) 10%);
+      border-bottom: 1px solid rgba($brand, 0.15);
+      color: $brand;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      height: 74px;
+      height: 66px;
       width: 100%;
       padding: 0 $spacing-md;
       position: relative;
 
       h3 {
         margin: 0;
+        font-size: $font-size-md;
       }
 
       .modal-close {
@@ -170,7 +202,7 @@ computed(() => {
         right: $spacing-md;
         top: 50%;
         transform: translateY(-50%);
-        color: $white;
+        color: $brand;
         
         &:before {
           content: '×';
@@ -188,7 +220,7 @@ computed(() => {
     }
 
     .body {
-      height: calc(100% - 75px);
+      height: calc(100% - 66px);
       overflow-y: auto;
       position: relative;
 

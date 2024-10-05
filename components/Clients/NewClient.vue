@@ -58,34 +58,35 @@ const client = reactive({
 
 console.log(logo_url.value)
 
-async function createClient() {
-  try {
-    loading.value = true
-    const updates = {
-      name: client.name,
-      created_at: client.created_at,
-      updated_at: client.updated_at,
-      created_by: client.created_by,
-      logo_url: logo_url.value,
-    }
+// TODO - MOVED THIS TO A COMPOSABLE
+// async function createClient() {
+//   try {
+//     loading.value = true
+//     const updates = {
+//       name: client.name,
+//       created_at: client.created_at,
+//       updated_at: client.updated_at,
+//       created_by: client.created_by,
+//       logo_url: logo_url.value,
+//     }
 
-    // console.log(updates)
+//     // console.log(updates)
 
-    let { error } = await supabase.from('clients').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
-    })
+//     let { error } = await supabase.from('clients').upsert(updates, {
+//         returning: 'minimal', // Don't return the value after inserting
+//     })
 
-    // When complete, load /clients
-    router.push('/clients')
+//     // When complete, load /clients
+//     router.push('/clients')
 
-    if (error) throw error
+//     if (error) throw error
 
-  } catch (error) {
-    console.error('Error creating client:', error)
-  } finally {
-    loading.value = false
-  }
-}
+//   } catch (error) {
+//     console.error('Error creating client:', error)
+//   } finally {
+//     loading.value = false
+//   }
+// }
 </script>
 
 <style scoped>
