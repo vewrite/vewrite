@@ -125,6 +125,8 @@ async function signOut() {
 
 #AccountContent {
     padding: $spacing-md;
+    background-color: $white;
+    height: 100%;
 }
 
 

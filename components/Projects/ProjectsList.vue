@@ -171,10 +171,6 @@ const downloadImage = async (path) => {
   }
 }
 
-// onMounted(() => {
-//   fetchProjects()
-// })
-
 onMounted(async () => {
   // Register onUnmounted before any await statements
   const subscription = supabase
@@ -193,7 +189,7 @@ onMounted(async () => {
 
   await fetchProjects();
 
-  loading.value.global = false;
+  loading.value = false;
 });
 
 const filteredProjects = computed(() => {
