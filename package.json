@@ -20,7 +20,8 @@
     "@vuelidate/validators": "^2.0.4",
     "date-fns": "^2.30.0",
     "pinia": "^2.2.1",
-    "sass": "^1.77.8"
+    "sass": "^1.77.8",
+    "vuedraggable": "^4.1.0"
   },
   "overrides": {
     "vue": "latest"
