@@ -8,7 +8,8 @@
       </div>
       <div class="workflow-group">
         <div class="title">Custom</div>
-        <div :class="['single-workflow', visibleWorkflow == workflow.id ? 'active' : '']" v-for="workflow in customWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
+        <div :class="['single-workflow', visibleWorkflow == workflow.id ? 'active' : '']" v-if="customWorkflows" v-for="workflow in customWorkflows" @click="showWorkflowPreview(workflow.id)">{{ workflow.name }}</div>
+        <div class="single-workflow-empty" v-if="customWorkflows.length == 0">No custom workflows</div>
       </div>
     </div>
     <div :class="['workflow-preview', 'scrollable']" v-if="!loading && workflows.length > 0">
@@ -33,7 +34,7 @@
         </aside>
       </div>
     </div>
-    <div class="inner-container" v-if="!loading && workflows.length < 1">
+    <div class="inner-container" v-if="!loading && workflows.length == 0">
       <p>No workflows found.</p>
     </div>
   </main>
@@ -46,7 +47,7 @@ import State from '/components/Workflows/State.vue'
 
 // Supabase
 const supabase = useSupabaseClient()
-const user = supabase.auth.user()
+const user = useSupabaseUser()
 
 const workflows = ref([])
 const defaultWorkflows = ref([])
@@ -55,32 +56,7 @@ const loading = ref(true)
 const visibleWorkflow = ref(1)
 
 import useWorkflow from '~/composables/useWorkflow'
-const { deleteWorkflowModal } = useWorkflow()
-
-
-// TODO - move this to the composable
-async function fetchWorkflows() {
-  try {
-    const { data, error } = await supabase
-      .from('workflows')
-      .select('*')
-
-    if (error) throw error
-
-    workflows.value = data
-
-    // Set default workflows (where type == 1)
-    defaultWorkflows.value = data.filter(workflow => workflow.type === 1)
-
-    // Set custom workflows (where type == 2, and belongs to this authenticated user)
-    customWorkflows.value = data.filter(workflow => workflow.type === 2 && workflow.user_id === supabase.auth.user.id)
-
-    loading.value = false
-
-  } catch (error) {
-    console.error("Error fetching workflows: ", error.message)
-  }
-}
+const { deleteWorkflowModal, fetchWorkflows } = useWorkflow()
 
 function showWorkflowPreview(workflowId) {
   visibleWorkflow.value = workflowId
@@ -90,19 +66,25 @@ onMounted(async () => {
   // Register onUnmounted before any await statements
   const subscription = supabase
     .from('workflows')
-    .on('INSERT', payload => {
-      console.log('New workflows:', payload.new);
+    .on('INSERT', async payload => {
+      loading.value = true;
+      // console.log('New workflows:', payload.new);
       workflows.value.push(payload.new);
-      // This is to update the dates after a new deliverable is added
-      fetchWorkflows();
+      defaultWorkflows.value = defaultWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
+      customWorkflows.value = customWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
+      workflows.value = await fetchWorkflows(user.value.id);
+      loading.value = false;
     })
     .on('DELETE', payload => {
-      console.log('Deleted workflow:', payload.old);
+      loading.value = true;
+      // console.log('Deleted workflow:', payload.old);
       workflows.value = workflows.value.filter(workflow => workflow.id !== payload.old.id);
       defaultWorkflows.value = defaultWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
       customWorkflows.value = customWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
+      
       // After deletion, reset the visible workflow to null to show the empty state
       visibleWorkflow.value = null;
+      loading.value = false;
     })
     .subscribe();
 
@@ -110,13 +92,21 @@ onMounted(async () => {
     supabase.removeSubscription(subscription);
   });
 
-  await fetchWorkflows();
+  workflows.value = await fetchWorkflows(user.value.id);
 
   loading.value = false;
 });
 
-onMounted(() => {
-  fetchWorkflows()
+onMounted(async () => {
+  try {
+    workflows.value = await fetchWorkflows(user.value.id)
+    // Set default workflows (where type == 1)
+    defaultWorkflows.value = workflows.value.filter(workflow => workflow.type === 1)
+    // Set custom workflows (where type == 2, and belongs to this authenticated user)
+    customWorkflows.value = workflows.value.filter(workflow => workflow.type === 2 && workflow.user_id === supabase.auth.user.id)
+  } catch (error) {
+    console.error("Error fetching workflows: ", error.message)
+  }
 })
 
 </script>
@@ -151,9 +141,8 @@ onMounted(() => {
         display: block;
         padding: 0 $spacing-xs;
         border-radius: $br-md;
-        border: 1px solid rgba($brand, 0);
         transition: background-color 0.18s ease;
-        color: $brand;
+        color: $black;
         font-size: $font-size-sm;
         font-family: $font-family-main;
         font-weight: 400;
@@ -166,10 +155,15 @@ onMounted(() => {
 
         &:hover,
         &.active {
-          background-color: rgba($white, 1);
-          border: 1px solid rgba($brand, .15);
+          background-color: rgba($brand, .075);
           color: $brand;
         }
+      }
+
+      .single-workflow-empty {
+        color: rgba($black, 0.5);
+        font-size: $font-size-xs;
+        padding: 0 $spacing-xs;
       }
 
       .title {

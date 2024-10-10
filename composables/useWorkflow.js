@@ -131,18 +131,38 @@ export default function useWorkflow() {
       alert(error.message);
     }
   }
-
+ 
   async function fetchWorkflows(uuid) {
     try {
       const { data, error } = await supabase
         .from('workflows')
         .select('*')
-        .eq('created_by', uuid);
+        // This will fetch all workflows that the user created
+        // This will fetch all default workflows
+        .or(`created_by.eq.${uuid},type.eq.1`);
+
+      console.log(data);
 
       if (error) throw error;
 
       return data;
-      
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function fetchDefaultWorkflows() {
+    try {
+      const { data, error } = await supabase
+        .from('workflows')
+        .select('*')
+        .eq('type', 1);
+
+      if (error) throw error;
+
+      return data;
+
     } catch (error) {
       alert(error.message);
     }
