@@ -440,6 +440,10 @@ textarea {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+
+        h4 {
+            margin: 0 0 $spacing-xs 0;
+        }
     }
 }
 

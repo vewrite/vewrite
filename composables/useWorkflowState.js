@@ -109,7 +109,9 @@ export default function useWorkflowState() {
 
       if (error) throw error;
 
-      StateData.value = data;
+      // StateData.value = data;
+
+      return data;
     } catch (error) {
       StateError.value = error;
     }
