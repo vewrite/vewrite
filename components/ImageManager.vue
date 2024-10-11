@@ -97,7 +97,7 @@ watch(() => props.logo_url, (newValue) => {
 .user-logo {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   gap: $spacing-sm;
   width: 100%;
@@ -121,19 +121,19 @@ watch(() => props.logo_url, (newValue) => {
   position: relative;
 
   &.small {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 30px;
       border-radius: $br-sm;
   }
 
   &.medium {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 60px;
       border-radius: $br-md;
   }
 
   &.large {
-      width: 120px;
+      width: 200px;
       height: 120px;
       border-radius: $br-lg;
   }

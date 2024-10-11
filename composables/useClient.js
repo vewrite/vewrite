@@ -98,7 +98,7 @@ export default function useClient() {
     }
   }
 
-  function createClientModal(projectId) {
+  function createClientModal() {
     useModal().setType('right');
     useModal().setHeader('Create Client');
     useModal().setContent('CreateClientModal');

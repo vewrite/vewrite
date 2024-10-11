@@ -1,5 +1,5 @@
 <template>
-  <div :class="['client-logo', 'image', size]">
+  <div :class="['client-logo-wrapper', 'client-logo', 'image', size]">
     <Loading v-if="loading" type="small" />
     <img v-if="!loading" :src="src" alt="logo" :class="['client-logo', 'image', size]" />
   </div>
@@ -62,6 +62,13 @@ watch(() => props.client, (newClient) => {
 
 @import 'assets/_variables.scss';
 
+.client-logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $gray-light;
+}
+
 .client-logo {
   border-radius: $br-md;
   background-color: $gray-light;
@@ -87,10 +94,6 @@ watch(() => props.client, (newClient) => {
       width: 200px;
       height: 120px;
       border-radius: $br-lg;
-  }
-
-  &.image {
-      border: 1px solid $gray-light;
   }
 
   &.no-image {

@@ -11,7 +11,8 @@
       <img src="/images/clients-empty-state.svg" alt="No clients found" />
       <h3>You haven’t created a client yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
-      <router-link to="clients/create" class="button primary">Create a client</router-link>
+      <!-- <router-link to="clients/create" class="button primary">Create a client</router-link> -->
+      <div class="button primary" @click="createClientModal()">Create a client</div>
     </div>
 
     <!-- Client list -->
@@ -40,7 +41,7 @@ const searchQuery = ref('')
 
 // Client composable
 import useClient from '~/composables/useClient';
-const { fetchClients, clientsData } = useClient();
+const { fetchClients, clientsData, createClientModal } = useClient();
 
 onMounted(async () => {
   try {
@@ -114,11 +115,9 @@ const filteredClients = computed(() => {
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: $spacing-md;
+      gap: $spacing-sm;
       text-decoration: none;
       width: 100%;
-      border: 1px solid transparent;
-      background-color: $white;
       padding: $spacing-xxs;
       border-radius: $br-md;
       transition: all 0.2s ease;
@@ -147,8 +146,8 @@ const filteredClients = computed(() => {
       }
       
       h3 {
-        font-size: $font-size-lg;
-        font-family: $font-family-secondary;
+        font-size: $font-size-md;
+        font-family: $font-family-main;
         font-weight: 500;
         color: $black;
         margin: 0;
