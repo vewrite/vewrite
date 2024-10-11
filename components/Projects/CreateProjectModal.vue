@@ -70,7 +70,7 @@
           
     </div>
     
-    <div class="buttons" v-if="clients.length > 1">
+    <div class="buttons" v-if="clients.length > 0">
       <button @click="createProject(project)" class="primary wide">Create</button>
     </div>
   </div>
