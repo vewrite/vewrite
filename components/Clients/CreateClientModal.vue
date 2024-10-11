@@ -23,7 +23,7 @@
                 <p class="details">Make your client identifiable. If this is a company, use their logo!</p>
             </div>
             <div class="form-content">
-                <ImageManager size="medium" table="logos" v-model:path="logo_url" /> 
+                <ImageManager size="medium" table="logos" v-model:path="logo_url" @update:logo_url="logoUrlUpdate" /> 
             </div>
         </div>
 
@@ -32,7 +32,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createClient(client, logo_url)" class="primary wide">Create</button>
+      <button @click="createClient(client)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
@@ -55,7 +55,13 @@ const client = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   created_by: user.value.id,
+  logo_url: logo_url.value,
 })
+
+function logoUrlUpdate(filePath) {
+  client.logo_url = filePath;
+  console.log('Logo URL updated:', filePath);
+}
 
 </script>
 

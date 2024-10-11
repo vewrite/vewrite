@@ -8,35 +8,33 @@ export default function useClient() {
   const supabase = useSupabaseClient();
 
 
-  async function createClient(client, logo_url) {
+  async function createClient(client) {
 
-    console.log('logo_url', logo_url.value);
+    try {
 
-    // try {
+      useModal().toggleLoading();
 
-    //   useModal().toggleLoading();
-
-    //   const newClient = {
-    //     name: client.name,
-    //     created_at: client.created_at,
-    //     updated_at: client.updated_at,
-    //     created_by: client.created_by,
-    //     logo_url: logo_url.value,
-    //   }
+      const newClient = {
+        name: client.name,
+        created_at: client.created_at,
+        updated_at: client.updated_at,
+        created_by: client.created_by,
+        logo_url: client.logo_url,
+      }
   
-    //   // console.log(updates)
+      // console.log(updates)
   
-    //   let { error } = await supabase.from('clients').upsert(newClient, {
-    //       returning: 'minimal', // Don't return the value after inserting
-    //   })
+      let { error } = await supabase.from('clients').upsert(newClient, {
+          returning: 'minimal', // Don't return the value after inserting
+      })
   
-    //   useModal().reset();
+      useModal().reset();
 
-    //   if (error) throw error
+      if (error) throw error
   
-    // } catch (error) {
-    //   console.error('Error creating client:', error)
-    // } 
+    } catch (error) {
+      console.error('Error creating client:', error)
+    } 
   }
 
   async function fetchClient(clientId) {

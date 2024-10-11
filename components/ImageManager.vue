@@ -40,9 +40,11 @@ const downloadImage = async () => {
 }
 
 const uploadlogo = async (evt) => {
+  console.log(evt)
   files.value = evt.target.files
   try {
       uploading.value = true
+      console.log("Uploading image ...")
       if (!files.value || files.value.length === 0) {
           throw new Error("You must select an image to upload.")
       }
@@ -54,6 +56,8 @@ const uploadlogo = async (evt) => {
           .from(table.value)
           .upload(filePath, file)
       if (uploadError) throw uploadError
+      console.log("Image uploaded successfully.")
+      console.log(filePath)
       emit("update:path", filePath)
       emit("update:logo_url", filePath)
       emit("upload")
