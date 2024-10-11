@@ -37,7 +37,6 @@ const props = defineProps({
   border-bottom: 1px solid $gray-light;
   width: calc(100%);
   transition: bottom 0.2s ease;
-  background-color: rgba($white, 0.65);
 
   .progress-status { 
     display: flex;

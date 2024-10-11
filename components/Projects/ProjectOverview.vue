@@ -37,7 +37,6 @@ const { client } = toRefs(props)
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
-  background-color: rgba($white, 0.65);
 
   .project-summary {
     display: flex;

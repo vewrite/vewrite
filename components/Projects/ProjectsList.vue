@@ -257,6 +257,9 @@ const filteredProjects = computed(() => {
 
   .projects-list {
 
+    background: $white;
+    height: calc(100% - 60px);
+
     &.grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -287,7 +290,7 @@ const filteredProjects = computed(() => {
         border: 1px solid rgba($brand, 0);
         box-shadow: $soft-shadow;
         text-decoration: none;
-        min-height: 220px;
+        height: 220px;
         color: $black;
         position: relative;
         overflow: hidden;

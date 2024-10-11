@@ -327,7 +327,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-md $spacing-md 0;
+    padding: $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -341,6 +341,7 @@ textarea {
         font-size: $font-size-sm;
         font-weight: 400;
         font-family: $font-family-main;
+        border-radius: $br-lg;
 
         &:focus-within {
             border: 1px solid rgba($brand, 0.9);

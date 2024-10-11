@@ -384,10 +384,12 @@ watchEffect(() => {
 }
 
 .project-deliverables {
-  margin: $spacing-md;
+  padding: $spacing-sm;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  background: $white;
+  height: 100%;
 
   .single-deliverable {
     padding: $spacing-sm;
@@ -397,7 +399,6 @@ watchEffect(() => {
     justify-content: space-between;
     align-items: center;
     border-radius: $br-md;
-    border: 1px solid rgba($brand, 0);
 
     .deliverable-details {
       display: flex;
@@ -419,8 +420,7 @@ watchEffect(() => {
     }
 
     &:hover {
-      background-color: rgba($white, 1);
-      border: 1px solid rgba($brand, .15);
+      background-color: rgba($brand, 0.05);
     }
 
     .deliverable-title {

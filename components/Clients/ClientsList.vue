@@ -110,6 +110,9 @@ const filteredClients = computed(() => {
     align-items: flex-start;
     width: 100%;
     overflow-y: auto;
+    background-color: $white;
+    height: calc(100% - 60px);
+    padding: $spacing-sm;
 
     a {
       display: flex;
@@ -123,8 +126,7 @@ const filteredClients = computed(() => {
       transition: all 0.2s ease;
 
       &:hover {
-        background-color: rgba($brand, 0.1);
-        border-color: $brand;
+        background-color: rgba($brand, 0.05);
       }
 
       .image-wrapper {
