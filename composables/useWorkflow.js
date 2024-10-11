@@ -218,7 +218,7 @@ export default function useWorkflow() {
   async function fetchState(stateId) {
     try {
       const { data, error } = await supabase
-        .from('states')
+        .from('statetypes')
         .select('*')
         .eq('id', stateId);
 

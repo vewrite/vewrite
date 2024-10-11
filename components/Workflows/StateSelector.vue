@@ -17,8 +17,8 @@
 <script setup>
 
 import { ref } from 'vue'
-import useWorkflowState from '~/composables/useWorkflowState'
-const { listStates } = useWorkflowState()
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes'
+const { listStates } = useWorkflowStateTypes()
 
 const returnedState = ref({
   name: '',

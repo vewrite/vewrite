@@ -140,11 +140,11 @@ create policy "Enable read access for all users"
 
 ```
 
-## Database Schema for States
+## Database Schema for Statetypes
 
 ```sql
 -- Create a table for public "states"
-create table states (
+create table statetypes (
   id uuid int8,
   name text,
   description text,
@@ -154,13 +154,35 @@ create table states (
   primary key (id)
 );
 
-alter table states enable row level security;
+alter table statetypes enable row level security;
 
 create policy "Enable read access for all users"
-  on projects for select
+  on statetypes for select
   using (auth.uid() IS NOT NULL);
 
 ```
+
+## Database Schema for Stateinstances
+
+```sql
+-- Create a table for public "states"
+create table stateinstances (
+  id uuid int8,
+  created_at timestamp with time zone,
+  statetype numeric,
+  created_by uuid,
+  assigned_to uuid,
+  actions json,
+
+  primary key (id)
+);
+
+alter table statetypes enable row level security;
+
+create policy "Enable read access for all users"
+  on stateinstances for select
+  using (auth.uid() IS NOT NULL);
+
 
 ## Database Schema for Workflows
 

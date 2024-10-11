@@ -25,8 +25,8 @@ import { ref } from 'vue'
 const props = defineProps(['state'])
 
 // State composable
-import useWorkflowState from '~/composables/useWorkflowState';
-const { fetchSingleState, StateData } = useWorkflowState();
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
+const { fetchSingleState, StateData } = useWorkflowStateTypes();
 
 const stateDetails = ref(null);
 
@@ -52,8 +52,6 @@ onMounted( async () => {
   flex-direction: row;
   align-items: center;
   gap: $spacing-sm;
-  box-shadow: $soft-shadow;
-  background: $white;
   border-radius: $br-md;
   min-width: 180px;
 

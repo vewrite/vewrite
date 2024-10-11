@@ -195,8 +195,11 @@ onMounted(async () => {
   .states-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: $spacing-xxs;
     margin: $spacing-md 0;
+    background: white;
+    border: 1px solid rgba($brand, 0.15);
+    border-radius: $br-lg;
   }
 }
 

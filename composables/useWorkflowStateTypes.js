@@ -19,7 +19,7 @@ This means we need:
 
 */
 
-export default function useWorkflowState() {
+export default function useWorkflowStateTypes() {
 
   const StateData = ref(null);
   const StateError = ref(null);
@@ -28,7 +28,7 @@ export default function useWorkflowState() {
 
   /*
   createState
-  - Creates a new state
+  - Creates a new statetypes
   - Accepts an object with the following properties:
     - created_at: timestamp
     - name: string
@@ -40,7 +40,7 @@ export default function useWorkflowState() {
   async function createState(state) {
     try {
       const { data, error } = await supabase
-        .from('states')
+        .from('statetypes')
         .insert(state);
 
       if (error) throw error;
@@ -53,7 +53,7 @@ export default function useWorkflowState() {
 
   /*
   updateState
-  - Updates an existing state
+  - Updates an existing statetypes
   - Accepts an object with the following properties:
     - name: string
     - description: string
@@ -64,7 +64,7 @@ export default function useWorkflowState() {
   async function updateState(state) {
     try {
       const { data, error } = await supabase
-        .from('states')
+        .from('statetypes')
         .update(state)
         .eq('id', state.id);
 
@@ -78,14 +78,14 @@ export default function useWorkflowState() {
 
   /*
   deleteState
-  - Deletes an existing state
+  - Deletes an existing statetypes
   - Accepts an object with the following properties:
     - id: numeric
   */
   async function deleteState(state) {
     try {
       const { data, error } = await supabase
-        .from('states')
+        .from('statetypes')
         .delete()
         .eq('id', state.id);
 
@@ -99,12 +99,12 @@ export default function useWorkflowState() {
 
   /*
   listStates
-  - Fetches all states
+  - Fetches all statetypes
   */
   async function listStates() {
     try {
       const { data, error } = await supabase
-        .from('states')
+        .from('statetypes')
         .select('*');
 
       if (error) throw error;
@@ -125,7 +125,7 @@ export default function useWorkflowState() {
   async function fetchSingleState(stateId) {
     try {
       const { data, error } = await supabase
-        .from('states')
+        .from('statetypes')
         .select('*')
         .eq('id', stateId);
 

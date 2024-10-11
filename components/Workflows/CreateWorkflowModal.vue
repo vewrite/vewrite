@@ -31,6 +31,7 @@
               >
                 <template #item="{ element }">
                   <div class="state-selector-row">
+                    <div class="grabby-mcgrab-face"></div>
                     <div class="form-input state-type">
                       <label for="state-type">State Type</label>
                       <select v-model="element.id">
@@ -40,6 +41,7 @@
                         </option>
                       </select>
                     </div>
+                    <div class="button" @click="deleteState(element)">Set Actions</div>
                     <div class="button" @click="deleteState(element)">Delete</div>
                   </div>
                 </template>
@@ -70,8 +72,8 @@ import useWorkflow from '~/composables/useWorkflow';
 const { createWorkflow } = useWorkflow();
 
 // WorkflowState composable
-import useWorkflowState from '~/composables/useWorkflowState'
-const { listStates } = useWorkflowState()
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes'
+const { listStates } = useWorkflowStateTypes()
 
 // These are the states that will be added to the workflow
 const states = ref([{ id: '' }])
@@ -153,7 +155,7 @@ watch(states, (newStates) => {
   .states-list {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $spacing-xxs;
     margin-top: $spacing-md;
 
     .state-selector-row {
@@ -161,6 +163,42 @@ watch(states, (newStates) => {
       justify-content: space-between;
       align-items: center;
       gap: $spacing-sm;
+      padding: $spacing-xxs $spacing-xs;
+      transition: background-color 0.18s ease;
+      border-radius: $br-lg;
+
+      &:hover {
+        background-color: rgba($brand, 0.05);
+      }
+
+      .grabby-mcgrab-face {
+        width: 32px;
+        height: 32px;
+        background: rgba($brand, 0.05);
+        border-radius: $br-sm;
+        cursor: grab;
+        position: relative;
+
+        &::after {
+          content: '═';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 1rem;
+          color: rgba($brand, 0.2);
+        }
+
+        &:hover {
+          &:after {
+            color: $brand;
+          }
+        }
+      }
+
+      .state-type {
+        width: 50%;
+      }
 
       .form-input {
         margin: 0;
