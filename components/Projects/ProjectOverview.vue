@@ -1,8 +1,6 @@
 <template>
   <aside class="project-overview">
     <div class="project-summary">
-      <!-- <h2>{{ project.name }}</h2> -->
-      <!-- <p>{{ project.description }}</p> -->
       <input class="project-title-input" v-model="project.name" @input="debouncedUpdateProjectName(project.id, $event.target.value)" />
       <input class="project-title-description" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" />
     </div>
@@ -34,6 +32,8 @@ function debounce(func, wait) {
 const debouncedUpdateProjectName = debounce((id, value) => updateProjectName(id, value), 1000);
 const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectDescription(id, value), 1000);
 
+// TODO - debounce should be its own composable that includes the debounce function and the debounced methods
+
 
 </script>
 
@@ -54,6 +54,7 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
+    width: 100%;
 
     .project-title-input {
       font-family: $font-family-secondary;
