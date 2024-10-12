@@ -287,8 +287,7 @@ const filteredProjects = computed(() => {
         padding: $spacing-md;
         background-color: $white;
         border-radius: $br-md;
-        border: 1px solid rgba($brand, 0);
-        box-shadow: $soft-shadow;
+        border: 1px solid rgba($brand, 0.2);
         text-decoration: none;
         height: 220px;
         color: $black;

@@ -6,7 +6,6 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons">
-        <!-- <router-link :to="`/project/${projectId}/edit`" class="button primary">Edit</router-link> -->
         <button class="button red" @click="deleteProjectModal(project.id)">Delete Project</button>
         <button class="button primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
       </div>
@@ -14,13 +13,9 @@
     <template v-slot:body>
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
-
-        <!-- <div v-if="loading.deliverables == false" class="new-deliverable">
-          <button class="button wide primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
-        </div> -->
 
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>

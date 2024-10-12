@@ -66,6 +66,71 @@ export default function useProject() {
     } 
   }
 
+  async function updateProject(project) {
+    try {
+      useModal().toggleLoading();
+
+      const updates = {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        status: project.status,
+        client: project.client,
+        deliverables: project.deliverables,
+        workflow: project.workflow,
+        created_at: project.created_at,
+        updated_at: project.updated_at,
+        created_by: project.created_by,
+        stakeholders: project.stakeholders
+      }
+
+      let { error } = await supabase.from('projects').upsert(updates, {
+          returning: 'minimal', // Don't return the value after inserting
+      })
+
+      useModal().reset();
+
+      if (error) throw error
+
+    } catch (error) {
+      console.error('Error updating project:', error)
+    } 
+  }
+
+  async function updateProjectName(projectId, name) {
+
+    console.log(projectId, name);
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .update({ name: name })
+        .eq('id', projectId);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      projectError.value = error.message;
+    }
+  }
+
+  async function updateProjectDescription(projectId, description) {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .update({ description: description })
+        .eq('id', projectId);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      projectError.value = error.message;
+    }
+  }
+
   function deleteProjectModal(projectId) {
     useModal().setType('medium');
     useModal().setHeader('Delete Project');
@@ -118,6 +183,9 @@ export default function useProject() {
   return {
     createProject,
     createProjectModal,
+    updateProject,
+    updateProjectName,
+    updateProjectDescription,
     deleteProject,
     deleteProjectModal,
     getProjectDetails,
