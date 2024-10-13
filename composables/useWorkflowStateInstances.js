@@ -14,8 +14,6 @@ export default function useWorkflowStateInstances() {
   //   - created_by: uuid
   //   - assigned_to: uuid
   //   - actions: json of actions which include
-  //     - action_id: id
-  //     - TODO: add more action properties
   async function createStateInstance(stateInstance) {
     try {
       const { data, error } = await supabase

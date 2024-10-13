@@ -1,5 +1,11 @@
 import { ref } from 'vue';
 
+// Workflow State Types composable
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
+
+// Workflow State Instances composable
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+
 /*
 
 WORKFLOWS
@@ -28,6 +34,9 @@ export default function useWorkflow() {
   const supabase = useSupabaseClient();
   const WorkflowStates = ref([]);
 
+  const { listStates, fetchSingleState } = useWorkflowStateTypes();
+  const { createStateInstance, updateStateInstance, deleteStateInstance } = useWorkflowStateInstances();
+
   /*
   createWorkflow
   - Creates a new workflow
@@ -38,6 +47,17 @@ export default function useWorkflow() {
     - states: json state instance ids
     - type: numeric, but will always be 2 as that is a custom workflow
     - completion_step: numeric, the state that the workflow ends on
+
+    When I create a workflow, I'm creating both the workflow and the state instances
+    These instances are created in the stateinstances table and require an object per instance
+
+    This object should contain:
+      - created_at: timestamp
+      - statetype: numeric, the id of the state type
+      - created_by: uuid
+      - assigned_to: uuid
+      - actions: json of actions which include
+
   */
   async function createWorkflow(workflow) {
 

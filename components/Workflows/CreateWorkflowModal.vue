@@ -35,7 +35,7 @@
                     <div class="form-input state-type">
                       <label for="state-type">State Type</label>
                       <select v-model="element.id">
-                        <option value="">Select a state</option>
+                        <option value="">Select a state type</option>
                         <option v-for="stateType in stateTypes" :value="stateType.id" :key="stateType.id">
                           {{ stateType.id }} - {{ stateType.name }}
                         </option>
@@ -180,13 +180,13 @@ watch(states, (newStates) => {
         position: relative;
 
         &::after {
-          content: '═';
+          content: '⋮⋮';
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
           font-size: 1rem;
-          color: rgba($brand, 0.2);
+          color: rgba($brand, 0.6);
         }
 
         &:hover {

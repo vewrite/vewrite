@@ -30,7 +30,12 @@
           This is a default workflow. You can't edit or delete this workflow.
         </div>
         <aside class="states-list">
-          <State v-for="state in workflow.states" key="state.id" :state="state" />
+          <!-- {{ workflow.states.states }} -->
+          <div class="state" v-for="state in workflow.states.states" :key="state.id">
+            <!-- {{ state.id }} -->
+            <State :state="state.id" />
+          </div>
+          <!-- <State v-for="state in workflow.states" key="state.id" :state="state" /> -->
         </aside>
       </div>
     </div>

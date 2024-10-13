@@ -266,6 +266,7 @@ const filteredProjects = computed(() => {
       gap: $spacing-md;
       width: 100%;
       padding: $spacing-md;
+      align-content: flex-start;
 
       @media (max-width: 1800px) {
         grid-template-columns: repeat(4, 1fr);
@@ -436,10 +437,12 @@ const filteredProjects = computed(() => {
 
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-content: center;
       width: calc(100% - $spacing-md - $spacing-md);
-      margin: $spacing-md;
+      padding: $spacing-sm;
+      align-content: flex-start;
+      width: 100%;
 
       .project-card {
         padding: $spacing-sm;
