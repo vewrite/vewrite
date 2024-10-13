@@ -32,6 +32,7 @@
                     <p class="details">Manage your profile picture.</p>
                 </div>
                 <div class="form-content">
+                    <!-- BUG TODO - this breaks because the logo_url is passed and not avatar_path, must fix -->
                     <ImageManager size="medium" table="avatars" v-model:path="avatar_path" @upload="updateProfile" />
                 </div>
             </div>

@@ -62,6 +62,8 @@
 
 <script setup>
 
+// TODO - Add validation to the form
+
 // Project composable
 // import useProject from '~/composables/useProject';
 // const { deleteProject, getProjectDetails, projectData, projectError } = useProject();

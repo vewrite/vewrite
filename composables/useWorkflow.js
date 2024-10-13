@@ -35,7 +35,7 @@ export default function useWorkflow() {
     - name: string
     - description: string
     - created_by: uuid
-    - states: array of state ids
+    - states: json state instance ids
     - type: numeric, but will always be 2 as that is a custom workflow
     - completion_step: numeric, the state that the workflow ends on
   */
