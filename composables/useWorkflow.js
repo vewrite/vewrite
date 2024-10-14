@@ -51,7 +51,7 @@ export default function useWorkflow() {
     When I create a workflow, I'm creating both the workflow and the state instances
     These instances are created in the stateinstances table and require an object per instance
 
-    This object should contain:
+    This stateinstances object should contain:
       - created_at: timestamp
       - statetype: numeric, the id of the state type
       - created_by: uuid
@@ -59,22 +59,32 @@ export default function useWorkflow() {
       - actions: json of actions which include
 
   */
-  async function createWorkflow(workflow) {
+  async function createWorkflow(workflow, stateInstances) {
 
     useModal().toggleLoading();
 
     try {
-      const { data, error } = await supabase
+      // Insert into workflows
+      const { data: workflowData, error: workflowError } = await supabase
         .from('workflows')
         .insert(workflow);
-
+  
+      if (workflowError) throw workflowError;
+  
+      // Insert into stateinstances
+      const { data: stateInstancesData, error: stateInstancesError } = await supabase
+        .from('stateinstances')
+        .insert(stateInstances);
+  
+      if (stateInstancesError) throw stateInstancesError;
+  
+      // Reset the modal
       useModal().reset();
-
-      if (error) throw error;
-
-      return data;
+  
+      return { workflowData, stateInstancesData };
     } catch (error) {
-      alert(error.message);
+      console.error('Error creating workflow and state instances:', error);
+      throw error;
     }
   }
 

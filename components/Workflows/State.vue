@@ -3,7 +3,7 @@
     {{ props.state }}
     <div v-if="stateDetails" class="details">
       <div class="icon">
-        <img :src="'/states/' + stateDetails.icon" alt="State icon" />
+        <img :src="'/states/' + stateDetails.icon" alt="State type icon" />
       </div>
       <div class="text">
         <p class="name">{{ stateDetails.name }}</p>

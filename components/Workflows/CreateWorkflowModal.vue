@@ -22,9 +22,11 @@
             <h4>States</h4>
             <p class="details">Select the different states of your workflow, and order them accordingly.</p>
 
+            {{ states.states }}
+
             <ClientOnly>
               <draggable 
-                v-model="states" 
+                v-model="states.states" 
                 item-key="id"
                 class="states-list"
                 ghost-class="ghost"
@@ -32,9 +34,13 @@
                 <template #item="{ element }">
                   <div class="state-selector-row">
                     <div class="grabby-mcgrab-face"></div>
+                    <div class="form-input state-name">
+                      <label for="state-name">State Name</label>
+                      <input type="text" v-model="element.state_instance.state_name" placeholder="Name your state" />
+                    </div>
                     <div class="form-input state-type">
                       <label for="state-type">State Type</label>
-                      <select v-model="element.id">
+                      <select v-model="element.state_instance.state_type">
                         <option value="">Select a state type</option>
                         <option v-for="stateType in stateTypes" :value="stateType.id" :key="stateType.id">
                           {{ stateType.id }} - {{ stateType.name }}
@@ -58,7 +64,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createWorkflow(workflow)" class="primary wide">Create</button>
+      <button @click="createWorkflow(workflow, stateInstances)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
@@ -76,7 +82,23 @@ import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes'
 const { listStates } = useWorkflowStateTypes()
 
 // These are the states that will be added to the workflow
-const states = ref([{ id: '' }])
+// const states = ref([{ id: '' }])
+
+const states = ref({
+  "states": [
+    {
+      "id": 1,
+      "state_instance": {
+        "state_type": 1,
+        "state_name": "Start",
+        "state_action": ""
+      }
+    }
+  ]
+});
+
+// Temporary state instances
+const stateInstances = ref([])
 
 // And now these are the state types that will populate the select dropdown
 const stateTypes = ref([]);
@@ -85,13 +107,27 @@ const loading = ref(false);
 const user = useSupabaseUser();
 
 function addState() {
-  states.value.push({ id: '' })
+  // states.value.push({ id: '' })
+  states.value.states.push(
+    {
+      "id": states.value.states.length + 1,
+      "state_instance": {
+        "state_type": 1,
+        "state_name": "",
+        "state_action": ""
+      }
+    }
+  )
 }
 
 function deleteState(stateToDelete) {
-  const index = states.value.findIndex(state => state === stateToDelete)
+  // const index = states.value.findIndex(state => state === stateToDelete)
+  // if (index !== -1) {
+  //   states.value.splice(index, 1)
+  // }
+  const index = states.value.states.findIndex(state => state === stateToDelete)
   if (index !== -1) {
-    states.value.splice(index, 1)
+    states.value.states.splice(index, 1)
   }
 }
 
