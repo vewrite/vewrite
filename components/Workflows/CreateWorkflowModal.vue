@@ -36,7 +36,7 @@
                     <div class="grabby-mcgrab-face"></div>
                     <div class="form-input state-name">
                       <label for="state-name">State Name</label>
-                      <input type="text" v-model="element.state_instance.state_name" placeholder="Name your state" />
+                      <input type="text" v-model="element.state_instance.instance_name" placeholder="Name your state" />
                     </div>
                     <div class="form-input state-type">
                       <label for="state-type">State Type</label>
@@ -64,7 +64,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createWorkflow(workflow, stateInstances)" class="primary wide">Create</button>
+      <button @click="createWorkflow(workflow, states.states)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
@@ -72,6 +72,9 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import draggable from 'vuedraggable'
+
+const loading = ref(false);
+const user = useSupabaseUser();
 
 // Deliverables composable
 import useWorkflow from '~/composables/useWorkflow';
@@ -89,22 +92,19 @@ const states = ref({
     {
       "id": 1,
       "state_instance": {
+        "instance_name": "",       
+        "created_at": new Date(),
         "state_type": 1,
-        "state_name": "Start",
-        "state_action": ""
+        "created_by": user.value.id,
+        "assigned_to": null,
+        "actions": []
       }
     }
   ]
 });
 
-// Temporary state instances
-const stateInstances = ref([])
-
 // And now these are the state types that will populate the select dropdown
 const stateTypes = ref([]);
-
-const loading = ref(false);
-const user = useSupabaseUser();
 
 function addState() {
   // states.value.push({ id: '' })
@@ -112,9 +112,12 @@ function addState() {
     {
       "id": states.value.states.length + 1,
       "state_instance": {
+        "instance_name": "",       
+        "created_at": new Date(),
         "state_type": 1,
-        "state_name": "",
-        "state_action": ""
+        "created_by": user.value.id,
+        "assigned_to": null,
+        "actions": []
       }
     }
   )

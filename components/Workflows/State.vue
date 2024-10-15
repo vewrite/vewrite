@@ -1,6 +1,6 @@
 <template>
   <div class="state">
-    {{ props.state }}
+    <!-- {{ props.state }} -->
     <div v-if="stateDetails" class="details">
       <div class="icon">
         <img :src="'/states/' + stateDetails.icon" alt="State type icon" />
@@ -13,8 +13,6 @@
     <div v-else>
       <Loading type="small" />
     </div>
-    <!-- <div class="icon">{{ stateDetails(props.state).icon }}</div> -->
-    <!-- {{ stateDetails(props.state).name }} -->
   </div>
 </template>
 
@@ -25,6 +23,9 @@ import { ref } from 'vue'
 const props = defineProps(['state'])
 
 // TODO: instead of the default state types, this should pull the state instances
+// from the workflow object
+
+
 
 // State composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
@@ -38,7 +39,7 @@ const stateDetails = ref(null);
 
 onMounted( async () => {
   try {
-    const state = await fetchSingleState(props.state);
+    await fetchSingleState(props.state);
     stateDetails.value = StateData.value;
   } catch (error) {
     console.error('Error fetching state:', error.message);

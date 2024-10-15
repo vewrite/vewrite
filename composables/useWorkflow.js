@@ -65,23 +65,31 @@ export default function useWorkflow() {
 
     try {
       // Insert into workflows
-      const { data: workflowData, error: workflowError } = await supabase
-        .from('workflows')
-        .insert(workflow);
+      // const { data: workflowData, error: workflowError } = await supabase
+      //   .from('workflows')
+      //   .insert(workflow);
   
-      if (workflowError) throw workflowError;
+      // if (workflowError) throw workflowError;
   
-      // Insert into stateinstances
-      const { data: stateInstancesData, error: stateInstancesError } = await supabase
-        .from('stateinstances')
-        .insert(stateInstances);
-  
-      if (stateInstancesError) throw stateInstancesError;
+      // Insert into stateinstances on by one
+      // const stateInstancesData = await Promise.all(stateInstances.state_instance.map(async stateInstance => {
+      //   const { data, error } = await createStateInstance(stateInstance);
+      //   if (error) throw error;
+      //   return data;
+      // }));
+
+      // console.log(stateInstances);
+
+      for (let i = 0; i < stateInstances.length; i++) {
+        const { data, error } = await createStateInstance(stateInstances[i].state_instance);
+        if (error) throw error;
+        // console.log(stateInstances[i].state_instance);
+      }
   
       // Reset the modal
       useModal().reset();
   
-      return { workflowData, stateInstancesData };
+      // return { workflowData, stateInstancesData };
     } catch (error) {
       console.error('Error creating workflow and state instances:', error);
       throw error;
