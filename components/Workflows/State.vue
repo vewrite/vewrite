@@ -1,14 +1,19 @@
 <template>
   <div class="state">
-    <!-- {{ props.state }} -->
-    <div v-if="stateDetails" class="details">
+    <div v-if="stateDetails && stateDetails.state_type" class="details">
       <div class="icon">
         <img :src="'/states/' + stateDetails.state_type.icon" alt="State type icon" />
+        <p class="state-type">{{ stateDetails.state_type.name }}</p>
       </div>
       <div class="text">
-        <p class="name">{{ stateDetails.state_type.name }}</p>
+        <p class="instance-name" v-if="stateDetails.state_instance && stateDetails.state_instance.length > 0">
+          {{ stateDetails.state_instance[0].instance_name }}
+        </p>
         <p class="description">{{ stateDetails.state_type.description }}</p>
       </div>
+    </div>
+    <div v-else-if="error">
+      <p>Error: {{ error }}</p>
     </div>
     <div v-else>
       <Loading type="small" />
@@ -16,11 +21,16 @@
   </div>
 </template>
 
+
 <script setup>
 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import Loading from '~/components/Loading.vue'
 
 const props = defineProps(['state'])
+
+const stateDetails = ref(null)
+const error = ref(null)
 
 /*
 1. Each state first needs to go and get the state instance
@@ -35,25 +45,27 @@ const { fetchSingleState, StateData } = useWorkflowStateTypes();
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
 
-const stateDetails = ref({
-  state_instance: {},
-  state_type: {}
-});
-
-onMounted( async () => {
+onMounted(async () => {
   try {
+    // Get the state instance
+    await fetchSingleStateInstance(props.state)
+    if (!StateInstanceData.value) {
+      throw new Error('Failed to fetch state instance')
+    }
 
-    // Get the state instance and put it in the stateDetails object
-    await fetchSingleStateInstance(props.state);
-    stateDetails.value.state_instance = StateInstanceData.value;
+    // Get the state type
+    await fetchSingleState(StateInstanceData.value[0].state_type)
+    if (!StateData.value) {
+      throw new Error('Failed to fetch state type')
+    }
 
-    // Get the state type and put it in the stateDetails object
-    // console.log(stateDetails.value.state_instance[0].state_type);
-    await fetchSingleState(stateDetails.value.state_instance[0].state_type);
-    stateDetails.value.state_type = StateData.value;
-    
-  } catch (error) {
-    console.error('Error fetching state:', error.message);
+    stateDetails.value = {
+      state_instance: StateInstanceData.value,
+      state_type: StateData.value
+    }
+  } catch (e) {
+    console.error('Error fetching state:', e.message)
+    error.value = e.message
   }
 })
 
@@ -82,14 +94,35 @@ onMounted( async () => {
     gap: $spacing-sm;
 
     .icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: $brand;
+      width: 68px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
+      border-radius: $br-md;
+      overflow: hidden;
+      background: $brand;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .state-type {
+        text-transform: capitalize;
+        padding: 2px $spacing-xxs $spacing-xxs $spacing-xxs;
+        color: rgba($white, .5);
+        background: $brand;
+        font-size: $font-size-xxs;
+        min-width: 100%;
+        text-align: center;
+        margin: -12px 0 0 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
 
     .text {
@@ -97,9 +130,9 @@ onMounted( async () => {
       flex-direction: column;
       gap: $spacing-xxs;
 
-      .name {
-        text-transform: capitalize;
+      .instance-name {
         font-weight: bold;
+        color: $black;
         margin: 0;
       }
 
