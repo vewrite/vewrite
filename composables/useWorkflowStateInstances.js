@@ -83,6 +83,22 @@ export default function useWorkflowStateInstances() {
     }
   }
 
+  async function fetchSingleStateInstance(stateInstanceId) {
+    try {
+      const { data, error } = await supabase
+        .from('stateinstances')
+        .select('*')
+        .eq('id', stateInstanceId);
+
+      if (error) throw error;
+
+      StateInstanceData.value = data;
+      return data;
+
+    } catch (error) {
+      StateInstanceError.value = error;
+    }
+  }
 
   return {
     StateInstanceData,
@@ -91,7 +107,8 @@ export default function useWorkflowStateInstances() {
     createStateInstance,
     createStateInstances,
     updateStateInstance,
-    deleteStateInstance
+    deleteStateInstance,
+    fetchSingleStateInstance
   }
 
 }
