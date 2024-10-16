@@ -31,9 +31,10 @@
         </div>
         <aside class="states-list">
           <!-- {{ workflow.states.states }} -->
-          <div class="state" v-for="state in workflow.states.states" :key="state.id">
-            <!-- {{ state.id }} -->
-            <State :state="state.state_instance.state_type" />
+          <div class="state" v-for="state in workflow.states" :key="state.id">
+            {{ state }}
+            <!-- <State :state="state.state_instance.state_type" /> -->
+             <State :state="state" />
           </div>
           <!-- <State v-for="state in workflow.states" key="state.id" :state="state" /> -->
         </aside>

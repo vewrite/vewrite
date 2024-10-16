@@ -35,7 +35,7 @@ export default function useWorkflow() {
   const WorkflowStates = ref([]);
 
   const { listStates, fetchSingleState } = useWorkflowStateTypes();
-  const { createStateInstance, updateStateInstance, deleteStateInstance } = useWorkflowStateInstances();
+  const { createStateInstances, updateStateInstance, deleteStateInstance, StateInstanceData, StateInstancesData } = useWorkflowStateInstances();
 
   /*
   createWorkflow
@@ -64,29 +64,34 @@ export default function useWorkflow() {
     useModal().toggleLoading();
 
     try {
-      // Insert into workflows
-      // const { data: workflowData, error: workflowError } = await supabase
-      //   .from('workflows')
-      //   .insert(workflow);
-  
-      // if (workflowError) throw workflowError;
-  
-      // Insert into stateinstances on by one
-      // const stateInstancesData = await Promise.all(stateInstances.state_instance.map(async stateInstance => {
-      //   const { data, error } = await createStateInstance(stateInstance);
-      //   if (error) throw error;
-      //   return data;
-      // }));
 
-      // console.log(stateInstances);
+      /*
+      The expected flow here is to:
+      1. Pass the instances into createStateInstances
+      2. createStateInstances will iterate over each instance and pass them to createStateInstance
+      3. createStateInstance will create the instance and push the ids of the created state instances to StateInstancesData
+      4. We can then use the ids in StateInstancesData to update the workflow object
+      */
 
-      for (let i = 0; i < stateInstances.length; i++) {
-        const { data, error } = await createStateInstance(stateInstances[i].state_instance);
-        if (error) throw error;
-        // console.log(stateInstances[i].state_instance);
-      }
+      // First we'll create the state instances
+      await createStateInstances(stateInstances);
+      console.log("Final output of StateInstancesData is: ", StateInstancesData);
+      
+      // Now we'll update the workflow object with the state instance ids
+      workflow.states = StateInstancesData;
+
+      // Check that the workflow object is correct
+      console.log(workflow);
+
+      // Finally, insert into workflows table
+      const { data: workflowData, error: workflowError } = await supabase
+        .from('workflows')
+        .insert(workflow);
   
-      // Reset the modal
+      if (workflowError) throw workflowError;
+
+  
+      // Lastly, reset the modal
       useModal().reset();
   
       // return { workflowData, stateInstancesData };
@@ -179,7 +184,7 @@ export default function useWorkflow() {
         // This will fetch all default workflows
         .or(`created_by.eq.${uuid},type.eq.1`);
 
-      console.log(data);
+      // console.log(data);
 
       if (error) throw error;
 

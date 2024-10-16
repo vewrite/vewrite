@@ -22,11 +22,6 @@ import { ref } from 'vue'
 
 const props = defineProps(['state'])
 
-// TODO: instead of the default state types, this should pull the state instances
-// from the workflow object
-
-
-
 // State composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 const { fetchSingleState, StateData } = useWorkflowStateTypes();

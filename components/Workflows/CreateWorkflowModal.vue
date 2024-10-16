@@ -149,9 +149,9 @@ onMounted(async () => {
   stateTypes.value = await listStates();
 })
 
-watch(states, (newStates) => {
-  console.log('States updated:', newStates)
-}, { deep: true })
+// watch(states, (newStates) => {
+//   console.log('States updated:', newStates)
+// }, { deep: true })
 
 </script>
 

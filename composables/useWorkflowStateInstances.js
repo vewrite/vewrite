@@ -3,6 +3,7 @@ import {ref} from 'vue';
 export default function useWorkflowStateInstances() {
 
   const StateInstanceData = ref(null);
+  const StateInstancesData = ref([]);
   const StateInstanceError = ref(null);
   const supabase = useSupabaseClient();
 
@@ -15,6 +16,7 @@ export default function useWorkflowStateInstances() {
   //   - assigned_to: uuid
   //   - actions: json of actions which include
   async function createStateInstance(stateInstance) {
+
     try {
       const { data, error } = await supabase
         .from('stateinstances')
@@ -22,10 +24,25 @@ export default function useWorkflowStateInstances() {
 
       if (error) throw error;
 
+      StateInstancesData.value.push(data[0].id);
+
       return data;
+
     } catch (error) {
       alert(error.message);
     }
+  }
+
+  async function createStateInstances(stateInstances) {
+    // We'll iterate over each state instance and create it
+    for (let i = 0; i < stateInstances.length; i++) {
+      const stateInstance = stateInstances[i].state_instance;
+
+      const { data, error } = await createStateInstance(stateInstance);
+
+      if (error) throw error;
+    }
+    return StateInstancesData;
   }
 
   // updateStateInstance
@@ -39,7 +56,9 @@ export default function useWorkflowStateInstances() {
 
       if (error) throw error;
 
+      StateInstanceData.value = data;
       return data;
+
     } catch (error) {
       alert(error.message);
     }
@@ -56,7 +75,9 @@ export default function useWorkflowStateInstances() {
 
       if (error) throw error;
 
+      StateInstanceData.value = data;
       return data;
+
     } catch (error) {
       alert(error.message);
     }
@@ -65,8 +86,10 @@ export default function useWorkflowStateInstances() {
 
   return {
     StateInstanceData,
+    StateInstancesData,
     StateInstanceError,
     createStateInstance,
+    createStateInstances,
     updateStateInstance,
     deleteStateInstance
   }
