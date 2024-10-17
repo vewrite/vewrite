@@ -63,9 +63,9 @@ onMounted(async () => {
       state_instance: StateInstanceData.value,
       state_type: StateData.value
     }
-  } catch (e) {
-    console.error('Error fetching state:', e.message)
-    error.value = e.message
+  } catch (error) {
+    console.error('Error fetching state:', error.message)
+    error.value = error.message
   }
 })
 

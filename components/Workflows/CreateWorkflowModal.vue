@@ -22,7 +22,7 @@
             <h4>States</h4>
             <p class="details">Select the different states of your workflow, and order them accordingly.</p>
 
-            {{ states.states }}
+            <!-- {{ states.states }} -->
 
             <ClientOnly>
               <draggable 
@@ -33,7 +33,15 @@
               >
                 <template #item="{ element }">
                   <div class="state-selector-row">
-                    <div class="grabby-mcgrab-face"></div>
+                    <div class="grabby-mcgrab-face">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 7L7 7" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                        <path d="M13 10L7 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                        <path d="M13 13L7 13" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                        <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                      </svg>
+
+                    </div>
                     <div class="form-input state-name">
                       <label for="state-name">State Name</label>
                       <input type="text" v-model="element.state_instance.instance_name" placeholder="Name your state" />
@@ -43,12 +51,17 @@
                       <select v-model="element.state_instance.state_type">
                         <option value="">Select a state type</option>
                         <option v-for="stateType in stateTypes" :value="stateType.id" :key="stateType.id">
-                          {{ stateType.id }} - {{ stateType.name }}
+                          {{ stateType.name }}
                         </option>
                       </select>
                     </div>
-                    <div class="button" @click="deleteState(element)">Set Actions</div>
-                    <div class="button" @click="deleteState(element)">Delete</div>
+                    <div class="button" @click="deleteState(element)">Actions</div>
+                    <div class="button red" @click="deleteState(element)">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 10L5 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                        <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                      </svg>
+                    </div>
                   </div>
                 </template>
               </draggable>
@@ -211,32 +224,28 @@ onMounted(async () => {
       }
 
       .grabby-mcgrab-face {
-        width: 32px;
-        height: 32px;
-        background: rgba($brand, 0.05);
-        border-radius: $br-sm;
+        padding: 4px;
+        border-radius: $br-md;
         cursor: grab;
-        position: relative;
-
-        &::after {
-          content: '⋮⋮';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 1rem;
-          color: rgba($brand, 0.6);
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
-          &:after {
-            color: $brand;
-          }
+          background-color: rgba($brand, 0.1);
+        }
+        &:active {
+          background-color: rgba($brand, 0.15);
+          cursor: grabbing;
         }
       }
 
       .state-type {
         width: 50%;
+
+        select {
+          text-transform: capitalize;
+        }
       }
 
       .form-input {
