@@ -151,6 +151,11 @@ computed(() => {
     width: 100%;
     height: 100%;
     box-shadow: $main-shadow;
+    background: $white linear-gradient(115deg, rgba($brand, 0.15) 0%, rgba($brand, 0.05) 10%);
+
+    .inner-container {
+      padding: 0 !important;
+    }
 
     &.small {
       width: 400px;
@@ -194,21 +199,18 @@ computed(() => {
     }
 
     .header {
-      background: rgba($brand, 0.025) linear-gradient(125deg, rgba($brand, 0.05) 0%, rgba($brand, 0.015) 10%);
-      border-bottom: 1px solid rgba($brand, 0.15);
-      color: $brand;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       height: 66px;
       width: 100%;
-      padding: 0 $spacing-md;
+      padding: 0 $spacing-md 0 $spacing-md;
       position: relative;
 
       h3 {
         margin: 0;
-        font-size: $font-size-md;
+        font-size: $font-size-lg;
       }
 
       .modal-close {

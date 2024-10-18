@@ -72,14 +72,26 @@
                         <section class="state-actions">
                           
                           <div class="state-actions-header" @click="toggleOpenState(element)" v-if="element.is_open">
-                            <span>Close actions</span>
+                            <span>
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z" stroke="black" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.8659 4.39969L12.367 3.60031C12.0917 3.15862 11.4815 3.00769 11.0041 3.26246L10.7416 3.40277C9.74383 3.93538 8.49659 3.26938 8.49659 2.20369V1.92308C8.49659 1.41308 8.05007 1 7.49879 1H6.50099C5.94971 1 5.50319 1.41308 5.50319 1.92308V2.20369C5.50319 3.26938 4.25594 3.93585 3.25815 3.40277L2.99573 3.26246C2.51828 3.00769 1.90813 3.15862 1.63273 3.60031L1.13383 4.39969C0.858442 4.84138 1.02158 5.40585 1.49903 5.66062L1.76145 5.80092C2.75925 6.334 2.75925 7.666 1.76145 8.19908L1.49903 8.33938C1.02158 8.59415 0.858442 9.15862 1.13383 9.60031L1.63273 10.3997C1.90813 10.8414 2.51828 10.9923 2.99573 10.7375L3.25815 10.5972C4.25594 10.0642 5.50319 10.7306 5.50319 11.7963V12.0769C5.50319 12.5869 5.94971 13 6.50099 13H7.49879C8.05007 13 8.49659 12.5869 8.49659 12.0769V11.7963C8.49659 10.7306 9.74383 10.0642 10.7416 10.5972L11.0041 10.7375C11.4815 10.9923 12.0917 10.8414 12.367 10.3997L12.8659 9.60031C13.1413 9.15862 12.9782 8.59415 12.5008 8.33938L12.2383 8.19908C11.2405 7.666 11.2405 6.334 12.2383 5.80092L12.5008 5.66062C12.9782 5.40585 13.1418 4.84138 12.8659 4.39969Z" stroke="black" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              Close state actions
+                            </span>
                             <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M1 5L4.29289 1.70711C4.68342 1.31658 5.31658 1.31658 5.70711 1.70711L9 5" stroke="#1759D5" stroke-opacity="0.5" stroke-linecap="round"/>
                             </svg>
                           </div>
 
                           <div class="state-actions-header" @click="toggleOpenState(element)" v-else>
-                            <span>Open actions</span>
+                            <span>
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z" stroke="black" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.8659 4.39969L12.367 3.60031C12.0917 3.15862 11.4815 3.00769 11.0041 3.26246L10.7416 3.40277C9.74383 3.93538 8.49659 3.26938 8.49659 2.20369V1.92308C8.49659 1.41308 8.05007 1 7.49879 1H6.50099C5.94971 1 5.50319 1.41308 5.50319 1.92308V2.20369C5.50319 3.26938 4.25594 3.93585 3.25815 3.40277L2.99573 3.26246C2.51828 3.00769 1.90813 3.15862 1.63273 3.60031L1.13383 4.39969C0.858442 4.84138 1.02158 5.40585 1.49903 5.66062L1.76145 5.80092C2.75925 6.334 2.75925 7.666 1.76145 8.19908L1.49903 8.33938C1.02158 8.59415 0.858442 9.15862 1.13383 9.60031L1.63273 10.3997C1.90813 10.8414 2.51828 10.9923 2.99573 10.7375L3.25815 10.5972C4.25594 10.0642 5.50319 10.7306 5.50319 11.7963V12.0769C5.50319 12.5869 5.94971 13 6.50099 13H7.49879C8.05007 13 8.49659 12.5869 8.49659 12.0769V11.7963C8.49659 10.7306 9.74383 10.0642 10.7416 10.5972L11.0041 10.7375C11.4815 10.9923 12.0917 10.8414 12.367 10.3997L12.8659 9.60031C13.1413 9.15862 12.9782 8.59415 12.5008 8.33938L12.2383 8.19908C11.2405 7.666 11.2405 6.334 12.2383 5.80092L12.5008 5.66062C12.9782 5.40585 13.1418 4.84138 12.8659 4.39969Z" stroke="black" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              Open state actions
+                            </span>
                             <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M1 1L4.29289 4.29289C4.68342 4.68342 5.31658 4.68342 5.70711 4.29289L9 1" stroke="#1759D5" stroke-opacity="0.5" stroke-linecap="round"/>
                             </svg>
@@ -168,7 +180,11 @@
 
             <div v-if="states.length === 0" class="no-states">No states added yet.</div>
             <hr>
-            <div class="button" @click="addState()">Add State</div>
+            <div class="button primary large add-new-state" @click="addState()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#1759D5"/>
+              </svg>
+            </div>
           </div>
         </div>
       </form>
@@ -290,6 +306,10 @@ onMounted(async () => {
     }
   }
 
+  .add-new-state {
+    align-self: center;
+  }
+
   .buttons {
     display: flex;
     flex-direction: row;
@@ -309,21 +329,25 @@ onMounted(async () => {
   .states-list {
     display: flex;
     flex-direction: column;
-    gap: $spacing-md;
+    gap: $spacing-sm;
     margin-top: $spacing-md;
     height: 100%;
+    background: rgba($brand, 0.05);
+    border-radius: $br-lg;
+    overflow-y: auto;
+    max-height: 440px;
+    padding: $spacing-sm;
 
     .state-selector-row {
       display: flex;
       flex-direction: column;
       align-items: center;
       border-radius: $br-md;
-      border: 1px solid rgba($brand, 0.25); 
       height: 100%;
+      background: $white;
 
-      &:hover {
-        border: 1px solid $brand;
-        box-shadow: $main-shadow;
+      &:last-child {
+        border-bottom: none;
       }
 
       .state-fill {
@@ -340,7 +364,6 @@ onMounted(async () => {
         align-items: center;
 
         &:hover {
-          background-color: rgba($brand, 0.1);
 
           svg {
             path, circle {
@@ -384,19 +407,38 @@ onMounted(async () => {
           background: rgba($white, 0.6);
 
           .state-actions-header {
-            padding: $spacing-xxs $spacing-sm;
+            padding: 0 $spacing-sm $spacing-sm;
             font-size: $font-size-xs;
             color: $brand;
-            border-top: 1px solid rgba($brand, 0.1);
-            background: rgba($brand, 0.05);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: $spacing-xs;
+            align-items: center;
             width: 100%;
+            color: $gray-dark;
+
+            span {
+              display: flex;
+              align-items: center;
+              gap: 2px;
+            }
+
+            svg {
+              path {
+                stroke: $gray-dark;
+              }
+            }
 
             &:hover {
-              background: rgba($brand, 0.1);
+              color: $brand;
+
+              svg {
+                path {
+                  stroke: $brand;
+                }
+              }
             }
           }
 
@@ -410,7 +452,7 @@ onMounted(async () => {
 
             &.open {
               height: auto;
-              padding: $spacing-xs;
+              padding: 0 $spacing-xs $spacing-xs;
             }
 
             .form-input {
@@ -442,8 +484,10 @@ onMounted(async () => {
 }
 
 .ghost {
-  opacity: 0.5;
-  background: $gray-light;
+  opacity: 0.8;
+  background: $white;
+  transform: rotate(12deg) scale(0.8);
+  outline: 1px solid $brand;
 }
 
 .no-states {
