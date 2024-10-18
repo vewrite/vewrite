@@ -289,7 +289,7 @@ export default function useWorkflow() {
   }
 
   function createWorkflowModal() {
-    useModal().setType('right');
+    useModal().setType('large');
     useModal().setHeader('Create Workflow');
     useModal().setContent('CreateWorkflowModal');
     useModal().toggleVisibility();

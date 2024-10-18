@@ -4,7 +4,11 @@
     <div class="modal-body" :class="[visibleClass, typeClass]">
       <div class="header">
         <h3>{{ header }}</h3>
-        <div class="modal-close" @click="close"></div>
+        <div class="button modal-close" @click="close">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.35355 1.35355C9.54882 1.15829 9.54882 0.841708 9.35355 0.646446C9.15829 0.451184 8.84171 0.451184 8.64645 0.646446L4.99999 4.2929L1.35355 0.646455C1.15829 0.451193 0.841705 0.451193 0.646442 0.646455C0.45118 0.841717 0.45118 1.1583 0.646442 1.35356L4.29289 5.00001L0.646441 8.64645C0.451179 8.84171 0.451178 9.1583 0.646441 9.35356C0.841703 9.54882 1.15829 9.54882 1.35355 9.35356L4.99999 5.70711L8.64645 9.35357C8.84171 9.54883 9.15829 9.54883 9.35355 9.35357C9.54882 9.15831 9.54882 8.84172 9.35355 8.64646L5.7071 5.00001L9.35355 1.35355Z" fill="black" fill-opacity="0.3"/>
+          </svg>
+        </div>
       </div>
       <div class="body">
         <Loading v-if="loading" type="small" class="padded-loader" />
@@ -163,6 +167,17 @@ computed(() => {
       height: auto;
     }
 
+    &.full {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+
+      .body {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+    }
+
     &.right {
       width: 600px;
       height: 100%;
@@ -198,16 +213,11 @@ computed(() => {
 
       .modal-close {
         cursor: pointer;
-        position: absolute;
-        right: $spacing-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         top: 50%;
-        transform: translateY(-50%);
         color: $brand;
-        
-        &:before {
-          content: '×';
-          font-size: $font-size-lg;
-        }
       }
 
       .app-panel-header-buttons {
