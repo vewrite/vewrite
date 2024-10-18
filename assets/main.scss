@@ -35,6 +35,7 @@ body,
 
 .inner-container {
     width: 100%;
+    height: 100%;
     margin: 0 auto;
     padding: $spacing-md;
     display: flex;
@@ -277,14 +278,14 @@ label {
     color: rgba($black,0.5);
     font-weight: 400;
     background-color: $white;
-    padding: $spacing-xs $spacing-xs 0 $spacing-xs;
+    padding: calc($spacing-xxs + 2px) $spacing-xs 0 $spacing-xs;
 }
 
 input,
 textarea,
 select {
     border: 1px solid transparent;
-    padding: $spacing-xxs $spacing-xs $spacing-xs $spacing-xs;
+    padding: 0 $spacing-xs calc($spacing-xxs + 2px) $spacing-xs;
     background-color: $white;
     color: $black;
     border-radius: $br-md;
@@ -396,6 +397,7 @@ textarea {
     transition: all 0.2s ease;
     width: 100%;
     overflow: hidden;
+    height: fit-content;
 
     &:focus,
     &:hover,
@@ -405,6 +407,13 @@ textarea {
     }
 }
 
+.form-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+    width: 100%;
+}
+
 .form-block {
     padding: 0 0 $spacing-md 0;
     display: flex;
@@ -412,6 +421,7 @@ textarea {
     justify-content: space-between;
     align-items: flex-start;
     gap: $spacing-lg;
+    height: 100%;
 
     &:last-of-type {
         border-bottom: none;
@@ -437,6 +447,7 @@ textarea {
     }
 
     .form-content-full {
+        height: 100%;
         width: 100%;
         display: flex;
         flex-direction: column;

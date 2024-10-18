@@ -22,9 +22,109 @@
             <h4>States</h4>
             <p class="details">Select the different states of your workflow, and order them accordingly.</p>
 
-            <!-- {{ states.states }} -->
-
             <ClientOnly>
+              <draggable 
+                v-model="states.states" 
+                item-key="id"
+                class="states-list"
+                ghost-class="ghost"
+              >
+                <template #item="{element}">
+                  <div class="state-selector-row">
+
+                    <div class="state-fill">
+
+
+                      <div class="grabby-mcgrab-face">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M13 7L7 7" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                          <path d="M13 10L7 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                          <path d="M13 13L7 13" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                          <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+
+                      <div class="state-content">
+
+                        <section class="state-details">
+                          <!-- <div class="state-type-icon">
+                            {{ element }}
+                            <img :src="StateTypeImg" alt="State type icon" />
+                          </div> -->
+
+                          <div class="form-input state-type">
+                            <label for="state-type">State Type</label>
+                            <select v-model="element.state_instance.state_type">
+                              <option value="">Select a state type</option>
+                              <option v-for="stateType in stateTypes" :value="stateType.id" :key="stateType.id">
+                                {{ stateType.name }}
+                              </option>
+                            </select>
+                          </div>
+
+                          <div class="form-input state-name">
+                            <label for="state-name">State Name</label>
+                            <input type="text" v-model="element.state_instance.instance_name" placeholder="Name your state" />
+                          </div> 
+                          
+                        </section>
+                        
+                        <section class="state-actions">
+                          
+                          <div class="state-actions-header" @click="toggleOpenState(element)" v-if="element.is_open">
+                            <span>Close actions</span>
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1 5L4.29289 1.70711C4.68342 1.31658 5.31658 1.31658 5.70711 1.70711L9 5" stroke="#1759D5" stroke-opacity="0.5" stroke-linecap="round"/>
+                            </svg>
+                          </div>
+
+                          <div class="state-actions-header" @click="toggleOpenState(element)" v-else>
+                            <span>Open actions</span>
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1 1L4.29289 4.29289C4.68342 4.68342 5.31658 4.68342 5.70711 4.29289L9 1" stroke="#1759D5" stroke-opacity="0.5" stroke-linecap="round"/>
+                            </svg>
+                          </div>
+                          
+                          <div :class="['state-actions-body', element.is_open ? 'open' : 'closed']">
+                            <div class="form-input-row">
+                              <div class="form-input state-type">
+                                <label for="state-on-enter">On state enter</label>
+                                <select v-model="element.state_instance.actions">
+                                  <option value="">Select an action</option>
+                                  <option value="">Do nothing</option>
+                                  <option value="">Send an email</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-input-row">
+                              <div class="form-input state-type">
+                                <label for="state-on-enter">On state exit</label>
+                                <select v-model="element.state_instance.actions">
+                                  <option value="">Select an action</option>
+                                  <option value="">Do nothing</option>
+                                  <option value="">Send an email</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                        
+                      </div>
+
+                      <div class="delete-state" @click="deleteState(element)">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M15 10L5 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                          <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+            </ClientOnly>
+
+            <!-- <ClientOnly>
               <draggable 
                 v-model="states.states" 
                 item-key="id"
@@ -40,7 +140,6 @@
                         <path d="M13 13L7 13" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
                         <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
                       </svg>
-
                     </div>
                     <div class="form-input state-name">
                       <label for="state-name">State Name</label>
@@ -65,7 +164,7 @@
                   </div>
                 </template>
               </draggable>
-            </ClientOnly>
+            </ClientOnly> -->
 
             <div v-if="states.length === 0" class="no-states">No states added yet.</div>
             <hr>
@@ -104,6 +203,7 @@ const states = ref({
   "states": [
     {
       "id": 1,
+      "is_open": false,
       "state_instance": {
         "instance_name": "",       
         "created_at": new Date(),
@@ -119,11 +219,17 @@ const states = ref({
 // And now these are the state types that will populate the select dropdown
 const stateTypes = ref([]);
 
+const state_type_img = ref('')
+
+function toggleOpenState(state) {
+  state.is_open = !state.is_open
+}
+
 function addState() {
-  // states.value.push({ id: '' })
   states.value.states.push(
     {
       "id": states.value.states.length + 1,
+      "is_open": false,
       "state_instance": {
         "instance_name": "",       
         "created_at": new Date(),
@@ -137,10 +243,6 @@ function addState() {
 }
 
 function deleteState(stateToDelete) {
-  // const index = states.value.findIndex(state => state === stateToDelete)
-  // if (index !== -1) {
-  //   states.value.splice(index, 1)
-  // }
   const index = states.value.states.findIndex(state => state === stateToDelete)
   if (index !== -1) {
     states.value.states.splice(index, 1)
@@ -207,32 +309,45 @@ onMounted(async () => {
   .states-list {
     display: flex;
     flex-direction: column;
-    gap: $spacing-xxs;
+    gap: $spacing-md;
     margin-top: $spacing-md;
+    height: 100%;
 
     .state-selector-row {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      gap: $spacing-sm;
-      padding: $spacing-xxs $spacing-xs;
-      transition: background-color 0.18s ease;
-      border-radius: $br-lg;
+      border-radius: $br-md;
+      border: 1px solid rgba($brand, 0.25); 
+      height: 100%;
 
       &:hover {
-        background-color: rgba($brand, 0.05);
+        border: 1px solid $brand;
+        box-shadow: $main-shadow;
+      }
+
+      .state-fill {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
       }
 
       .grabby-mcgrab-face {
-        padding: 4px;
-        border-radius: $br-md;
+        padding: $spacing-xxs;
         cursor: grab;
+        height: 100%;
         display: flex;
         align-items: center;
-        justify-content: center;
 
         &:hover {
           background-color: rgba($brand, 0.1);
+
+          svg {
+            path, circle {
+              stroke: $brand;
+              stroke-width: 2;
+            }
+          }
         }
         &:active {
           background-color: rgba($brand, 0.15);
@@ -240,26 +355,87 @@ onMounted(async () => {
         }
       }
 
-      .state-type {
-        width: 50%;
+      .state-content {
+        width: 100%;
+        border-left: 1px solid rgba($brand, 0.1);
+        border-right: 1px solid rgba($brand, 0.1);
 
-        select {
-          text-transform: capitalize;
+        .state-details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: $spacing-xs;
+          padding: $spacing-xs;
+          width: 100%;
+
+          .state-type-icon {
+            background: $brand;
+            border-radius: $br-md;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .state-name, .state-type {
+            margin: 0;
+          }
+        }
+
+        .state-actions {
+          background: rgba($white, 0.6);
+
+          .state-actions-header {
+            padding: $spacing-xxs $spacing-sm;
+            font-size: $font-size-xs;
+            color: $brand;
+            border-top: 1px solid rgba($brand, 0.1);
+            background: rgba($brand, 0.05);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            &:hover {
+              background: rgba($brand, 0.1);
+            }
+          }
+
+          .state-actions-body {
+            padding: 0 $spacing-xs;
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-xs;
+            overflow: hidden;
+            height: 0;
+
+            &.open {
+              height: auto;
+              padding: $spacing-xs;
+            }
+
+            .form-input {
+              margin: 0;
+            }
+          }
         }
       }
 
-      .form-input {
-        margin: 0;
-      }
+      .delete-state {
+        height: 100%;
+        padding: $spacing-xxs;
+        display: flex;
+        align-items: center;
 
+        &:hover {
+          background-color: rgba($red, 0.1);
 
-      button {
-        background-color: $red;
-        color: white;
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 0.25rem;
-        cursor: pointer;
+          svg {
+            path, circle {
+              stroke: $red;
+              stroke-width: 2;
+            }
+          }
+        }
       }
     }
   }
