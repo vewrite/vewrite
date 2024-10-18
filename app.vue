@@ -40,7 +40,7 @@ const fetchUser = async () => {
 
   if (error) throw error
   
-  console.log('Data:', data)
+  // console.log('Data:', data)
 
   if(data.length == 0) {
     createProfile(user.value)
@@ -95,7 +95,7 @@ watch(user, async (newUser) => {
 
 // Call the user store and set the user using the Supabase user
 onMounted(async () => {
-  console.log('User:', user.value)
+  // console.log('User:', user.value)
   if (user.value) {
     await fetchUser();
     loading.value = false;
