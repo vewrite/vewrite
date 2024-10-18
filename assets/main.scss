@@ -492,9 +492,9 @@ textarea {
 button,
 .button {
     color: $brand;
-    background: rgba($brand, 0);
+    background: rgba($white, .35);
     border-radius: $br-md;
-    border: 1px solid rgba($brand, 0.1);
+    border: 1px solid rgba($brand, 0.25);
     text-align: center;
     text-decoration: none;
     padding: $spacing-xxs $spacing-sm $spacing-xxs;
@@ -508,6 +508,7 @@ button,
     gap: $spacing-sm;
     align-items: center;
     text-transform: capitalize;
+    box-shadow: $main-shadow;
 
     &:hover {
         border: 1px solid rgba($brand, 0.4);
@@ -529,12 +530,15 @@ button.wide,
 button.primary,
 .button.primary {
     border: 1px solid rgba($brand-dark, 0.3);
-    background-color: rgba($brand, 0.05);
-    color: $brand;
+    background-color: rgba($brand, 0.65);
+    color: $white;
+    outline: 1px solid rgba($white, 0.4);
+    outline-offset: -2px;
 
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 0.1);
+        background-color: rgba($brand, 0.85);
+        outline-offset: -4px;
     }
 }
 

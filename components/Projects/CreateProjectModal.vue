@@ -165,6 +165,7 @@ onMounted(async () => {
 #ClientSelect {
   padding: $spacing-sm;
   border: 1px solid rgba($brand, 0.15);
+  background-color: $white;
   border-radius: $br-md;
   max-height: 320px;
   overflow-y: auto;
@@ -179,7 +180,6 @@ onMounted(async () => {
 
     &:hover {
       background-color: rgba($brand, 0.05);
-      border-color: $brand;
     }
 
     .image-wrapper {

@@ -146,12 +146,13 @@ computed(() => {
 
   .modal-body {
     background-color: $white;
-    border-radius: $br-md;
+    border-radius: $br-lg;
     overflow: auto;
     width: 100%;
     height: 100%;
     box-shadow: $main-shadow;
-    background: $white linear-gradient(115deg, rgba($brand, 0.15) 0%, rgba($brand, 0.05) 10%);
+    background: $white linear-gradient(-135deg, rgba($brand, 0.15) 0%, rgba($brand, 0.025) 35%);
+    box-shadow: inset 0 0 20px white, 0 0 10px 0 rgba($black, 0.1);
 
     .inner-container {
       padding: 0 !important;
@@ -203,7 +204,7 @@ computed(() => {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      height: 66px;
+      height: 88px;
       width: 100%;
       padding: 0 $spacing-md 0 $spacing-md;
       position: relative;
@@ -232,7 +233,7 @@ computed(() => {
     }
 
     .body {
-      height: calc(100% - 66px);
+      height: calc(100% - 88px);
       overflow-y: auto;
       position: relative;
 

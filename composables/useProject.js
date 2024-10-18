@@ -18,7 +18,7 @@ export default function useProject() {
   const { deleteProjectDeliverables } = useDeliverables();
 
   function createProjectModal() {
-    useModal().setType('right');
+    useModal().setType('large');
     useModal().setHeader('Create Project');
     useModal().setContent('CreateProjectModal');
     useModal().toggleVisibility();
