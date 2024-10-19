@@ -28,6 +28,7 @@ export default function useClient() {
           returning: 'minimal', // Don't return the value after inserting
       })
   
+      useModal().toggleVisibility();
       useModal().reset();
 
       if (error) throw error

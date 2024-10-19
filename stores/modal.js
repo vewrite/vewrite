@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useModal = defineStore('modal', {
   state: () => ({
-    visible: 0,
+    visible: false,
     content: '',
     type: '',
     header: '',
@@ -13,6 +13,7 @@ export const useModal = defineStore('modal', {
   actions: {
     toggleVisibility() {
       this.visible = !this.visible
+      this.updateBodyClass()
     },
     toggleLoading() {
       this.loading = !this.loading
@@ -25,18 +26,24 @@ export const useModal = defineStore('modal', {
     },
     setContent(content) {
       this.content = content
-      // console.log(this.$state);
     },
     setWorkflowId(workflowId) {
       this.workflowId = workflowId
     },
     reset() {
-      this.visible = 0
       this.content = ''
       this.type = ''
       this.header = ''
       this.loading = 0
       this.workflowId = ''
+      this.visible = false
+    },
+    updateBodyClass() {
+      if (this.visible) {
+        document.body.classList.add('no-scroll');
+      } else {
+        document.body.classList.remove('no-scroll');
+      }
     }
   },
 })

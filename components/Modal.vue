@@ -69,7 +69,7 @@ const contentComponent = computed(() => {
 })
 
 const close = () => {
-  modal.visible = false
+  modal.toggleVisibility()
   modal.reset()
 }
 

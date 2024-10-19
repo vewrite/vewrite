@@ -3,8 +3,10 @@
     <Loading class="on-top" :hasLogo="true" v-if="loading" />
     <div class="app" v-if="user">
       <main v-if="userStore.firstTime == false">
-        <Sidebar />
-        <NuxtPage />
+        <section class="zoom">
+          <Sidebar />
+          <NuxtPage />
+        </section>
         <Modal />
       </main>
       <main v-else>
@@ -39,8 +41,6 @@ const fetchUser = async () => {
     .eq('id', user.value.id)
 
   if (error) throw error
-  
-  // console.log('Data:', data)
 
   if(data.length == 0) {
     createProfile(user.value)
@@ -65,10 +65,6 @@ async function createProfile(user) {
       website: '',
       persona: '',
     }
-
-    // let { error } = await supabase.from('clients').upsert(updates, {
-    //     returning: 'minimal', // Don't return the value after inserting
-    // })
 
     const { data, error } = await supabase
       .from('profiles')
@@ -121,6 +117,25 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
     display: flex;
+
+    .zoom {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.zoom {
+  transition: transform 0.42s ease-in-out;
+}
+
+.no-scroll {
+  overflow: hidden;
+
+  .zoom {
+    transform: scale(0.9);
   }
 }
 

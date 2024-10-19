@@ -219,6 +219,7 @@ export default function useDeliverables() {
         .from('deliverables')
         .insert(deliverable);
 
+      useModal().toggleVisibility();
       useModal().reset();
 
       if (error) throw error;

@@ -77,13 +77,8 @@ export default function useWorkflow() {
       await createStateInstances(stateInstances);
       console.log("Final output of StateInstancesData is: ", StateInstancesData);
       
-      // Now we'll update the workflow object with the state instance ids
       workflow.states = StateInstancesData;
 
-      // Check that the workflow object is correct
-      console.log(workflow);
-
-      // Finally, insert into workflows table
       const { data: workflowData, error: workflowError } = await supabase
         .from('workflows')
         .insert(workflow);
@@ -91,7 +86,7 @@ export default function useWorkflow() {
       if (workflowError) throw workflowError;
 
   
-      // Lastly, reset the modal
+      useModal().toggleVisibility();
       useModal().reset();
   
       // return { workflowData, stateInstancesData };
@@ -165,6 +160,7 @@ export default function useWorkflow() {
         .delete()
         .eq('id', workflowId);
 
+      useModal().toggleVisibility();
       useModal().reset();
   
       if (deleteError) throw deleteError;
@@ -180,11 +176,7 @@ export default function useWorkflow() {
       const { data, error } = await supabase
         .from('workflows')
         .select('*')
-        // This will fetch all workflows that the user created
-        // This will fetch all default workflows
         .or(`created_by.eq.${uuid},type.eq.1`);
-
-      // console.log(data);
 
       if (error) throw error;
 
