@@ -532,13 +532,13 @@ button.primary,
     border: 1px solid rgba($brand-dark, 0.3);
     background-color: rgba($brand, 0.85);
     color: $white;
-    outline: 1px solid rgba($white, 0.4);
-    outline-offset: -2px;
+    outline: 1px solid rgba($brand, 0.4);
+    outline-offset: 0px;
 
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
         background-color: rgba($brand, 0.95);
-        outline-offset: -4px;
+        outline: 4px solid rgba($brand, 0.3);
     }
 }
 

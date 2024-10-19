@@ -3,7 +3,7 @@
     <template v-slot:header>
       <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button">Back</router-link>
       <div class="app-panel-header-buttons">
-        <!-- <router-link :to="`/project/${projectId}/edit`" class="button primary">Edit</router-link> -->
+        <!-- TODO - This delete button is dangerous and should be replaced with a modal -->
         <span class="button red" @click="deleteDeliverable(deliverable.id, projectId)">Delete Deliverable</span>
       </div>
     </template>
