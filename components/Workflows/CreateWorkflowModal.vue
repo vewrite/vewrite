@@ -47,10 +47,9 @@
                       <div class="state-content">
 
                         <section class="state-details">
-                          <!-- <div class="state-type-icon">
-                            {{ element }}
-                            <img :src="StateTypeImg" alt="State type icon" />
-                          </div> -->
+                          <div class="state-type-icon">
+                            <StateImage :state="element.state_instance.state_type" />
+                          </div>
 
                           <div class="form-input state-type">
                             <label for="state-type">State Type</label>
@@ -98,7 +97,9 @@
                           </div>
                           
                           <div :class="['state-actions-body', element.is_open ? 'open' : 'closed']">
+
                             <div class="form-input-row">
+
                               <div class="form-input state-type">
                                 <label for="state-on-enter">On state enter</label>
                                 <select v-model="element.state_instance.actions">
@@ -110,6 +111,7 @@
                             </div>
 
                             <div class="form-input-row">
+
                               <div class="form-input state-type">
                                 <label for="state-on-enter">On state exit</label>
                                 <select v-model="element.state_instance.actions">
@@ -120,6 +122,7 @@
                               </div>
                             </div>
                           </div>
+
                         </section>
                         
                       </div>
@@ -136,55 +139,16 @@
               </draggable>
             </ClientOnly>
 
-            <!-- <ClientOnly>
-              <draggable 
-                v-model="states.states" 
-                item-key="id"
-                class="states-list"
-                ghost-class="ghost"
-              >
-                <template #item="{ element }">
-                  <div class="state-selector-row">
-                    <div class="grabby-mcgrab-face">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 7L7 7" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-                        <path d="M13 10L7 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-                        <path d="M13 13L7 13" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-                        <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-                      </svg>
-                    </div>
-                    <div class="form-input state-name">
-                      <label for="state-name">State Name</label>
-                      <input type="text" v-model="element.state_instance.instance_name" placeholder="Name your state" />
-                    </div>
-                    <div class="form-input state-type">
-                      <label for="state-type">State Type</label>
-                      <select v-model="element.state_instance.state_type">
-                        <option value="">Select a state type</option>
-                        <option v-for="stateType in stateTypes" :value="stateType.id" :key="stateType.id">
-                          {{ stateType.name }}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="button" @click="deleteState(element)">Actions</div>
-                    <div class="button red" @click="deleteState(element)">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 10L5 10" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-                        <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
-                      </svg>
-                    </div>
-                  </div>
-                </template>
-              </draggable>
-            </ClientOnly> -->
-
             <div v-if="states.length === 0" class="no-states">No states added yet.</div>
+            
             <hr>
+            
             <div class="button add-new-state" @click="addState()">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#1759D5"/>
               </svg>
             </div>
+
           </div>
         </div>
       </form>
@@ -200,6 +164,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import draggable from 'vuedraggable'
+import StateImage from '~/components/Workflows/StateImage.vue'
 
 const loading = ref(false);
 const user = useSupabaseUser();
@@ -385,7 +350,7 @@ onMounted(async () => {
 
         .state-details {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 60px 1fr 1fr;
           gap: $spacing-xs;
           padding: $spacing-xs;
           width: 100%;
@@ -407,7 +372,7 @@ onMounted(async () => {
           background: rgba($white, 0.6);
 
           .state-actions-header {
-            padding: 0 $spacing-sm $spacing-sm;
+            padding: 0 $spacing-sm $spacing-sm calc(60px + $spacing-md);
             font-size: $font-size-xs;
             color: $brand;
             cursor: pointer;
@@ -449,9 +414,20 @@ onMounted(async () => {
             gap: $spacing-xs;
             overflow: hidden;
             height: 0;
+            transition: height 0.2s ease;
+
+            .form-input-row {
+              margin-left: calc(60px + $spacing-xs);
+              width: calc(100% - 60px);
+
+              .form-input {
+                margin: 0;
+                width: 100%;
+              }
+            }
 
             &.open {
-              height: auto;
+              height: 136px;
               padding: 0 $spacing-xs $spacing-xs;
             }
 

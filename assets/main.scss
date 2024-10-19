@@ -508,7 +508,7 @@ button,
     gap: $spacing-sm;
     align-items: center;
     text-transform: capitalize;
-    box-shadow: $main-shadow;
+    // box-shadow: $main-shadow;
 
     &:hover {
         border: 1px solid rgba($brand, 0.4);
@@ -530,14 +530,14 @@ button.wide,
 button.primary,
 .button.primary {
     border: 1px solid rgba($brand-dark, 0.3);
-    background-color: rgba($brand, 0.65);
+    background-color: rgba($brand, 0.85);
     color: $white;
     outline: 1px solid rgba($white, 0.4);
     outline-offset: -2px;
 
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 0.85);
+        background-color: rgba($brand, 0.95);
         outline-offset: -4px;
     }
 }

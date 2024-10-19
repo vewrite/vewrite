@@ -32,11 +32,6 @@ const props = defineProps(['state'])
 const stateDetails = ref(null)
 const error = ref(null)
 
-/*
-1. Each state first needs to go and get the state instance
-2. Then it needs to go and get the state type
-*/
-
 // State type composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 const { fetchSingleState, StateData } = useWorkflowStateTypes();
@@ -68,9 +63,6 @@ onMounted(async () => {
     error.value = error.message
   }
 })
-
-
-
 
 </script>
 
