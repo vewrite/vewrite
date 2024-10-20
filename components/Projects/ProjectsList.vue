@@ -327,9 +327,6 @@ const filteredProjects = computed(() => {
           flex-direction: row;
 
           .image-wrapper {
-            width: 80px;
-            min-height: 54px;
-            height: 54px;
             border-radius: $br-md;
             overflow: hidden;
             background-color: $gray-light;

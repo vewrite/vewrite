@@ -1,7 +1,8 @@
 <template>
   <div :class="['client-logo-wrapper', 'client-logo', 'image', size]">
     <Loading v-if="loading" type="small" />
-    <img v-if="!loading" :src="src" alt="logo" :class="['client-logo', 'image', size]" />
+    <!-- <img v-if="!loading" :src="src" alt="logo" :class="['client-logo', 'image', size]" /> -->
+    <div v-if="!loading" class="client-logo image" :class="size" :style="{ backgroundImage: `url(${src})` }" />
   </div>
 </template>
 
@@ -77,21 +78,24 @@ watch(() => props.client, (newClient) => {
   align-items: center;
   overflow: hidden;
   position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   &.small {
-      width: 50px;
+      width: 30px;
       height: 30px;
       border-radius: $br-sm;
   }
 
   &.medium {
-      width: 100px;
+      width: 60px;
       height: 60px;
       border-radius: $br-md;
   }
 
   &.large {
-      width: 200px;
+      width: 120px;
       height: 120px;
       border-radius: $br-lg;
   }

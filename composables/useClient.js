@@ -100,7 +100,7 @@ export default function useClient() {
   }
 
   function createClientModal() {
-    useModal().setType('right');
+    useModal().setType('large');
     useModal().setHeader('Create Client');
     useModal().setContent('CreateClientModal');
     useModal().toggleVisibility();

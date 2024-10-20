@@ -1,6 +1,8 @@
 <template>
   <div class="user-logo">
-      <img v-if="src" :src="src" alt="logo" :class="['logo', 'image', size]" />
+      <!-- <img v-if="src" :src="src" alt="logo" :class="['logo', 'image', size]" /> -->
+      <!-- Use a background image for the logo inside the div -->
+      <div v-if="src" class="logo image" :class="size" :style="{ backgroundImage: `url(${src})` }" />
       <div v-else class="logo no-image" :class="size" />
 
       <div>
@@ -99,11 +101,15 @@ watch(() => props.logo_url, (newValue) => {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: $spacing-sm;
+  gap: 0;
   width: 100%;
+  border: 1px solid $gray-light;
+  background-color: $white;
+  padding: $spacing-xs $spacing-xs;
+  border-radius: $br-md;
   
   label {
-      margin: 0 0 $spacing-xs 0;
+      margin: 0 0 $spacing-xxs 0;
   }
 
   input {
@@ -119,21 +125,24 @@ watch(() => props.logo_url, (newValue) => {
   align-items: center;
   overflow: hidden;
   position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   &.small {
-      width: 50px;
+      width: 30px;
       height: 30px;
       border-radius: $br-sm;
   }
 
   &.medium {
-      width: 100px;
+      width: 60px;
       height: 60px;
       border-radius: $br-md;
   }
 
   &.large {
-      width: 200px;
+      width: 120px;
       height: 120px;
       border-radius: $br-lg;
   }
