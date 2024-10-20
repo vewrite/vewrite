@@ -40,15 +40,14 @@
               <div class="deliverable-workflow-state">
                 <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-if="deliverable.workflow_state">
                   <Loading v-if="!deliverable" />
-                  {{ deliverable.workflow_state }} - {{ deliverable.state_name }}
-                    <!-- {{ deliverable.state_name }} -->
+                  {{ deliverable.state_name }}
                 </span>
                 <span class="deliverable-workflow-state-bubble button red no-uppercase" @click="toggleWorkflowState" v-else>
                   Set state
                 </span>
 
                 <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
-                    <div v-for="state in states" :class="deliverable.workflow_state == state[0].id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state[0].id)">
+                    <div v-for="state in states" :class="deliverable.workflow_state == state[0].id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state[0].id, state[0].instance_name)">
                       {{ state[0].instance_name }}
                     </div>
                 </div>
@@ -304,14 +303,17 @@ function toggleWorkflowState(event) {
   popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
-const onWorkflowStateSelect = async (deliverableId, newWorkflowState) => {
+const onWorkflowStateSelect = async (deliverableId, newWorkflowState, newStateName) => {
   await updateDeliverableWorkflowState(deliverableId, newWorkflowState);
   
   try {
-    // Workflow state instance name
-    const state_name = await fetchStateInstanceName(deliverable.workflow_state);
-    deliverable.state_name = state_name[0].instance_name;
-    console.log('State name:', state_name);
+    deliverables.value = deliverables.value.map(d => {
+      if (d.id === deliverableId) {
+        d.workflow_state = newWorkflowState;
+        d.state_name = newStateName;
+      }
+      return d;
+    });
   } catch (error) {
     console.error('Error fetching state:', error.message);
   }
