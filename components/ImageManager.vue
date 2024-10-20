@@ -119,7 +119,6 @@ watch(() => props.logo_url, (newValue) => {
 
 .logo {
   border-radius: 50%;
-  background-color: $gray-light;
   display: flex;
   justify-content: center;
   align-items: center;

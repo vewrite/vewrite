@@ -67,18 +67,16 @@ watch(() => props.client, (newClient) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid $gray-light;
 }
 
 .client-logo {
   border-radius: $br-md;
-  background-color: $gray-light;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   position: relative;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 
