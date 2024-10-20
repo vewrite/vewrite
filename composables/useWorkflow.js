@@ -77,6 +77,7 @@ export default function useWorkflow() {
       await createStateInstances(stateInstances);
       console.log("Final output of StateInstancesData is: ", StateInstancesData);
       
+      // Now we'll update the workflow object with the state instance ids
       workflow.states = StateInstancesData;
 
       const { data: workflowData, error: workflowError } = await supabase

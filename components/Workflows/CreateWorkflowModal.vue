@@ -429,6 +429,7 @@ onMounted(async () => {
             &.open {
               height: 136px;
               padding: 0 $spacing-xs $spacing-xs;
+              overflow: visible;
             }
 
             .form-input {

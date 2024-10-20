@@ -14,6 +14,9 @@
           <input class="deliverable-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
           <input class="deliverable-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
+        <section class="state-management">
+          <div class="button vertical"><small>Current state</small><span>{{ StateInstanceData[0].instance_name }}</span></div>
+        </section>
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
         <Toolbar :textareaRef="$refs.textareaRef" />
@@ -39,6 +42,9 @@ const supabase = useSupabaseClient();
 const loading = ref(true);
 const projectId = ref(null);
 const textareaRef = ref(null);
+const currentState = ref(null);
+const previousState = ref(null);
+const nextState = ref(null);
 
 // Get the route object
 const route = useRoute();
@@ -52,6 +58,18 @@ const deliverable = ref(null);
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
 const { saveDeliverable, deleteDeliverable, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
+
+// useWorkflowStateInstances composable
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+
+// Get the previous and next states
+// 1. Get the project workflow
+// 2. Get the state instances
+// 3. Get the current state instance
+// 4. Set the previous and next state instances
+
+
 
 async function getDeliverable(id) {
   try {
@@ -86,8 +104,6 @@ function debounce(func, wait) {
   };
 }
 
-
-
 // Debounced save function
 const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
 
@@ -99,6 +115,7 @@ function updateDeliverable() {
 // Fetch the deliverable data when the component is mounted
 onMounted(async () => {
   await getDeliverable(deliverableId);
+  await fetchSingleStateInstance(deliverable.value.workflow_state);
 });
 
 </script>
@@ -122,7 +139,7 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    width: 100%;
+    width: 50%;
 
     .deliverable-title-input {
       font-family: $font-family-secondary;

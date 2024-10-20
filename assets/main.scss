@@ -311,7 +311,6 @@ select:focus,
 input:hover,
 textarea:hover,
 select:hover {
-    // border: 1px solid rgba($brand, 0.9);
     outline: none;
 }
 
@@ -398,12 +397,14 @@ textarea {
     width: 100%;
     overflow: hidden;
     height: fit-content;
+    outline: 1px solid rgba($brand, 0);
 
     &:focus,
     &:hover,
     &:focus-within,
     &:active {
         border: 1px solid rgba($brand, 0.9);
+        outline: 4px solid rgba($brand, 0.3);
     }
 }
 
@@ -559,10 +560,24 @@ button.red,
     border: 1px solid rgba($red-dark, 0.3);
     background-color: rgba($red, 0.05);
     color: $red;
+    outline-color: rgba($red, 0.4);
 
     &:hover {
         border: 1px solid rgba($red-dark, 1);
         background-color: rgba($red, 0.1);
+        outline: 4px solid rgba($red, 0.3);
+    }
+}
+
+button.vertical,
+.button.vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    small {
+        font-size: $font-size-xxs;
+        color: rgba($black, 0.5);
     }
 }
 

@@ -17,12 +17,15 @@
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
+        <!-- <pre style="min-height: 300px;">{{ project }}</pre> -->
+
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
           <p>No deliverables found for this project</p>
         </div>
 
         <div v-if="loading.deliverables == false" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
+            <!-- <pre>{{ deliverable }}</pre> -->
             <div class="deliverable-details">
               <span class="deliverable-id">{{ deliverable.id }}</span>
               <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
@@ -37,15 +40,16 @@
               <div class="deliverable-workflow-state">
                 <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-if="deliverable.workflow_state">
                   <Loading v-if="!deliverable" />
-                  {{ renderStateName(deliverable.workflow_state) }}
+                  {{ deliverable.workflow_state }} - {{ deliverable.state_name }}
+                    <!-- {{ deliverable.state_name }} -->
                 </span>
                 <span class="deliverable-workflow-state-bubble button red no-uppercase" @click="toggleWorkflowState" v-else>
                   Set state
                 </span>
 
                 <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
-                    <div v-for="state in states" :class="deliverable.workflow_state == state.id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state.id)">
-                      {{ state.name }}
+                    <div v-for="state in states" :class="deliverable.workflow_state == state[0].id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state[0].id)">
+                      {{ state[0].instance_name }}
                     </div>
                 </div>
               </div>
@@ -87,6 +91,10 @@ const { createDeliverableModal } = useDeliverables();
 // Client composable
 import useClient from '~/composables/useClient';
 const { fetchClient, clientData } = useClient();
+
+// State Instance composable
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+const { fetchSingleStateInstance, fetchStateInstanceName, StateInstanceData } = useWorkflowStateInstances();
 
 const supabase = useSupabaseClient();
 const loading = ref({
@@ -143,6 +151,7 @@ async function getProject(id) {
   }
 }
 
+// TODO - migrate to composable
 async function fetchProjectWorkflow(workflowId) {
   try {
     const { data, error } = await supabase
@@ -158,11 +167,16 @@ async function fetchProjectWorkflow(workflowId) {
   }
 }
 
-function renderStateName(stateId) {
-  const state = states.value.find(s => s.id === stateId);
-  return state ? state.name : '';
+// // TODO - migrate to composable
+async function renderStateName(stateId) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ name: `State ${stateId}` });
+    }, 1000);
+  });
 }
 
+// TODO - migrate to composable
 async function fetchWorkflowStates(workflowId) {
   try {
     const { data, error } = await supabase
@@ -176,7 +190,7 @@ async function fetchWorkflowStates(workflowId) {
     // Fetch the states as an array of objects from the states table
     states.value = await Promise.all(states.value.map(async state => {
       // return await fetchState(state);
-      const fetchedState = await fetchState(state);
+      const fetchedState = await fetchSingleStateInstance(state);
       // console.log(fetchedState);
       return {
         ...fetchedState
@@ -190,64 +204,59 @@ async function fetchWorkflowStates(workflowId) {
   }
 }
 
-async function fetchState(stateId) {
+async function fetchDeliverables(projectId) {
   try {
     const { data, error } = await supabase
-      .from('statetypes')
+      .from('deliverables')
       .select('*')
-      .eq('id', stateId);
+      .eq('project', projectId);
 
-    if (error) throw error;
-
-    return data[0];
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-async function fetchDeliverables(projectId) {
-  // console.log("Fetching deliverables for project: ", projectId);
-
-  const { data, error } = await supabase
-    .from('deliverables')
-    .select('*')
-    .eq('project', projectId);
-
-  if (error) {
-    console.error('Error fetching deliverables:', error.message);
-    return;
-  }
-
-  deliverables.value = data;
-
-  // Update attrs with deliverables' duedate
-  deliverables.value.forEach(deliverable => {
-    // console.log(deliverable.due_date);
-    const dueDate = parseISO(deliverable.due_date);
-    // console.log('Due date:', dueDate);
-    if (isNaN(dueDate)) {
-      console.error('Invalid date:', deliverable.due_date);
+    if (error) {
+      console.error('Error fetching deliverables:', error.message);
       return;
     }
 
-    // Format the due date into something nicer
-    deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
-    deliverable.formattedUpdatedAt = format(parseISO(deliverable.updated_at), 'MMMM do, yyyy');
+    deliverables.value = data;
 
-    if (!deliverable.attrs) {
-      deliverable.attrs = [];
-    }
-    deliverable.attrs.push({
-      key: deliverable.id,
-      highlight: {
-        color: 'red',
-        fillMode: 'solid'
-      },
-      dates: dueDate
-    });
-  });
+    // Fetch the state name for each deliverable
+    await Promise.all(deliverables.value.map(async deliverable => {
+      try {
+        // Workflow state instance name
+        const state_name = await fetchStateInstanceName(deliverable.workflow_state);
+        deliverable.state_name = state_name[0].instance_name;
+      } catch (error) {
+        console.error('Error fetching state:', error.message);
+      }
 
-  loading.value.deliverables = false;
+      // Due date
+      const dueDate = parseISO(deliverable.due_date);
+      
+      if (isNaN(dueDate)) {
+        console.error('Invalid date:', deliverable.due_date);
+        return;
+      }
+
+      // Format the due date into something nicer
+      deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
+      deliverable.formattedUpdatedAt = format(parseISO(deliverable.updated_at), 'MMMM do, yyyy');
+
+      if (!deliverable.attrs) {
+        deliverable.attrs = [];
+      }
+      deliverable.attrs.push({
+        key: deliverable.id,
+        highlight: {
+          color: 'red',
+          fillMode: 'solid'
+        },
+        dates: dueDate
+      });
+    }));
+
+    loading.value.deliverables = false;
+  } catch (error) {
+    console.error('Error fetching deliverables:', error.message);
+  }
 }
 
 function toggleCalendar(event) {
@@ -297,6 +306,16 @@ function toggleWorkflowState(event) {
 
 const onWorkflowStateSelect = async (deliverableId, newWorkflowState) => {
   await updateDeliverableWorkflowState(deliverableId, newWorkflowState);
+  
+  try {
+    // Workflow state instance name
+    const state_name = await fetchStateInstanceName(deliverable.workflow_state);
+    deliverable.state_name = state_name[0].instance_name;
+    console.log('State name:', state_name);
+  } catch (error) {
+    console.error('Error fetching state:', error.message);
+  }
+
   const popup = document.getElementById(`deliverable-workflow-state-${deliverableId}`);
   popup.style.display = 'none';
 
