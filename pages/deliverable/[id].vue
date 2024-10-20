@@ -70,7 +70,6 @@ const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstance
 // 4. Set the previous and next state instances
 
 
-
 async function getDeliverable(id) {
   try {
     const { data, error } = await supabase

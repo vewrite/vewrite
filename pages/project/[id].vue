@@ -17,15 +17,13 @@
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
-        <!-- <pre style="min-height: 300px;">{{ project }}</pre> -->
-
-        <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length < 1">
+        <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
           <p>No deliverables found for this project</p>
         </div>
 
-        <div v-if="loading.deliverables == false" class="project-deliverables">
+        <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
-            <!-- <pre>{{ deliverable }}</pre> -->
+
             <div class="deliverable-details">
               <span class="deliverable-id">{{ deliverable.id }}</span>
               <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
