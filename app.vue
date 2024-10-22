@@ -33,6 +33,14 @@ const loading = ref(true)
 import { useUser } from '@/stores/user'
 const userStore = useUser()
 
+// Profile composable
+import useProfile from '~/composables/useProfile'
+const { createProfile } = useProfile()
+
+// Group composable
+import useGroup from '~/composables/useGroup'
+const { createGroup, GroupData, GroupError } = useGroup()
+
 // Pull the user state from the database, then pass that into the user store
 const fetchUser = async () => {
   const { data, error } = await supabase
@@ -47,38 +55,6 @@ const fetchUser = async () => {
     return
   }
   userStore.setUser(data[0])
-}
-
-async function createProfile(user) {
-
-  console.log('Creating new user:', user)
-
-  try {
-    loading.value = true
-
-    const newUser = {
-      id: user.id,
-      email: user.email,
-      username: '',
-      firstTime: true,
-      avatar_url: '',
-      website: '',
-      persona: '',
-    }
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert(newUser)
-
-    if (error) throw error
-
-    return data
-
-  } catch (error) {
-    console.error('Error creating new user:', error)
-  } finally {
-    loading.value = false
-  }
 }
 
 // Watch for changes in the user object

@@ -2,8 +2,8 @@ import { ref } from 'vue';
 
 export default function useGroup() {
 
-  GroupData = ref(null);
-  GroupError = ref(null);
+  const GroupData = ref(null);
+  const GroupError = ref(null);
 
   async function createGroup(group) {
     try {
