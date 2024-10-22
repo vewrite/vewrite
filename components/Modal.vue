@@ -37,6 +37,9 @@ import DeleteWorkflowModal from '~/components/Workflows/DeleteWorkflowModal.vue'
 import CreateClientModal from '~/components/Clients/CreateClientModal.vue'
 import DeleteClientModal from '~/components/Clients/DeleteClientModal.vue'
 
+// Team modals
+import CreateTeamModal from '~/components/Teams/CreateTeamModal.vue'
+
 const modal = useModal()
 
 const visibleClass = computed(() => {
@@ -64,6 +67,7 @@ const contentComponent = computed(() => {
     'DeleteWorkflowModal': DeleteWorkflowModal,
     'CreateClientModal': CreateClientModal,
     'DeleteClientModal': DeleteClientModal,
+    'CreateTeamModal': CreateTeamModal
   }
   return components[modal.content]
 })

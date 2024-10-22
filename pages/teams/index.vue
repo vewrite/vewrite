@@ -1,21 +1,23 @@
 <template>
   <AppPanel>
     <template v-slot:header>
+      <div></div>
+      <div class="button primary" @click="createTeamModal()">Create team</div>
     </template>
     <template v-slot:body>
-      
+      <TeamsList />
     </template>
   </AppPanel>
 </template>
 
-<script>
-import AppPanel from '~/components/AppPanel.vue';
+<script setup>
 
-export default {
-  components: {
-    AppPanel
-  }
-}
+// Clients composable
+import useTeam from '~/composables/useTeam';
+const { createTeamModal } = useTeam();
+
+
+
 </script>
 
 <style scoped>

@@ -74,13 +74,30 @@ export default function useGroup() {
     }
   }
 
+  async function fetchGroupId(owner_id) {
+    try {
+      const { data, error } = await supabase
+        .from('groups')
+        .select('id')
+        .eq('owner_id', owner_id);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   return {
     GroupData,
     GroupError,
     createGroup,
     updateGroup,
     deleteGroup,
-    fetchSingleGroup
+    fetchSingleGroup,
+    fetchGroupId
   };
 
 }

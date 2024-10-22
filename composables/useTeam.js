@@ -1,25 +1,7 @@
 import { ref } from 'vue';
+import { useModal } from '~/stores/modal'
 
-/*
-
-TEAMS
-
-A team is a collection of users that are working together on a project. 
-
-Teams have a variety of properties:
-
-- an administrator, usually the person who created the team
-- a list of members that are part of the team
-
-This means we need:
-
-- A way to create a team, delete a team, update a team
-- A way to list all teams
-- A way to list all members of a team
-
-*/
-
-export function useTeam() {
+export default function useTeam() {
 
   const TeamData = ref(null);
   const TeamError = ref(null);
@@ -28,6 +10,9 @@ export function useTeam() {
   const Teams = ref([]);
 
   async function createTeam(team) {
+
+    useModal().toggleLoading();
+
     try {
       const { data, error } = await supabase
         .from('teams')
@@ -35,7 +20,11 @@ export function useTeam() {
 
       if (error) throw error;
 
+      useModal().toggleVisibility();
+      useModal().reset();
+
       return data;
+      
     } catch (error) {
       alert(error.message);
     }
@@ -71,21 +60,24 @@ export function useTeam() {
     }
   }
 
-  async function listTeams() {
+  async function fetchTeams(group_id) {
     try {
       const { data, error } = await supabase
         .from('teams')
-        .select('*');
+        .select('*')
+        .eq('group_id', group_id);
 
       if (error) throw error;
 
-      Teams.value = data;
+      TeamData.value = data;
+      return data;
+
     } catch (error) {
       alert(error.message);
     }
   }
 
-  async function listTeamMembers(teamId) {
+  async function fetchTeamMembers(teamId) {
     try {
       const { data, error } = await supabase
         .from('team_members')
@@ -100,6 +92,14 @@ export function useTeam() {
     }
   }
 
+
+  function createTeamModal() {
+    useModal().setType('large');
+    useModal().setHeader('Create Team');
+    useModal().setContent('CreateTeamModal');
+    useModal().toggleVisibility();
+  }
+
   return {
     TeamData,
     TeamError,
@@ -108,8 +108,9 @@ export function useTeam() {
     createTeam,
     updateTeam,
     deleteTeam,
-    listTeams,
-    listTeamMembers
+    fetchTeams,
+    fetchTeamMembers,
+    createTeamModal
   }
 
 }
