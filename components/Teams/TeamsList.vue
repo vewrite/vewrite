@@ -1,6 +1,5 @@
 <template>
   <main id="Teams">
-    {{ TeamData }}
     <Loading v-if="loading" />
 
     <div class="search-bar" v-if="!loading">
@@ -12,14 +11,16 @@
       <img src="/images/clients-empty-state.svg" alt="No teams found" />
       <h3>You haven’t created a team yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
-      <div class="button primary" @click="createTeamModal()">Create a team</div>
     </div>
 
     <!-- Team list -->
     <div class="teams-list inner-container" v-if="!loading && TeamData.length > 0">
-      <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id">
+      <!-- <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id"> -->
+      <div v-for="team in filteredTeams" :key="team.id">
         <h3>{{ team.name }}</h3>
-      </router-link>
+        <div class="button red" @click="deleteTeam(team.id)">Delete team</div>
+      </div>
+      <!-- </router-link> -->
     </div>
   </main>
 </template>
@@ -39,7 +40,7 @@ const GroupId = '3b119f52-06e6-42a1-ad76-dd763d36126b'
 
 // Team composable
 import useTeam from '~/composables/useTeam';
-const { fetchTeams, TeamData } = useTeam();
+const { fetchTeams, deleteTeam, TeamData } = useTeam();
 
 onMounted(async () => {
   try {

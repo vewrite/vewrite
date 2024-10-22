@@ -45,12 +45,12 @@ export default function useTeam() {
     }
   }
 
-  async function deleteTeam(team) {
+  async function deleteTeam(team_id) {
     try {
       const { data, error } = await supabase
         .from('teams')
         .delete()
-        .eq('id', team.id);
+        .eq('id', team_id);
 
       if (error) throw error;
 
