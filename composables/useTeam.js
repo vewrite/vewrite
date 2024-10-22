@@ -60,6 +60,23 @@ export default function useTeam() {
     }
   }
 
+  async function fetchSingleTeam(team_id) {
+    try {
+      const { data, error } = await supabase
+        .from('teams')
+        .select('*')
+        .eq('id', team_id);
+
+      if (error) throw error;
+
+      TeamData.value = data;
+      return data;
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function fetchTeams(group_id) {
     try {
       const { data, error } = await supabase
@@ -109,6 +126,7 @@ export default function useTeam() {
     updateTeam,
     deleteTeam,
     fetchTeams,
+    fetchSingleTeam,
     fetchTeamMembers,
     createTeamModal
   }
