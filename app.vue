@@ -41,6 +41,8 @@ const { createProfile } = useProfile()
 import useGroup from '~/composables/useGroup'
 const { createGroup, GroupData, GroupError } = useGroup()
 
+// console.log('User:', user.value.id)
+
 // Pull the user state from the database, then pass that into the user store
 const fetchUser = async () => {
   const { data, error } = await supabase
@@ -52,6 +54,7 @@ const fetchUser = async () => {
 
   if(data.length == 0) {
     createProfile(user.value)
+    createGroup(user.value.id)
     return
   }
   userStore.setUser(data[0])

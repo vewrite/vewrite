@@ -11,16 +11,6 @@ export default function useProfile() {
 
     try {
 
-  //   const newUser = {
-  //     id: user.id,
-  //     email: user.email,
-  //     username: '',
-  //     firstTime: true,
-  //     avatar_url: '',
-  //     website: '',
-  //     persona: '',
-  //   }
-
       const newProfile = {
         id: profile.id,
         email: profile.email,
@@ -30,10 +20,6 @@ export default function useProfile() {
         website: '',
         persona: '',
       }
-  
-      // let { error } = await supabase.from('profiles').upsert(newProfile, {
-      //     returning: 'minimal', // Don't return the value after inserting
-      // })
 
       const { data, error } = await supabase
         .from('profiles')

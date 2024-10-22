@@ -29,7 +29,7 @@
       <p>That’s ok, It’s easy and we’ll do it together</p>
     </div>
 
-    <div :class="['projects-list', viewMode]" v-if="!loading">
+    <div :class="['projects-list', viewMode]" v-if="!loading && projects.length > 0">
       <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
