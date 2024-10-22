@@ -1,27 +1,26 @@
 <template>
-  <main id="Clients">
+  <main id="Users">
     <Loading v-if="loading" />
 
     <div class="search-bar" v-if="!loading">
-      <input type="text" placeholder="Search clients" v-model="searchQuery" />
+      <input type="text" placeholder="Search users" v-model="searchQuery" />
     </div>
 
     <!-- Empty state -->
-    <div class="empty-state" v-if="clientsData && clientsData.length === 0 && !loading">
-      <img src="/images/clients-empty-state.svg" alt="No clients found" />
-      <h3>You haven’t created a client yet</h3>
+    <div class="empty-state" v-if="usersData && usersData.length === 0 && !loading">
+      <img src="/images/clients-empty-state.svg" alt="No users found" />
+      <h3>You haven’t created a user yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
-      <!-- <router-link to="clients/create" class="button primary">Create a client</router-link> -->
-      <div class="button primary" @click="createClientModal()">Create a client</div>
+      <div class="button primary" @click="createUserModal()">Create a user</div>
     </div>
 
-    <!-- Client list -->
-    <div class="clients-list inner-container" v-if="!loading">
-      <router-link :to="'/client/' + client.id" class="client-card" v-for="client in filteredClients" :key="client.id">
+    <!-- user list -->
+    <div class="users-list inner-container" v-if="!loading">
+      <router-link :to="'/user/' + user.id" class="user-card" v-for="user in filteredusers" :key="user.id">
         <div class="image-wrapper">
-          <ClientImage :client="client" size="medium" table="logos" />
+          <userImage :user="user" size="medium" table="logos" />
         </div>
-        <h3>{{ client.name }}</h3>
+        <h3>{{ user.name }}</h3>
       </router-link>
     </div>
   </main>
@@ -31,35 +30,35 @@
 
 import { onMounted, ref } from 'vue'
 
-// Fetch clients
+// Fetch users
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-const clients = ref([])
+const users = ref([])
 const test = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
 
-// Client composable
-import useClient from '~/composables/useClient';
-const { fetchClients, clientsData, createClientModal } = useClient();
+// users composable
+import useUser from '~/composables/useUser';
+const { fetchUsers, UserData, createUserModal } = useUser();
 
 onMounted(async () => {
   try {
-    await fetchClients(user.value.id)
+    await fetchUsers(user.value.id)
   } catch (error) {
-    console.error('Failed to fetch clients:', error)
+    console.error('Failed to fetch users:', error)
   } finally {
     loading.value = false
   }
   
 })
 
-const filteredClients = computed(() => {
+const filteredusers = computed(() => {
   if (!searchQuery.value) {
-    return clientsData.value
+    return UserData.value
   }
-  return clientsData.value.filter(client =>
-    client.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return UserData.value.filter(users =>
+    users.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 
@@ -69,7 +68,7 @@ const filteredClients = computed(() => {
 
 @import 'assets/_variables.scss';
 
-#Clients {
+#Users {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -103,7 +102,7 @@ const filteredClients = computed(() => {
 
   }
 
-  .clients-list {
+  .users-list {
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;

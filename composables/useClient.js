@@ -22,8 +22,6 @@ export default function useClient() {
         logo_url: client.logo_url,
       }
   
-      // console.log(updates)
-  
       let { error } = await supabase.from('clients').upsert(newClient, {
           returning: 'minimal', // Don't return the value after inserting
       })

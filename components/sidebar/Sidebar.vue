@@ -11,8 +11,8 @@
       </div>
       <div class="link-group">
         <div class="title">People</div>
-        <!-- <router-link to="/talent" class="link"><Icon type="star" /> Talent</router-link> -->
-        <router-link to="/team" class="link"><Icon type="approve" /> Team</router-link>
+        <router-link to="/users" class="link"><Icon type="star" /> Users</router-link>
+        <router-link to="/teams" class="link"><Icon type="approve" /> Teams</router-link>
       </div>
       <div class="link-group">
         <div class="title">Business</div>
