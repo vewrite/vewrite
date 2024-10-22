@@ -16,7 +16,7 @@
     </div>
 
     <!-- Client list -->
-    <div class="clients-list inner-container" v-if="!loading && clientsData > 0">
+    <div class="clients-list inner-container" v-if="!loading && clientsData.length > 0">
       <router-link :to="'/client/' + client.id" class="client-card" v-for="client in filteredClients" :key="client.id">
         <div class="image-wrapper">
           <ClientImage :client="client" size="medium" table="logos" />
