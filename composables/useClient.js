@@ -66,26 +66,21 @@ export default function useClient() {
       return
     }
   
-    // add the clients to the clients ref
     clientsData.value = data
   
-    // Add the clients to the clients ref
     clientsData.value = await Promise.all(data.map(async client => {
       
-      // Get the projects for the client
-      const projects = await fetchClientProjects(client.id);
+      clientsData.projects = [];
+      clientsData.projects = await fetchClientProjects(client.id);
       
       // Download the image
       const logoBlob = await downloadImage(client.logo_url);
       
       return {
         ...client,
-        projects: projects,
         logo_url: URL.createObjectURL(logoBlob)
       };
     }));
-
-    // console.log('clientsData', clientsData.value);
 
     return clientsData.value
   

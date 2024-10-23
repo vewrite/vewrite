@@ -16,10 +16,28 @@
     <!-- Team list -->
     <div class="teams-list inner-container" v-if="!loading && TeamData.length > 0">
       <router-link :to="'/team/' + team.id" class="team-card max-width sm" v-for="team in filteredTeams" :key="team.id">
-      <!-- <div v-for="team in filteredTeams" :key="team.id"> -->
-        <h3>{{ team.name }}</h3>
-        <!-- <div class="button red" @click="deleteTeam(team.id)">Delete team</div> -->
-      <!-- </div> -->
+        <div class="team-info">
+          <div class="members" v-if="team.members.length > 0">
+            <div class="members-image" v-for="member in team.members" :key="member.id">
+              <img :src="member.avatar_url" alt="Member avatar" />
+            </div>
+          </div>
+          <div class="members-image" v-else>
+            <img src="/images/team-default.svg" alt="Team avatar" />
+          </div>
+          <h3>{{ team.name }}</h3>
+        </div>
+        <div class="team-stats">
+          <span class="team-details">
+            <span>{{ team.members.length }} members</span>
+            <span>{{ team.projects.length }} projects</span>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="15" y1="8" x2="19" y2="12" />
+            <line x1="15" y1="16" x2="19" y2="12" />
+          </svg>
+        </div>
       </router-link>
     </div>
   </main>
@@ -35,6 +53,8 @@ const user = useSupabaseUser()
 const teams = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
+
+// TODO - Replace with the user's group ID
 const GroupId = '3b119f52-06e6-42a1-ad76-dd763d36126b'
 
 
@@ -44,7 +64,22 @@ const { fetchTeams, deleteTeam, TeamData } = useTeam();
 
 onMounted(async () => {
   try {
+
+    const subscription = supabase
+      .from('teams')
+      .on('INSERT', payload => {
+        console.log('New team:', payload.new);
+        teams.value.push(payload.new);
+        fetchTeams(GroupId);
+      })
+      .subscribe();
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+
     await fetchTeams(GroupId)
+
   } catch (error) {
     console.error('Failed to fetch teams:', error)
   } finally {
@@ -111,36 +146,45 @@ const filteredTeams = computed(() => {
     overflow-y: auto;
     background-color: $white;
     height: calc(100% - 60px);
-    padding: $spacing-sm;
+    padding: $spacing-md $spacing-sm;
 
     a {
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: space-between;
       gap: $spacing-sm;
       text-decoration: none;
       width: 100%;
-      padding: $spacing-xxs;
+      padding: $spacing-sm;
       border-radius: $br-md;
       transition: all 0.2s ease;
+      border: 1px solid $gray-light;
 
       &:hover {
-        background-color: rgba($brand, 0.05);
+        border: 1px solid $brand;
       }
 
-      .image-wrapper {
-        border-radius: $br-md;
-        overflow: hidden;
-        background-color: $gray-light;
+      .team-info {
         display: flex;
-        justify-content: center;
+        flex-direction: row;
         align-items: center;
+        gap: $spacing-sm;
+      }
 
-        img {
-          width: auto;
-          height: 100%;
+      .team-stats {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-sm;
+        color: $gray-dark;
+
+        .team-details {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: $spacing-xs;
         }
-
       }
       
       h3 {

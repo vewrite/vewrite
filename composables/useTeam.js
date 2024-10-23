@@ -87,7 +87,23 @@ export default function useTeam() {
       if (error) throw error;
 
       TeamData.value = data;
-      return data;
+      
+      TeamData.value.forEach(team => {
+        team.members = []
+        team.projects = []
+      })
+
+      TeamData.value = await Promise.all(data.map(async team => {
+        TeamData.members = []
+        TeamData.projects = []
+
+        // TODO - when I have it ready, fetch the team members and projects like in the useClient composable
+
+        return {
+          ...team
+        }
+
+      }))
 
     } catch (error) {
       alert(error.message);

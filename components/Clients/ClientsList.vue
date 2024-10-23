@@ -25,8 +25,7 @@
           <h3>{{ client.name }}</h3>
         </div>
         <div class="clients-projects">
-          <span>{{ client.projects.length }} projects</span>
-          <!-- svg arrow_forward -->
+          <span v-if="client.projects">{{ client.projects.length }} projects</span>
           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <line x1="15" y1="8" x2="19" y2="12" />
@@ -56,6 +55,21 @@ const { fetchClients, clientsData, createClientModal } = useClient();
 
 onMounted(async () => {
   try {
+
+    const subscription = supabase
+      .from('clients')
+      .on('INSERT', payload => {
+        console.log('New client:', payload.new);
+        const newClient = { ...payload.new, projects: [] }; // Add empty projects array
+        clients.value.push(newClient);
+        fetchClients(user.value.id);
+      })
+      .subscribe();
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+
     await fetchClients(user.value.id)
   } catch (error) {
     console.error('Failed to fetch clients:', error)
