@@ -31,11 +31,13 @@ export default function useTeam() {
   }
 
   async function updateTeam(team) {
+    console.log('Updating team', team);
+
     try {
       const { data, error } = await supabase
         .from('teams')
         .update(team)
-        .eq('id', team.id);
+        .eq('id', team[0].id);
 
       if (error) throw error;
 
