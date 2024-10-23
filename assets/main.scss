@@ -47,6 +47,24 @@ body,
     }
 }
 
+.max-width {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    &.lg {
+        max-width: 1200px;
+    }
+
+    &.md {
+        max-width: 800px;
+    }
+
+    &.sm {
+        max-width: 600px;
+    }
+}
+
 .scrollable {
     overflow-y: auto;
     max-height: 100%;

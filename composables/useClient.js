@@ -71,9 +71,16 @@ export default function useClient() {
   
     // Add the clients to the clients ref
     clientsData.value = await Promise.all(data.map(async client => {
+      
+      // Get the projects for the client
+      const projects = await fetchClientProjects(client.id);
+      
+      // Download the image
       const logoBlob = await downloadImage(client.logo_url);
+      
       return {
         ...client,
+        projects: projects,
         logo_url: URL.createObjectURL(logoBlob)
       };
     }));
@@ -82,6 +89,20 @@ export default function useClient() {
 
     return clientsData.value
   
+  }
+
+  async function fetchClientProjects(clientId) {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('client', clientId)
+  
+    if (error) {
+      console.error('Error fetching client projects:', error.message)
+      return
+    }
+  
+    return data
   }
   
   const downloadImage = async (path) => {
@@ -110,7 +131,8 @@ export default function useClient() {
     createClient,
     createClientModal,  
     fetchClient,
-    fetchClients
+    fetchClients,
+    fetchClientProjects
   }
 
 }

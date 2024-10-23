@@ -15,6 +15,8 @@
           <input class="deliverable-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
         <section class="state-management">
+          <!-- TODO -  This breaks if there are no state instances set -->
+          <!-- https://github.com/ramijames/vewrite/issues/19 -->
           <div class="button vertical"><small>Current state</small><span>{{ StateInstanceData[0].instance_name }}</span></div>
         </section>
       </aside>

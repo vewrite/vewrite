@@ -15,7 +15,7 @@
 
     <!-- Team list -->
     <div class="teams-list inner-container" v-if="!loading && TeamData.length > 0">
-      <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id">
+      <router-link :to="'/team/' + team.id" class="team-card max-width sm" v-for="team in filteredTeams" :key="team.id">
       <!-- <div v-for="team in filteredTeams" :key="team.id"> -->
         <h3>{{ team.name }}</h3>
         <!-- <div class="button red" @click="deleteTeam(team.id)">Delete team</div> -->

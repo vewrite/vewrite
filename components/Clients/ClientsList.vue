@@ -17,11 +17,22 @@
 
     <!-- Client list -->
     <div class="clients-list inner-container" v-if="!loading && clientsData.length > 0">
-      <router-link :to="'/client/' + client.id" class="client-card" v-for="client in filteredClients" :key="client.id">
-        <div class="image-wrapper">
-          <ClientImage :client="client" size="medium" table="logos" />
+      <router-link :to="'/client/' + client.id" class="client-card max-width sm" v-for="client in filteredClients" :key="client.id">
+        <div class="client-info">
+          <div class="image-wrapper">
+            <ClientImage :client="client" size="medium" table="logos" />
+          </div>
+          <h3>{{ client.name }}</h3>
         </div>
-        <h3>{{ client.name }}</h3>
+        <div class="clients-projects">
+          <span>{{ client.projects.length }} projects</span>
+          <!-- svg arrow_forward -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="15" y1="8" x2="19" y2="12" />
+            <line x1="15" y1="16" x2="19" y2="12" />
+          </svg>
+        </div>
       </router-link>
     </div>
   </main>
@@ -112,21 +123,23 @@ const filteredClients = computed(() => {
     overflow-y: auto;
     background-color: $white;
     height: calc(100% - 60px);
-    padding: $spacing-sm;
+    padding: $spacing-md $spacing-sm;
 
     a {
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: space-between;
       gap: $spacing-sm;
       text-decoration: none;
       width: 100%;
       padding: $spacing-xxs;
-      border-radius: $br-md;
+      border-radius: $br-lg;
       transition: all 0.2s ease;
+      border: 1px solid $gray-light;
 
       &:hover {
-        background-color: rgba($brand, 0.05);
+        border: 1px solid $brand;
       }
 
       .image-wrapper {
@@ -142,6 +155,27 @@ const filteredClients = computed(() => {
           height: 100%;
         }
 
+      }
+
+      .client-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-sm;
+      }
+
+      .clients-projects {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: $font-size-sm;
+        font-weight: 400;
+        color: $gray-dark;
+
+        svg {
+          fill: $gray-dark;
+          margin-right: $spacing-sm;
+        }
       }
       
       h3 {
