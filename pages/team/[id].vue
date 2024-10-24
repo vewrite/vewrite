@@ -21,8 +21,11 @@
         </div>
       </div>
       <div class="team-management inner-container" v-if="!loading && TeamData">
-        <div class="max-width md">
-          <p>Team members</p>
+        <div class="team-members-empty max-width md" v-if="TeamMembersData && TeamMembersData.length === 0">
+          <p>No team members found</p>
+        </div>
+        <div class="max-width md" v-else>
+          {{ TeamMembersData }}
         </div>
       </div>  
 
@@ -38,6 +41,7 @@ const supabase = useSupabaseClient();
 const loading = ref(true);
 const route = useRoute();
 const team = ref(null);
+const teamMembers = ref(null);
 const teamId = route.params.id;
 
 console.log('Team ID is: ', teamId);
@@ -45,12 +49,20 @@ console.log('Team ID is: ', teamId);
 import useTeam from '~/composables/useTeam';
 const { fetchSingleTeam, updateTeam, TeamData, deleteTeamModal } = useTeam();
 
+import useTeamMembers from '~/composables/useTeamMembers';
+const { fetchTeamMembers, addTeamMember, deleteTeamMember, TeamMembersData } = useTeamMembers();
+
 // Fetch the team data when the component is mounted
 onMounted(async () => {
   try {
+    // Team
     await fetchSingleTeam(teamId);
     team.value = TeamData.value[0];
-    console.log('Team data:', team.value);
+
+    // Team members
+    await fetchTeamMembers(teamId);
+    teamMembers.value = TeamMembersData.value[0];
+
     loading.value = false;
   } catch (error) {
     alert(error.message);
