@@ -2,16 +2,27 @@
   <AppPanel>
     <template v-slot:header>
       <router-link to="/teams/" class="button">Back</router-link>
-      <div></div>
+      <!-- <div class="button red" @click="deleteTeamModal(team.id)">Delete team</div> -->
+      <Dropdown>
+        <template v-slot:trigger>
+          ⋮
+        </template>
+        <template v-slot:menu>
+          <div class="dropdown-item" @click="deleteTeamModal(team.id)">Delete team</div>
+        </template>
+      </Dropdown>
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
       <div class="team-overview" v-if="TeamData && !loading">
         <div class="team-summary">
           <input class="team-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
-          <!-- <h2>{{ TeamData[0].name }}</h2> -->
         </div>
       </div>
+      <div class="team-management inner-container" v-if="!loading && TeamData">
+        <p>Team members</p>
+      </div>  
+
     </template>
   </AppPanel>
 </template>
@@ -69,21 +80,20 @@ function updateTeamWithDebounce() {
 @import 'assets/_variables.scss';
 
 .team-overview {
-  width: calc(100%);
-  padding: $spacing-md;
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
   border-radius: $br-md;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
-  height: 140px;
 
   .team-summary {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    width: 50%;
+    width: 100%;
 
     .team-title-input {
       font-family: $font-family-secondary;
@@ -91,7 +101,7 @@ function updateTeamWithDebounce() {
       font-weight: 500;
       margin: 0 -0.85rem;
       background-color: transparent;
-      width: 100%;
+      width: calc(100% + 1.7rem);
       padding: $spacing-xs;
 
       &:focus,
@@ -102,6 +112,17 @@ function updateTeamWithDebounce() {
     }
 
   }
+}
+
+.team-management {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  width: 100%;
+  padding: $spacing-md;
+  border-radius: $br-md;
+  background-color: $white;
+  height: 100%;
 }
 
 </style>
