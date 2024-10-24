@@ -39,6 +39,7 @@ import DeleteClientModal from '~/components/Clients/DeleteClientModal.vue'
 
 // Team modals
 import CreateTeamModal from '~/components/Teams/CreateTeamModal.vue'
+import DeleteTeamModal from '~/components/Teams/DeleteTeamModal.vue'
 
 const modal = useModal()
 
@@ -67,7 +68,8 @@ const contentComponent = computed(() => {
     'DeleteWorkflowModal': DeleteWorkflowModal,
     'CreateClientModal': CreateClientModal,
     'DeleteClientModal': DeleteClientModal,
-    'CreateTeamModal': CreateTeamModal
+    'CreateTeamModal': CreateTeamModal,
+    'DeleteTeamModal': DeleteTeamModal,
   }
   return components[modal.content]
 })

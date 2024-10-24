@@ -14,13 +14,16 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <div class="team-overview" v-if="TeamData && !loading">
+      <div class="team-overview max-width md" v-if="TeamData && !loading">
         <div class="team-summary">
           <input class="team-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
+          <span>Click to edit</span>
         </div>
       </div>
       <div class="team-management inner-container" v-if="!loading && TeamData">
-        <p>Team members</p>
+        <div class="max-width md">
+          <p>Team members</p>
+        </div>
       </div>  
 
     </template>
@@ -40,7 +43,7 @@ const teamId = route.params.id;
 console.log('Team ID is: ', teamId);
 
 import useTeam from '~/composables/useTeam';
-const { fetchSingleTeam, updateTeam, TeamData } = useTeam();
+const { fetchSingleTeam, updateTeam, TeamData, deleteTeamModal } = useTeam();
 
 // Fetch the team data when the component is mounted
 onMounted(async () => {
@@ -80,35 +83,46 @@ function updateTeamWithDebounce() {
 @import 'assets/_variables.scss';
 
 .team-overview {
-  width: 100%;
-  padding: $spacing-sm $spacing-md;
+  padding: $spacing-sm 0;
   border-radius: $br-md;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
+  margin: 0 auto;
 
   .team-summary {
     display: flex;
     flex-direction: column;
     gap: 2px;
     width: 100%;
+    position: relative;
 
     .team-title-input {
       font-family: $font-family-secondary;
       font-size: $font-size-lg;
       font-weight: 500;
-      margin: 0 -0.85rem;
       background-color: transparent;
-      width: calc(100% + 1.7rem);
+      width: 100%;
       padding: $spacing-xs;
+      border: 1px solid rgba($brand, 0.1);
 
       &:focus,
       &:active {
         border: 1px solid $brand;
         background: $white;
       }
+    }
+
+    span {
+      position: absolute;
+      right: $spacing-xs;
+      top: 0;
+      line-height: 54px;
+      opacity: 0.25;
+      font-size: $font-size-sm;
+      pointer-events: none;
     }
 
   }

@@ -15,7 +15,7 @@
 
     <!-- Team list -->
     <div class="teams-list inner-container" v-if="!loading && TeamData.length > 0">
-      <router-link :to="'/team/' + team.id" class="team-card max-width sm" v-for="team in filteredTeams" :key="team.id">
+      <router-link :to="'/team/' + team.id" class="team-card max-width md" v-for="team in filteredTeams" :key="team.id">
         <div class="team-info">
           <div class="members" v-if="team.members.length > 0">
             <div class="members-image" v-for="member in team.members" :key="member.id">

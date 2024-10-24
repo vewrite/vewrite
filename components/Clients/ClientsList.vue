@@ -17,10 +17,10 @@
 
     <!-- Client list -->
     <div class="clients-list inner-container" v-if="!loading && clientsData.length > 0">
-      <router-link :to="'/client/' + client.id" class="client-card max-width sm" v-for="client in filteredClients" :key="client.id">
+      <router-link :to="'/client/' + client.id" class="client-card max-width md" v-for="client in filteredClients" :key="client.id">
         <div class="client-info">
           <div class="image-wrapper">
-            <ClientImage :client="client" size="medium" table="logos" />
+            <ClientImage :client="client" size="large" table="logos" />
           </div>
           <h3>{{ client.name }}</h3>
         </div>

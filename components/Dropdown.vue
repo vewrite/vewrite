@@ -3,7 +3,7 @@
     <div @click="toggleDropdown" class="button">
       <slot name="trigger"></slot>
     </div>
-    <div class="dropdown-content">
+    <div class="dropdown-content" @click="toggleDropdown">
       <slot name="menu"></slot>
     </div>
     <div class="blur" v-if="isOpen" @click="toggleDropdown"></div>
@@ -65,6 +65,10 @@ function toggleDropdown() {
       animation: scaleBounce 0.3s ease;
     }
   }
+}
+
+.dropdown-item {
+  padding: $spacing-xs $spacing-sm;
 }
 
 .blur {

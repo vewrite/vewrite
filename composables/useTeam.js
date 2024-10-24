@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { useModal } from '~/stores/modal'
+import { useRouter } from 'vue-router';
 
 export default function useTeam() {
 
@@ -8,6 +9,7 @@ export default function useTeam() {
   const supabase = useSupabaseClient();
   const TeamMembers = ref([]);
   const Teams = ref([]);
+  const router = useRouter();
 
   async function createTeam(team) {
 
@@ -48,6 +50,9 @@ export default function useTeam() {
   }
 
   async function deleteTeam(team_id) {
+
+    useModal().toggleLoading();
+
     try {
       const { data, error } = await supabase
         .from('teams')
@@ -55,6 +60,11 @@ export default function useTeam() {
         .eq('id', team_id);
 
       if (error) throw error;
+
+      useModal().toggleVisibility();
+      useModal().reset();
+
+      router.push('/teams');
 
       return data;
     } catch (error) {
@@ -135,6 +145,13 @@ export default function useTeam() {
     useModal().toggleVisibility();
   }
 
+  function deleteTeamModal(team_id) {
+    useModal().setType('medium');
+    useModal().setHeader('Delete Team');
+    useModal().setContent('DeleteTeamModal');
+    useModal().toggleVisibility();
+  }
+
   return {
     TeamData,
     TeamError,
@@ -146,7 +163,8 @@ export default function useTeam() {
     fetchTeams,
     fetchSingleTeam,
     fetchTeamMembers,
-    createTeamModal
+    createTeamModal,
+    deleteTeamModal
   }
 
 }

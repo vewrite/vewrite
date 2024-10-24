@@ -1,5 +1,5 @@
 <template>
-  <div id="CreateWorkflowModal">
+  <div id="CreateProjectModal">
     <div class="modal-body">
       <Loading v-if="loading" />
       <section class="inner-container" v-if="clients.length < 1">
