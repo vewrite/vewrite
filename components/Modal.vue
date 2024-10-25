@@ -155,12 +155,10 @@ computed(() => {
   }
 
   .modal-body {
-    background-color: $white;
     border-radius: $br-lg;
     overflow: auto;
     width: 100%;
     height: 100%;
-    box-shadow: $main-shadow;
     background: $white linear-gradient(-135deg, rgba($brand, 0.1) 0%, rgba($brand, 0.025) 35%);
     box-shadow: inset 0 0 20px white, 
                       0 2px 4px 0 rgba($brand, 0.1), 

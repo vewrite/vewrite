@@ -80,11 +80,27 @@ export default function useProfile() {
     }
   }
 
+  async function fetchProfileViaEmail(email) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('email', email);
+
+      if (error) throw error;
+
+      ProfileData.value = data[0];
+    } catch (error) {
+      ProfileError.value = error.message;
+    }
+  }
+
   return {
     createProfile,
     updateProfile,
     deleteProfile,
     fetchSingleProfile,
+    fetchProfileViaEmail,
     ProfileData,
     ProfileError,
     Profiles

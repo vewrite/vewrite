@@ -22,8 +22,8 @@
         </div>
 
         <div class="form-block">
-            <!-- List of team members in teamMembers.members -->
-            <div class="form-content-full">
+          <!-- List of team members in teamMembers.members -->
+          <div class="form-content-full">
             <h4>Team Members</h4>
             <table>
               <tr v-for="member in teamMembers.members" :key="member">
@@ -33,8 +33,6 @@
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 6C11.5 6.27614 11.2761 6.5 11 6.5L1 6.5C0.723858 6.5 0.5 6.27614 0.5 6C0.5 5.72386 0.723858 5.5 1 5.5L11 5.5C11.2761 5.5 11.5 5.72386 11.5 6Z" fill="#FF0000"/>
                     </svg>
-
-
                   </div>
                 </td>
               </tr>
