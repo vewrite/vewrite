@@ -6,14 +6,19 @@ export default function useTeamMembers() {
   const TeamMembersError = ref(null);
   const supabase = useSupabaseClient();
 
-  async function addTeamMember(teamMember) {
+  async function addTeamMember(member) {
+
+    // First remove the email property from the member object
+    delete member.email;
+
     try {
       const { data, error } = await supabase
         .from('team_members')
-        .insert(teamMember);
+        .insert(member);
 
       if (error) throw error;
 
+      TeamMembersData.value = data;
       return data;
 
     } catch (error) {
@@ -41,12 +46,15 @@ export default function useTeamMembers() {
   }
 
 
-  async function deleteTeamMember(teamMemberId) {
+  async function deleteTeamMember(user_id) {
+
+    console.log('Deleting team member', user_id);
+
     try {
       const { data, error } = await supabase
         .from('team_members')
         .delete()
-        .eq('id', teamMemberId);
+        .eq('user_id', user_id);
 
       if (error) throw error;
 
@@ -65,8 +73,6 @@ export default function useTeamMembers() {
         .eq('team_id', teamId);
 
       if (error) throw error;
-
-      TeamMembers.value = data;
 
       return data;
 
