@@ -96,6 +96,7 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
     display: flex;
+    perspective: 1000px;
 
     .zoom {
       display: flex;
@@ -107,14 +108,14 @@ onMounted(async () => {
 }
 
 .zoom {
-  transition: transform 0.42s ease-in-out;
+  transition: all 0.42s ease-in-out;
 }
 
 .no-scroll {
   overflow: hidden;
 
   .zoom {
-    transform: scale(0.9);
+    transform: scale(0.88);
   }
 }
 

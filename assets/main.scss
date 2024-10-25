@@ -416,6 +416,21 @@ textarea {
     overflow: hidden;
     height: fit-content;
     outline: 1px solid rgba($brand, 0);
+    position: relative;
+
+    .button {
+        position: absolute;
+        right: $spacing-sm;
+        top: $spacing-sm;
+        bottom: $spacing-sm;
+        background-color: rgba($brand, 0.1);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: rgba($brand, 0.2);
+        }
+    }
 
     &:focus,
     &:hover,

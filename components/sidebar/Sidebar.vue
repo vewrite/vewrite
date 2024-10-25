@@ -79,6 +79,7 @@ onMounted(() => {
   min-width: 340px;
   transition: min-width 0.3s ease;
   position: relative;
+  background-color: $white;
 
   @media (max-width: 1024px) {
     min-width: 260px;

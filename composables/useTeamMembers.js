@@ -21,6 +21,26 @@ export default function useTeamMembers() {
     }
   }
 
+  async function addTeamMembers(teamMembers, teamId) {
+    try {
+
+      Promise.all(teamMembers.map(async (teamMember) => {
+        const { data, error } = await supabase
+          .from('team_members')
+          .insert({ ...teamMember, team_id: teamId });
+
+        if (error) throw error;
+
+        return data;
+      }));
+
+    } catch (error) {
+      TeamMembersError.value = error.message;
+    }
+
+  }
+
+
   async function deleteTeamMember(teamMemberId) {
     try {
       const { data, error } = await supabase
@@ -55,11 +75,19 @@ export default function useTeamMembers() {
     }
   }
 
+  function addTeamMembersModal() {
+    useModal().setType('large');
+    useModal().setHeader('Add Team Members');
+    useModal().setContent('AddTeamMemberModal');
+    useModal().toggleVisibility();
+  }
+
   return {
     TeamMembersData,
     TeamMembersError,
     addTeamMember,
     deleteTeamMember,
-    fetchTeamMembers
+    fetchTeamMembers,
+    addTeamMembersModal
   }
 }

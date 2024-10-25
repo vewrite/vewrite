@@ -21,11 +21,13 @@
         </div>
       </div>
       <div class="team-management inner-container" v-if="!loading && TeamData">
-        <div class="team-members-empty max-width md" v-if="TeamMembersData && TeamMembersData.length === 0">
-          <p>No team members found</p>
-        </div>
-        <div class="max-width md" v-else>
-          {{ TeamMembersData }}
+        <div class="max-width md">
+          <div v-if="TeamMembersData.length > 0">{{ TeamMembersData }}</div>
+          <div class="button" @click="addTeamMembersModal()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#1759D5"/>
+            </svg>
+          </div>
         </div>
       </div>  
 
@@ -50,7 +52,7 @@ import useTeam from '~/composables/useTeam';
 const { fetchSingleTeam, updateTeam, TeamData, deleteTeamModal } = useTeam();
 
 import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, addTeamMember, deleteTeamMember, TeamMembersData } = useTeamMembers();
+const { fetchTeamMembers, addTeamMembersModal, deleteTeamMember, TeamMembersData } = useTeamMembers();
 
 // Fetch the team data when the component is mounted
 onMounted(async () => {
@@ -119,6 +121,7 @@ function updateTeamWithDebounce() {
       width: 100%;
       padding: $spacing-xs;
       border: 1px solid rgba($brand, 0.1);
+      background: rgba($white, 0.9);
 
       &:focus,
       &:active {
@@ -129,11 +132,11 @@ function updateTeamWithDebounce() {
 
     span {
       position: absolute;
-      right: $spacing-xs;
+      right: $spacing-sm;
       top: 0;
       line-height: 54px;
       opacity: 0.25;
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       pointer-events: none;
     }
 

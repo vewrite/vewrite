@@ -130,7 +130,7 @@ onMounted(async () => {
 
 @import 'assets/_variables.scss';
 
-#CreateWorkflowModal {
+#CreateProjectModal {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
