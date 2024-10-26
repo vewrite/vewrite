@@ -198,7 +198,6 @@ onMounted(async () => {
           justify-content: space-between;
           align-items: center;
           gap: $spacing-md;
-          border-bottom: 1px solid rgba($brand, 0.15);
           padding: $spacing-md;
 
           h3 {

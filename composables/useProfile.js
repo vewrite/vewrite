@@ -75,6 +75,7 @@ export default function useProfile() {
       if (error) throw error;
 
       ProfileData.value = data[0];
+      return data;
     } catch (error) {
       ProfileError.value = error.message;
     }

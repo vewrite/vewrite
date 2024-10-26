@@ -28,43 +28,49 @@
               <label for="email">Email</label>
               <input v-model="member.email" id="email" type="email" placeholder="Input team member email address" @input="fetchProfileViaEmail(member.email)" />
             </div>
-            <div class="profile-card" v-if="ProfileData">
-              <div class="profile-image">
-                <Avatar :uuid="ProfileData.id" size="large" />
-              </div>
+
+            <!-- TODO BUG - There's a bug here where you can add the same profile multiple times -->
+            <div class="profile-result" v-if="ProfileData">
               <div class="profile-info">
-                <h4>{{ ProfileData.id }}</h4>
+                <div class="profile-image">
+                  <Avatar :uuid="ProfileData.id" size="large" />
+                </div>
+                <p>{{ ProfileData.username }}</p>
               </div>
-              {{ TeamMembersError }}
-              <div class="button" @click="addTeamMember(member)">
+              <div class="button primary" @click="addTeamMember(member)">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#1759D5"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
                 </svg>
+                Add to team
               </div>
             </div>
+            <span class="notification error" v-if="TeamMembersError">{{ TeamMembersError }}</span>
           </div>
 
-              <table v-if="teamMembers.length > 0">
-                <tr v-for="member in teamMembers" :key="member">
-                  <td>
-                    <Avatar :uuid="member.user_id" size="large" />
-                  </td>
-                  <td>
+          <section v-if="teamMembers.length > 0">
+            <div class="members-list">
+              <div class="member" v-for="member in teamMembers" :key="member.user_id">
+                <Profilecard :uuid="member.user_id">
+                  <template v-slot:actions>
                     <div class="button red" @click="deleteTeamMember(member.user_id)">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 6C11.5 6.27614 11.2761 6.5 11 6.5L1 6.5C0.723858 6.5 0.5 6.27614 0.5 6C0.5 5.72386 0.723858 5.5 1 5.5L11 5.5C11.2761 5.5 11.5 5.72386 11.5 6Z" fill="#FF0000"/>
                       </svg>
-                    </div>
-                  </td>
-                </tr>
-              </table>
+                      Remove
+                    </div>  
+                  </template>
+                </Profilecard>
 
-              <div class="empty-state" v-else>
-                <h3>No members</h3>
-                <p>You haven't invited anyone to this team yet</p>
               </div>
             </div>
+          </section>
+
+          <div class="empty-state" v-else>
+            <h3>No members</h3>
+            <p>You haven't invited anyone to this team yet</p>
           </div>
+        </div>
+      </div>
 
     </template>
   </AppPanel>
@@ -100,14 +106,6 @@ const member = reactive({
   user_id: null
 })
 
-// function addToMembersArray(email) {
-//   teamMembers.members.push(email);
-// }
-
-// function removeMemberFromArray(email) {
-//   teamMembers.members = teamMembers.members.filter(member => member !== email);
-// }
-
 watch(() => ProfileData.value, (value) => {
   if (value) {
     member.user_id = value.id;
@@ -117,7 +115,25 @@ watch(() => ProfileData.value, (value) => {
 // Fetch the team data when the component is mounted
 onMounted(async () => {
   try {
-    // Team
+    const subscription = supabase
+      .from('team_members')
+      .on('INSERT', payload => {
+        console.log('New team member:', payload.new);
+        console.log('Team members:', teamMembers.value);
+        teamMembers.value.push(payload.new);
+        // Reset the search input ProfileData
+        ProfileData.value = null;
+      })
+      .on('DELETE', payload => {
+        console.log('Deleted team member:', payload.old);
+        teamMembers.value = teamMembers.value.filter(member => member.id !== payload.old.id);
+      })
+      .subscribe();
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+    
     await fetchSingleTeam(teamId);
     team.value = TeamData.value[0];
 
@@ -218,29 +234,29 @@ function updateTeamWithDebounce() {
     background: rgba(24, 100, 218, 0.05);
     border-radius: $br-lg;
 
-    .form-input {
-      margin: 0;
-    }
-
-    .profile-card {
+    .profile-result {
       display: flex;
       flex-direction: row;
-      gap: $spacing-sm;
+      padding: $spacing-sm 0 0;
       align-items: center;
-      margin-top: $spacing-sm;
-      padding: $spacing-sm;
-      border-radius: $br-md;
-      background: $white;
-      box-shadow: $soft-shadow;
+      justify-content: space-between;
 
       .profile-info {
-        h4 {
-          font-size: $font-size-md;
-          font-family: $font-family-secondary;
-          font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-sm;
+
+
+        p {
+          font-size: $font-size-sm;
           margin: 0;
         }
       }
+    }
+
+    .form-input {
+      margin: 0;
     }
   }
 
