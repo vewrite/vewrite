@@ -16,16 +16,18 @@
     <!-- Team list -->
     <div class="teams-list inner-container" v-if="!loading && TeamData.length > 0">
       <router-link :to="'/team/' + team.id" class="team-card max-width md" v-for="team in filteredTeams" :key="team.id">
+        
+        <!-- {{ team }} -->
         <div class="team-info">
           <div class="members" v-if="team.members.length > 0">
             <div class="members-image" v-for="member in team.members" :key="member.id">
-              <img :src="member.avatar_url" alt="Member avatar" />
+              <Avatar :uuid="member.user_id" size="large" />
             </div>
           </div>
           <div class="members-image" v-else>
             <img src="/images/team-default.svg" alt="Team avatar" />
           </div>
-          <h3>{{ team.name }}</h3>
+          <p>{{ team.name }}</p>
         </div>
         <div class="team-stats">
           <span class="team-details">
@@ -148,7 +150,7 @@ const filteredTeams = computed(() => {
     height: calc(100% - 60px);
     padding: $spacing-md $spacing-sm;
 
-    a {
+    .team-card {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -163,6 +165,10 @@ const filteredTeams = computed(() => {
 
       &:hover {
         border: 1px solid $brand;
+
+        p {
+          color: $brand;
+        }
       }
 
       .team-info {
@@ -170,6 +176,44 @@ const filteredTeams = computed(() => {
         flex-direction: row;
         align-items: center;
         gap: $spacing-sm;
+
+        .members {
+          display: block;
+          position: relative;
+          width: 70px;
+          height: 40px;
+
+          .members-image {
+            position: absolute;
+            display: none;
+            border-radius: $br-xl;
+
+            .user-avatar {
+              border: 2px solid $white;
+            }
+
+            &:nth-child(1) {
+              z-index: 3;
+              left: 0px;
+              top: 0px;
+              display: block;
+            }
+
+            &:nth-child(2) {
+              z-index: 2;
+              left: 15px;
+              top: 0px;
+              display: block;
+            }
+
+            &:nth-child(3) {
+              z-index: 1;
+              left: 30px;
+              top: 0px;
+              display: block;
+            }
+          }
+        }
       }
 
       .team-stats {
@@ -187,10 +231,7 @@ const filteredTeams = computed(() => {
         }
       }
       
-      h3 {
-        font-size: $font-size-md;
-        font-family: $font-family-main;
-        font-weight: 500;
+      p {
         color: $black;
         margin: 0;
       }

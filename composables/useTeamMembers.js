@@ -74,6 +74,7 @@ export default function useTeamMembers() {
 
       if (error) throw error;
 
+      TeamMembersData.value = data;
       return data;
 
     } catch (error) {

@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { useModal } from '~/stores/modal'
 import { useRouter } from 'vue-router';
+import useTeamMembers from '~/composables/useTeamMembers'
 
 export default function useTeam() {
 
@@ -10,10 +11,13 @@ export default function useTeam() {
   const TeamMembers = ref([]);
   const Teams = ref([]);
   const router = useRouter();
+  const { fetchTeamMembers, TeamMembersData, TeamMembersError } = useTeamMembers();
 
   async function createTeam(team) {
 
     useModal().toggleLoading();
+
+    console.log('Creating team', team);
 
     try {
       const { data, error } = await supabase
@@ -112,6 +116,14 @@ export default function useTeam() {
         TeamData.projects = []
 
         // TODO - when I have it ready, fetch the team members and projects like in the useClient composable
+        
+        try {
+          // team.projects = await fetchTeamProjects(team.id);
+          team.members = await fetchTeamMembers(team.id);
+          TeamData.members = await fetchTeamMembers(team.id);
+        } catch (error) {
+          TeamError.value = error.message;
+        }
 
         return {
           ...team
@@ -124,20 +136,20 @@ export default function useTeam() {
     }
   }
 
-  async function fetchTeamMembers(teamId) {
-    try {
-      const { data, error } = await supabase
-        .from('team_members')
-        .select('*')
-        .eq('team_id', teamId);
+  // async function fetchTeamMembers(teamId) {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('team_members')
+  //       .select('*')
+  //       .eq('team_id', teamId);
 
-      if (error) throw error;
+  //     if (error) throw error;
 
-      TeamMembers.value = data;
-    } catch (error) {
-      alert(error.message);
-    }
-  }
+  //     TeamMembers.value = data;
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // }
 
 
   function createTeamModal() {
@@ -164,7 +176,6 @@ export default function useTeam() {
     deleteTeam,
     fetchTeams,
     fetchSingleTeam,
-    fetchTeamMembers,
     createTeamModal,
     deleteTeamModal
   }

@@ -52,7 +52,7 @@
 
           <section v-if="teamMembers.length > 0">
             <div class="members-list">
-              <h3>Team members</h3>
+              <h4>Team members</h4>
               <div class="member" v-for="member in teamMembers" :key="member.user_id">
                 <Profilecard :uuid="member.user_id">
                   <template v-slot:actions>
@@ -183,6 +183,7 @@ function updateTeamWithDebounce() {
   align-items: center;
   gap: $spacing-md;
   margin: 0 auto;
+  background-color: $white;
 
   .team-summary {
     display: flex;
@@ -197,8 +198,8 @@ function updateTeamWithDebounce() {
       background-color: transparent;
       width: 100%;
       padding: $spacing-xs;
-      border: 1px solid rgba($brand, 0.1);
-      background: rgba($white, 0.9);
+      // border: 1px solid rgba($brand, 0.1);
+      // background: rgba($white, 0.9);
 
       &:focus,
       &:active {
