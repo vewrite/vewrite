@@ -22,7 +22,7 @@ function toggleDropdown() {
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
 @import 'assets/_variables.scss';
 
@@ -49,12 +49,12 @@ function toggleDropdown() {
     display: none;
     position: absolute;
     background-color: $white;
-    min-width: 160px;
+    min-width: 240px;
     box-shadow: $main-shadow;
     z-index: 2;
     right: 0;
     top: 32px;
-    padding: $spacing-sm;
+    padding: $spacing-xxs;
     border-radius: $br-lg;
     animation: scaleBounce 0.3s ease;
   }
@@ -68,7 +68,13 @@ function toggleDropdown() {
 }
 
 .dropdown-item {
-  padding: $spacing-xs $spacing-sm;
+  padding: $spacing-xxs $spacing-xs;
+  cursor: pointer !important;
+  border-radius: $br-md;
+
+  &:hover {
+    background-color: rgba($brand, 0.05);
+  }
 }
 
 .blur {

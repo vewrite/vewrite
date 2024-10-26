@@ -51,6 +51,8 @@ export default function useTeam() {
 
   async function deleteTeam(team_id) {
 
+    // TODO - this must also delete team_members and projects associated with the team
+
     useModal().toggleLoading();
 
     try {

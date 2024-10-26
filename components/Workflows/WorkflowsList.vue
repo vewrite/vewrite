@@ -23,11 +23,16 @@
             <p>{{ workflow.description }}</p>
           </div>
           <div class="header-actions" v-if="workflow.type == 2">
-            <button class="button red" @click="deleteWorkflowModal(workflow.id)">Delete workflow {{ workflow.id }}</button>
+            <!-- <button class="button red" @click="deleteWorkflowModal(workflow.id)">Delete workflow</button> -->
+            <Dropdown>
+              <template v-slot:trigger>
+                ⋮
+              </template>
+              <template v-slot:menu>
+                <div class="dropdown-item" @click="deleteWorkflowModal(workflow.id)">Delete workflow</div>
+              </template>
+            </Dropdown>
           </div>
-        </div>
-        <div class="" v-if="workflow.type == 1">
-          This is a default workflow. You can't edit or delete this workflow.
         </div>
         <aside class="states-list">
           <div class="state" v-for="state in workflow.states" :key="state.id">
@@ -182,11 +187,30 @@ onMounted(async () => {
     width: calc(100% - 200px);
     display: flex;
     flex-direction: column;
-    padding:  $spacing-md;
     background-color: $white;
 
     .single-workflow-preview {
       display: none;
+
+      .single-workflow-preview-header {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: $spacing-md;
+          border-bottom: 1px solid rgba($brand, 0.15);
+          padding: $spacing-md;
+
+          h3 {
+            margin-bottom: $spacing-xxs;
+          }
+
+          p {
+            color: $gray-dark;
+            font-size: $font-size-sm;
+            margin: 0;
+          }
+        }
 
       &.active {
         display: block;
@@ -198,9 +222,8 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     gap: $spacing-xxs;
-    margin: $spacing-md 0;
+    padding: $spacing-sm;
     background: white;
-    border: 1px solid rgba($brand, 0.15);
     border-radius: $br-lg;
   }
 }

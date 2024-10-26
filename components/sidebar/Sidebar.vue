@@ -129,12 +129,21 @@ onMounted(() => {
         font-family: $font-family-main;
         font-weight: 400;
         text-decoration: none;
+        transition: all 0.2s ease;
+
+        .icon {
+          transition: transform 0.18s ease;
+        }
 
         &:hover,
         &.router-link-active,
         &.router-link-exact-active {
           background-color: rgba($brand, 0.05);
           color: $brand;
+
+          .icon {
+            transform: scale(1.15);
+          }
         }
       }
 
