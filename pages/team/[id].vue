@@ -14,7 +14,7 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <div class="team-overview max-width md" v-if="TeamData && !loading">
+      <div class="team-overview" v-if="TeamData && !loading">
         <div class="team-summary">
           <input class="team-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
           <span>Click to edit</span>
@@ -30,6 +30,9 @@
             </div>
 
             <!-- TODO BUG - There's a bug here where you can add the same profile multiple times -->
+            <div class="profile-result-header" v-if="ProfileData">
+              <p>Profile found</p>
+            </div>
             <div class="profile-result" v-if="ProfileData">
               <div class="profile-info">
                 <div class="profile-image">
@@ -49,6 +52,7 @@
 
           <section v-if="teamMembers.length > 0">
             <div class="members-list">
+              <h3>Team members</h3>
               <div class="member" v-for="member in teamMembers" :key="member.user_id">
                 <Profilecard :uuid="member.user_id">
                   <template v-slot:actions>
@@ -60,7 +64,6 @@
                     </div>  
                   </template>
                 </Profilecard>
-
               </div>
             </div>
           </section>
@@ -172,7 +175,7 @@ function updateTeamWithDebounce() {
 @import 'assets/_variables.scss';
 
 .team-overview {
-  padding: $spacing-sm 0;
+  padding: $spacing-sm;
   border-radius: $br-md;
   display: flex;
   flex-direction: row;
@@ -189,7 +192,6 @@ function updateTeamWithDebounce() {
     position: relative;
 
     .team-title-input {
-      font-family: $font-family-secondary;
       font-size: $font-size-lg;
       font-weight: 500;
       background-color: transparent;
@@ -230,16 +232,28 @@ function updateTeamWithDebounce() {
   height: 100%;
 
   .add-member-box {
-    padding: $spacing-sm;
-    background: rgba(24, 100, 218, 0.05);
-    border-radius: $br-lg;
+
+    .profile-result-header {
+      padding: $spacing-xxs $spacing-sm;
+      background: rgba($mint, 0.2);
+      margin-top: $spacing-sm;
+      border-radius: $br-md $br-md 0 0;
+
+      p {
+        font-size: $font-size-xs;
+        margin: 0;
+        color: $mint;
+      }
+    }
 
     .profile-result {
       display: flex;
       flex-direction: row;
-      padding: $spacing-sm 0 0;
+      padding: $spacing-sm;
+      border-radius: 0 0 $br-md $br-md;
       align-items: center;
       justify-content: space-between;
+      background: rgba($mint, 0.1);
 
       .profile-info {
         display: flex;
@@ -258,6 +272,12 @@ function updateTeamWithDebounce() {
     .form-input {
       margin: 0;
     }
+  }
+
+  .members-list {
+    margin-top: $spacing-md;
+    border-top: 1px dashed rgba($black, 0.1);
+    padding-top: $spacing-sm;
   }
 
   .empty-state {

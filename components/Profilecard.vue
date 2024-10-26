@@ -44,9 +44,10 @@ onMounted(async () => {
   align-items: center;
   margin-top: $spacing-sm;
   padding: $spacing-sm ;
-  border-radius: $br-lg;
+  border-radius: $br-md;
   background: $white;
-  box-shadow: $soft-shadow;
+  border: 1px solid rgba($brand, 0.15);
+  transition: all 0.2s ease;
 
   .profile-image {
     width: 40px;
@@ -57,6 +58,22 @@ onMounted(async () => {
 
     p {
       margin: 0;
+    }
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-sm;
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    border: 1px solid $brand;
+
+    .profile-actions {
+      opacity: 1;
     }
   }
 }
