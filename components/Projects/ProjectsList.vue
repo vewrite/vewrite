@@ -256,8 +256,6 @@ const filteredProjects = computed(() => {
   }
 
   .projects-list {
-
-    background: $white;
     height: calc(100% - 60px);
 
     &.grid {

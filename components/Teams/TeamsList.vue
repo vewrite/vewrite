@@ -185,7 +185,6 @@ const filteredTeams = computed(() => {
   .teams-list {
     width: 100%;
     overflow-y: auto;
-    background-color: $white;
     height: calc(100% - 60px);
     padding: 0 $spacing-sm $spacing-sm $spacing-sm;
 
