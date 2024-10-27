@@ -15,6 +15,10 @@
                             <input id="email" type="text" :value="user.email" disabled />
                         </div>
                         <div class="form-input">
+                            <label for="email">Email</label>
+                            <input id="email" type="text" :value="user.email" disabled />
+                        </div>
+                        <div class="form-input">
                             <label for="username">Name</label>
                             <input id="username" type="text" v-model="username" />
                         </div>

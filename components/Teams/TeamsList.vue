@@ -18,6 +18,8 @@
       <router-link :to="'/team/' + team.id" class="team-card max-width md" v-for="team in filteredTeams" :key="team.id">
         
         <!-- {{ team }} -->
+        <span class="notification error" v-if="TeamError">{{ TeamError }}</span>
+        <span class="notification error" v-if="GroupError">{{ GroupError }}</span>
         <div class="team-info">
           <div class="members" v-if="team.members.length > 0">
             <div class="members-image" v-for="member in team.members" :key="member.id">
@@ -56,23 +58,26 @@ const teams = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
 
-// TODO - Replace with the user's group ID
-const GroupId = '3b119f52-06e6-42a1-ad76-dd763d36126b'
-
-
 // Team composable
 import useTeam from '~/composables/useTeam';
-const { fetchTeams, deleteTeam, TeamData } = useTeam();
+const { fetchTeams, deleteTeam, TeamData, TeamError } = useTeam();
+
+// Group composable
+import useGroup from '~/composables/useGroup';
+const { fetchGroupId, GroupData, GroupError } = useGroup();
 
 onMounted(async () => {
   try {
+
+    // Fetch group ID
+    await fetchGroupId(user.value.id)
 
     const subscription = supabase
       .from('teams')
       .on('INSERT', payload => {
         console.log('New team:', payload.new);
         teams.value.push(payload.new);
-        fetchTeams(GroupId);
+        fetchTeams(GroupData.value.id);
       })
       .subscribe();
 
@@ -80,7 +85,7 @@ onMounted(async () => {
       supabase.removeSubscription(subscription);
     });
 
-    await fetchTeams(GroupId)
+    await fetchTeams(GroupData.value.id)
 
   } catch (error) {
     console.error('Failed to fetch teams:', error)

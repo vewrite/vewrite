@@ -2,6 +2,7 @@
   <div id="CreateTeamModal">
     <div class="modal-body">
       <Loading v-if="loading" />
+      {{ GroupError }}
       <form class="inner-container" @submit.prevent="createTeam">
 
         <div class="form-block">
@@ -18,7 +19,6 @@
         </div>
 
       </form>
-          
     </div>
     
     <div class="buttons">
@@ -35,33 +35,34 @@ const { createTeam } = useTeam();
 
 // Group composable
 import useGroup from '~/composables/useGroup';
-const { fetchGroupId } = useGroup();
+const { fetchGroupId, GroupData, GroupError } = useGroup();
 
 const loading = ref(false);
-const logo_url = ref('')
-
-// Get the current user
 const user = useSupabaseUser();
-
-const GroupId = ref(null);
 
 // Set some sane defaults for the team object
 const team = reactive({
   name: '',
-  group_id: null,
+  group_id: '',
 })
+
+const GroupId = ref('')
+
+console.log('User is:', user.value.id);
 
 // Get the current user's group ID
 onMounted(async () => {
   try {
-    GroupId.value = await fetchGroupId(user.value.id);
-    team.group_id = GroupId.value[0].id;
+    await fetchGroupId(user.value.id);
+    console.log('Group ID:', GroupData.value.id); // Access GroupData.value.id
+    GroupId.value = GroupData.value.id; // Access GroupData.value.id
+    console.log('Group ID:', GroupId.value);
+    team.group_id = GroupData.value.id; // Set team.group_id
+    console.log('Group ID:', GroupData.value.id);
   } catch (error) {
     console.error('Error fetching group ID:', error);
   }
 });
-
-console.log('Team is: ', team);
 
 function logoUrlUpdate(filePath) {
   team.logo_url = filePath;
