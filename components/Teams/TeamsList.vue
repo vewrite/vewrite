@@ -1,5 +1,9 @@
 <template>
   <main id="Teams">
+
+    <!-- <span class="notification success">owner_id: {{ user.id }}</span> -->
+    <!-- <span class="notification error">GroupData: {{ GroupData }}</span> -->
+
     <Loading v-if="loading" />
 
     <div class="search-bar" v-if="!loading">
@@ -34,6 +38,7 @@
     <div :class="['teams-list', viewMode]" v-if="!loading && TeamData.length > 0">
       
       <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id">  
+        <!-- <span class="notification success">team.id: {{ team.id }}</span> -->
         <span class="notification error" v-if="TeamError">{{ TeamError }}</span>
         <span class="notification error" v-if="GroupError">{{ GroupError }}</span>
         <div class="team-info">
@@ -247,6 +252,44 @@ const filteredTeams = computed(() => {
           flex-direction: row;
           align-items: center;
           gap: $spacing-sm;
+
+          .members {
+            display: block;
+            position: relative;
+            width: 70px;
+            height: 40px;
+
+            .members-image {
+              position: absolute;
+              display: none;
+              border-radius: $br-xl;
+
+              .user-avatar {
+                border: 2px solid $white;
+              }
+
+              &:nth-child(1) {
+                z-index: 3;
+                left: 0px;
+                top: 0px;
+                display: block;
+              }
+
+              &:nth-child(2) {
+                z-index: 2;
+                left: 15px;
+                top: 0px;
+                display: block;
+              }
+
+              &:nth-child(3) {
+                z-index: 1;
+                left: 30px;
+                top: 0px;
+                display: block;
+              }
+            }
+          }
 
           p {
             font-size: $font-size-sm;

@@ -4,6 +4,7 @@
       <Logo />
     </div>
     <div class="sidebar-content">
+      <!-- {{ user.id }} -->
       <div class="link-group">
         <div class="title">Work</div>
         <router-link to="/" class="link"><Icon type="folder" /> Projects</router-link>

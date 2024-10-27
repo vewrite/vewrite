@@ -81,6 +81,22 @@ export default function useProfile() {
     }
   }
 
+  async function fetchProfileImage(uuid) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('avatar_url')
+        .eq('id', uuid);
+
+      if (error) throw error;
+
+      ProfileData.value = data[0];
+      return data;
+    } catch (error) {
+      ProfileError.value = error.message;
+    }
+  }
+
   async function fetchProfileViaEmail(email) {
     try {
       const { data, error } = await supabase
@@ -102,6 +118,7 @@ export default function useProfile() {
     deleteProfile,
     fetchSingleProfile,
     fetchProfileViaEmail,
+    fetchProfileImage,
     ProfileData,
     ProfileError,
     Profiles

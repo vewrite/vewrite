@@ -9,33 +9,12 @@
 
 const props = defineProps(['uuid', 'size'])
 const supabase = useSupabaseClient()
-const user = useSupabaseUser()
 const loading = ref(false)
 const src = ref("")
 const path = ref("")
 
-const fetchAvatar = async () => {
-  try {
-    loading.value = true
-    // load the user via the uuid prop
-    // then go to the profiles table and get the 'avatar_url' for that user
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', props.uuid)
-
-    if (error) throw error
-
-    // download the avatar image
-    user.value = data[0]
-    downloadImage(user.value.avatar_url)
-
-  } catch (error) {
-    console.error("Error downloading image: ", error.message)
-  } finally {
-    loading.value = false
-  }
-}
+import useProfile from '~/composables/useProfile'
+const { fetchProfileImage, ProfileData, ProfileError } = useProfile()
 
 const downloadImage = async (path) => {
     try {
@@ -49,8 +28,13 @@ const downloadImage = async (path) => {
     }
 }
 
-onMounted(() => {
-  fetchAvatar();
+onMounted(async () => {
+  try {
+    await fetchProfileImage(props.uuid)
+    downloadImage(ProfileData.value.avatar_url)  
+  } catch (error) {
+    console.error("Error downloading image: ", error.message)
+  }
 });
 
 watch(path, () => {
