@@ -6,16 +6,12 @@ export default function useGroup() {
   const GroupError = ref(null);
   const supabase = useSupabaseClient();
 
-  async function createGroup(owner_id) {
+  async function createGroup(group) {
     try {
-
-      const newGroup = {
-        owner_id: owner_id
-      }
 
       const { data, error } = await supabase
         .from('groups')
-        .insert(newGroup);
+        .insert(group);
 
       if (error) throw error;
 

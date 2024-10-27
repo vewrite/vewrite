@@ -355,6 +355,7 @@ textarea {
     justify-content: space-between;
     align-items: center;
     gap: $spacing-md;
+    background: $white linear-gradient(180deg, rgba($brand, 0.015) 0%, rgba($white, 1) 100%);
 
     input {
         border: 1px solid rgba($black, 0.1);

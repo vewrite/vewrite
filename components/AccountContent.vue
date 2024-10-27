@@ -1,6 +1,10 @@
 <template>
     <main id="AccountContent">
+
+        <!-- <div class="button red" @click="createGroup(group)">Create Group</div> -->
+
         <Loading v-if="loading" />
+
         <form class="inner-container" @submit.prevent="updateProfile" v-else>
 
             <div class="form-block">
@@ -78,6 +82,14 @@ if (data) {
     avatar_path.value = data.avatar_url
 }
 loading.value = false
+
+// Group composable
+// import useGroup from '~/composables/useGroup'
+// const { createGroup, GroupData, GroupError } = useGroup()
+
+// const group = ref({
+//   owner_id: user.value.id,
+// })
 
 // User store
 import { useUser } from '@/stores/user'

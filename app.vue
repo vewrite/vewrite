@@ -41,7 +41,9 @@ const { createProfile } = useProfile()
 import useGroup from '~/composables/useGroup'
 const { createGroup, GroupData, GroupError } = useGroup()
 
-// console.log('User:', user.value.id)
+const group = ref({
+  owner_id: user.value.id,
+})
 
 // Pull the user state from the database, then pass that into the user store
 const fetchUser = async () => {
@@ -54,7 +56,7 @@ const fetchUser = async () => {
 
   if(data.length == 0) {
     createProfile(user.value)
-    createGroup(user.value.id)
+    createGroup(group)
     return
   }
   userStore.setUser(data[0])

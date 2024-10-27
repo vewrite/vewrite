@@ -187,9 +187,9 @@ const filteredTeams = computed(() => {
     &.grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: $spacing-md;
+      gap: $spacing-sm;
       width: 100%;
-      padding: $spacing-sm $spacing-md $spacing-md $spacing-md;
+      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
       align-content: flex-start;
 
       @media (max-width: 1800px) {
