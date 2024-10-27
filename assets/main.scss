@@ -354,20 +354,23 @@ textarea {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: $spacing-md;
+    gap: $spacing-sm;
     background: $white linear-gradient(180deg, rgba($brand, 0.015) 0%, rgba($white, 1) 100%);
 
     input {
-        border: 1px solid rgba($black, 0.1);
-        padding: $spacing-xs;
+        color: $black;
+        background: rgba($white, .35);
+        border-radius: $br-md;
+        border: 1px solid rgba($brand, 0.25);
+        padding: $spacing-xxxs $spacing-sm;
         width: 100%;
-        font-size: $font-size-sm;
-        font-weight: 400;
-        font-family: $font-family-main;
-        border-radius: $br-lg;
+        font-size: $font-size-xs;
+        outline: 1px solid rgba($brand, 0);
+        outline-offset: 0px;
 
         &:focus-within {
-            border: 1px solid rgba($brand, 0.9);
+            border: 1px solid rgba($brand-dark, 1);
+            outline: 4px solid rgba($brand, 0.3);
         }
     }
 
@@ -375,8 +378,9 @@ textarea {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        gap: $spacing-xxs;
         height: 100%;
+        border: 1px solid rgba($brand, 0.25);
+        border-radius: $br-md;
 
         button {
             box-shadow: none;
@@ -388,8 +392,23 @@ textarea {
             width: 36px;
         }
 
+        svg {
+            transition: all 0.2s ease;
+            transform: scale(1);
+            stroke: $brand;
+            stroke-opacity: 0.5;
+            stroke-width: 1px;
+            width: 20px;
+            height: 20px;
+
+            path,
+            mask path {
+                stroke: $brand;
+                stroke-opacity: 0.5;
+            }
+        }
+
         .active {
-            border-bottom: 1px solid $brand;
 
             svg {
 
@@ -547,7 +566,6 @@ button,
     gap: $spacing-sm;
     align-items: center;
     text-transform: capitalize;
-    // box-shadow: $main-shadow;
 
     &:hover {
         border: 1px solid rgba($brand, 0.4);
