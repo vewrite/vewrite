@@ -27,7 +27,7 @@ export default {
   overflow: hidden;
 
   .header {
-    border-left: 1px solid rgba($brand, 0.15);
+    border-left: $border;
     color: $brand;
     display: flex;
     flex-direction: row;
@@ -64,8 +64,8 @@ export default {
     overflow-y: hidden;
     position: relative;
     background: rgba($gray-light, 0.15);
-    border-left: 1px solid rgba($brand, 0.15);
-    border-top: 1px solid rgba($brand, 0.15);
+    border-left: $border;
+    border-top: $border;
   }
 }
 

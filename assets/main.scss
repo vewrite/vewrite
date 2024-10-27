@@ -355,13 +355,13 @@ textarea {
     justify-content: space-between;
     align-items: center;
     gap: $spacing-sm;
-    background: transparent linear-gradient(180deg, rgba($brand, 0.05) 0%, rgba($white, 0) 100%);
+    border-bottom: $border;
 
     input {
         color: $black;
         background: rgba($white, .35);
         border-radius: $br-md;
-        border: 1px solid rgba($brand, 0.25);
+        border: $border;
         padding: $spacing-xxxs $spacing-sm;
         width: 100%;
         font-size: $font-size-xs;
@@ -372,8 +372,8 @@ textarea {
         &:focus,
         &:hover,
         &:focus-within {
-            border: 1px solid rgba($brand-dark, 1);
-            outline: 4px solid rgba($brand, 0.3);
+            border: 1px solid rgba($brand, 1);
+            outline: 4px solid rgba($brand, 0.1);
             background: rgba($white, 1);
         }
     }
@@ -383,7 +383,7 @@ textarea {
         flex-direction: row;
         justify-content: flex-end;
         height: 100%;
-        border: 1px solid rgba($brand, 0.25);
+        border: $border;
         border-radius: $br-md;
         background: rgba($white, .35);
         transition: all 0.2s ease;
@@ -394,8 +394,8 @@ textarea {
         &:focus,
         &:hover,
         &:focus-within {
-            border: 1px solid rgba($brand-dark, 1);
-            outline: 4px solid rgba($brand, 0.3);
+            border: 1px solid rgba($brand, 1);
+            outline: 4px solid rgba($brand, 0.1);
             background: rgba($white, 1);
         }
 

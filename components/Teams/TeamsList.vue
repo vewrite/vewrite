@@ -186,14 +186,13 @@ const filteredTeams = computed(() => {
     width: 100%;
     overflow-y: auto;
     height: calc(100% - 60px);
-    padding: 0 $spacing-sm $spacing-sm $spacing-sm;
 
     &.grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: $spacing-sm;
       width: 100%;
-      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+      padding: $spacing-sm;
       align-content: flex-start;
 
       @media (max-width: 1800px) {
@@ -213,12 +212,12 @@ const filteredTeams = computed(() => {
       }
 
       .team-card {
-        padding: $spacing-md;
+        padding: $spacing-sm;
         background-color: $white;
         border-radius: $br-md;
-        border: 1px solid rgba($brand, 0.2);
+        border: $border;
         text-decoration: none;
-        height: 160px;
+        height: 120px;
         color: $black;
         position: relative;
         overflow: hidden;
@@ -248,9 +247,10 @@ const filteredTeams = computed(() => {
 
         .team-info {
           display: flex;
-          flex-direction: row;
+          flex-direction: row-reverse;
           align-items: center;
           gap: $spacing-sm;
+          justify-content: space-between;
 
           .members {
             display: block;
@@ -269,21 +269,21 @@ const filteredTeams = computed(() => {
 
               &:nth-child(1) {
                 z-index: 3;
-                left: 0px;
+                right: 0px;
                 top: 0px;
                 display: block;
               }
 
               &:nth-child(2) {
                 z-index: 2;
-                left: 15px;
+                right: 15px;
                 top: 0px;
                 display: block;
               }
 
               &:nth-child(3) {
                 z-index: 1;
-                left: 30px;
+                right: 30px;
                 top: 0px;
                 display: block;
               }
@@ -327,6 +327,7 @@ const filteredTeams = computed(() => {
       align-items: flex-start;
       flex-direction: column;
       gap: $spacing-xxs;
+      padding: $spacing-sm;
 
       .team-card {
         display: flex;
@@ -337,9 +338,23 @@ const filteredTeams = computed(() => {
         text-decoration: none;
         width: 100%;
         padding: $spacing-sm;
-        transition: border 0.2s ease;
-        border: 1px solid transparent;
+        background-color: $white;
+        border: $border;
         border-radius: $br-md;
+        transition: border, transform 0.18s ease;
+        animation: cardAppear 0.2s ease;
+        animation-fill-mode: forwards;
+        animation-delay: 0s;
+        opacity: 0;
+        transform: scale(0.9);
+
+        $project-cards: ();
+
+        @for $i from 0 through 60 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * .1}s;
+          }
+        }
 
         &:hover {
           border: 1px solid $brand;
@@ -351,9 +366,11 @@ const filteredTeams = computed(() => {
 
         .team-info {
           display: flex;
-          flex-direction: row;
+          flex-direction: row-reverse;
           align-items: center;
+          justify-content: space-between;
           gap: $spacing-sm;
+          width: 100%;
 
           .members-image {
             width: 70px;
@@ -415,7 +432,8 @@ const filteredTeams = computed(() => {
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: $spacing-xs;
+            gap: $spacing-md;
+            text-wrap: nowrap;
           }
         }
         
