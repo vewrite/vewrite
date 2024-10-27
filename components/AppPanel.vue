@@ -27,15 +27,15 @@ export default {
   overflow: hidden;
 
   .header {
-    // border-bottom: 1px solid rgba($brand, 0.1);
+    border-left: 1px solid rgba($brand, 0.15);
     color: $brand;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 66px;
+    height: 54px;
     width: 100%;
-    padding: 0 $spacing-md 0 0;
+    padding: 0 $spacing-sm;
     position: relative;
 
     .app-panel-header {
@@ -60,11 +60,10 @@ export default {
   }
 
   .body {
-    height: calc(100% - 66px);
+    height: calc(100% - 54px);
     overflow-y: hidden;
     position: relative;
-    background: rgba($brand, 0.025) linear-gradient(125deg, rgba($brand, 0.05) 0%, rgba($brand, 0.015) 10%);
-    border-radius: $br-xl 0 0 0;
+    background: $white;
     border-left: 1px solid rgba($brand, 0.15);
     border-top: 1px solid rgba($brand, 0.15);
   }

@@ -4,6 +4,23 @@
 
     <div class="search-bar" v-if="!loading">
       <input type="text" placeholder="Search teams" v-model="searchQuery" />
+      <div class="list-buttons">
+        <button :class="['list-icon', viewMode == 'grid' ? 'active' : '']" @click="listToggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.5 18L10.5 15C10.5 14.1716 9.82843 13.5 9 13.5L5 13.5C4.17157 13.5 3.5 14.1716 3.5 15L3.5 18C3.5 18.8284 4.17157 19.5 5 19.5L9 19.5C9.82843 19.5 10.5 18.8284 10.5 18Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M20.5 18L20.5 15C20.5 14.1716 19.8284 13.5 19 13.5L15 13.5C14.1716 13.5 13.5 14.1716 13.5 15L13.5 18C13.5 18.8284 14.1716 19.5 15 19.5L19 19.5C19.8284 19.5 20.5 18.8284 20.5 18Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M10.5 9L10.5 6C10.5 5.17157 9.82843 4.5 9 4.5L5 4.5C4.17157 4.5 3.5 5.17157 3.5 6L3.5 9C3.5 9.82843 4.17157 10.5 5 10.5L9 10.5C9.82843 10.5 10.5 9.82843 10.5 9Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M20.5 9L20.5 6C20.5 5.17157 19.8284 4.5 19 4.5L15 4.5C14.1716 4.5 13.5 5.17157 13.5 6L13.5 9C13.5 9.82843 14.1716 10.5 15 10.5L19 10.5C19.8284 10.5 20.5 9.82843 20.5 9Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button :class="['list-icon', viewMode == 'list' ? 'active' : '']" @click="listToggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 5H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M4 19H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+            <path d="M4 12H20" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Empty state -->
@@ -14,10 +31,9 @@
     </div>
 
     <!-- Team list -->
-    <div class="teams-list inner-container" v-if="!loading && TeamData.length > 0">
-      <router-link :to="'/team/' + team.id" class="team-card max-width md" v-for="team in filteredTeams" :key="team.id">
-        
-        <!-- {{ team }} -->
+    <div :class="['teams-list', viewMode]" v-if="!loading && TeamData.length > 0">
+      
+      <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id">  
         <span class="notification error" v-if="TeamError">{{ TeamError }}</span>
         <span class="notification error" v-if="GroupError">{{ GroupError }}</span>
         <div class="team-info">
@@ -57,6 +73,12 @@ const user = useSupabaseUser()
 const teams = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
+
+const viewMode = ref('grid');
+
+const listToggle = () => {
+  viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid';
+};
 
 // Team composable
 import useTeam from '~/composables/useTeam';
@@ -110,6 +132,17 @@ const filteredTeams = computed(() => {
 
 @import 'assets/_variables.scss';
 
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 #Teams {
   display: flex;
   flex-direction: column;
@@ -145,102 +178,213 @@ const filteredTeams = computed(() => {
   }
 
   .teams-list {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-    align-items: flex-start;
     width: 100%;
     overflow-y: auto;
     background-color: $white;
     height: calc(100% - 60px);
-    padding: $spacing-md $spacing-sm;
+    padding: 0 $spacing-sm $spacing-sm $spacing-sm;
 
-    .team-card {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: $spacing-sm;
-      text-decoration: none;
+    &.grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: $spacing-md;
       width: 100%;
-      padding: $spacing-sm;
-      border-radius: $br-md;
-      transition: all 0.2s ease;
-      border: 1px solid $gray-light;
+      padding: $spacing-sm $spacing-md $spacing-md $spacing-md;
+      align-content: flex-start;
 
-      &:hover {
-        border: 1px solid $brand;
-
-        p {
-          color: $brand;
-        }
+      @media (max-width: 1800px) {
+        grid-template-columns: repeat(4, 1fr);
       }
 
-      .team-info {
+      @media (max-width: 1600px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+
+      .team-card {
+        padding: $spacing-md;
+        background-color: $white;
+        border-radius: $br-md;
+        border: 1px solid rgba($brand, 0.2);
+        text-decoration: none;
+        height: 160px;
+        color: $black;
+        position: relative;
+        overflow: hidden;
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
         gap: $spacing-sm;
+        justify-content: space-between;
+        transition: border, transform 0.18s ease;
+        animation: cardAppear 0.2s ease;
+        animation-fill-mode: forwards;
+        animation-delay: 0s;
+        opacity: 0;
+        transform: scale(0.9);
 
-        .members {
-          display: block;
-          position: relative;
-          width: 70px;
-          height: 40px;
+        $project-cards: ();
 
-          .members-image {
-            position: absolute;
-            display: none;
-            border-radius: $br-xl;
-
-            .user-avatar {
-              border: 2px solid $white;
-            }
-
-            &:nth-child(1) {
-              z-index: 3;
-              left: 0px;
-              top: 0px;
-              display: block;
-            }
-
-            &:nth-child(2) {
-              z-index: 2;
-              left: 15px;
-              top: 0px;
-              display: block;
-            }
-
-            &:nth-child(3) {
-              z-index: 1;
-              left: 30px;
-              top: 0px;
-              display: block;
-            }
+        @for $i from 0 through 60 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * .1}s;
           }
         }
-      }
 
-      .team-stats {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: $spacing-sm;
-        color: $gray-dark;
+        &:hover {
+          border: 1px solid rgba($brand, 1);
+          transform: scale(1.05);
+        }
 
-        .team-details {
+        .team-info {
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: $spacing-xs;
+          gap: $spacing-sm;
+
+          p {
+            font-size: $font-size-sm;
+            font-weight: bold;
+            margin: 0;
+          }
         }
-      }
-      
-      p {
-        color: $black;
-        margin: 0;
+
+        .team-stats {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          gap: $spacing-sm;
+          color: $gray-dark;
+
+          .team-details {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-xs;
+          }
+        }
+
+        p {
+          font-size: $font-size-sm;
+        }
+
+        
       }
     }
+
+    &.list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: $spacing-xxs;
+
+      .team-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacing-xxs;
+        text-decoration: none;
+        width: 100%;
+        padding: $spacing-sm;
+        transition: border 0.2s ease;
+        border: 1px solid transparent;
+        border-radius: $br-md;
+
+        &:hover {
+          border: 1px solid $brand;
+
+          p {
+            color: $brand;
+          }
+        }
+
+        .team-info {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: $spacing-sm;
+
+          .members-image {
+            width: 70px;
+          }
+
+          p {
+            font-size: $font-size-sm;
+            font-weight: bold;
+            margin: 0;
+          }
+
+          .members {
+            display: block;
+            position: relative;
+            width: 70px;
+            height: 40px;
+
+            .members-image {
+              position: absolute;
+              display: none;
+              border-radius: $br-xl;
+
+              .user-avatar {
+                border: 2px solid $white;
+              }
+
+              &:nth-child(1) {
+                z-index: 3;
+                left: 0px;
+                top: 0px;
+                display: block;
+              }
+
+              &:nth-child(2) {
+                z-index: 2;
+                left: 15px;
+                top: 0px;
+                display: block;
+              }
+
+              &:nth-child(3) {
+                z-index: 1;
+                left: 30px;
+                top: 0px;
+                display: block;
+              }
+            }
+          }
+        }
+
+        .team-stats {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: $spacing-sm;
+          color: $gray-dark;
+
+          .team-details {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-xs;
+          }
+        }
+        
+        p {
+          color: $black;
+          margin: 0;
+        }
+      }
+    }
+
+
   }
 }
 

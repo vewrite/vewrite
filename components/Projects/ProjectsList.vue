@@ -265,7 +265,7 @@ const filteredProjects = computed(() => {
       grid-template-columns: repeat(5, 1fr);
       gap: $spacing-md;
       width: 100%;
-      padding: $spacing-md;
+      padding: $spacing-sm $spacing-md $spacing-md $spacing-md;
       align-content: flex-start;
 
       @media (max-width: 1800px) {
@@ -307,7 +307,6 @@ const filteredProjects = computed(() => {
 
         $project-cards: ();
 
-        // generate the colors with an HSL model
         @for $i from 0 through 60 {
           &:nth-child(#{$i}) {
             animation-delay: #{$i * .1}s;
@@ -437,15 +436,13 @@ const filteredProjects = computed(() => {
       justify-content: flex-start;
       align-content: center;
       width: calc(100% - $spacing-md - $spacing-md);
-      padding: $spacing-sm;
+      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
       align-content: flex-start;
       width: 100%;
 
       .project-card {
         padding: $spacing-sm;
-        background-color: $white;
-        border-radius: $br-md;
-        transition: background-color 0.18s ease;
+        transition: border 0.2s ease;
         text-decoration: none;
         width: 100%;
         color: $black;
@@ -455,6 +452,8 @@ const filteredProjects = computed(() => {
         flex-direction: row;
         gap: $spacing-md;
         justify-content: space-between;
+        border: 1px solid transparent;
+        border-radius: $br-md;
 
         .project-card-header {
           display: flex;
@@ -519,14 +518,10 @@ const filteredProjects = computed(() => {
         }
 
         &:hover {
-          background-color: rgba($brand, 0.05);
+          border: 1px solid $brand;
 
-          .project-card-buttons {
-
-          }
-
-          .project-deliverables-status {
-            
+          p {
+            color: $brand;
           }
         }
 

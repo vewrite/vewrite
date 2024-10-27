@@ -529,13 +529,13 @@ textarea {
 
 button,
 .button {
-    color: $brand;
+    color: $black;
     background: rgba($white, .35);
     border-radius: $br-md;
     border: 1px solid rgba($brand, 0.25);
     text-align: center;
     text-decoration: none;
-    padding: $spacing-xxs $spacing-sm $spacing-xxs;
+    padding: $spacing-xxxs $spacing-sm;
     cursor: pointer;
     font-size: $font-size-xs;
     font-weight: 500;

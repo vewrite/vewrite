@@ -91,24 +91,21 @@ onMounted(() => {
 
   .sidebar-header {
     color: $white;
-    // background: rgba($brand, 0.05);
-    padding: 0 0 0 $spacing-md;
+    padding: 0 0 0 $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 66px;
-    // border-bottom: 1px solid rgba($brand, 0.1);
+    height: 54px;
   }
 
   .sidebar-content {
-    padding: $spacing-md $spacing-md $spacing-lg $spacing-md;
+    padding: $spacing-sm;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    height: calc(100% - 54px - 180px);
+    height: calc(100% - 54px);
     overflow-y: auto;
-    // border-right: 1px solid rgba($brand, 0.1);
 
     .link-group {
       display: flex;
@@ -163,12 +160,10 @@ onMounted(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: $spacing-md $spacing-md $spacing-md $spacing-md;
+    padding: $spacing-sm;
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 180px;
-    // border-right: 1px solid rgba($brand, 0.1);
 
     .tier-type {
       display: flex;
