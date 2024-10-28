@@ -106,7 +106,12 @@ export default function useProfile() {
 
       if (error) throw error;
 
-      ProfileData.value = data[0];
+      if (data.length === 0) {
+        // No result found, return the inputted email address as the data
+        ProfileData.value = { email };
+      } else {
+        ProfileData.value = data[0];
+      }
     } catch (error) {
       ProfileError.value = error.message;
     }
