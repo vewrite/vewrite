@@ -581,9 +581,10 @@ button,
     font-family: $font-family-main;
     display: flex;
     justify-content: center;
-    gap: $spacing-sm;
+    gap: calc($spacing-xs - 2px);
     align-items: center;
     text-transform: capitalize;
+    min-height: 24px;
 
     &:hover {
         border: 1px solid rgba($brand, 0.4);
