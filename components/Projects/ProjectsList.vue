@@ -285,6 +285,7 @@ const filteredProjects = computed(() => {
       .project-card {
         padding: $spacing-md;
         background-color: $white;
+        box-shadow: $soft-shadow;
         border-radius: $br-md;
         border: $border;
         text-decoration: none;
@@ -452,6 +453,9 @@ const filteredProjects = computed(() => {
         justify-content: space-between;
         border: 1px solid transparent;
         border-radius: $br-md;
+        box-shadow: $soft-shadow;
+        border: $border;
+        background-color: $white;
 
         .project-card-header {
           display: flex;

@@ -52,6 +52,10 @@ body,
     margin-left: auto;
     margin-right: auto;
 
+    &.xl {
+        max-width: 1600px;
+    }
+
     &.lg {
         max-width: 1200px;
     }
@@ -570,7 +574,7 @@ button,
     color: $black;
     background: rgba($white, .35);
     border-radius: $br-md;
-    border: 1px solid rgba($brand, 0);
+    border: $border;
     text-align: center;
     text-decoration: none;
     padding: $spacing-xxxs $spacing-sm;

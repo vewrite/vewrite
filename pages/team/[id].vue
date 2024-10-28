@@ -30,15 +30,13 @@
         <div class="max-width md max-height">
 
           <div class="add-member-box">
+            <h4>Add team members</h4>
             <div class="form-input">
               <label for="email">Email</label>
               <input v-model="member.email" id="email" type="email" placeholder="Input team member email address" @input="fetchProfileViaEmail(member.email)" />
             </div>
 
             <!-- TODO BUG - There's a bug here where you can add the same profile multiple times -->
-            <div class="profile-result-header" v-if="ProfileData">
-              <p>Profile found</p>
-            </div>
             <div class="profile-result" v-if="ProfileData">
               <div class="profile-info">
                 <div class="profile-image">
@@ -58,7 +56,7 @@
 
           <section v-if="teamMembers.length > 0">
             <div class="members-list">
-              <h4>Team members</h4>
+              <h4>Current team members</h4>
               <div class="member" v-for="member in teamMembers" :key="member.user_id">
                 <Profilecard :uuid="member.user_id">
                   <template v-slot:actions>
@@ -190,6 +188,7 @@ function updateTeamWithDebounce() {
   gap: $spacing-md;
   margin: 0 auto;
   background-color: $white;
+  border-bottom: $border;
 
   .team-summary {
     display: flex;
@@ -204,8 +203,6 @@ function updateTeamWithDebounce() {
       background-color: transparent;
       width: 100%;
       padding: $spacing-xs;
-      // border: 1px solid rgba($brand, 0.1);
-      // background: rgba($white, 0.9);
 
       &:focus,
       &:active {
@@ -235,32 +232,41 @@ function updateTeamWithDebounce() {
   width: 100%;
   padding: $spacing-md;
   border-radius: $br-md;
-  background-color: $white;
   height: 100%;
 
   .add-member-box {
+    border-radius: $br-lg;
+    background: rgba($brand, 0) linear-gradient(to bottom, rgba($brand, 0.05) 40%, rgba($brand, 0.15) 100%);
+    border: 1px solid rgba($brand, 0.15);
+    transition: all 0.2s ease;
 
-    .profile-result-header {
-      padding: $spacing-xxs $spacing-sm;
-      background: rgba($mint, 0.2);
-      margin-top: $spacing-sm;
-      border-radius: $br-md $br-md 0 0;
+    &:active,
+    &:focus,
+    &:hover {
+      border: 1px solid rgba($brand, 0.15);
+    }
 
-      p {
-        font-size: $font-size-xs;
-        margin: 0;
-        color: $mint;
-      }
+    .form-input {
+      margin: $spacing-sm;
+      width: calc(100% - $spacing-md);
+    }
+
+    h4 {
+      margin: $spacing-sm $spacing-sm 0;
+      color: $brand;
     }
 
     .profile-result {
       display: flex;
       flex-direction: row;
-      padding: $spacing-sm;
-      border-radius: 0 0 $br-md $br-md;
+      padding: $spacing-sm $spacing-xs $spacing-xs $spacing-xs;
       align-items: center;
       justify-content: space-between;
-      background: rgba($mint, 0.1);
+      background-color: $white;
+      border-top: $border;
+      overflow: hidden;
+      border-radius: 0 0 $br-lg $br-lg;
+      margin-top: $spacing-sm;
 
       .profile-info {
         display: flex;
@@ -268,23 +274,23 @@ function updateTeamWithDebounce() {
         align-items: center;
         gap: $spacing-sm;
 
-
         p {
           font-size: $font-size-sm;
           margin: 0;
         }
       }
     }
-
-    .form-input {
-      margin: 0;
-    }
   }
 
   .members-list {
-    margin-top: $spacing-md;
-    border-top: 1px dashed rgba($black, 0.1);
     padding-top: $spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xxs;
+
+    h4 {
+      margin-bottom: $spacing-sm;
+    }
   }
 
   .empty-state {

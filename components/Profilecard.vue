@@ -42,12 +42,12 @@ onMounted(async () => {
   flex-direction: row;
   gap: $spacing-sm;
   align-items: center;
-  margin-top: $spacing-sm;
   padding: $spacing-sm ;
   border-radius: $br-md;
   background: $white;
   border: 1px solid rgba($brand, 0.15);
   transition: all 0.2s ease;
+  box-shadow: $soft-shadow;
 
   .profile-image {
     width: 40px;

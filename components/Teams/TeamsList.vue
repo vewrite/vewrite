@@ -231,6 +231,7 @@ const filteredTeams = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
+        box-shadow: $soft-shadow;
 
         $project-cards: ();
 
@@ -326,7 +327,7 @@ const filteredTeams = computed(() => {
       flex-direction: column;
       align-items: flex-start;
       flex-direction: column;
-      gap: $spacing-sm;
+      gap: $spacing-xxs;
       padding: $spacing-sm;
 
       .team-card {
@@ -347,6 +348,7 @@ const filteredTeams = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
+        box-shadow: $soft-shadow;
 
         $project-cards: ();
 
