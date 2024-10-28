@@ -263,7 +263,7 @@ const filteredProjects = computed(() => {
       grid-template-columns: repeat(5, 1fr);
       gap: $spacing-sm;
       width: 100%;
-      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+      padding: $spacing-sm;
       align-content: flex-start;
 
       @media (max-width: 1800px) {
@@ -434,7 +434,7 @@ const filteredProjects = computed(() => {
       justify-content: flex-start;
       align-content: center;
       width: calc(100% - $spacing-md - $spacing-md);
-      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+      padding: $spacing-sm;
       align-content: flex-start;
       width: 100%;
 

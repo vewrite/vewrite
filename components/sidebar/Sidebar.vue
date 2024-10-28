@@ -165,6 +165,7 @@ onMounted(() => {
     position: absolute;
     bottom: 0;
     width: 100%;
+    border-top: $border;
 
     .tier-type {
       display: flex;
@@ -176,7 +177,7 @@ onMounted(() => {
       width: 100%;
       background-color: rgba($mint, 0.25);
       padding: $spacing-xs;
-      border-radius: $br-md;
+      border-radius: $br-lg;
 
       p {
         font-size: $font-size-sm;
@@ -198,10 +199,15 @@ onMounted(() => {
       justify-content: space-between;
       border-radius: $br-md;
       background-color: $white;
-      border: 1px solid rgba($black, 0.1);
+      border: 1px solid rgba($black, 0);
+      padding: $spacing-xxs;
 
       &:hover {
         border-color: $brand;
+
+        p.user {
+          color: $brand;
+        }
       }
     }
 
@@ -209,7 +215,6 @@ onMounted(() => {
       font-size: $font-size-sm;
       font-family: $font-family-main;
       font-weight: 400;
-      color: rgba($black, 0.5);
       margin:0 0 0 $spacing-sm;
       text-transform: capitalize;
       transition: color 0.22s ease-in-out;

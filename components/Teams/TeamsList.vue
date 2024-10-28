@@ -326,7 +326,7 @@ const filteredTeams = computed(() => {
       flex-direction: column;
       align-items: flex-start;
       flex-direction: column;
-      gap: $spacing-xxs;
+      gap: $spacing-sm;
       padding: $spacing-sm;
 
       .team-card {

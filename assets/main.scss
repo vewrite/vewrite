@@ -356,6 +356,7 @@ textarea {
     align-items: center;
     gap: $spacing-sm;
     border-bottom: $border;
+    background: rgba($white, 1);
 
     input {
         color: $black;
