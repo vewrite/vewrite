@@ -259,7 +259,7 @@ function updateTeamWithDebounce() {
     .profile-result {
       display: flex;
       flex-direction: row;
-      padding: $spacing-sm $spacing-xs $spacing-xs $spacing-xs;
+      padding: $spacing-sm $spacing-sm $spacing-xs $spacing-sm;
       align-items: center;
       justify-content: space-between;
       background-color: $white;

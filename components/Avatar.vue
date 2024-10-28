@@ -53,15 +53,16 @@ watch(path, () => {
   display: block;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: $br-lg;
   overflow: hidden;
   font-size: 0;
-  border: 1px solid $gray-light;
+  border: 1px solid $white;
+  outline: 1px solid rgba($black, 0.1);
+  outline-offset: -2px;
 
   img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 42px;
+    height: 42px;
     background-color: $gray-light;
     border: 0;
     outline: 0;
