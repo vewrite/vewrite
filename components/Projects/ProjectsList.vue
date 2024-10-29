@@ -93,7 +93,6 @@ async function fetchProjects() {
     return
   }
 
-  // The clientimage component expects a client object with an id
   projects.value = await Promise.all(data.map(async project => {
     const clientLogo = await fetchClientLogo(project.client);
     return {
@@ -104,9 +103,6 @@ async function fetchProjects() {
     };
   }));
 
-  // Get the deliverables from a separate table
-  // Calculate the progress of each project
-  // Update the project object with the deliverables and progress
   projects.value = await Promise.all(projects.value.map(async project => {
     const deliverables = await fetchDeliverables(project.id);
 
@@ -119,14 +115,11 @@ async function fetchProjects() {
     };
   }));
 
-  // console.log(projects.value)
-
   loading.value = false
 }
 
 async function fetchClientLogo(client) {
 
-  // get one logo based on the client id
   const { data, error } = await supabase
     .from('clients')
     .select('logo_url')
@@ -429,7 +422,6 @@ const filteredProjects = computed(() => {
     }
 
     &.list {
-
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -450,7 +442,6 @@ const filteredProjects = computed(() => {
         display: flex;
         flex-direction: row;
         gap: $spacing-md;
-        justify-content: space-between;
         border: 1px solid transparent;
         border-radius: $br-md;
         box-shadow: $soft-shadow;
@@ -462,10 +453,10 @@ const filteredProjects = computed(() => {
           justify-content: space-between;
           align-items: flex-start;
           flex-direction: row;
-          width: 80px;
+          width: 54px;
 
           .image-wrapper {
-            width: 80px;
+            width: 54px;
             min-height: 54px;
             height: 54px;
             border-radius: $br-md;
@@ -484,12 +475,12 @@ const filteredProjects = computed(() => {
         }
 
         h3 {
-          font-size: $font-size-lg;
+          font-size: $font-size-sm;
           font-family: $font-family-secondary;
-          font-weight: 500;
+          font-weight: bold;
           margin: 0;
           align-self: center;
-          width: 35%;
+          width: 100%;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -530,7 +521,7 @@ const filteredProjects = computed(() => {
         .project-deliverables-status {
           display: flex;
           flex-direction: row;
-          justify-content: flex-start;
+          justify-content: flex-end;
           transition: all 0.2s ease;
           width: 35%;
           gap: $spacing-md;
@@ -539,7 +530,6 @@ const filteredProjects = computed(() => {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 50%;
 
             span {
               font-size: $font-size-sm;
@@ -550,7 +540,7 @@ const filteredProjects = computed(() => {
               text-overflow: ellipsis;
 
               &:first-child {
-                display: none;
+                margin-right: $spacing-sm;
               }
             }
           }
