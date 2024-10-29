@@ -212,18 +212,16 @@ const filteredTeams = computed(() => {
       }
 
       .team-card {
-        padding: $spacing-sm;
+        padding: $spacing-md;
         background-color: $white;
         border-radius: $br-md;
         border: $border;
         text-decoration: none;
-        height: 120px;
         color: $black;
         position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        gap: $spacing-sm;
         justify-content: space-between;
         transition: border, transform 0.18s ease;
         animation: cardAppear 0.2s ease;
@@ -249,7 +247,7 @@ const filteredTeams = computed(() => {
         .team-info {
           display: flex;
           flex-direction: row-reverse;
-          align-items: center;
+          align-items: flex-start;
           gap: $spacing-sm;
           justify-content: space-between;
 
@@ -295,6 +293,9 @@ const filteredTeams = computed(() => {
             font-size: $font-size-sm;
             font-weight: bold;
             margin: 0;
+            text-wrap: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 
@@ -305,6 +306,10 @@ const filteredTeams = computed(() => {
           justify-content: space-between;
           gap: $spacing-sm;
           color: $gray-dark;
+
+          svg {
+            display: none;
+          }
 
           .team-details {
             display: flex;
