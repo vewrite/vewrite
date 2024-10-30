@@ -21,6 +21,8 @@
 
 <script setup>
 
+console.log('App.vue')
+
 import FirstTime from '~/components/Onboarding/Firsttime.vue'
 
 // Supabase setup
@@ -41,9 +43,13 @@ const { createProfile } = useProfile()
 import useGroup from '~/composables/useGroup'
 const { createGroup, GroupData, GroupError } = useGroup()
 
-const group = ref({
-  owner_id: user.value.id,
-})
+console.log(user.value)
+if (user.value) {
+  const group = ref({owner_id: user.value.id})
+} else {
+  const group = ref(null)
+}
+
 
 // Pull the user state from the database, then pass that into the user store
 const fetchUser = async () => {
