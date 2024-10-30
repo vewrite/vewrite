@@ -59,7 +59,7 @@
                 {{ ProfileData.email }}
                 <div class="profile-deny">Unknown user email</div>
               </div>
-              <div class="button primary" @click="addTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
+              <div class="button primary" @click="inviteToVewrite(member.email)">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
                 </svg>
@@ -128,6 +128,18 @@ const member = reactive({
   team_id: teamId,
   user_id: null
 })
+
+const inviteToVewrite = async (email) => {
+  console.log('Inviting user by email:', member.email);
+  try {
+    const { error } = await supabase.auth.signIn({ 
+      email: email 
+    })
+    if (error) throw error
+  } catch (error) {
+    console.error('Error inviting user:', error.message);
+  }
+}
 
 watch(() => ProfileData.value, (value) => {
   if (value) {
