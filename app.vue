@@ -41,7 +41,8 @@ const { createProfile } = useProfile()
 import useGroup from '~/composables/useGroup'
 const { createGroup, GroupData, GroupError } = useGroup()
 
-console.log(user.value)
+console.log("User: ", user.value)
+
 if (user.value) {
   const group = ref({owner_id: user.value.id})
 } else {

@@ -65,6 +65,26 @@ export default function useTeamMembers() {
     }
   }
 
+  async function deleteInvitedMember(email, teamId) {
+    
+    console.log('Deleting invited team member', email);
+
+    try {
+      const { data, error } = await supabase
+        .from('invited_profiles')
+        .delete()
+        .eq('email', email)
+        .eq('team_id', teamId);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      InvitedTeamMembersError.value = error.message;
+    }
+  }
+
   async function fetchTeamMembers(teamId) {
     try {
       const { data, error } = await supabase
@@ -113,6 +133,7 @@ export default function useTeamMembers() {
     InvitedTeamMembersError,
     addTeamMember,
     deleteTeamMember,
+    deleteInvitedMember,
     fetchTeamMembers,
     fetchInvitedTeamMembers,
     addTeamMembersModal
