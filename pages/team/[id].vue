@@ -74,7 +74,7 @@
             <div class="members-list">
               <h4>Current team members</h4>
               <div class="member" v-for="member in teamMembers" :key="member.user_id">
-                <Profilecard :uuid="member.user_id">
+                <Profilecard :uuid="member.user_id" type="list">
                   <template v-slot:actions>
                     <div class="button red" @click="deleteTeamMember(member.user_id)">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -325,10 +325,27 @@ function updateTeamWithDebounce() {
     padding-top: $spacing-sm;
     display: flex;
     flex-direction: column;
-    gap: $spacing-xxs;
+    gap: 0;
 
     h4 {
       margin-bottom: $spacing-sm;
+    }
+
+    .member {
+      border-left: $border;
+      border-right: $border;
+      border-bottom: $border;
+
+      &:nth-child(2) {
+        border-top: $border;
+        border-radius: $br-lg $br-lg 0 0;
+        overflow: hidden;
+      }
+
+      &:last-child {
+        border-radius: 0 0 $br-lg $br-lg;
+        overflow: hidden;
+      }
     }
   }
 

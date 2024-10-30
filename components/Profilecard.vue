@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-card">
+  <div class="profile-card" :class="[type]">
     <div class="profile-image">
       <Avatar :uuid="uuid" size="large" />
     </div>
@@ -18,7 +18,7 @@
 import { ref, onMounted } from 'vue';
 import useProfile from '~/composables/useProfile';
 
-const props = defineProps(['uuid']);
+const props = defineProps(['uuid', 'type']);
 const { fetchSingleProfile, ProfileData, ProfileError } = useProfile();
 
 onMounted(async () => {
@@ -48,6 +48,16 @@ onMounted(async () => {
   border: 1px solid rgba($brand, 0.15);
   transition: all 0.2s ease;
   box-shadow: $soft-shadow;
+
+  &.list {
+    border-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+
+    &:hover {
+      border-color: transparent;
+    }
+  }
 
   .profile-image {
     width: 40px;
