@@ -35,6 +35,22 @@ export default function useProfile() {
     } 
   }
 
+  async function createInvitedProfile(profile) {
+    try {
+      const { data, error } = await supabase
+        .from('invited_profiles')
+        .insert(profile);
+
+      if (error) throw error
+
+      ProfileData.value = data[0]
+      return data
+  
+    } catch (error) {
+      console.error('Error creating invited profile:', error)
+    } 
+  }
+
   async function updateProfile(profile) {
     try {
       const { data, error } = await supabase
@@ -119,6 +135,7 @@ export default function useProfile() {
 
   return {
     createProfile,
+    createInvitedProfile,
     updateProfile,
     deleteProfile,
     fetchSingleProfile,

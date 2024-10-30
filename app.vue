@@ -21,8 +21,6 @@
 
 <script setup>
 
-console.log('App.vue')
-
 import FirstTime from '~/components/Onboarding/Firsttime.vue'
 
 // Supabase setup

@@ -73,22 +73,41 @@
           <section v-if="teamMembers.length > 0">
             <div class="members-list">
               <h4>Current team members</h4>
-              <div class="member" v-for="member in teamMembers" :key="member.user_id">
-                <Profilecard :uuid="member.user_id" type="list">
-                  <template v-slot:actions>
-                    <div class="button red" @click="deleteTeamMember(member.user_id)">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 6C11.5 6.27614 11.2761 6.5 11 6.5L1 6.5C0.723858 6.5 0.5 6.27614 0.5 6C0.5 5.72386 0.723858 5.5 1 5.5L11 5.5C11.2761 5.5 11.5 5.72386 11.5 6Z" fill="#FF0000"/>
-                      </svg>
-                      Remove
-                    </div>  
-                  </template>
-                </Profilecard>
+              <div class="member-wrap">
+                <div class="member" v-for="member in teamMembers" :key="member.user_id">
+                  <Profilecard :uuid="member.user_id" type="list">
+                    <template v-slot:actions>
+                      <div class="button red" @click="deleteTeamMember(member.user_id)">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 6C11.5 6.27614 11.2761 6.5 11 6.5L1 6.5C0.723858 6.5 0.5 6.27614 0.5 6C0.5 5.72386 0.723858 5.5 1 5.5L11 5.5C11.2761 5.5 11.5 5.72386 11.5 6Z" fill="#FF0000"/>
+                        </svg>
+                        Remove
+                      </div>  
+                    </template>
+                  </Profilecard>
+                </div>
               </div>
             </div>
           </section>
 
-          <div class="empty-state" v-else>
+          <section v-if="invitedMembers.length > 0">
+            <div class="members-list">
+              <h4>Invited team members</h4>
+              <div class="member-wrap invited-members">
+                <div class="member" v-for="member in invitedMembers" :key="member.user_id">
+                  {{ member.email }}
+                  <div class="button red" @click="deleteTeamMember(member.user_id)">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 6C11.5 6.27614 11.2761 6.5 11 6.5L1 6.5C0.723858 6.5 0.5 6.27614 0.5 6C0.5 5.72386 0.723858 5.5 1 5.5L11 5.5C11.2761 5.5 11.5 5.72386 11.5 6Z" fill="#FF0000"/>
+                    </svg>
+                    Remove
+                  </div>  
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="empty-state" v-if="teamMembers.length == 0 && invitedMembers.length == 0">
             <h3>No members</h3>
             <p>You haven't invited anyone to this team yet</p>
           </div>
@@ -112,16 +131,16 @@ const teamId = route.params.id;
 console.log('Team ID is: ', teamId);
 
 import useProfile from '~/composables/useProfile';
-const { fetchProfileViaEmail, ProfileData, ProfileError } = useProfile();
+const { fetchProfileViaEmail, createInvitedProfile, ProfileData, ProfileError } = useProfile();
 
 import useTeam from '~/composables/useTeam';
 const { fetchSingleTeam, updateTeam, TeamData, deleteTeamModal } = useTeam();
 
 import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, addTeamMember, deleteTeamMember, TeamMembersData, TeamMembersError } = useTeamMembers();
+const { fetchTeamMembers, fetchInvitedTeamMembers, addTeamMember, deleteTeamMember, InvitedTeamMembersData, InvitedTeamMembersError, TeamMembersData, TeamMembersError } = useTeamMembers();
 
-// Set some sane defaults for the client object
 const teamMembers = ref([]);
+const invitedMembers = ref([]);
 
 const member = reactive({
   email: '',
@@ -129,12 +148,24 @@ const member = reactive({
   user_id: null
 })
 
+// TODO - this will need to be improved to deal with multiple team invitations
+const invited_profile = reactive({
+  email: member.email,
+  team_id: teamId,
+})
+
 const inviteToVewrite = async (email) => {
   console.log('Inviting user by email:', member.email);
+  
+  invited_profile.email = email;
+
   try {
     const { error } = await supabase.auth.signIn({ 
       email: email 
     })
+
+    await createInvitedProfile(invited_profile);
+
     if (error) throw error
   } catch (error) {
     console.error('Error inviting user:', error.message);
@@ -183,8 +214,24 @@ onMounted(async () => {
       })
       .subscribe();
 
+    const invited_subscription = supabase
+      .from('invited_profiles')
+      .on('INSERT', payload => {
+        console.log('New invited member:', payload.new);
+        console.log('Invited members:', invitedMembers.value);
+        invitedMembers.value.push(payload.new);
+        // Reset the search input ProfileData
+        ProfileData.value = null;
+      })
+      .on('DELETE', payload => {
+        console.log('Deleted invited member:', payload.old);
+        invitedMembers.value = invitedMembers.value.filter(member => member.id !== payload.old.id);
+      })
+      .subscribe();
+
     onUnmounted(() => {
       supabase.removeSubscription(subscription);
+      supabase.removeSubscription(invited_subscription);
     });
     
     await fetchSingleTeam(teamId);
@@ -192,6 +239,7 @@ onMounted(async () => {
 
     // Team members
     teamMembers.value = await fetchTeamMembers(teamId);
+    invitedMembers.value = await fetchInvitedTeamMembers(teamId);
 
     loading.value = false;
   } catch (error) {
@@ -343,22 +391,42 @@ function updateTeamWithDebounce() {
       margin-bottom: $spacing-sm;
     }
 
-    .member {
-      border-left: $border;
-      border-right: $border;
-      border-bottom: $border;
+    .member-wrap {
+      border-radius: $br-lg;
+      overflow: hidden;
+      border: $border;
 
-      &:nth-child(2) {
-        border-top: $border;
-        border-radius: $br-lg $br-lg 0 0;
-        overflow: hidden;
+      &.invited-members {
+        
+        .member {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: $spacing-sm;
+
+          .button {
+            opacity: 0;
+          }
+
+          &:hover {
+
+            .button {
+              opacity: 1;
+            }
+          }
+        }
       }
 
-      &:last-child {
-        border-radius: 0 0 $br-lg $br-lg;
-        overflow: hidden;
+      .member {
+        border-bottom: $border;
+        background: $white;
+
+        &:last-child {
+          border-bottom: 0;
+        }
       }
     }
+
   }
 
   .empty-state {

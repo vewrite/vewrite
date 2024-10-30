@@ -2,6 +2,8 @@ import { ref } from 'vue';
 
 export default function useTeamMembers() {
 
+  const InvitedTeamMembersData = ref([]);
+  const InvitedTeamMembersError = ref(null);
   const TeamMembersData = ref([]);
   const TeamMembersError = ref(null);
   const supabase = useSupabaseClient();
@@ -42,9 +44,7 @@ export default function useTeamMembers() {
     } catch (error) {
       TeamMembersError.value = error.message;
     }
-
   }
-
 
   async function deleteTeamMember(user_id) {
 
@@ -82,6 +82,23 @@ export default function useTeamMembers() {
     }
   }
 
+  async function fetchInvitedTeamMembers(teamId) {
+    try {
+      const { data, error } = await supabase
+        .from('invited_profiles')
+        .select('*')
+        .eq('team_id', teamId);
+
+      if (error) throw error;
+
+      InvitedTeamMembersData.value = data;
+      return data;
+
+    } catch (error) {
+      InvitedTeamMembersError.value = error.message;
+    }
+  }
+
   function addTeamMembersModal() {
     useModal().setType('large');
     useModal().setHeader('Add Team Members');
@@ -92,9 +109,12 @@ export default function useTeamMembers() {
   return {
     TeamMembersData,
     TeamMembersError,
+    InvitedTeamMembersData,
+    InvitedTeamMembersError,
     addTeamMember,
     deleteTeamMember,
     fetchTeamMembers,
+    fetchInvitedTeamMembers,
     addTeamMembersModal
   }
 }
