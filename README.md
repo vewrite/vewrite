@@ -8,6 +8,7 @@ Vewrite is a project management tool for technical writers, teams, and developer
 
 It currently includes the ability to create and manage:
 
+- Teams and team members
 - Clients
 - Workflows with customizable states
 - Projects which use workflows

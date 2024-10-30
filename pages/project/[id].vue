@@ -18,10 +18,6 @@
     <template v-slot:body>
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-        
-        <DevOnly>
-          <pre>{{ project }}</pre>
-        </DevOnly>
 
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
