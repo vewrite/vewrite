@@ -182,6 +182,22 @@ export default function useProject() {
     }
   }
 
+  async function fetchProjectWorkflow(projectId) {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('workflow')
+        .eq('id', projectId);
+
+      if (error) throw error;
+
+      return data[0];
+
+    } catch (error) {
+      projectError.value = error.message;
+    }
+  }
+
   return {
     createProject,
     createProjectModal,
@@ -191,6 +207,7 @@ export default function useProject() {
     deleteProject,
     deleteProjectModal,
     getProjectDetails,
+    fetchProjectWorkflow,
     projectData,
     projectError
   }

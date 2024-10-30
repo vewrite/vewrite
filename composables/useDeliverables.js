@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useModal } from '~/stores/modal'
+import useWorkflow from '~/composables/useWorkflow'
+import useProject from '~/composables/useProject'
 
 export default function useDeliverables() {
 
@@ -9,6 +11,8 @@ export default function useDeliverables() {
   const supabase = useSupabaseClient();
   const DeliverableStates = ref([]);
   const router = useRouter();
+
+  const { fetchProjectWorkflow, fetchStates, WorkflowData, WorkflowError } = useWorkflow();
 
   async function fetchProjectDeliverables(projectId) {
     
@@ -192,6 +196,26 @@ export default function useDeliverables() {
     }
   }
 
+
+  async function updateDeliverableWorkflowState(deliverableId, newWorkflowState) {
+
+    console.log('Updating deliverable workflow state', deliverableId, newWorkflowState);
+
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .update({ workflow_state: newWorkflowState })
+        .eq('id', deliverableId);
+  
+      if (error) throw error;
+  
+      return data;
+
+    } catch (error) {
+      console.error('Error updating deliverable:', error.message);
+    }
+  }
+
   async function createDeliverable(deliverable) {
 
     useModal().toggleLoading();
@@ -222,6 +246,21 @@ export default function useDeliverables() {
       useModal().toggleVisibility();
       useModal().reset();
 
+      // We also need to set the deliverable state to the first state in the list
+      // await updateDeliverableWorkflowState(data[0].id, DeliverableStates.value[0].id);
+
+      /*
+      1. Get the project id
+      2. Get the workflow associated with that project
+      3. Get the first state in the workflow
+      4. Update the deliverable with the first state
+      */
+
+      const ProjectWorkflow = await fetchProjectWorkflow(deliverable.project);
+      const States = await fetchStates(ProjectWorkflow);
+      await updateDeliverableWorkflowState(data[0].id, States[0]);
+
+
       if (error) throw error;
 
       return data;
@@ -244,6 +283,7 @@ export default function useDeliverables() {
     fetchSingleProjectDeliverable,
     fetchProjectDeliverables,
     fetchDeliverableStates,
+    updateDeliverableWorkflowState,
     renderStateName,
     deleteProjectDeliverables
   }

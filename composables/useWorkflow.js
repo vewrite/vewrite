@@ -1,31 +1,8 @@
 import { ref } from 'vue';
-
-// Workflow State Types composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
-
-// Workflow State Instances composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 
-/*
 
-WORKFLOWS
-
-A workflow is a collection of states that a project can be in. Each state is a
-step in the workflow.
-
-Workflows can have actions associated with each state, which means that we 
-should be able to select an action and run it when a project is in that state.
-
-States are assigned to a specific user.
-
-This means we need: 
-
-- A way to create a workflow, delete a workflow, update a workflow
-- A way to fetch a workflow and its states
-- A way to create an action, delete an action, update an action
-- A way to get all projects that use a specific workflow
-
-*/
 
 export default function useWorkflow() {
 
@@ -204,17 +181,23 @@ export default function useWorkflow() {
     }
   }
 
-  async function fetchProjectWorkflow(workflowId) {
+  async function fetchProjectWorkflow(projectId) {
+
+    console.log('Fetching workflow for project:', projectId);
 
     try {
       const { data, error } = await supabase
-        .from('workflows')
-        .select('*')
-        .eq('id', workflowId);
+        .from('projects')
+        .select('workflow')
+        .eq('id', projectId);
 
       if (error) throw error;
 
+      // await fetchWorkflowStates(data[0].workflow);
+
       WorkflowData.value = data[0];
+      return data[0].workflow;
+
     } catch (error) {
       WorkflowError.value = error.message;
     }
@@ -225,7 +208,26 @@ export default function useWorkflow() {
     return state ? state.name : '';
   }
 
+  async function fetchStates(workflowId) {
+    try {
+      const { data, error } = await supabase
+        .from('workflows')
+        .select('states')
+        .eq('id', workflowId);
+
+      if (error) throw error;
+
+      return data[0].states;
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function fetchWorkflowStates(workflowId) {
+
+    console.log('Fetching states for workflow:', workflowId);
+
     try {
       const { data, error } = await supabase
         .from('workflows')
@@ -237,7 +239,6 @@ export default function useWorkflow() {
 
       // Fetch the states as an array of objects from the states table
       WorkflowStates.value = await Promise.all(WorkflowStates.value.map(async state => {
-        // return await fetchState(state);
         const fetchedState = await fetchState(state);
         return {
           ...fetchedState
@@ -307,6 +308,7 @@ export default function useWorkflow() {
     deleteWorkflowModal,
     deleteWorkflow,
     fetchWorkflowStates,
+    fetchStates,
     renderStateName,
     fetchAssociatedProjects
   }
