@@ -594,6 +594,12 @@ button,
         border: 1px solid rgba($brand, 0.4);
         background: rgba($brand, 0);
     }
+
+    &:disabled {
+        cursor: not-allowed;
+        background: rgba($black, 0.1);
+        color: rgba($black, 0.5);
+    }
 }
 
 button.large,
@@ -619,6 +625,13 @@ button.primary,
         border: 1px solid rgba($brand-dark, 1);
         background-color: rgba($brand, 0.95);
         outline: 4px solid rgba($brand, 0.3);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background: rgba($black, 0.1);
+        color: rgba($black, 0.5);
+        outline: none;
     }
 }
 

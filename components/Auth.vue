@@ -19,8 +19,7 @@
                             <input class="inputField" type="email" placeholder="you@home.com" v-model="email" />
                         </div>
                     </div>
-                    <input type="submit" class="button primary" @click="reset" :value="loading ? 'Loading' : 'Send magic link'"
-                        :disabled="loading" />
+                    <input type="submit" class="button primary" @click="reset" :value="loading ? 'Sending magic link' : 'Send magic link'" :disabled="loading" />
                 </div>
                 <div v-if="errorbox">
                     <p class="notification error">{{ errorbox }}</p>
@@ -39,6 +38,7 @@
 <script setup>
 
 const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 
 const loading = ref(false)
 const email = ref("")

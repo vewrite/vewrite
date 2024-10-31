@@ -1,8 +1,4 @@
 <template>
-  <!-- <pre v-if="supabase && authListener">
-    {{ supabase.auth }}
-    {{ authListener }}
-  </pre> -->
   <Loading class="on-top" :hasLogo="true" v-if="loading" />
   <div id="vewrite">
     <div class="app" v-if="HasUser">
@@ -43,56 +39,56 @@ const { createProfile, fetchSingleProfile, ProfileData, ProfileError } = useProf
   
 const HasUser = ref(false)
 
-// Watch for changes in the user object
-watch(user, async (newUser) => {
-  if (newUser) {
-    await fetchSingleProfile(user.value.id);
-    HasUser.value = true;
-    userStore.setUser(ProfileData.value);
-    loading.value = false;
-  } else {
-    loading.value = false;
-    HasUser.value = false;
-  }
-});
-
-const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN') {
-        console.log("User signed in:", session);
-        // Update your app's state or store user data here
-    } else if (event === 'SIGNED_OUT') {
-        console.log("User signed out");
-        // Handle any clean-up or redirects here
-    } else if (event === 'TOKEN_REFRESHED') {
-        console.log("Token refreshed:", session);
-        // Update token/session state here to keep user logged in
-    } else if (event === 'USER_UPDATED') {
-        console.log("User data updated:", session);
-        // Useful if user profile or permissions change
-    }
-});
-
-
-
-// Call the user store and set the user using the Supabase user
-onMounted(async () => {
-
+async function checkUser() {
   if (user.value) {
     await fetchSingleProfile(user.value.id);
-
-    if (ProfileData.value === null) {
+    console.log('Current ProfileData:', ProfileData.value);
+    if (ProfileData.value === undefined) {
+      console.log("Creating profile because ProfileData was undefined");
       await createProfile(user.value);
+      await checkUser();
     } else {
-      console.log("Setting user store", ProfileData.value);
+      console.log("ProfileData found. Setting user store with ProfileData", ProfileData.value);
       userStore.setUser(ProfileData.value);
       HasUser.value = true;
     }
-
     loading.value = false;
   } else {
+    HasUser.value = false;
+    loading.value = false;
+  }
+}
+
+// Watch for changes in the user object
+watch(user, async (newUser) => {
+  console.log('User changed', newUser);
+  if (newUser) {
+    await checkUser();
+  } else {
+    HasUser.value = false;
     loading.value = false;
   }
 });
+
+onMounted(async () => {
+  await checkUser();
+});
+
+// const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+//     if (event === 'SIGNED_IN') {
+//         console.log("User signed in:", session);
+//         // Update your app's state or store user data here
+//     } else if (event === 'SIGNED_OUT') {
+//         console.log("User signed out");
+//         // Handle any clean-up or redirects here
+//     } else if (event === 'TOKEN_REFRESHED') {
+//         console.log("Token refreshed:", session);
+//         // Update token/session state here to keep user logged in
+//     } else if (event === 'USER_UPDATED') {
+//         console.log("User data updated:", session);
+//         // Useful if user profile or permissions change
+//     }
+// });
 
 </script>
 
