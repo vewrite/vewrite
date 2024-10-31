@@ -1,9 +1,7 @@
 <template>
+  <Loading class="on-top" :hasLogo="true" v-if="loading" />
   <div id="vewrite">
-    <Loading class="on-top" :hasLogo="true" v-if="loading" />
-    {{ GroupData }}
-    {{ GroupError }}
-    <div class="app" v-if="user">
+    <div class="app" v-if="HasUser">
       <main v-if="userStore.firstTime == false">
         <section class="zoom">
           <Sidebar />
@@ -37,52 +35,39 @@ const userStore = useUser()
 
 // Profile composable
 import useProfile from '~/composables/useProfile'
-const { createProfile } = useProfile()
-
-// Group composable
-import useGroup from '~/composables/useGroup'
-const { createGroup, GroupData, GroupError } = useGroup()
-
-console.log("User: ", user.value)
+const { createProfile, fetchSingleProfile, ProfileData, ProfileError } = useProfile()
   
-const group = ref(null)
-
-
-// Pull the user state from the database, then pass that into the user store
-const fetchUser = async () => {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.value.id)
-
-  if (error) throw error
-
-  if(data.length == 0) {
-    group.owner_id = user.value.id
-    createProfile(user.value)
-    console.log("Creating group", group)
-    createGroup(group)
-    return
-  }
-  userStore.setUser(data[0])
-}
+const HasUser = computed(() => {
+  return user.value !== null
+})
 
 // Watch for changes in the user object
 watch(user, async (newUser) => {
+  console.log("User changed", newUser);
   if (newUser) {
-    await fetchUser();
+    await fetchSingleProfile(user.value.id);
+    HasUser.value = true;
+    userStore.setUser(ProfileData.value);
     loading.value = false;
   }
 });
 
+
 // Call the user store and set the user using the Supabase user
 onMounted(async () => {
-  // console.log('User:', user.value)
+
   if (user.value) {
-    await fetchUser();
+    await fetchSingleProfile(user.value.id);
+
+    if (ProfileData.value === null) {
+      await createProfile(user.value);
+    } else {
+      console.log("Setting user store", ProfileData.value);
+      userStore.setUser(ProfileData.value);
+    }
+
     loading.value = false;
   } else {
-    // because we are not logged in, and now need to show the auth component
     loading.value = false;
   }
 });
@@ -124,6 +109,17 @@ onMounted(async () => {
   .zoom {
     transform: scale(0.88);
   }
+}
+
+#DevDrawer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px);
+  color: white;
+  z-index: 1000;
+  border-radius: $br-lg 0 0 0;
 }
 
 </style>

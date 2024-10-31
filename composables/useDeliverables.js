@@ -47,7 +47,7 @@ export default function useDeliverables() {
 
       if (error) throw error;
     } catch (error) {
-      alert(error.message);
+      console.error('Error updating deliverable:', error.message);
     }
   }
 
@@ -152,7 +152,7 @@ export default function useDeliverables() {
       if (error) throw error;
 
     } catch (error) {
-      alert(error.message);
+      console.error(error);
     }
   }
 
@@ -167,7 +167,7 @@ export default function useDeliverables() {
 
       return data[0];
     } catch (error) {
-      alert(error.message);
+      console.error(error);
     }
   }
 

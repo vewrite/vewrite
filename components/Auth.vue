@@ -60,7 +60,6 @@ const handleLogin = async () => {
         if (error) throw error
         notification.value = "Check your email for the magic link"
     } catch (error) {
-        // alert(error.error_description || error.message)
         errorbox.value = error.error_description || error.message
     } finally {
         loading.value = false

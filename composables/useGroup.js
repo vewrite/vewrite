@@ -6,23 +6,28 @@ export default function useGroup() {
   const GroupError = ref(null);
   const supabase = useSupabaseClient();
 
-  async function createGroup(group) {
+  async function createGroup(owner_id) {
 
-    console.log('Creating group', group);
+    console.log('Creating group for: ', owner_id);
+
+    const InsertData = {
+      owner_id: owner_id,
+      created_at: new Date(),
+    };
 
     try {
 
       const { data, error } = await supabase
         .from('groups')
-        .insert(group);
+        .insert(InsertData);
 
       if (error) throw error;
 
-      GroupData.value = data[0];
+      console.log('Group created', data);
+      GroupData.value = data;
       return data;
 
     } catch (error) {
-      alert(error.message);
       GroupError.value = error;
     }
   }
@@ -38,7 +43,7 @@ export default function useGroup() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      console.error('Error updating group:', error.message);
     }
   }
 
@@ -54,7 +59,7 @@ export default function useGroup() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      console.error('Error deleting group:', error.message);
     }
   }
 
@@ -70,7 +75,7 @@ export default function useGroup() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      console.error('Error fetching group:', error.message);
     }
   }
 
@@ -90,8 +95,8 @@ export default function useGroup() {
       return data;
 
     } catch (error) {
-      alert(error.message);
       GroupError.value = error;
+      console.error('Error fetching group:', error.message);
     }
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div id="FirstTime">
     <div class="onboarding-form">
-      <div class="onboarding-step" v-if="onboardingStep == 1">
+      <div class="onboarding-step" v-if="onboardingStep == 1">        
         <h1>Hello!</h1>
         <h2>How will you be using Vewrite?</h2>
           <div class="onboarding-header">
@@ -73,22 +73,43 @@
 
 <script setup>
 
-// Supabase setup
-const supabase = useSupabaseClient()
-const user = useSupabaseUser()
-
-// User store
 import { useUser } from '@/stores/user'
 const userStore = useUser()
 
+import useGroup from '~/composables/useGroup'
+const { createGroup, fetchSingleGroup, GroupData, GroupError } = useGroup()
+
+import useProfile from '~/composables/useProfile'
+const { fetchSingleProfile, ProfileData, ProfileError } = useProfile()
+
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 const loading = ref(false)
+const onboardingStep = ref(1)
+const ActiveProfile = ref(null)
 
-// Onboarding state
-const onboardingStep = ref(1);
+/* 
 
-// First time users will see this onboarding screen
-// After they see it, we should set in the database that they have seen it
-// and then they will see the main screen
+I want to:
+
+1. Get the user from the database
+2. Ensure that the user's group is created
+3. Ensure that the user's profile is created
+4. Allow the user to set their persona
+5. Allow the user to set their name and website
+
+*/
+
+onMounted(async () => {
+  try {
+    await fetchSingleProfile(user.value.id)
+    console.log(ProfileData)
+    await createGroup(user.value.id)
+  } catch (error) {
+    console.error(error)
+    console.error(GroupError)
+  }
+})
 
 // STEP 1 - set the user's persona
 const setPersona = async (persona) => {
