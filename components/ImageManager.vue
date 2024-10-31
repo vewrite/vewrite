@@ -64,7 +64,7 @@ const uploadlogo = async (evt) => {
       emit("update:logo_url", filePath)
       emit("upload")
   } catch (error) {
-      alert(error.message)
+      console.error("Error uploading image: ", error.message)
   } finally {
       uploading.value = false
   }

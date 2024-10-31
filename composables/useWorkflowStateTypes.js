@@ -47,7 +47,8 @@ export default function useWorkflowStateTypes() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      StateError.value = error;
+      console.log(StateError.value);
     }
   }
 
@@ -72,7 +73,8 @@ export default function useWorkflowStateTypes() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      StateError.value = error;
+      console.log(StateError.value);
     }
   }
 
@@ -93,7 +95,8 @@ export default function useWorkflowStateTypes() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      StateError.value = error;
+      console.log(StateError.value);
     }
   }
 
@@ -114,6 +117,7 @@ export default function useWorkflowStateTypes() {
       return data;
     } catch (error) {
       StateError.value = error;
+      console.log(StateError.value);
     }
   }
 
@@ -136,6 +140,7 @@ export default function useWorkflowStateTypes() {
       // return data[0];
     } catch (error) {
       StateError.value = error;
+      console.log(StateError.value);
     }
   }
 

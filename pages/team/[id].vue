@@ -243,7 +243,7 @@ onMounted(async () => {
 
     loading.value = false;
   } catch (error) {
-    alert(error.message);
+    console.error(error);
   }
 });
 

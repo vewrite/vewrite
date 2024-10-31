@@ -1,8 +1,6 @@
 <template>
     <main id="AccountContent">
 
-        <div class="button red" @click="createGroup(group)">Create Group</div>
-
         <Loading v-if="loading" />
 
         <form class="inner-container" @submit.prevent="updateProfile" v-else>
@@ -63,6 +61,8 @@
 
 <script setup>
 
+import { useRouter } from 'vue-router';
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser();
 
@@ -70,6 +70,7 @@ const loading = ref(true)
 const username = ref('')
 const website = ref('')
 const avatar_path = ref('')
+const router = useRouter()
 
 let { data } = await supabase
     .from('profiles')
@@ -82,14 +83,6 @@ if (data) {
     avatar_path.value = data.avatar_url
 }
 loading.value = false
-
-// Group composable
-import useGroup from '~/composables/useGroup'
-const { createGroup, GroupData, GroupError } = useGroup()
-
-const group = ref({
-  owner_id: user.value.id,
-})
 
 // User store
 import { useUser } from '@/stores/user'
@@ -116,7 +109,7 @@ async function updateProfile() {
         })
         if (error) throw error
     } catch (error) {
-        alert(error.message)
+        console.error(error)
     } finally {
         loading.value = false
     }
@@ -126,14 +119,16 @@ async function signOut() {
     try {
         loading.value = true
         let { error } = await supabase.auth.signOut()
+        router.push('/');
         if (error) throw error
         user.value = null
     } catch (error) {
-        alert(error.message)
+        console.error(error)
     } finally {
         loading.value = false
     }
 }
+
 </script>
 
 <style lang="scss" scoped>
