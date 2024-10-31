@@ -49,11 +49,12 @@
                   Set state
                 </span>
 
-                <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id">
-                    <div v-for="state in states" :class="deliverable.workflow_state == state[0].id ? 'active' : ''" @click="onWorkflowStateSelect(deliverable.id, state[0].id, state[0].instance_name)">
-                      {{ state[0].instance_name }}
-                    </div>
+                <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id" v-if="states">
+                  <div v-for="state in states" :key="state[0]?.id" :class="deliverable.workflow_state == state[0]?.id ? 'active' : ''" @click="state[0] && onWorkflowStateSelect(deliverable.id, state[0].id, state[0].instance_name)">
+                    {{ state[0]?.instance_name }}
+                  </div>
                 </div>
+                
               </div>
               
               <div class="deliverable-calendar">
