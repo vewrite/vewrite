@@ -1,4 +1,8 @@
 <template>
+  <!-- <pre v-if="supabase && authListener">
+    {{ supabase.auth }}
+    {{ authListener }}
+  </pre> -->
   <Loading class="on-top" :hasLogo="true" v-if="loading" />
   <div id="vewrite">
     <div class="app" v-if="HasUser">
@@ -41,7 +45,6 @@ const HasUser = ref(false)
 
 // Watch for changes in the user object
 watch(user, async (newUser) => {
-  console.log("User changed", newUser);
   if (newUser) {
     await fetchSingleProfile(user.value.id);
     HasUser.value = true;
@@ -52,6 +55,23 @@ watch(user, async (newUser) => {
     HasUser.value = false;
   }
 });
+
+const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+        console.log("User signed in:", session);
+        // Update your app's state or store user data here
+    } else if (event === 'SIGNED_OUT') {
+        console.log("User signed out");
+        // Handle any clean-up or redirects here
+    } else if (event === 'TOKEN_REFRESHED') {
+        console.log("Token refreshed:", session);
+        // Update token/session state here to keep user logged in
+    } else if (event === 'USER_UPDATED') {
+        console.log("User data updated:", session);
+        // Useful if user profile or permissions change
+    }
+});
+
 
 
 // Call the user store and set the user using the Supabase user
@@ -65,6 +85,7 @@ onMounted(async () => {
     } else {
       console.log("Setting user store", ProfileData.value);
       userStore.setUser(ProfileData.value);
+      HasUser.value = true;
     }
 
     loading.value = false;

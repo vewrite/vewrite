@@ -136,7 +136,6 @@ const filteredClients = computed(() => {
     align-items: flex-start;
     width: 100%;
     overflow-y: auto;
-    background-color: $white;
     height: calc(100% - 60px);
     padding: $spacing-md $spacing-sm;
 
@@ -151,7 +150,9 @@ const filteredClients = computed(() => {
       padding: $spacing-xxs;
       border-radius: $br-lg;
       transition: all 0.2s ease;
-      border: 1px solid $gray-light;
+      border: $border;
+      box-shadow: $soft-shadow;
+      background-color: $white;
 
       &:hover {
         border: 1px solid $brand;
