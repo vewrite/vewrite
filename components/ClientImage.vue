@@ -1,7 +1,6 @@
 <template>
   <div :class="['client-logo-wrapper', 'client-logo', 'image', size]">
     <Loading v-if="loading" type="small" />
-    <!-- <img v-if="!loading" :src="src" alt="logo" :class="['client-logo', 'image', size]" /> -->
     <div v-if="!loading" class="client-logo image" :class="size" :style="{ backgroundImage: `url(${src})` }" />
   </div>
 </template>
@@ -24,13 +23,15 @@ async function fetchClientLogo(client) {
   const { data, error } = await supabase
     .from('clients')
     .select('logo_url')
-    .eq('id', client)
+    .eq('client_id', client)
     .single()
 
   if (error) {
     console.error('Error fetching client:', error.message)
     return null
   }
+
+  console.log('Client logo:', data.logo_url)
 
   const logoBlob = await downloadImage(data.logo_url);
   src.value = URL.createObjectURL(logoBlob);
@@ -53,7 +54,8 @@ const downloadImage = async (path) => {
 // Watch for changes to the client prop
 watch(() => props.client, (newClient) => {
   if (newClient) {
-    fetchClientLogo(newClient.id);
+    console.log('New client:', newClient);
+    fetchClientLogo(newClient);
   }
 }, { immediate: true });
 

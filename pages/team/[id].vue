@@ -20,9 +20,9 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <div class="team-overview" v-if="TeamData && !loading">
-        <div class="team-summary">
-          <input class="team-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
+      <div class="object-overview" v-if="TeamData && !loading">
+        <div class="object-summary">
+          <input class="object-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
           <span>Click to edit</span>
         </div>
       </div>
@@ -271,52 +271,6 @@ function updateTeamWithDebounce() {
 <style lang="scss" scoped>
 
 @import 'assets/_variables.scss';
-
-.team-overview {
-  padding: $spacing-sm;
-  border-radius: $br-md;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing-md;
-  margin: 0 auto;
-  background-color: $white;
-  border-bottom: $border;
-
-  .team-summary {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    width: 100%;
-    position: relative;
-
-    .team-title-input {
-      font-size: $font-size-lg;
-      font-weight: 500;
-      background-color: transparent;
-      width: 100%;
-      padding: $spacing-xs;
-
-      &:focus,
-      &:active {
-        border: 1px solid $brand;
-        background: $white;
-      }
-    }
-
-    span {
-      position: absolute;
-      right: $spacing-sm;
-      top: 0;
-      line-height: 54px;
-      opacity: 0.25;
-      font-size: $font-size-xs;
-      pointer-events: none;
-    }
-
-  }
-}
 
 .team-management {
   display: flex;

@@ -32,9 +32,6 @@ function debounce(func, wait) {
 const debouncedUpdateProjectName = debounce((id, value) => updateProjectName(id, value), 1000);
 const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectDescription(id, value), 1000);
 
-// TODO - debounce should be its own composable that includes the debounce function and the debounced methods
-
-
 </script>
 
 <style lang="scss" scoped>

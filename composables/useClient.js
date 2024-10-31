@@ -3,9 +3,11 @@ import { useModal } from '~/stores/modal'
 
 export default function useClient() {
 
-  const clientData = ref(null)
+  const ClientData = ref(null)
+  const ClientError = ref(null)
   const clientsData = ref(null)
-  const supabase = useSupabaseClient();
+  const ClientProjects = ref([])
+  const supabase = useSupabaseClient()
 
 
   async function createClient(client) {
@@ -33,6 +35,7 @@ export default function useClient() {
   
     } catch (error) {
       console.error('Error creating client:', error)
+      ClientError.value = error.message
     } 
   }
 
@@ -41,19 +44,35 @@ export default function useClient() {
     const { data, error } = await supabase
       .from('clients')
       .select('*')
-      .eq('id', clientId)
+      .eq('client_id', clientId)
   
     if (error) {
       console.error('Error fetching clients:', error.message)
+      ClientError.value = error.message
       return
     }
 
-    clientData.value = data[0]
-  
-    // add the clients to the clients ref
+    ClientData.value = data[0]
     return data[0]
   
   }
+
+  async function fetchProjectsFromSpecificClient(clientId) {
+    const { data, error } = await supabase
+      .from('clients')
+      .select(`*,projects (*)`)
+      .eq('client_id', clientId);
+  
+    if (error) {
+      console.error('Error fetching client projects:', error.message)
+      ClientError.value = error.message
+      return
+    }
+  
+    ClientProjects.value = data
+    return data
+  }
+    
 
   async function fetchClients(userId) {
     const { data, error } = await supabase
@@ -63,6 +82,7 @@ export default function useClient() {
   
     if (error) {
       console.error('Error fetching clients:', error.message)
+      ClientError.value = error.message
       return
     }
   
@@ -90,10 +110,11 @@ export default function useClient() {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
-      .eq('client', clientId)
+      .eq('client_id', clientId)
   
     if (error) {
       console.error('Error fetching client projects:', error.message)
+      ClientError.value = error.message
       return
     }
   
@@ -110,6 +131,7 @@ export default function useClient() {
         return data
     } catch (error) {
         console.error("Error downloading image: ", error.message)
+        ClientError.value = error.message
     }
   }
 
@@ -121,13 +143,16 @@ export default function useClient() {
   }
 
   return {
-    clientData,
+    ClientData,
+    ClientProjects,
+    ClientError,
     clientsData,
     createClient,
     createClientModal,  
     fetchClient,
     fetchClients,
-    fetchClientProjects
+    fetchClientProjects,
+    fetchProjectsFromSpecificClient
   }
 
 }

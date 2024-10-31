@@ -15,51 +15,30 @@
             </svg>
           </template>
           <template v-slot:menu>
-            <div class="dropdown-item" @click="deleteClientModal(client.id)">Delete client</div>
+            <div class="dropdown-item" @click="deleteClientModal(client.client_id)">Delete client</div>
           </template>
         </Dropdown>
       </div>
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <div class="inner-container" v-if="client && !loading">
-        <div class="form-block">
-          <div class="form-details">
-            <h3>Overview</h3>
-            <p>Just a quick list of all available details</p>
-          </div>
-          <div class="form-content">
-            <table>
-              <tr>
-                <td>Name</td>
-                <td>{{ client.name }}</td>
-              </tr>
-              <tr>
-                <td>Description</td>
-                <td>{{ client.description }}</td>
-              </tr>
-              <tr>
-                <td>Created at</td>
-                <td>{{ new Date(client.created_at).toLocaleString() }}</td>
-              </tr>
-              <tr>
-                <td>Updated at</td>
-                <td>{{ new Date(client.updated_at).toLocaleString() }}</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-
-        <div class="form-block" v-if="creator && !loading">
-          <div class="form-details">
-            <h3>Creator</h3>
-            <p>Who made this?</p>
-          </div>
-          <div class="form-content">
-            <p>{{ creator.username }}</p>
-          </div>
+      <div class="object-overview" v-if="ClientData && !loading">
+        <div class="object-summary">
+          <input class="object-title-input" v-model="ClientData.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
+          <span>Click to edit</span>
         </div>
       </div>
+      <div class="inner-container" v-if="ClientData && !loading">
+        <div v-for="client in ClientProjects" :key="client.client_id">
+          <div v-for="project in client.projects" :key="project.id">
+            {{ project.name }}
+          </div>
+        </div>  
+      </div>
+      <!-- I want to show: 
+      - Client name
+      - Client image
+      - Client projects -->
     </template>
   </AppPanel>
 </template>
@@ -77,62 +56,20 @@ const route = useRoute();
 // Extract the client ID from the route parameters
 const clientId = route.params.id;
 
-// Fetch the client data from supabase
-const client = ref(null);
-const creator = ref(null);
+import useClient from '~/composables/useClient';
+const { fetchClient, fetchProjectsFromSpecificClient, ClientData, ClientProjects, ClientError } = useClient();
 
-// Modal
-import { useModal } from '~/stores/modal';
-const modal = useModal();
-
-async function getclient(id) {
-  try {
-    const { data, error } = await supabase
-      .from('clients')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) throw error;
-
-    client.value = data;
-
-    // Cool, now go get the creator data
-    getCreator(client.value.created_by);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function getCreator(uuid) {
-  try {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('id', uuid)
-      .single();
-
-    if (error) throw error;
-
-    creator.value = data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const edit = () => {
-  modal.visible = 1;
-};
 
 // Fetch the client data when the component is mounted
-onMounted(() => {
-  getclient(clientId);
-  loading.value = false;
+onMounted(async () => {
+  try {
+    await fetchClient(clientId);
+    await fetchProjectsFromSpecificClient(clientId);
+    loading.value = false;
+  } catch (error) {
+    console.error('Error fetching client:', error);
+  }
 });
 
 </script>
 
-<style scoped>
-/* Your styles here */
-</style>

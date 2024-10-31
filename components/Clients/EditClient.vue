@@ -1,6 +1,6 @@
 <template>
   <main class="client-edit">
-    {{ client.id }}
+    {{ client.client_id }}
   </main>
 </template>
 

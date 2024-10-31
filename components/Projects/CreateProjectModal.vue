@@ -37,8 +37,8 @@
             <div class="form-group">
               <section id="ClientSelect">
                 <div class="client-select" v-for="client in clients">
-                  <input type="radio" :id="client.id" name="drone" :value="client.id" v-model="project.client" />
-                  <label :for="client.id">
+                  <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client" />
+                  <label :for="client.client_id">
                     <div class="image-wrapper">
                       <img :src="client.logo_url" alt="Client avatar" />
                     </div>

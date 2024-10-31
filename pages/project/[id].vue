@@ -19,7 +19,7 @@
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
 
-        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="clientData" :creator="creator" />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" />
         <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
@@ -93,7 +93,7 @@ const { createDeliverableModal } = useDeliverables();
 
 // Client composable
 import useClient from '~/composables/useClient';
-const { fetchClient, clientData } = useClient();
+const { fetchClient, ClientData } = useClient();
 
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
@@ -125,7 +125,6 @@ const projectId = route.params.id;
 // Fetch the project data from supabase
 const project = ref(null);
 const creator = ref(null);
-const client = ref(null);
 const deliverables = ref([]);
 const workflow = ref([]);
 const states = ref([]);
@@ -143,8 +142,7 @@ async function getProject(id) {
 
     project.value = data;
 
-    // fetchCreator(project.value.created_by);
-    fetchClient(project.value.client);
+    fetchClient(project.value.client_id);
     fetchDeliverables(project.value.id);
     fetchProjectWorkflow(project.value.workflow);
     fetchWorkflowStates(project.value.workflow);

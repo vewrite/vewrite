@@ -710,3 +710,51 @@ button.vertical,
     align-items: center;
     justify-content: center;
 }
+
+/* Editable Object Title */
+
+.object-overview {
+    padding: $spacing-sm;
+    border-radius: $br-md;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-md;
+    margin: 0 auto;
+    background-color: $white;
+    border-bottom: $border;
+  
+    .object-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      position: relative;
+  
+      .object-title-input {
+        font-size: $font-size-lg;
+        font-weight: 500;
+        background-color: transparent;
+        width: 100%;
+        padding: $spacing-xs;
+  
+        &:focus,
+        &:active {
+          border: 1px solid $brand;
+          background: $white;
+        }
+      }
+  
+      span {
+        position: absolute;
+        right: $spacing-sm;
+        top: 0;
+        line-height: 54px;
+        opacity: 0.25;
+        font-size: $font-size-xs;
+        pointer-events: none;
+      }
+  
+    }
+  }

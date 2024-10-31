@@ -11,22 +11,23 @@
       <img src="/images/clients-empty-state.svg" alt="No clients found" />
       <h3>You haven’t created a client yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
-      <!-- <router-link to="clients/create" class="button primary">Create a client</router-link> -->
       <div class="button primary" @click="createClientModal()">Create a client</div>
     </div>
 
     <!-- Client list -->
     <div class="clients-list inner-container" v-if="!loading && clientsData.length > 0">
-      <router-link :to="'/client/' + client.id" class="client-card max-width md" v-for="client in filteredClients" :key="client.id">
+      <router-link :to="'/client/' + client.client_id" class="client-card max-width md" v-for="client in filteredClients" :key="client.client_id">
         <div class="client-info">
           <div class="image-wrapper">
-            <ClientImage :client="client" size="large" table="logos" />
+            <ClientImage :client="client.client_id" size="large" table="logos" />
           </div>
           <h3>{{ client.name }}</h3>
         </div>
         <div class="clients-projects">
           <span v-if="client.projects">{{ client.projects.length }} projects</span>
-          <span v-else>No projects</span>
+          <span v-else>
+            <!-- TODO - project count -->
+          </span>
           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <line x1="15" y1="8" x2="19" y2="12" />
@@ -52,7 +53,9 @@ const searchQuery = ref('')
 
 // Client composable
 import useClient from '~/composables/useClient';
-const { fetchClients, clientsData, createClientModal } = useClient();
+const { fetchClients, fetchProjectsFromSpecificClient, clientsData, createClientModal } = useClient();
+
+const ClientProjects = ref([]);
 
 onMounted(async () => {
   try {

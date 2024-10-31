@@ -33,7 +33,7 @@
       <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id">
         <div class="project-card-header">
           <div class="image-wrapper">
-            <ClientImage :client="project.client" size="medium" table="logos" />
+            <ClientImage :client="project.client_id" size="medium" table="logos" />
           </div>
         </div>
         <h3>{{ project.name }}</h3>
@@ -94,11 +94,10 @@ async function fetchProjects() {
   }
 
   projects.value = await Promise.all(data.map(async project => {
-    const clientLogo = await fetchClientLogo(project.client);
     return {
       ...project,
       client: {
-        id: project.client,
+        client_id: project.client,
       }
     };
   }));
@@ -116,24 +115,6 @@ async function fetchProjects() {
   }));
 
   loading.value = false
-}
-
-async function fetchClientLogo(client) {
-
-  const { data, error } = await supabase
-    .from('clients')
-    .select('logo_url')
-    .eq('id', client)
-    .single()
-
-  if (error) {
-    console.error('Error fetching client:', error.message)
-    return null
-  }
-
-  const logoBlob = await downloadImage(data.logo_url);
-  return URL.createObjectURL(logoBlob);
-
 }
 
 async function fetchDeliverables(projectId) {
