@@ -1,7 +1,7 @@
 <template>
     <main id="AccountContent">
 
-        <!-- <div class="button red" @click="createGroup(group)">Create Group</div> -->
+        <div class="button red" @click="createGroup(group)">Create Group</div>
 
         <Loading v-if="loading" />
 
@@ -84,12 +84,12 @@ if (data) {
 loading.value = false
 
 // Group composable
-// import useGroup from '~/composables/useGroup'
-// const { createGroup, GroupData, GroupError } = useGroup()
+import useGroup from '~/composables/useGroup'
+const { createGroup, GroupData, GroupError } = useGroup()
 
-// const group = ref({
-//   owner_id: user.value.id,
-// })
+const group = ref({
+  owner_id: user.value.id,
+})
 
 // User store
 import { useUser } from '@/stores/user'

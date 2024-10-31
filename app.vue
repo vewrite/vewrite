@@ -1,6 +1,8 @@
 <template>
   <div id="vewrite">
     <Loading class="on-top" :hasLogo="true" v-if="loading" />
+    {{ GroupData }}
+    {{ GroupError }}
     <div class="app" v-if="user">
       <main v-if="userStore.firstTime == false">
         <section class="zoom">
@@ -42,12 +44,8 @@ import useGroup from '~/composables/useGroup'
 const { createGroup, GroupData, GroupError } = useGroup()
 
 console.log("User: ", user.value)
-
-if (user.value) {
-  const group = ref({owner_id: user.value.id})
-} else {
-  const group = ref(null)
-}
+  
+const group = ref(null)
 
 
 // Pull the user state from the database, then pass that into the user store
@@ -60,7 +58,9 @@ const fetchUser = async () => {
   if (error) throw error
 
   if(data.length == 0) {
+    group.owner_id = user.value.id
     createProfile(user.value)
+    console.log("Creating group", group)
     createGroup(group)
     return
   }

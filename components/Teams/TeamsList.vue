@@ -36,7 +36,6 @@
 
     <!-- Team list -->
     <div :class="['teams-list', viewMode]" v-if="!loading && TeamData.length > 0">
-      
       <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id">  
         <!-- <span class="notification success">team.id: {{ team.id }}</span> -->
         <span class="notification error" v-if="TeamError">{{ TeamError }}</span>

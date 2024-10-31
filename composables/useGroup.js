@@ -7,6 +7,9 @@ export default function useGroup() {
   const supabase = useSupabaseClient();
 
   async function createGroup(group) {
+
+    console.log('Creating group', group);
+
     try {
 
       const { data, error } = await supabase
@@ -20,6 +23,7 @@ export default function useGroup() {
 
     } catch (error) {
       alert(error.message);
+      GroupError.value = error;
     }
   }
 
