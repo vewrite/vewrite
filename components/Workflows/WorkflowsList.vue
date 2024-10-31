@@ -77,16 +77,13 @@ onMounted(async () => {
     .from('workflows')
     .on('INSERT', async payload => {
       loading.value = true;
-      // console.log('New workflows:', payload.new);
       workflows.value.push(payload.new);
-      defaultWorkflows.value = defaultWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
-      customWorkflows.value = customWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
+      customWorkflows.value.push(payload.new);
       workflows.value = await fetchWorkflows(user.value.id);
       loading.value = false;
     })
     .on('DELETE', payload => {
       loading.value = true;
-      // console.log('Deleted workflow:', payload.old);
       workflows.value = workflows.value.filter(workflow => workflow.id !== payload.old.id);
       defaultWorkflows.value = defaultWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
       customWorkflows.value = customWorkflows.value.filter(workflow => workflow.id !== payload.old.id);
