@@ -32,8 +32,7 @@ export default function useTeam() {
       return data;
       
     } catch (error) {
-      TeamError.value = error.message;
-      console.error('Error creating team:', error.message);
+      alert(error.message);
     }
   }
 
@@ -50,8 +49,7 @@ export default function useTeam() {
 
       return data;
     } catch (error) {
-      TeamError.value = error.message;
-      console.error('Error updating team:', error.message);
+      alert(error.message);
     }
   }
 
@@ -76,8 +74,7 @@ export default function useTeam() {
 
       return data;
     } catch (error) {
-      TeamError.value = error.message;
-      console.error('Error deleting team:', error.message);
+      alert(error.message);
     }
   }
 
@@ -94,8 +91,7 @@ export default function useTeam() {
       return data;
 
     } catch (error) {
-      TeamError.value = error.message;
-      console.error('Error fetching team:', error.message);
+      alert(error.message);
     }
   }
 
@@ -136,10 +132,24 @@ export default function useTeam() {
       }))
 
     } catch (error) {
-      TeamError.value = error.message;
-      console.error('Error fetching teams:', error.message);
+      alert(error.message);
     }
   }
+
+  // async function fetchTeamMembers(teamId) {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('team_members')
+  //       .select('*')
+  //       .eq('team_id', teamId);
+
+  //     if (error) throw error;
+
+  //     TeamMembers.value = data;
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // }
 
 
   function createTeamModal() {

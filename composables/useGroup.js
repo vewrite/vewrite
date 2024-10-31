@@ -29,6 +29,7 @@ export default function useGroup() {
 
     } catch (error) {
       GroupError.value = error;
+      console.error('Error creating group:', error.message);
     }
   }
 
@@ -43,6 +44,7 @@ export default function useGroup() {
 
       return data;
     } catch (error) {
+      GroupError.value = error;
       console.error('Error updating group:', error.message);
     }
   }
@@ -59,6 +61,7 @@ export default function useGroup() {
 
       return data;
     } catch (error) {
+      GroupError.value = error;
       console.error('Error deleting group:', error.message);
     }
   }
@@ -75,6 +78,7 @@ export default function useGroup() {
 
       return data;
     } catch (error) {
+      GroupError.value = error;
       console.error('Error fetching group:', error.message);
     }
   }

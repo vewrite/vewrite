@@ -47,7 +47,7 @@ export default function useDeliverables() {
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error updating deliverable:', error.message);
+      alert(error.message);
     }
   }
 
@@ -152,7 +152,7 @@ export default function useDeliverables() {
       if (error) throw error;
 
     } catch (error) {
-      console.error(error);
+      alert(error.message);
     }
   }
 
@@ -167,7 +167,7 @@ export default function useDeliverables() {
 
       return data[0];
     } catch (error) {
-      console.error(error);
+      alert(error.message);
     }
   }
 
@@ -239,9 +239,9 @@ export default function useDeliverables() {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('deliverables')
-        .insert(deliverable);
+      // const { data, error } = await supabase
+      //   .from('deliverables')
+      //   .insert(deliverable);
 
       useModal().toggleVisibility();
       useModal().reset();

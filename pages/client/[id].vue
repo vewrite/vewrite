@@ -97,7 +97,7 @@ async function getclient(id) {
     getCreator(client.value.created_by);
 
   } catch (error) {
-    console.error(error);
+    alert(error.message);
   }
 }
 
@@ -113,7 +113,7 @@ async function getCreator(uuid) {
 
     creator.value = data;
   } catch (error) {
-    console.error(error);
+    alert(error.message);
   }
 }
 

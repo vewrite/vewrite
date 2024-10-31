@@ -27,7 +27,7 @@ export default {
             if (error) throw error
             user.value = null
         } catch (error) {
-            console.error(error.message)
+            alert(error.message)
         } finally {
             loading.value = false
         }

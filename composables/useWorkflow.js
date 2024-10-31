@@ -97,8 +97,7 @@ export default function useWorkflow() {
 
       return data;
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error updating workflow:', error.message);
+      alert(error.message);
     }
   } 
 
@@ -146,8 +145,7 @@ export default function useWorkflow() {
   
       return data;
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error deleting workflow:', error.message);
+      alert(error.message);
     }
   }
  
@@ -163,8 +161,7 @@ export default function useWorkflow() {
       return data;
 
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error fetching workflows:', error.message);
+      alert(error.message);
     }
   }
 
@@ -180,8 +177,7 @@ export default function useWorkflow() {
       return data;
 
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error fetching workflows:', error.message);
+      alert(error.message);
     }
   }
 
@@ -200,7 +196,6 @@ export default function useWorkflow() {
       // await fetchWorkflowStates(data[0].workflow);
 
       WorkflowData.value = data[0];
-      return data[0].workflow;
 
     } catch (error) {
       WorkflowError.value = error.message;
@@ -224,8 +219,7 @@ export default function useWorkflow() {
       return data[0].states;
 
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error fetching states:', error.message);
+      alert(error.message);
     }
   }
 
@@ -253,8 +247,7 @@ export default function useWorkflow() {
       if (error) throw error;
 
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error(error);
+      alert(error.message);
     }
   }
 
@@ -269,8 +262,7 @@ export default function useWorkflow() {
 
       return data[0];
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error fetching state:', error.message);
+      alert(error.message);
     }
   }
 
@@ -285,8 +277,7 @@ export default function useWorkflow() {
 
       return data;
     } catch (error) {
-      WorkflowError.value = error.message;
-      console.error('Error fetching associated projects:', error.message);
+      alert(error.message);
     }
   }
 

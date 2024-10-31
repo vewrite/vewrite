@@ -52,7 +52,6 @@ watch(user, async (newUser) => {
   }
 });
 
-
 // Call the user store and set the user using the Supabase user
 onMounted(async () => {
 

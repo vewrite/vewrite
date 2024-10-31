@@ -150,7 +150,7 @@ async function getProject(id) {
     fetchWorkflowStates(project.value.workflow);
 
   } catch (error) {
-    console.error(error);
+    alert(error.message);
   }
 }
 
@@ -166,7 +166,7 @@ async function fetchProjectWorkflow(workflowId) {
 
     workflow.value = data;
   } catch (error) {
-    console.error(error);
+    alert(error.message);
   }
 }
 
@@ -203,7 +203,7 @@ async function fetchWorkflowStates(workflowId) {
     if (error) throw error;
 
   } catch (error) {
-    console.error(error);
+    alert(error.message);
   }
 }
 

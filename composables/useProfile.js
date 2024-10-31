@@ -62,8 +62,7 @@ export default function useProfile() {
 
       return data;
     } catch (error) {
-      ProfileError.value = error.message;
-      console.error('Error updating profile:', error.message);
+      alert(error.message);
     }
   }
 
@@ -78,8 +77,7 @@ export default function useProfile() {
 
       return data;
     } catch (error) {
-      ProfileError.value = error.message;
-      console.error('Error deleting profile:', error.message);
+      alert(error.message);
     }
   }
 

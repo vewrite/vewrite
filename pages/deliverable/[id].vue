@@ -94,7 +94,7 @@ async function getDeliverable(id) {
 
     projectId.value = data.project;
   } catch (error) {
-    console.error(error);
+    alert(error.message);
   } finally {
     loading.value = false;
   }
