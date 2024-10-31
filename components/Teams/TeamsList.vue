@@ -107,10 +107,6 @@ onMounted(async () => {
       })
       .subscribe();
 
-    onUnmounted(() => {
-      supabase.removeSubscription(subscription);
-    });
-
     await fetchTeams(GroupData.value.id)
 
   } catch (error) {
@@ -119,6 +115,11 @@ onMounted(async () => {
     loading.value = false
   }
   
+})
+
+onUnmounted(() => {
+  // Unsubscribe from changes
+  supabase.removeSubscription(subscription);
 })
 
 const filteredTeams = computed(() => {

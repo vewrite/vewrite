@@ -9,17 +9,3 @@
     </template>
   </AppPanel>
 </template>
-
-<script setup>
-
-// Clients composable
-import useTeam from '~/composables/useTeam';
-const { createTeamModal } = useTeam();
-
-
-
-</script>
-
-<style scoped>
-/* Your styles here */
-</style>
