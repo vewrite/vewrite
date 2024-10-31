@@ -27,7 +27,7 @@ export default {
             if (error) throw error
             user.value = null
         } catch (error) {
-            alert(error.message)
+            console.error(error.message)
         } finally {
             loading.value = false
         }
@@ -42,7 +42,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* Your styles here */
-</style>

@@ -29,7 +29,8 @@ export default function useWorkflowStateInstances() {
       return data;
 
     } catch (error) {
-      alert(error.message);
+      StateInstanceError.value = error;
+      console.error('Error creating state instance:', error);
     }
   }
 
@@ -60,7 +61,8 @@ export default function useWorkflowStateInstances() {
       return data;
 
     } catch (error) {
-      alert(error.message);
+      StateInstanceError.value = error;
+      console.error('Error updating state instance:', error);
     }
   }
 
@@ -79,7 +81,8 @@ export default function useWorkflowStateInstances() {
       return data;
 
     } catch (error) {
-      alert(error.message);
+      StateInstanceError.value = error;
+      console.error('Error deleting state instance:', error);
     }
   }
 
@@ -97,6 +100,7 @@ export default function useWorkflowStateInstances() {
 
     } catch (error) {
       StateInstanceError.value = error;
+      console.error('Error fetching state instance:', error);
     }
   }
 

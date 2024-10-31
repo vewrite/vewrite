@@ -55,7 +55,8 @@ export function useTalent() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      TalentError.value = error.message;
+      console.error('Error creating talent:', error.message);
     }
   }
 
@@ -82,7 +83,8 @@ export function useTalent() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      TalentError.value = error.message;
+      console.error('Error updating talent:', error.message);
     }
   }
 
@@ -102,7 +104,8 @@ export function useTalent() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      TalentError.value = error.message;
+      console.error('Error deleting talent:', error.message);
     }
   }
 
@@ -122,7 +125,8 @@ export function useTalent() {
 
       TalentList.value = data;
     } catch (error) {
-      alert(error.message);
+      TalentError.value = error.message;
+      console.error('Error listing talent:', error.message);
     }
   }
 

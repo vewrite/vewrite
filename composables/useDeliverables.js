@@ -239,9 +239,9 @@ export default function useDeliverables() {
     }
 
     try {
-      // const { data, error } = await supabase
-      //   .from('deliverables')
-      //   .insert(deliverable);
+      const { data, error } = await supabase
+        .from('deliverables')
+        .insert(deliverable);
 
       useModal().toggleVisibility();
       useModal().reset();

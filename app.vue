@@ -37,9 +37,7 @@ const userStore = useUser()
 import useProfile from '~/composables/useProfile'
 const { createProfile, fetchSingleProfile, ProfileData, ProfileError } = useProfile()
   
-const HasUser = computed(() => {
-  return user.value !== null
-})
+const HasUser = ref(false)
 
 // Watch for changes in the user object
 watch(user, async (newUser) => {
@@ -49,8 +47,12 @@ watch(user, async (newUser) => {
     HasUser.value = true;
     userStore.setUser(ProfileData.value);
     loading.value = false;
+  } else {
+    loading.value = false;
+    HasUser.value = false;
   }
 });
+
 
 // Call the user store and set the user using the Supabase user
 onMounted(async () => {
