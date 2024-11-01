@@ -3,10 +3,15 @@
     <div class="modal-body">
       <p>This is an irreversible action. All data associated with this project, <strong>{{ project.name }}</strong>, will be permanently deleted.</p>
       <br><br>
-      <p><strong>These deliverables will also be deleted</strong></p>
-      <ul>
-        <li v-for="deliverable in deliverables" :key="deliverable.id">{{ deliverable.title }}</li>
-      </ul>
+      <section v-if="deliverables.length > 0">
+        <p><strong>These deliverables will also be deleted</strong></p>
+        <ul>
+          <li v-for="deliverable in deliverables" :key="deliverable.id">{{ deliverable.title }}</li>
+        </ul>
+      </section>
+      <section v-else>
+        <p class="details">No deliverables found for this project.</p>
+      </section>
     </div>
     
     <div class="buttons">
