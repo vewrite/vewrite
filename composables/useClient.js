@@ -39,6 +39,24 @@ export default function useClient() {
     } 
   }
 
+  async function updateClient(client) {
+    console.log('Updating client', client);
+
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .update(client)
+        .eq('client_id', client.client_id);
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      ClientError.value = error.message;
+      console.error('Error updating client:', error.message);
+    }
+  }
+
   async function fetchClient(clientId) {
 
     const { data, error } = await supabase
@@ -149,6 +167,7 @@ export default function useClient() {
     clientsData,
     createClient,
     createClientModal,  
+    updateClient,
     fetchClient,
     fetchClients,
     fetchClientProjects,

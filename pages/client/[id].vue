@@ -24,14 +24,18 @@
       <Loading v-if="loading" />
       <div class="object-overview" v-if="ClientData && !loading">
         <div class="object-summary">
-          <input class="object-title-input" v-model="ClientData.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
+          <input class="object-title-input" v-model="ClientData.name" @input="updateClientWithDebounce(ClientData.client_id, $event.target.value)" />
           <span>Click to edit</span>
         </div>
       </div>
       <div class="inner-container" v-if="ClientData && !loading">
+        <div class="client-image" v-if="ClientData && !loading">
+          <ClientImage :client="ClientData.client_id" size="large" table="logos" />
+        </div>
+        <h3>Projects</h3>
         <div v-for="client in ClientProjects" :key="client.client_id">
           <div v-for="project in client.projects" :key="project.id">
-            {{ project.name }}
+            <nuxt-link :to="'/project/' + project.id">{{ project.name }}</nuxt-link>
           </div>
         </div>  
       </div>
@@ -57,8 +61,24 @@ const route = useRoute();
 const clientId = route.params.id;
 
 import useClient from '~/composables/useClient';
-const { fetchClient, fetchProjectsFromSpecificClient, ClientData, ClientProjects, ClientError } = useClient();
+const { fetchClient, fetchProjectsFromSpecificClient, updateClient, ClientData, ClientProjects, ClientError } = useClient();
 
+// Manual debounce function
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+// Debounced save function
+const debouncedSaveClient = debounce(() => updateClient(ClientData.value), 1000);
+
+// Update deliverable function
+function updateClientWithDebounce() {
+  debouncedSaveClient();
+}
 
 // Fetch the client data when the component is mounted
 onMounted(async () => {
@@ -73,3 +93,12 @@ onMounted(async () => {
 
 </script>
 
+<style scoped lang="scss">
+
+@import 'assets/_variables.scss';
+
+.client-image {
+  display: flex;
+}
+
+</style>
