@@ -42,13 +42,13 @@ const HasUser = ref(false)
 async function checkUser() {
   if (user.value) {
     await fetchSingleProfile(user.value.id);
-    console.log('Current ProfileData:', ProfileData.value);
+    // console.log('Current ProfileData:', ProfileData.value);
     if (ProfileData.value === undefined) {
-      console.log("Creating profile because ProfileData was undefined");
+      // console.log("Creating profile because ProfileData was undefined");
       await createProfile(user.value);
       await checkUser();
     } else {
-      console.log("ProfileData found. Setting user store with ProfileData", ProfileData.value);
+      // console.log("ProfileData found. Setting user store with ProfileData", ProfileData.value);
       userStore.setUser(ProfileData.value);
       HasUser.value = true;
     }
