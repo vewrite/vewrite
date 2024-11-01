@@ -8,7 +8,16 @@
         Back
       </router-link>
       <div class="app-panel-header-buttons">
-        <span class="button red" @click="deleteDeliverable(deliverable.id, projectId)">Delete Deliverable</span>
+        <Dropdown>
+          <template v-slot:trigger>
+            <svg width="2" height="10" viewBox="0 0 2 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M2 1C2 1.55228 1.55228 2 1 2C0.447715 2 0 1.55228 0 1C0 0.447715 0.447715 0 1 0C1.55228 0 2 0.447715 2 1ZM2 5C2 5.55228 1.55228 6 1 6C0.447715 6 0 5.55228 0 5C0 4.44772 0.447715 4 1 4C1.55228 4 2 4.44772 2 5ZM1 10C1.55228 10 2 9.55229 2 9C2 8.44771 1.55228 8 1 8C0.447715 8 0 8.44771 0 9C0 9.55229 0.447715 10 1 10Z" fill="black"/>
+            </svg>
+          </template>
+          <template v-slot:menu>
+            <div class="dropdown-item" @click="deleteDeliverableModal()">Delete deliverable</div>
+          </template>
+        </Dropdown>
       </div>
     </template>
     <template v-slot:body>
@@ -19,8 +28,6 @@
           <input class="deliverable-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
         <section class="state-management">
-          <!-- TODO -  This breaks if there are no state instances set -->
-          <!-- https://github.com/ramijames/vewrite/issues/19 -->
           <div class="button vertical"><small>Current state</small><span>{{ StateInstanceData[0].instance_name }}</span></div>
         </section>
       </aside>
@@ -63,7 +70,7 @@ const deliverable = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, deleteDeliverable, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
+const { saveDeliverable, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
 
 // useWorkflowStateInstances composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';

@@ -92,9 +92,6 @@ export default function useGroup() {
 
       if (error) throw error;
 
-      console.log('fetching group for owner_id', owner_id);
-      console.log('fetched GroupId', data[0]);
-
       GroupData.value = data[0];
       return data;
 

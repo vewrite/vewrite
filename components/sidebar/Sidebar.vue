@@ -13,7 +13,7 @@
       <div class="link-group">
         <div class="title">People</div>
         <router-link to="/teams" class="link"><Icon type="approve" /> Teams</router-link>
-        <router-link to="/members" class="link"><Icon type="star" /> Members</router-link>
+        <!-- <router-link to="/members" class="link"><Icon type="star" /> Members</router-link> -->
       </div>
       <div class="link-group">
         <div class="title">Business</div>

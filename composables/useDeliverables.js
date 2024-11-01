@@ -15,7 +15,6 @@ export default function useDeliverables() {
   const { fetchProjectWorkflow, fetchStates, WorkflowData, WorkflowError } = useWorkflow();
 
   async function fetchProjectDeliverables(projectId) {
-    
     try {
       const { data, error } = await supabase
         .from('deliverables')
@@ -32,11 +31,6 @@ export default function useDeliverables() {
   }
 
   async function saveDeliverable(deliverable) {
-
-    console.log('Saving deliverable', deliverable);
-
-
-      
     try {
       console.log('Updating deliverable', deliverable);
       
@@ -103,9 +97,6 @@ export default function useDeliverables() {
   }
   
   async function fetchSingleProjectDeliverable(deliverableId) {
-
-    console.log('fetchProjectDeliverable', deliverableId);
-
     try {
       const { data, error } = await supabase
         .from('deliverables')
@@ -114,9 +105,7 @@ export default function useDeliverables() {
 
       if (error) throw error;
 
-      // DeliverableData.value = data[0];
-      console.log(data[0]);
-      
+      DeliverableData.value = data[0];
       return data[0];
 
     } catch (error) {
@@ -178,7 +167,17 @@ export default function useDeliverables() {
     useModal().toggleVisibility();
   }
 
+  function deleteDeliverableModal() {
+    useModal().setType('medium');
+    useModal().setHeader('Delete Deliverable');
+    useModal().setContent('DeleteDeliverableModal');
+    useModal().toggleVisibility();
+  }
+
   async function deleteDeliverable(deliverableId, projectId) {
+
+    useModal().toggleLoading();
+    
     try {
       const { data, error } = await supabase
         .from('deliverables')
@@ -186,6 +185,9 @@ export default function useDeliverables() {
         .eq('id', deliverableId);
 
       if (error) throw error;
+
+      useModal().toggleVisibility();
+      useModal().reset();
 
       router.push('/project/' + projectId);
 
@@ -279,6 +281,7 @@ export default function useDeliverables() {
     updateDeliverableTitle,
     updateDeliverableDescription,
     createDeliverableModal,
+    deleteDeliverableModal,
     createDeliverable,
     fetchSingleProjectDeliverable,
     fetchProjectDeliverables,

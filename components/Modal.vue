@@ -28,6 +28,7 @@ import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
 
 // Delivery modals
 import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
+import DeleteDeliverableModal from '~/components/Projects/DeleteDeliverableModal.vue'
 
 // Workflow modals
 import CreateWorkflowModal from '~/components/Workflows/CreateWorkflowModal.vue'
@@ -67,6 +68,7 @@ const contentComponent = computed(() => {
     'CreateProjectModal': CreateProjectModal,
     'DeleteProjectModal': DeleteProjectModal,
     'CreateDeliverableModal': CreateDeliverableModal,
+    'DeleteDeliverableModal': DeleteDeliverableModal,
     'CreateWorkflowModal': CreateWorkflowModal,
     'DeleteWorkflowModal': DeleteWorkflowModal,
     'CreateClientModal': CreateClientModal,
