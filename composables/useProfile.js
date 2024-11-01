@@ -4,6 +4,7 @@ export default function useProfile() {
 
   const ProfileData = ref(null);
   const ProfileError = ref(null);
+  const TeamIds = ref([]);
   const Profiles = ref([]);
   const supabase = useSupabaseClient();
 
@@ -100,6 +101,22 @@ export default function useProfile() {
     }
   }
 
+  async function fetchInvitedTeamsForThisProfile(email) {
+    try {
+      const { data, error } = await supabase
+        .from('invited_profiles')
+        .select('*')
+        .eq('email', email);
+
+      if (error) throw error;
+
+      TeamIds.value = data[0];
+      return data;
+    } catch (error) {
+      ProfileError.value = error.message;
+    }
+  }
+
   async function fetchProfileImage(uuid) {
     try {
       const { data, error } = await supabase
@@ -144,6 +161,8 @@ export default function useProfile() {
     fetchSingleProfile,
     fetchProfileViaEmail,
     fetchProfileImage,
+    fetchInvitedTeamsForThisProfile,
+    TeamIds,
     ProfileData,
     ProfileError,
     Profiles

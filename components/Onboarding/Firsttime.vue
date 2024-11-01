@@ -1,13 +1,28 @@
 <template>
   <div id="FirstTime">
     <div class="onboarding-form">
-      <div class="onboarding-step" v-if="onboardingStep == 1">        
+
+      <div class="onboarding-step" v-if="TeamsData && TeamsData.length > 0">        
         <h1>Hello!</h1>
-        <h2>How will you be using Vewrite?</h2>
+        {{ user }}
+        <h3>You've been invited to join a Vewrite team</h3>
+        <!-- {{ TeamIds }} -->
+        <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
+          <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
+            <p>{{ team.name }}</p>
+            <div class="teams-approval-buttons">
+              <button class="button primary" @click="approveTeamMember(team.id, user.id, user.email)">Approve</button>
+              <button class="button red" @click="rejectTeamMember(team.id, user.id, user.email)">Reject</button>
+            </div>
+          </div>
+        </section>
+        <!-- <Loading v-else /> -->
+        {{ TeamsError }}
+        <!-- <h2>How will you be using Vewrite?</h2>
           <div class="onboarding-header">
           <p>Let's get started by learning about who you are. You can change this from your settings in the future if you find that you require more or less functionality.</p>
-        </div>
-        <div class="select-persona">
+        </div> -->
+        <!-- <div class="select-persona">
           <button class="large" @click="setPersona('talent')">
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_159_236)">
@@ -40,10 +55,11 @@
             <h2>Manager</h2>
             <p class="define">Create projects, deliverables, and track your team's success</p>
           </button>
-        </div>
+        </div> -->
       </div>
-      <div class="onboarding-step" v-if="onboardingStep == 2">
-        <button class="prevStep" @click="prevStep">Back</button>
+
+      <div class="onboarding-step" v-else>
+        <!-- <button class="prevStep" @click="prevStep">Back</button> -->
         <h1>Great!</h1>
         <h2>Let's get personal</h2>
         <div class="onboarding-header">
@@ -80,7 +96,10 @@ import useGroup from '~/composables/useGroup'
 const { createGroup, fetchSingleGroup, GroupData, GroupError } = useGroup()
 
 import useProfile from '~/composables/useProfile'
-const { fetchSingleProfile, ProfileData, ProfileError } = useProfile()
+const { fetchSingleProfile, fetchInvitedTeamsForThisProfile, TeamIds, ProfileData, ProfileError } = useProfile()
+
+import useTeam from '~/composables/useTeam'
+const { fetchInvitedTeams, approveTeamMember, rejectTeamMember, TeamsData, TeamsError } = useTeam()
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
@@ -95,6 +114,7 @@ I want to:
 1. Get the user from the database
 2. Ensure that the user's group is created
 3. Ensure that the user's profile is created
+4. If the user was invited (email exists in invited_profiles), then we should allow the user to review those team invitations
 4. Allow the user to set their persona
 5. Allow the user to set their name and website
 
@@ -103,13 +123,26 @@ I want to:
 onMounted(async () => {
   try {
     await fetchSingleProfile(user.value.id)
-    console.log(ProfileData)
-    await createGroup(user.value.id)
+    await fetchInvitedTeamsForThisProfile(user.value.email)
+    await fetchInvitedTeams([TeamIds.value])
+    // await createGroup(user.value.id)
   } catch (error) {
     console.error(error)
     console.error(GroupError)
   }
 })
+
+// watch(TeamIds, async (newValue) => {
+//   console.log("Got TeamIds")
+//   if (newValue) {
+//     try {
+//       await fetchInvitedTeams([newValue])
+//     } catch (error) {
+//       console.error(error)
+//       console.error(TeamsError)
+//     }
+//   }
+// })
 
 // STEP 1 - set the user's persona
 const setPersona = async (persona) => {
@@ -184,6 +217,31 @@ const prevStep = () => {
   flex-direction: row;
   height: 100%;
   width: 100%;
+
+  .teams-approval-wrapper {
+    border: $border;
+    border-radius: $br-md;
+    padding: $spacing-sm;
+    margin-top: $spacing-md;
+
+    .teams-approval-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      p {
+        margin: 0;
+      }
+
+      .teams-approval-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-sm;
+      }
+    }
+  }
 
   .onboarding-form {
     display: flex;

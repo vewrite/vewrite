@@ -9,7 +9,8 @@ export default function useTeam() {
   const TeamError = ref(null);
   const supabase = useSupabaseClient();
   const TeamMembers = ref([]);
-  const Teams = ref([]);
+  const TeamsData = ref([]);
+  const TeamsError = ref(null);
   const router = useRouter();
   const { fetchTeamMembers, TeamMembersData, TeamMembersError } = useTeamMembers();
 
@@ -99,6 +100,27 @@ export default function useTeam() {
     }
   }
 
+  async function fetchInvitedTeams(teams) {
+
+    Promise.all(teams.map(async team => {
+      try {
+        const { data, error } = await supabase
+          .from('teams')
+          .select('*')
+          .eq('id', team.team_id);
+
+        if (error) throw error;
+
+        TeamsData.value.push(data[0]);
+        return data;
+
+      } catch (error) {
+        TeamError.value = error.message;
+        console.error('Error fetching invited team:', error.message);
+      }
+    }))
+  }
+
   async function fetchTeams(group_id) {
     try {
       const { data, error } = await supabase
@@ -156,18 +178,75 @@ export default function useTeam() {
     useModal().toggleVisibility();
   }
 
+  async function addTeamMember(team_id, user_id) {
+    try {
+      const { data, error } = await supabase
+        .from('team_members')
+        .insert({ team_id, user_id });
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      TeamError.value = error.message;
+      console.error('Error adding team member:', error.message);
+    }
+  }
+
+  async function deleteInvitedProfile(user_email) {
+    try {
+      const { data, error } = await supabase
+        .from('invited_profiles')
+        .delete()
+        .eq('email', user_email);
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      TeamError.value = error.message;
+      console.error('Error deleting invited profile:', error.message);
+    }
+  }
+
+  async function approveTeamMember(team_id, user_id, user_email) {
+    // 1. Now that we have a user_id for the onboarded user, we can add them to the team_members table
+    // 2. Then we must go into the invited_profiles table and delete the record
+    
+    try {
+      await addTeamMember(team_id, user_id)
+      await deleteInvitedProfile(user_email)
+    } catch (error) {
+      TeamError.value = error.message;
+      console.error('Error approving team member:', error.message);
+    }
+  }
+
+  async function rejectTeamMember(team_id, user_id, user_email) {
+    try {
+      await deleteInvitedProfile(user_email)
+    } catch (error) {
+      TeamError.value = error.message;
+      console.error('Error rejecting team member:', error.message);
+    }
+  }
+
   return {
     TeamData,
+    TeamsData,
     TeamError,
+    TeamsError,
     TeamMembers,
-    Teams,
     createTeam,
     updateTeam,
     deleteTeam,
     fetchTeams,
     fetchSingleTeam,
+    fetchInvitedTeams,
     createTeamModal,
-    deleteTeamModal
+    deleteTeamModal,
+    approveTeamMember,
+    rejectTeamMember
   }
 
 }
