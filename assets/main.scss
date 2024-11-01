@@ -724,11 +724,12 @@ button.vertical,
     margin: 0 auto;
     background-color: $white;
     border-bottom: $border;
+    width: 100%;
   
     .object-summary {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 0;
       width: 100%;
       position: relative;
   
@@ -741,8 +742,23 @@ button.vertical,
   
         &:focus,
         &:active {
-          border: 1px solid $brand;
-          background: $white;
+            color: $brand;
+        }
+      }
+
+      .object-description-input {
+        font-size: $font-size-sm;
+        font-weight: 500;
+        background-color: transparent;
+        width: 100%;
+        padding: $spacing-xs;
+        margin-top: -16px;
+        margin-bottom: 6px;
+  
+        &:focus,
+        &:active {
+          color: $brand;
+          opacity: 1;
         }
       }
   

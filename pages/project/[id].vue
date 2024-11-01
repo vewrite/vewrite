@@ -11,7 +11,6 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons">
-        <!-- <button class="button red" @click="deleteProjectModal(project.id)">Delete Project</button> -->
         <button class="button primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
         <Dropdown>
           <template v-slot:trigger>
@@ -30,7 +29,7 @@
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
 
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" />
-        <DeliverablesProgress v-if="project && loading.global == false" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
+        <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
           <p>No deliverables found for this project</p>

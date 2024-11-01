@@ -1,8 +1,8 @@
 <template>
-  <aside class="project-overview">
-    <div class="project-summary">
-      <input class="project-title-input" v-model="project.name" @input="debouncedUpdateProjectName(project.id, $event.target.value)" />
-      <input class="project-title-description" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" />
+  <aside class="object-overview">
+    <div class="object-summary">
+      <input class="object-title-input" v-model="project.name" @input="debouncedUpdateProjectName(project.id, $event.target.value)" />
+      <input class="object-description-input" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" placeholder="Add a project description" />
     </div>
     <div class="client-summary">
       <ClientImage :client="client" size="medium" table="logos" />
@@ -38,55 +38,6 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
 
 @import 'assets/_variables.scss';
 
-.project-overview {
-  width: calc(100%);
-  padding: $spacing-md $spacing-md 0 $spacing-md;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing-md;
 
-  .project-summary {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xs;
-    width: 100%;
-
-    .project-title-input {
-      font-family: $font-family-secondary;
-      font-size: $font-size-lg;
-      font-weight: 500;
-      margin: 0 -0.85rem;
-      background-color: transparent;
-      width: 100%;
-      padding: $spacing-xs;
-
-      &:focus,
-      &:active {
-        border: 1px solid $brand;
-        background: $white;
-      }
-    }
-
-    .project-title-description {
-      font-family: $font-family-main;
-      font-size: $font-size-sm;
-      color: $gray-dark;
-      font-weight: 400;
-      margin: -10px -0.85rem 0 -0.85rem;
-      background-color: transparent;
-      width: 100%;
-      padding: $spacing-xs;
-
-      &:focus,
-      &:active {
-        border: 1px solid $brand;
-        background: $white;
-        color: $black;
-      }
-    }
-  }
-}
 
 </style>
