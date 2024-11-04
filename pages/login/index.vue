@@ -68,12 +68,8 @@ const reset = () => {
 }
 
 async function signInWithGithub() {
-  const { data, error } = await supabase.auth.signInWithOtp(
-    { provider: 'github', 
-      options: {
-        redirectTo: 'http://localhost:3000/confirm',
-      },
-     })
+  const { data, error } = await supabase.auth.signIn(
+    { provider: 'github'})
 }
 
 const signInWithMagicLink = async () => {
