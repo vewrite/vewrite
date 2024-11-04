@@ -125,7 +125,7 @@ onMounted(async () => {
     await fetchSingleProfile(user.value.id)
     await fetchInvitedTeamsForThisProfile(user.value.email)
     await fetchInvitedTeams([TeamIds.value])
-    // await createGroup(user.value.id)
+    await createGroup(user.value.id)
   } catch (error) {
     console.error(error)
     console.error(GroupError)

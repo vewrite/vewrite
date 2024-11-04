@@ -231,7 +231,7 @@ p {
 }
 
 p.details {
-    color: rgba($black, 0.5);
+    color: rgba($black, 0.5) !important;
     font-size: $font-size-xs;
 }
 

@@ -49,6 +49,13 @@ const { path } = toRefs(props)
     display: block;
     padding: 0;
 
+    &.tiny {
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba($brand, .1);
+      border-top-color: $brand;
+    }
+
     &.small {
       width: 20px;
       height: 20px;

@@ -29,8 +29,7 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      'Noto Sans': true,
-      'Noto Serif': true,
+      'Noto Sans': true
     }
   },
 

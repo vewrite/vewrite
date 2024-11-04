@@ -5,7 +5,8 @@
     </div>
     <div class="profile-info">
       <p v-if="ProfileData">{{ ProfileData.username }}</p>
-      <p v-else-if="ProfileError">{{ ProfileError }}</p>
+      <p v-if="ProfileError">{{ ProfileError }}</p>
+      <Role v-if="RoleData" :role="RoleData.role" :user="uuid" :team="team" />
     </div>
     <div class="profile-actions">
       <slot name="actions"></slot>
@@ -17,18 +18,39 @@
 
 import { ref, onMounted } from 'vue';
 import useProfile from '~/composables/useProfile';
+import Role from '~/components/Roles/Role.vue';
 
-const props = defineProps(['uuid', 'type']);
+import useRoles from '~/composables/useRoles';
+const { fetchUserTeamRole, RoleData, RoleError } = useRoles();
+const supabase = useSupabaseClient();
+const props = defineProps(['uuid', 'type', 'team']);
 const { fetchSingleProfile, ProfileData, ProfileError } = useProfile();
 
 onMounted(async () => {
-  try {
-    console.log('Fetching profile:', props.uuid);
+
+  const subscription = supabase
+    .from('team_members')
+    .on('*', (payload) => {
+      console.log('Change received!', payload);
+      fetchSingleProfile(props.uuid);
+      fetchUserTeamRole(props.uuid, props.team);
+    })
+    .subscribe();
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+
     await fetchSingleProfile(props.uuid);
-  } catch (error) {
-    console.error('Error fetching profile:', error.message);
-    ProfileError.value = error.message;
-  }
+    await fetchUserTeamRole(props.uuid, props.team);
+  // try {
+  //   console.log('Fetching profile:', props.uuid);
+  //   await fetchSingleProfile(props.uuid);
+  //   await fetchUserTeamRole(props.uuid, props.team);
+  // } catch (error) {
+  //   console.error('Error fetching profile:', error.message);
+  //   ProfileError.value = error.message;
+  // }
 });
 
 </script>
@@ -44,7 +66,6 @@ onMounted(async () => {
   align-items: center;
   padding: $spacing-sm ;
   border-radius: $br-md;
-  background: $white;
   border: 1px solid rgba($brand, 0.15);
   transition: all 0.2s ease;
   box-shadow: $soft-shadow;
@@ -65,6 +86,10 @@ onMounted(async () => {
 
   .profile-info {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-sm;
+    align-items: center;
 
     p {
       margin: 0;
