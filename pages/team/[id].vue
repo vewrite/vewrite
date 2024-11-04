@@ -117,6 +117,12 @@
 </template>
 
 <script setup>
+
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 

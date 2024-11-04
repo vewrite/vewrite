@@ -85,6 +85,11 @@
 
 <script setup>
 
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
 import DeliverablesProgress from '~/components/DeliverablesProgress.vue';

@@ -46,6 +46,11 @@
 
 <script setup>
 
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
