@@ -43,14 +43,6 @@ onMounted(async () => {
 
     await fetchSingleProfile(props.uuid);
     await fetchUserTeamRole(props.uuid, props.team);
-  // try {
-  //   console.log('Fetching profile:', props.uuid);
-  //   await fetchSingleProfile(props.uuid);
-  //   await fetchUserTeamRole(props.uuid, props.team);
-  // } catch (error) {
-  //   console.error('Error fetching profile:', error.message);
-  //   ProfileError.value = error.message;
-  // }
 });
 
 </script>

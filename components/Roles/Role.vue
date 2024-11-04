@@ -26,23 +26,6 @@ onMounted(async () => {
 
   loading.value = true;
 
-  // const subscription = supabase
-  //   .from('team_members')
-  //   .on('*', (payload) => {
-  //     console.log('Change received!', payload);
-  //     fetchRoles();
-  //     fetchSingleRole(props.role);
-  //   })
-  //   .subscribe();
-
-  //   onUnmounted(() => {
-  //     supabase.removeSubscription(subscription);
-  //   });
-
-  //   await fetchRoles();
-  //   await fetchSingleRole(props.role);
-
-  // loading.value = false;
   try {
     console.log('Fetching role:', props.role);
     await fetchRoles();
