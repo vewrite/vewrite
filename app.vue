@@ -1,4 +1,10 @@
 <template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>   
+</template>
+
+<!-- <template>
   <Loading class="on-top" :hasLogo="true" v-if="loading" />
   <div id="vewrite">
     <div class="app" v-if="HasUser">
@@ -17,9 +23,9 @@
       <Auth />
     </div>
   </div>
-</template>
+</template> -->
 
-<script setup>
+<!-- <script setup>
 
 import FirstTime from '~/components/Onboarding/Firsttime.vue'
 
@@ -90,7 +96,7 @@ onMounted(async () => {
 //     }
 // });
 
-</script>
+</script> -->
 
 <style lang="scss" scoped>
 

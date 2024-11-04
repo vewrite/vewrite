@@ -15,4 +15,9 @@
 import useProject from '~/composables/useProject';
 const { createProjectModal } = useProject();
 
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
 </script>

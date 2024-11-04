@@ -7,7 +7,7 @@
       <!-- {{ user.id }} -->
       <div class="link-group">
         <div class="title">Work</div>
-        <router-link to="/" class="link"><Icon type="folder" /> Projects</router-link>
+        <router-link to="/projects" class="link"><Icon type="folder" /> Projects</router-link>
         <router-link to="/workflows" class="link"><Icon type="workflow" /> Workflows</router-link>
       </div>
       <div class="link-group">
@@ -24,12 +24,12 @@
       </div>
     </div>
     <div class="user-section">
-      <aside class="tier-type">
+      <!-- <aside class="tier-type">
         <div class="tier">
           <p>You are on the Free tier</p>
         </div>
-        <router-link to="/settings" class="button green">Upgrade</router-link>
-      </aside>
+        <router-link to="" class="button green">Upgrade</router-link>
+      </aside> -->
       <router-link to="/account" class="button user" v-if="userStore">
         <div class="user-identity">
           <Avatar :uuid="userStore.uuid" />

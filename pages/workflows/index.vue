@@ -12,12 +12,12 @@
 
 <script setup>
 
-// Workflow composable
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
 import useWorkflow from '~/composables/useWorkflow';
 const { createWorkflowModal } = useWorkflow();
 
 </script>
-
-<style scoped>
-/* Your styles here */
-</style>

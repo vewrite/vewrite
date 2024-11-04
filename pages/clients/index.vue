@@ -12,6 +12,11 @@
 
 <script setup>
 
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
 import useClient from '~/composables/useClient';
 const { createClientModal } = useClient();
 
