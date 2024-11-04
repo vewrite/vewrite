@@ -66,7 +66,7 @@ const filteredusers = computed(() => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #Users {
   display: flex;

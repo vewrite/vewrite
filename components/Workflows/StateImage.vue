@@ -47,7 +47,7 @@ watch(() => props.state, async (newState) => {
 
 <style scoped lang="scss">
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .state-image {
   display: flex;

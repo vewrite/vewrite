@@ -283,7 +283,7 @@ function updateTeamWithDebounce() {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .team-management {
   display: flex;

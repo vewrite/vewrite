@@ -253,7 +253,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #CreateWorkflowModal {
   display: flex;

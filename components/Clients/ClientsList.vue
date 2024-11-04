@@ -96,7 +96,7 @@ const filteredClients = computed(() => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #Clients {
   display: flex;

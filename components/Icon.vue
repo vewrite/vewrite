@@ -12,7 +12,7 @@ defineProps({
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .icon {
   width: 24px;

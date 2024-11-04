@@ -15,7 +15,7 @@ import Sidebar from '~/components/Sidebar/Sidebar.vue'
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #Vewrite {
   display: flex;

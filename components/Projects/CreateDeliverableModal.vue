@@ -101,7 +101,7 @@ const deliverable = reactive({
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #CreateDeliverableModal {
   display: flex;

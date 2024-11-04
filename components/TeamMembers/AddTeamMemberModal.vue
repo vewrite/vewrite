@@ -86,7 +86,7 @@ function removeMemberFromArray(email) {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #AddTeamMemberModal {
   display: flex;

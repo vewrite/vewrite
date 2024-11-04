@@ -139,7 +139,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .deliverable-overview {
   width: calc(100%);

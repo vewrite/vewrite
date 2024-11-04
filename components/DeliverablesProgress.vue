@@ -27,7 +27,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .project-deliverables-status {
   display: flex;

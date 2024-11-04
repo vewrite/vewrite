@@ -101,7 +101,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .client-image {
   display: flex;

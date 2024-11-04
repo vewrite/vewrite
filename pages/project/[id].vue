@@ -392,7 +392,7 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 
-@import "./assets/_variables.scss";
+@use 'assets/variables' as *;
 
 .deliverables-list {
   display: flex;

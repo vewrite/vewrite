@@ -17,7 +17,7 @@ export default {
 
 <style lang="scss">
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #AppPanel {
   display: flex;

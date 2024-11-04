@@ -35,7 +35,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .state-selector-row {
   display: flex;

@@ -6,7 +6,7 @@
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #Login {
   display: flex;

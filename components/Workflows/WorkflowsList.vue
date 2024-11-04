@@ -119,7 +119,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 
-@import "./assets/variables.scss";
+@use 'assets/variables' as *;
 
 #Workflows {
   width: 100%;

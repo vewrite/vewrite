@@ -65,7 +65,7 @@ fetchText();
 
 <style lang="scss">
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #pushText,
 #viewText {

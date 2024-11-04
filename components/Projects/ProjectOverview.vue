@@ -36,7 +36,7 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 
 

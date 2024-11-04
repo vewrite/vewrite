@@ -133,7 +133,7 @@ async function signOut() {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #AccountContent {
     padding: $spacing-md;

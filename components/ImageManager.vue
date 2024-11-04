@@ -94,7 +94,7 @@ watch(() => props.logo_url, (newValue) => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .user-logo {
   display: flex;

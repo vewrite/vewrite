@@ -73,7 +73,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #Sidebar {
   height: 100%;

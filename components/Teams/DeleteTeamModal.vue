@@ -34,7 +34,7 @@ const teamId = route.params.id;
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #DeleteTeamModal {
   display: flex;

@@ -40,7 +40,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .profile-row {
   display: flex;

@@ -67,7 +67,7 @@ function logoUrlUpdate(filePath) {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #CreateClientModal {
   display: flex;

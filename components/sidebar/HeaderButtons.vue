@@ -10,7 +10,7 @@
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #HeaderButtons {
   display: flex;

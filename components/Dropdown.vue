@@ -24,7 +24,7 @@ function toggleDropdown() {
 
 <style lang="scss">
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 
 @keyframes scaleBounce {

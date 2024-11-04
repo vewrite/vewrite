@@ -66,7 +66,7 @@ const handleLogin = async () => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .auth {
     display: flex;

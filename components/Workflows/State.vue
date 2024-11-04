@@ -68,7 +68,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 
-@import "./assets/variables.scss";
+@use 'assets/variables' as *;
 
 .state {
   padding: $spacing-sm;

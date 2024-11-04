@@ -134,7 +134,7 @@ const filteredTeams = computed(() => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 @keyframes cardAppear {
   0% {

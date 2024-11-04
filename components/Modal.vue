@@ -97,7 +97,7 @@ computed(() => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 @keyframes scaleBounce {
   0% {

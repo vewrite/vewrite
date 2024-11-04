@@ -39,7 +39,7 @@ export default {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .toolbar {
   display: flex;

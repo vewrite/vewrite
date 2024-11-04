@@ -63,7 +63,7 @@ watch(() => props.client, (newClient) => {
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 .client-logo-wrapper {
   display: flex;

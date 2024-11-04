@@ -14,7 +14,7 @@ const { path } = toRefs(props)
 
 <style lang="scss" scoped>
 
-@import 'assets/_variables.scss';
+@use 'assets/variables' as *;
 
 #Loading {
   display: flex;
