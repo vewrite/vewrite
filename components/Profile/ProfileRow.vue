@@ -1,17 +1,17 @@
 <template>
-  <div class="profile-card" :class="[type]">
-    <div class="profile-image">
+  <tr class="profile-row" :class="[type]">
+    <td class="profile-image">
       <Avatar :uuid="uuid" size="large" />
-    </div>
-    <div class="profile-info">
+    </td>
+    <td class="profile-info">
       <p v-if="ProfileData">{{ ProfileData.username }}</p>
       <p v-if="ProfileError">{{ ProfileError }}</p>
       <Role v-if="RoleData" :role="RoleData.role" :user="uuid" :team="team" />
-    </div>
-    <div class="profile-actions">
+    </td>
+    <td class="profile-actions">
       <slot name="actions"></slot>
-    </div>
-  </div>
+    </td>
+  </tr>
 </template>
 
 <script setup>
@@ -28,21 +28,12 @@ const { fetchSingleProfile, ProfileData, ProfileError } = useProfile();
 
 onMounted(async () => {
 
-  const subscription = supabase
-    .from('team_members')
-    .on('*', (payload) => {
-      console.log('Change received!', payload);
-      fetchSingleProfile(props.uuid);
-      fetchUserTeamRole(props.uuid, props.team);
-    })
-    .subscribe();
-
-    onUnmounted(() => {
-      supabase.removeSubscription(subscription);
-    });
-
+  try {
     await fetchSingleProfile(props.uuid);
     await fetchUserTeamRole(props.uuid, props.team);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 </script>
@@ -51,26 +42,15 @@ onMounted(async () => {
 
 @import 'assets/_variables.scss';
 
-.profile-card {
+.profile-row {
   display: flex;
   flex-direction: row;
   gap: $spacing-sm;
   align-items: center;
-  padding: $spacing-sm ;
-  border-radius: $br-md;
-  border: 1px solid rgba($brand, 0.15);
+  padding: $spacing-xxxs $spacing-sm;
+  border-bottom: 1px solid rgba($brand, 0.15);
   transition: all 0.2s ease;
-  box-shadow: $soft-shadow;
-
-  &.list {
-    border-color: transparent;
-    box-shadow: none;
-    border-radius: 0;
-
-    &:hover {
-      border-color: transparent;
-    }
-  }
+  width: 100%;
 
   .profile-image {
     width: 40px;
@@ -82,6 +62,7 @@ onMounted(async () => {
     flex-direction: row;
     gap: $spacing-sm;
     align-items: center;
+    justify-content: space-between;
 
     p {
       margin: 0;
@@ -92,16 +73,7 @@ onMounted(async () => {
     display: flex;
     flex-direction: row;
     gap: $spacing-sm;
-    opacity: 0;
     transition: all 0.2s ease;
-  }
-
-  &:hover {
-    border: 1px solid $brand;
-
-    .profile-actions {
-      opacity: 1;
-    }
   }
 }
 

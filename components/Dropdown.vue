@@ -50,7 +50,7 @@ function toggleDropdown() {
     position: absolute;
     background-color: $white;
     min-width: 240px;
-    box-shadow: $main-shadow;
+    box-shadow: $big-shadow;
     z-index: 2;
     right: 0;
     top: 32px;

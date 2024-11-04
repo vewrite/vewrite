@@ -26,8 +26,7 @@
           <span>Click to edit</span>
         </div>
       </div>
-      <div class="team-management inner-container" v-if="!loading && TeamData">
-        <div class="max-width md max-height">
+      <div class="team-management" v-if="!loading && TeamData">
 
           <div class="add-member-box">
             <h4>Add team members</h4>
@@ -70,12 +69,13 @@
             <span class="notification error" v-if="TeamMembersError">{{ TeamMembersError }}</span>
           </div>
 
-          <section v-if="teamMembers.length > 0">
-            <div class="members-list">
+          <section class="members-table">
+
+            <section v-if="teamMembers.length > 0" class="members-list max-width lg">
               <h4>Current team members</h4>
               <div class="member-wrap">
                 <div class="member" v-for="member in teamMembers" :key="member.user_id">
-                  <Profilecard :uuid="member.user_id" type="list" :team="TeamData[0].id">
+                  <ProfileCard :uuid="member.user_id" type="list" :team="TeamData[0].id">
                     <template v-slot:actions>
                       <div class="button red" @click="deleteTeamMember(member.user_id)">
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,14 +84,12 @@
                         Remove
                       </div>  
                     </template>
-                  </Profilecard>
+                  </ProfileCard>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section v-if="invitedMembers.length > 0">
-            <div class="members-list">
+            <section v-if="invitedMembers.length > 0" class="members-list max-width lg">
               <h4>Invited team members</h4>
               <div class="member-wrap invited-members">
                 <div class="member" v-for="member in invitedMembers" :key="member.user_id">
@@ -104,15 +102,15 @@
                   </div>  
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <div class="empty-state" v-if="teamMembers.length == 0 && invitedMembers.length == 0">
-            <h3>No members</h3>
-            <p>You haven't invited anyone to this team yet</p>
-          </div>
+            <div class="empty-state" v-if="teamMembers.length == 0 && invitedMembers.length == 0">
+              <h3>No members</h3>
+              <p>You haven't invited anyone to this team yet</p>
+            </div>
+
+          </section>
         </div>
-      </div>
 
     </template>
   </AppPanel>
@@ -199,8 +197,17 @@ function clearProfileData() {
 // Fetch the team data when the component is mounted
 onMounted(async () => {
   try {
-    const subscription = supabase
+    const members_subscription = supabase
       .from('team_members')
+      .on('UPDATE', payload => {
+        console.log('Team member updated:', payload.new);
+        teamMembers.value = teamMembers.value.map(member => {
+          if (member.user_id === payload.new.user_id) {
+            return payload.new;
+          }
+          return member;
+        });
+      })
       .on('INSERT', payload => {
         console.log('New team member:', payload.new);
         console.log('Team members:', teamMembers.value);
@@ -230,7 +237,7 @@ onMounted(async () => {
       .subscribe();
 
     onUnmounted(() => {
-      supabase.removeSubscription(subscription);
+      supabase.removeSubscription(members_subscription);
       supabase.removeSubscription(invited_subscription);
     });
     
@@ -276,45 +283,33 @@ function updateTeamWithDebounce() {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: $spacing-sm;
   width: 100%;
-  padding: $spacing-md;
   border-radius: $br-md;
   height: 100%;
 
   .add-member-box {
-    border-radius: $br-lg;
-    background: rgba($brand, 0) linear-gradient(to bottom, rgba($brand, 0.05) 40%, rgba($brand, 0.15) 100%);
-    border: 1px solid rgba($brand, 0.15);
-    transition: all 0.2s ease;
-
-    &:active,
-    &:focus,
-    &:hover {
-      border: 1px solid rgba($brand, 0.15);
-    }
-
-    .form-input {
-      margin: $spacing-sm;
-      width: calc(100% - $spacing-md);
-    }
+    background: rgba($brand, 0.05);
+    border-bottom: $border;
+    width: 100%;
 
     h4 {
-      margin: $spacing-sm $spacing-sm 0;
+      margin: $spacing-md $spacing-md 0;
       color: $brand;
+    }
+    
+    .form-input {
+      margin: $spacing-sm $spacing-md $spacing-md $spacing-md;
+      width: calc(100% - $spacing-md * 2);
     }
 
     .profile-result {
       display: flex;
       flex-direction: row;
-      padding: $spacing-sm $spacing-sm $spacing-xs $spacing-sm;
       align-items: center;
       justify-content: space-between;
       background-color: $white;
-      border-top: $border;
       overflow: hidden;
-      border-radius: 0 0 $br-lg $br-lg;
-      margin-top: $spacing-sm;
+      margin: $spacing-md;
 
       .profile-info {
         display: flex;
@@ -335,14 +330,22 @@ function updateTeamWithDebounce() {
     }
   }
 
+  .members-table {
+    width: 100%;
+    padding: 0 $spacing-md;
+  }
+
   .members-list {
-    padding-top: $spacing-sm;
+    padding-top: $spacing-md;
     display: flex;
     flex-direction: column;
     gap: 0;
+    width: 100%;
 
     h4 {
       margin-bottom: $spacing-sm;
+      font-size: $font-size-sm;
+      color: rgba($black, 0.65);
     }
 
     .member-wrap {
