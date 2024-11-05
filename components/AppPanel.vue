@@ -23,7 +23,6 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: rgba($white, 1);
   overflow: hidden;
 
   .header {
@@ -63,7 +62,7 @@ export default {
     height: calc(100% - 54px);
     overflow-y: hidden;
     position: relative;
-    background: rgba($gray-light, 0.15);
+    background: rgba($gray-light, 0.1);
     border-left: $border;
     border-top: $border;
   }

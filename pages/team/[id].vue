@@ -28,45 +28,43 @@
       </div>
       <div class="team-management" v-if="!loading && TeamData">
 
-          <div class="add-member-box">
-            <h4>Add team members</h4>
+          <div class="add-member-box max-width lg">
             <div class="form-input">
               <label for="email">Email</label>
-              <input v-model="member.email" id="email" type="email" placeholder="Input team member email address" @input="handleInput" />
+              <input v-model="member.email" id="email" type="email" placeholder="Add a team member via email address" autocomplete="off" @input="handleInput" />
             </div>
-
-            <!-- CASE: We find an email address match -->
-            <div class="profile-result" v-if="ProfileData && ProfileData.id">
-              <div class="profile-info">
-                <div class="profile-image">
-                  <Avatar :uuid="ProfileData.id" size="large" />
-                </div>
-                <p>{{ ProfileData.username }}</p>
-              </div>
-              <div class="button primary" @click="addTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
-                </svg>
-                Add to team
-              </div>
-              <div class="profile-deny" v-else>Already added to this team</div>
-            </div>
-
-            <!-- CASE: We don't find an email address match -->
-            <div class="profile-result" v-if="ProfileData && !ProfileData.id">
-              <div class="profile-info">
-                {{ ProfileData.email }}
-                <div class="profile-deny">Unknown user email</div>
-              </div>
-              <div class="button primary" @click="inviteToVewrite(member.email)">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
-                </svg>
-                Invite to team
-              </div>
-            </div>
-
             <span class="notification error" v-if="TeamMembersError">{{ TeamMembersError }}</span>
+          </div>
+          
+          <!-- CASE: We find an email address match -->
+          <div class="profile-result max-width lg" v-if="ProfileData && ProfileData.id" :class="ProfileData && ProfileData.id ? 'active' : ''">
+            <div class="profile-info">
+              <div class="profile-image">
+                <Avatar :uuid="ProfileData.id" size="large" />
+              </div>
+              <p>{{ ProfileData.username }}</p>
+            </div>
+            <div class="button primary" @click="addTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
+              </svg>
+              Add to team
+            </div>
+            <div class="profile-deny" v-else>Already added to this team</div>
+          </div>
+
+          <!-- CASE: We don't find an email address match -->
+          <div class="profile-result max-width lg" v-if="ProfileData && !ProfileData.id" :class="ProfileData && !ProfileData.id ? 'active' : ''">
+            <div class="profile-info">
+              {{ ProfileData.email }}
+              <div class="profile-deny">Unknown user email</div>
+            </div>
+            <div class="button primary" @click="inviteToVewrite(member.email)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
+              </svg>
+              Invite to team
+            </div>
           </div>
 
           <section class="members-table">
@@ -292,11 +290,16 @@ function updateTeamWithDebounce() {
   width: 100%;
   border-radius: $br-md;
   height: 100%;
+  position: relative;
 
   .add-member-box {
-    background: rgba($brand, 0.05);
-    border-bottom: $border;
+    background: $white;
+    border: $border;
+    border-radius: $br-lg;
     width: 100%;
+    box-shadow: $soft-shadow;
+    margin: $spacing-sm auto 0;
+    z-index: 1;
 
     h4 {
       margin: $spacing-md $spacing-md 0;
@@ -304,35 +307,54 @@ function updateTeamWithDebounce() {
     }
     
     .form-input {
-      margin: $spacing-sm $spacing-md $spacing-md $spacing-md;
-      width: calc(100% - $spacing-md * 2);
+      margin: $spacing-sm;
+      width: calc(100% - $spacing-sm * 2);
+    }
+  }
+
+  @keyframes showResult {
+    0% {
+      top: -6rem;
+    }
+    100% {
+      top: -3rem;
+    }
+  }
+
+  .profile-result {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba($brand, 0.05) linear-gradient(to bottom, rgba($brand, 0.5) 0%, rgba($brand, 0) 50%);
+    overflow: hidden;
+    padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+    border-radius: 0 0 $br-lg $br-lg;
+    top: -8rem;
+    z-index: 0;
+    position: relative;
+    transition: all 0.3s ease;
+
+    &.active {
+      animation: showResult 0.45s ease-in-out forwards;
+      padding: $spacing-lg $spacing-sm $spacing-sm $spacing-sm;
     }
 
-    .profile-result {
+    .profile-info {
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-between;
-      background-color: $white;
-      overflow: hidden;
-      margin: $spacing-md;
+      gap: $spacing-sm;
 
-      .profile-info {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: $spacing-sm;
-
-        p {
-          font-size: $font-size-sm;
-          margin: 0;
-        }
+      p {
+        font-size: $font-size-sm;
+        margin: 0;
       }
+    }
 
-      .profile-deny {
-        font-size: $font-size-xs;
-        color: $gray-dark;
-      }
+    .profile-deny {
+      font-size: $font-size-xs;
+      color: $gray-dark;
     }
   }
 
@@ -342,7 +364,6 @@ function updateTeamWithDebounce() {
   }
 
   .members-list {
-    padding-top: $spacing-md;
     display: flex;
     flex-direction: column;
     gap: 0;

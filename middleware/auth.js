@@ -5,11 +5,8 @@ export default defineNuxtRouteMiddleware((to) => {
   const route = useRoute();
   const magiclink = route.query.magiclink;
   const hasAccessToken = route.hash.includes('access_token');
-
-  console.log('hasProviderToken', hasAccessToken)
   
   if (magiclink === 'true' || hasAccessToken) {
-    console.log('magiclink', magiclink)
     return navigateTo("/confirm");
   }
 
