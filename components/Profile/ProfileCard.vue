@@ -6,9 +6,9 @@
     <div class="profile-info">
       <p v-if="ProfileData">{{ ProfileData.username }}</p>
       <p v-if="ProfileError">{{ ProfileError }}</p>
-      <Role v-if="RoleData" :role="RoleData.role" :user="uuid" :team="team" />
     </div>
     <div class="profile-actions">
+      <Role v-if="RoleData" :role="RoleData.role" :user="uuid" :team="team" />
       <slot name="actions"></slot>
     </div>
   </div>
@@ -73,6 +73,7 @@ onMounted(async () => {
     flex-direction: row;
     gap: $spacing-sm;
     align-items: center;
+    justify-content: space-between;
 
     p {
       margin: 0;
@@ -83,16 +84,7 @@ onMounted(async () => {
     display: flex;
     flex-direction: row;
     gap: $spacing-sm;
-    opacity: 0;
     transition: all 0.2s ease;
-  }
-
-  &:hover {
-    border: 1px solid $brand;
-
-    .profile-actions {
-      opacity: 1;
-    }
   }
 }
 

@@ -358,6 +358,7 @@ function updateTeamWithDebounce() {
       border-radius: $br-lg;
       border: $border;
       background: $white;
+      box-shadow: $soft-shadow;
 
       &.invited-members {
         
@@ -366,17 +367,6 @@ function updateTeamWithDebounce() {
           flex-direction: row;
           justify-content: space-between;
           padding: $spacing-sm;
-
-          .button {
-            opacity: 0;
-          }
-
-          &:hover {
-
-            .button {
-              opacity: 1;
-            }
-          }
         }
       }
 

@@ -400,7 +400,7 @@ textarea {
         &:hover,
         &:focus-within {
             border: 1px solid rgba($brand, 1);
-            outline: 4px solid rgba($brand, 0.1);
+            outline: 0px solid rgba($brand, 0.1);
             background: rgba($white, 1);
         }
 
@@ -412,6 +412,7 @@ textarea {
             padding: 0;
             height: 100%;
             width: 36px;
+            outline: 0;
         }
 
         svg {
@@ -589,10 +590,13 @@ button,
     align-items: center;
     text-transform: capitalize;
     min-height: 24px;
+    outline: 0px solid rgba($brand, 0.4);
+    outline-offset: 0px;
 
     &:hover {
-        border: 1px solid rgba($brand, 0.4);
-        background: rgba($brand, 0);
+        border: 1px solid rgba($brand-dark, 1);
+        background-color: rgba($brand, 0.05);
+        outline: 4px solid rgba($brand, 0.15);
     }
 
     &:disabled {
@@ -618,7 +622,7 @@ button.primary,
     border: 1px solid rgba($brand-dark, 0.3);
     background-color: rgba($brand, 0.85);
     color: $white;
-    outline: 1px solid rgba($brand, 0.4);
+    outline: 0px solid rgba($brand, 0.4);
     outline-offset: 0px;
 
     &:hover {
