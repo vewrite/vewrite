@@ -1,15 +1,26 @@
 <template>
   <div id="CreateProjectModal">
     <div class="modal-body">
-      <Loading v-if="loading" />
-      <section class="inner-container" v-if="clients.length < 1">
+
+      <Loading v-if="loading" class="loader" />
+
+      <section class="inner-container" v-if="!loading && TeamsData.length < 1">
+        <div class="empty">
+          <h3>No Teams Found</h3>
+          <p>You do not have a team to assign a project to. You must first add a team to Vewrite.</p>
+          <nuxt-link class="button primary" to="/teams" @click="useModal().reset()">Add a team</nuxt-link>
+        </div>
+      </section>
+
+      <section class="inner-container" v-if="!loading && clients.length < 1">
         <div class="empty">
           <h3>No Clients Found</h3>
           <p>You do not have a client to assign a project to. You must first add a client to Vewrite.</p>
           <nuxt-link class="button primary" to="/clients" @click="useModal().reset()">Add a client</nuxt-link>
         </div>
       </section>
-      <form class="inner-container" v-if="!loading && clients.length > 0" @submit.prevent="createProject(project)">
+
+      <form class="inner-container" v-if="!loading && clients.length > 0 && TeamsData.length > 0" @submit.prevent="createProject(project)">
 
         <div class="form-block">
           <div class="form-details">
@@ -24,6 +35,22 @@
             <div class="form-input">
               <label for="description">Description</label>
               <input v-model="project.description" id="description" type="text" placeholder="Summarize your project and its objectives" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-block">
+          <div class="form-details">
+            <h4>Team</h4>
+            <p class="details">Assign a team who will work on this project.</p>
+          </div>
+          <div class="form-content">
+            <div class="form-input">
+              <label for="team">Assigned team</label>
+              <select v-model="project.assigned_team" id="team">
+                <option v-for="team in TeamsData" :key="team.team_id" :value="team.id">{{ team.name }}</option>
+              </select>
+              <!-- TODO: Add validation -->
             </div>
           </div>
         </div>
@@ -78,23 +105,28 @@
 
 <script setup>
 
-// Deliverables composable
 import useProject from '~/composables/useProject';
 const { createProject } = useProject();
 
-// Clients composable
 import useClient from '~/composables/useClient';
 const { fetchClients } = useClient();
 
-// Workflow composable
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchWorkflows } = useWorkflow();
 
-// Modal
+import useTeam from '~/composables/useTeam';
+const { fetchTeams, TeamsData, TeamsError } = useTeam();
+
+import useGroup from '~/composables/useGroup';
+const { fetchSingleGroup, GroupData, GroupError } = useGroup();
+
 import { useModal } from '~/stores/modal'
 
-const loading = ref(false);
 const user = useSupabaseUser();
+
+// Loading state
+const loading = ref(true);
+// useModal().toggleLoading();
 
 // Set some sane defaults for the workflow
 const project = reactive({
@@ -102,14 +134,11 @@ const project = reactive({
   description: '',
   status: 1,
   client_id: 0,
-  deliverables: ["1"],
   workflow: 1,
   created_at: new Date(),
   updated_at: new Date(),
   created_by: user.value.id,
-  stakeholders: {
-                  "stakeholders": "1"
-                }
+  assigned_team: '',
 })
 
 const clients = ref([]);
@@ -117,11 +146,19 @@ const workflows = ref([]);
 
 onMounted(async () => {
   try {
+    await fetchSingleGroup(user.value.id);
+    await fetchTeams(GroupData.value.id);
     clients.value = await fetchClients(user.value.id);
     workflows.value = await fetchWorkflows(user.value.id);
+    loading.value = false;
   } catch (error) {
     console.error('Error fetching clients:', error.message);
+    loading.value = false;
   }
+})
+
+watch(project, (newVal, oldVal) => {
+  console.log('Project:', project);
 })
 
 </script>
@@ -139,6 +176,7 @@ onMounted(async () => {
 
   .modal-body {
     width: 100%;
+    min-height: 320px;
 
     p {
       margin: 0;
@@ -173,7 +211,6 @@ onMounted(async () => {
   .client-select {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
     border: 1px solid rgba($brand, 0);
     border-radius: $br-md;
     padding: $spacing-xxs;

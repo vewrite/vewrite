@@ -1,12 +1,12 @@
 <template>
-  <aside class="object-overview">
+  <aside class="object-overview no-border">
     <div class="object-summary">
       <input class="object-title-input" v-model="project.name" @input="debouncedUpdateProjectName(project.id, $event.target.value)" />
       <input class="object-description-input" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" placeholder="Add a project description" />
     </div>
-    <div class="client-summary">
+    <!-- <div class="client-summary">
       <ClientImage :client="client" size="medium" table="logos" />
-    </div>
+    </div> -->
   </aside>
 </template>
 

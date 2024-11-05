@@ -83,6 +83,9 @@ export default function useTeam() {
   }
 
   async function fetchSingleTeam(team_id) {
+
+    console.log('Fetching single team', team_id);
+
     try {
       const { data, error } = await supabase
         .from('teams')
@@ -91,7 +94,7 @@ export default function useTeam() {
 
       if (error) throw error;
 
-      TeamData.value = data;
+      TeamData.value = data[0];
       return data;
 
     } catch (error) {
@@ -130,25 +133,25 @@ export default function useTeam() {
 
       if (error) throw error;
 
-      TeamData.value = data;
+      TeamsData.value = data;
       
-      TeamData.value.forEach(team => {
+      TeamsData.value.forEach(team => {
         team.members = []
         team.projects = []
       })
 
-      TeamData.value = await Promise.all(data.map(async team => {
-        TeamData.members = []
-        TeamData.projects = []
+      TeamsData.value = await Promise.all(data.map(async team => {
+        TeamsData.members = []
+        TeamsData.projects = []
 
         // TODO - when I have it ready, fetch the team members and projects like in the useClient composable
         
         try {
           // team.projects = await fetchTeamProjects(team.id);
           team.members = await fetchTeamMembers(team.id);
-          TeamData.members = await fetchTeamMembers(team.id);
+          TeamsData.members = await fetchTeamMembers(team.id);
         } catch (error) {
-          TeamError.value = error.message;
+          TeamsError.value = error.message;
         }
 
         return {
@@ -158,7 +161,7 @@ export default function useTeam() {
       }))
 
     } catch (error) {
-      TeamError.value = error.message;
+      TeamsError.value = error.message;
       console.error('Error fetching teams:', error.message);
     }
   }

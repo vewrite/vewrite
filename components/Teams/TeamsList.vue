@@ -1,9 +1,6 @@
 <template>
   <main id="Teams">
 
-    <!-- <span class="notification success">owner_id: {{ user.id }}</span> -->
-    <!-- <span class="notification error">GroupData: {{ GroupData }}</span> -->
-
     <Loading v-if="loading" />
 
     <div class="search-bar" v-if="!loading">
@@ -28,17 +25,16 @@
     </div>
 
     <!-- Empty state -->
-    <div class="empty-state" v-if="TeamData && TeamData.length === 0 && !loading">
+    <div class="empty-state" v-if="TeamsData && TeamsData.length === 0 && !loading">
       <img src="/images/clients-empty-state.svg" alt="No teams found" />
       <h3>You haven’t created a team yet</h3>
       <p>That’s ok, It’s easy and we’ll do it together</p>
     </div>
 
     <!-- Team list -->
-    <div :class="['teams-list', viewMode]" v-if="!loading && TeamData.length > 0">
+    <div :class="['teams-list', viewMode]" v-if="!loading && TeamsData.length > 0">
       <router-link :to="'/team/' + team.id" class="team-card" v-for="team in filteredTeams" :key="team.id">  
-        <!-- <span class="notification success">team.id: {{ team.id }}</span> -->
-        <span class="notification error" v-if="TeamError">{{ TeamError }}</span>
+        <span class="notification error" v-if="TeamsError">{{ TeamsError }}</span>
         <span class="notification error" v-if="GroupError">{{ GroupError }}</span>
         <div class="team-info">
           <div class="members" v-if="team.members.length > 0">
@@ -86,7 +82,7 @@ const listToggle = () => {
 
 // Team composable
 import useTeam from '~/composables/useTeam';
-const { fetchTeams, deleteTeam, TeamData, TeamError } = useTeam();
+const { fetchTeams, deleteTeam, TeamsData, TeamsError } = useTeam();
 
 // Group composable
 import useGroup from '~/composables/useGroup';
@@ -123,9 +119,9 @@ onMounted(async () => {
 
 const filteredTeams = computed(() => {
   if (!searchQuery.value) {
-    return TeamData.value
+    return TeamsData.value
   }
-  return TeamData.value.filter(team =>
+  return TeamsData.value.filter(team =>
     team.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })

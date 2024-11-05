@@ -33,8 +33,9 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: $spacing-md;
-  border-bottom: 1px solid $gray-light;
+  padding: 0 $spacing-md $spacing-md;
+  border-bottom: $border;
+  background: $white linear-gradient(180deg, $white 80%, rgba($brand, 0.05));
   width: calc(100%);
   transition: bottom 0.2s ease;
 

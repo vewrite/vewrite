@@ -512,7 +512,7 @@ textarea {
         width: 33%;
 
         h4 {
-            margin: 0 0 $spacing-xs 0;
+            margin: 0 0 $spacing-xxs 0;
         }
     }
     
@@ -732,6 +732,10 @@ button.vertical,
     background-color: $white;
     border-bottom: $border;
     width: 100%;
+
+    &.no-border {
+        border-bottom: none;
+    }
   
     .object-summary {
       display: flex;

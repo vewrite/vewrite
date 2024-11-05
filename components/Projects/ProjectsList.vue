@@ -64,13 +64,16 @@ const projects = ref([]);
 const loading = ref(true);
 const searchQuery = ref('')
 
-// Supabase
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
-// Modal
+import useDeliverables from '~/composables/useDeliverables';
+const { fetchProjectDeliverables } = useDeliverables();
+
 import { useModal } from '~/stores/modal';
 const modal = useModal();
+
+
 
 const edit = () => {
   modal.visible = 1;
@@ -103,7 +106,7 @@ async function fetchProjects() {
   }));
 
   projects.value = await Promise.all(projects.value.map(async project => {
-    const deliverables = await fetchDeliverables(project.id);
+    const deliverables = await fetchProjectDeliverables(project.id);
 
     // TODO: Calculate the progress of the project based on the deliverable status 
     const completedDeliverables = deliverables.filter(deliverable => deliverable.workflow_state == 6).length;
@@ -115,21 +118,6 @@ async function fetchProjects() {
   }));
 
   loading.value = false
-}
-
-async function fetchDeliverables(projectId) {
-
-  const { data, error } = await supabase
-    .from('deliverables')
-    .select('*')
-    .eq('project', projectId)
-
-  if (error) {
-    console.error('Error fetching deliverables:', error.message)
-    return
-  }
-
-  return data
 }
 
 const downloadImage = async (path) => {
@@ -145,7 +133,6 @@ const downloadImage = async (path) => {
 }
 
 onMounted(async () => {
-  // Register onUnmounted before any await statements
   const subscription = supabase
     .from('projects')
     .on('INSERT', payload => {

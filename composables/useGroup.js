@@ -76,6 +76,7 @@ export default function useGroup() {
 
       if (error) throw error;
 
+      GroupData.value = data[0];
       return data;
     } catch (error) {
       GroupError.value = error;

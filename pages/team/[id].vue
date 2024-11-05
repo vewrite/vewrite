@@ -73,7 +73,7 @@
               <h4>Current team members</h4>
               <div class="member-wrap">
                 <div class="member" v-for="member in teamMembers" :key="member.user_id">
-                  <ProfileCard :uuid="member.user_id" type="list" :team="TeamData[0].id">
+                  <ProfileCard :uuid="member.user_id" type="list" :team="TeamData.id">
                     <template v-slot:actions>
                       <div class="button red" @click="deleteTeamMember(member.user_id)">
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -246,7 +246,7 @@ onMounted(async () => {
     });
     
     await fetchSingleTeam(teamId);
-    team.value = TeamData.value[0];
+    team.value = TeamData.value;
 
     // Team members
     teamMembers.value = await fetchTeamMembers(teamId);

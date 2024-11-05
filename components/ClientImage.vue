@@ -81,11 +81,12 @@ watch(() => props.client, (newClient) => {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: $gray-light;
 
   &.small {
-      width: 30px;
-      height: 30px;
-      border-radius: $br-sm;
+      width: 42px;
+      height: 42px;
+      border-radius: $br-md;
   }
 
   &.medium {

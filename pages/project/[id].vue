@@ -29,6 +29,7 @@
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
 
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" />
+        <ProjectDetails v-if="project && loading.global == false" :client="project.client_id" :team="project.assigned_team" />
         <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
@@ -92,6 +93,7 @@ definePageMeta({
 
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
+import ProjectDetails from '~/components/Projects/ProjectDetails.vue';
 import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';

@@ -17,4 +17,7 @@ definePageMeta({
   middleware: ['auth'],
 });
 
+import useTeam from '~/composables/useTeam';
+const { createTeamModal } = useTeam();
+
 </script>

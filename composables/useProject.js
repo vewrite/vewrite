@@ -36,6 +36,8 @@ export default function useProject() {
     //   console.log('Form is invalid')
     //   return
     // }
+
+    console.log('Creating project', project);
     
     try {
       useModal().toggleLoading();
@@ -45,12 +47,11 @@ export default function useProject() {
         description: project.description,
         status: project.status,
         client_id: project.client_id,
-        deliverables: project.deliverables,
         workflow: project.workflow,
         created_at: project.created_at,
         updated_at: project.updated_at,
         created_by: project.created_by,
-        stakeholders: project.stakeholders
+        assigned_team: project.assigned_team,
       }
 
       let { error } = await supabase.from('projects').upsert(updates, {
@@ -77,12 +78,11 @@ export default function useProject() {
         description: project.description,
         status: project.status,
         client: project.client,
-        deliverables: project.deliverables,
         workflow: project.workflow,
         created_at: project.created_at,
         updated_at: project.updated_at,
         created_by: project.created_by,
-        stakeholders: project.stakeholders
+        assigned_team: project.assigned_team,
       }
 
       let { error } = await supabase.from('projects').upsert(updates, {
