@@ -336,7 +336,7 @@ function updateTeamWithDebounce() {
     transition: all 0.3s ease;
 
     &.active {
-      animation: showResult 0.45s ease-in-out forwards;
+      animation: showResult 0.45s ease forwards;
       padding: $spacing-lg $spacing-sm $spacing-sm $spacing-sm;
     }
 
