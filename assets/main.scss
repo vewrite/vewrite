@@ -596,7 +596,7 @@ button,
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
         background-color: rgba($brand, 0.05);
-        outline: 4px solid rgba($brand, 0.15);
+        outline: 4px solid rgba($brand, 0.05);
     }
 
     &:disabled {
@@ -644,10 +644,13 @@ button.green,
     border: 1px solid rgba($mint-dark, 0.3);
     background-color: rgba($mint, 0.75);
     color: $black;
+    outline: 0px solid rgba($mint, 0.4);
+    outline-offset: 0px;
 
     &:hover {
         border: 1px solid rgba($mint-dark, 1);
         background-color: rgba($mint, 1);
+        outline: 4px solid rgba($mint, 0.3);
     }
 }
 

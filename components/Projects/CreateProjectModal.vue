@@ -37,7 +37,7 @@
             <div class="form-group">
               <section id="ClientSelect">
                 <div class="client-select" v-for="client in clients">
-                  <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client" />
+                  <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client_id" />
                   <label :for="client.client_id">
                     <div class="image-wrapper">
                       <img :src="client.logo_url" alt="Client avatar" />
@@ -101,7 +101,7 @@ const project = reactive({
   name: '',
   description: '',
   status: 1,
-  client: 0,
+  client_id: 0,
   deliverables: ["1"],
   workflow: 1,
   created_at: new Date(),

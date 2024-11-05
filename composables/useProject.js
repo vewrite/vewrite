@@ -44,7 +44,7 @@ export default function useProject() {
         name: project.name,
         description: project.description,
         status: project.status,
-        client: project.client,
+        client_id: project.client_id,
         deliverables: project.deliverables,
         workflow: project.workflow,
         created_at: project.created_at,

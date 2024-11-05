@@ -4,6 +4,7 @@
     <main>
       <slot />
     </main>
+    <Modal />
   </main>
 </template>
 
