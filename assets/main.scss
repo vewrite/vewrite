@@ -765,6 +765,8 @@ button.vertical,
         background-color: transparent;
         width: 100%;
         padding: $spacing-xs;
+        padding-top: 2px;
+        padding-bottom: 6px;
   
         &:focus,
         &:active {

@@ -123,17 +123,6 @@ function toggleMobile() {
           }
         }
 
-        &:hover {
-          .menu-icon {
-            &::before {
-              top: 8px;
-            }
-
-            &::after {
-              bottom: 8px;
-            }
-          }
-        }
       }
 
     }

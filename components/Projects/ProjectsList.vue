@@ -355,13 +355,13 @@ const filteredProjects = computed(() => {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: $spacing-sm;
+            margin-bottom: $spacing-xs;
             width: 100%;
 
             span {
-              font-size: $font-size-sm;
+              font-size: $font-size-xs;
               font-weight: 400;
-              color: $gray-dark;
+              color: rgba($black, 0.5);
             }
           }
 
@@ -374,7 +374,8 @@ const filteredProjects = computed(() => {
               min-height: 10px;
               border-radius: $br-md;
               background-color: $white;
-              border: 1px solid $gray-light;
+              border: $border;
+              box-shadow: $soft-shadow;
 
               .progress {
                 height: 6px;
@@ -500,9 +501,9 @@ const filteredProjects = computed(() => {
             align-items: center;
 
             span {
-              font-size: $font-size-sm;
+              font-size: $font-size-xs;
               font-weight: 400;
-              color: $gray-dark;
+              color: rgba($black, 0.5);
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -541,7 +542,8 @@ const filteredProjects = computed(() => {
               min-height: 10px;
               border-radius: $br-md;
               background-color: $white;
-              border: 1px solid $gray-light;
+              border: $border;
+              box-shadow: $soft-shadow;
 
               .progress {
                 height: 6px;

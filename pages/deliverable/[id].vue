@@ -22,16 +22,12 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <aside class="deliverable-overview" v-if="deliverable && !loading">
-        <div class="deliverable-summary">
-          <input class="deliverable-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
-          <input class="deliverable-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
+      <aside class="object-overview" v-if="deliverable && !loading">
+        <div class="object-summary">
+          <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
+          <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
-        
-        <StateManager :deliverable="deliverable" :states="workflowStates" />
-        <!-- <section class="state-management">
-          <div class="button vertical"><small>Current state</small><span>{{ StateInstanceData[0].instance_name }}</span></div>
-        </section> -->
+        <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
         <Toolbar :textareaRef="$refs.textareaRef" />
@@ -250,7 +246,6 @@ onMounted(async () => {
   width: 100%;
   height: calc(100% - 140px);
   padding: 0 $spacing-md $spacing-md $spacing-md;
-  border-top: 1px solid rgba($black, 0.1);
   background-color: $white;
 
   textarea {
