@@ -639,6 +639,21 @@ button.primary,
     }
 }
 
+button.clear,
+.button.clear {
+    border: 1px solid rgba($brand-dark, 0);
+    background-color: rgba($brand, 0);
+    color: $white;
+    outline: 0px solid rgba($brand, 0);
+    outline-offset: 0px;
+
+    &:hover {
+        border: 1px solid rgba($brand-dark, 0);
+        background-color: rgba($brand, 0);
+        outline: 4px solid rgba($brand, 0);
+    }
+}
+
 button.green,
 .button.green {
     border: 1px solid rgba($mint-dark, 0.3);

@@ -148,7 +148,7 @@ computed(() => {
     width: 100%;
     height: 100%;
     background-color: rgba(25, 60, 115, 0.1);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(10px);
   }
 
   &.visible {

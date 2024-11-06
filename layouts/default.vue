@@ -1,5 +1,6 @@
 <template>
   <main id="Vewrite">
+    <Mobile />
     <Sidebar />
     <main>
       <slot />
@@ -11,6 +12,7 @@
 <script setup>
 
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
+import Mobile from '~/components/Sidebar/Mobile.vue'
 
 </script>
 
@@ -23,6 +25,10 @@ import Sidebar from '~/components/Sidebar/Sidebar.vue'
   flex-direction: row;
   height: 100%;
   width: 100%;
+
+  @media (max-width: 960px) {
+    flex-direction: column;
+  }
 
   .app, main {
     width: 100%;
