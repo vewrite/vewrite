@@ -291,6 +291,7 @@ function updateTeamWithDebounce() {
   border-radius: $br-md;
   height: 100%;
   position: relative;
+  padding: 0 $spacing-sm;
 
   .add-member-box {
     background: $white;
@@ -360,7 +361,6 @@ function updateTeamWithDebounce() {
 
   .members-table {
     width: 100%;
-    padding: 0 $spacing-md;
   }
 
   .members-list {
@@ -370,9 +370,12 @@ function updateTeamWithDebounce() {
     width: 100%;
 
     h4 {
-      margin-bottom: $spacing-sm;
+      margin-bottom: -15px;
       font-size: $font-size-sm;
       color: rgba($black, 0.65);
+      padding: $spacing-sm $spacing-sm $spacing-md $spacing-sm;
+      background: rgba($gray-light, 0.25);
+      border-radius: $br-lg $br-lg 0 0;
     }
 
     .member-wrap {
