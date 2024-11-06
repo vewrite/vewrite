@@ -80,7 +80,8 @@ onMounted(() => {
   min-width: 340px;
   transition: min-width 0.3s ease;
   position: relative;
-  background-color: $white;
+  background: $white;
+  box-shadow: inset -1px 0px 1px rgba($brand, 0.025), inset -4px 0px 4px rgba($brand, 0.025), inset -10px 0px 20px rgba(0, 0, 0, 0.01);
 
   @media (max-width: 1024px) {
     min-width: 260px;
@@ -165,7 +166,6 @@ onMounted(() => {
     position: absolute;
     bottom: 0;
     width: 100%;
-    border-top: $border;
 
     .tier-type {
       display: flex;
@@ -197,10 +197,9 @@ onMounted(() => {
       width: 100%;
       flex-direction: row;
       justify-content: space-between;
-      border-radius: $br-md;
-      background-color: $white;
-      border: 1px solid rgba($black, 0);
       padding: $spacing-xxs;
+      box-shadow: $soft-shadow;
+      background-color: $white;
 
       &:hover {
         border-color: $brand;

@@ -8,7 +8,7 @@
         </div>
       </div>
       <section class="team-info">
-        <p class="assigned">{{ TeamData.name }} assigned</p>
+        <p class="assigned"><nuxt-link :to="'/team/' + TeamData.id">{{ TeamData.name }}</nuxt-link> assigned</p>
       </section>
     </section>
     <div class="members-image" v-if="!loading && TeamData?.length == 0">
@@ -59,7 +59,6 @@ onMounted(async () => {
     align-items: center;
     justify-content: center;
     margin-right: $spacing-md;
-    gap: $spacing-xs;
 
     .team-info {
       display: flex;
@@ -72,18 +71,21 @@ onMounted(async () => {
         margin: 0;
         opacity: 0.5;
         font-size: $font-size-xs;
+        text-wrap: nowrap;
       }
     }
   }
 
   .members {
-    display: block;
+    display: flex;
+    flex-direction: row;
     position: relative;
-    width: 70px;
+    width: 100%;
     height: 40px;
 
     .members-image {
-      position: absolute;
+      position: relative;
+      top: 0;
       display: none;
       border-radius: $br-xl;
 
@@ -100,14 +102,14 @@ onMounted(async () => {
 
       &:nth-child(2) {
         z-index: 2;
-        left: 25px;
+        left: -10px;
         top: 0px;
         display: block;
       }
 
       &:nth-child(3) {
         z-index: 1;
-        left: 50px;
+        left: -20px;
         top: 0px;
         display: block;
       }

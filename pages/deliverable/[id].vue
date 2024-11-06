@@ -27,9 +27,11 @@
           <input class="deliverable-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
           <input class="deliverable-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
-        <section class="state-management">
+        
+        <StateManager :deliverable="deliverable" :states="workflowStates" />
+        <!-- <section class="state-management">
           <div class="button vertical"><small>Current state</small><span>{{ StateInstanceData[0].instance_name }}</span></div>
-        </section>
+        </section> -->
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
         <Toolbar :textareaRef="$refs.textareaRef" />
@@ -55,14 +57,12 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import Toolbar from '~/components/Toolbar.vue';
+import StateManager from '~/components/States/StateManager.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
 const projectId = ref(null);
 const textareaRef = ref(null);
-const currentState = ref(null);
-const previousState = ref(null);
-const nextState = ref(null);
 
 // Get the route object
 const route = useRoute();
@@ -77,16 +77,13 @@ const deliverable = ref(null);
 import useDeliverables from '~/composables/useDeliverables';
 const { saveDeliverable, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
 
+// import useWorkflow from '~/composables/useWorkflow';
+// const { fetchWorkflowStates, WorkflowStates, WorkflowData, WorkflowError } = useWorkflow();
+
 // useWorkflowStateInstances composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
-
-// Get the previous and next states
-// 1. Get the project workflow
-// 2. Get the state instances
-// 3. Get the current state instance
-// 4. Set the previous and next state instances
-
+const workflowStates = ref([]);
 
 async function getDeliverable(id) {
   try {
@@ -112,6 +109,51 @@ async function getDeliverable(id) {
   }
 }
 
+async function fetchWorkflowStates() {
+  try {
+    // 1. Get the current deliverable ID
+    const deliverableId = route.params.id;
+
+    // 2. Get the project ID from the deliverable
+    const { data: deliverableData, error: deliverableError } = await supabase
+      .from('deliverables')
+      .select('project')
+      .eq('id', deliverableId)
+      .single();
+
+    if (deliverableError) throw deliverableError;
+
+    const projectId = deliverableData.project;
+
+    // 3. Get the workflow ID from the project
+    const { data: projectData, error: projectError } = await supabase
+      .from('projects')
+      .select('workflow')
+      .eq('id', projectId)
+      .single();
+
+    if (projectError) throw projectError;
+
+    const workflowId = projectData.workflow;
+
+    // 4. Get the workflow states instances array from the workflow
+    const { data: workflowData, error: workflowError } = await supabase
+      .from('workflows')
+      .select('states')
+      .eq('id', workflowId)
+      .single();
+
+    if (workflowError) throw workflowError;
+    console.log(workflowData.states);
+
+    workflowStates.value = workflowData.states;
+  } catch (error) {
+    console.error('Error fetching workflow states:', error);
+  } finally {
+    loading.value = false;
+  }
+}
+
 // Manual debounce function
 function debounce(func, wait) {
   let timeout;
@@ -131,8 +173,12 @@ function updateDeliverable() {
 
 // Fetch the deliverable data when the component is mounted
 onMounted(async () => {
-  await getDeliverable(deliverableId);
-  await fetchSingleStateInstance(deliverable.value.workflow_state);
+  try {
+    await getDeliverable(deliverableId);
+    await fetchWorkflowStates();
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 </script>

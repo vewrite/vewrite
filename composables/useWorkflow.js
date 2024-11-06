@@ -229,9 +229,64 @@ export default function useWorkflow() {
     }
   }
 
-  async function fetchWorkflowStates(workflowId) {
+  // async function fetchWorkflowStates(workflowId) {
 
-    console.log('Fetching states for workflow:', workflowId);
+  //   console.log('Fetching states for workflow:', workflowId);
+
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('workflows')
+  //       .select('states')
+  //       .eq('id', workflowId);
+
+  //     console.log('Workflow states:', data[0].states);
+
+  //     // Fetch the states as an array of integers
+  //     WorkflowStates.value = data[0].states;
+
+  //     // Fetch the states as an array of objects from the states table
+  //     WorkflowStates.value = await Promise.all(WorkflowStates.value.map(async state => {
+  //       const fetchedState = await fetchState(state);
+  //       console.log('Fetched state:', state);
+  //       return {
+  //         ...fetchedState
+  //       }
+  //     }));
+
+  //     if (error) throw error;
+
+  //   } catch (error) {
+  //     WorkflowError.value = error.message;
+  //     console.error(error);
+  //   }
+  // }
+
+  async function fetchWorkflowStates(workflowId) {
+      
+      console.log('Fetching states for workflow:', workflowId);
+  
+      try {
+        const { data, error } = await supabase
+          .from('workflows')
+          .select('states')
+          .eq('id', workflowId);
+        
+        if (error) throw error;
+
+        console.log('Workflow states:', data);
+
+        WorkflowStates.value = data.states;
+        return data.states;
+  
+      } catch (error) {
+        WorkflowError.value = error.message;
+        console.error(error);
+      }
+    }
+
+  async function fetchWorkflowStateInstances(workflowId) {
+
+    console.log('Fetching state instances for workflow:', workflowId);
 
     try {
       const { data, error } = await supabase
@@ -239,14 +294,17 @@ export default function useWorkflow() {
         .select('states')
         .eq('id', workflowId);
 
+      console.log('Workflow states:', data[0].states);
+
       // Fetch the states as an array of integers
       WorkflowStates.value = data[0].states;
 
       // Fetch the states as an array of objects from the states table
       WorkflowStates.value = await Promise.all(WorkflowStates.value.map(async state => {
-        const fetchedState = await fetchState(state);
+        const fetchedStateInstance = await fetchStateInstance(state);
+        console.log('Fetched state:', fetchedStateInstance);
         return {
-          ...fetchedState
+          ...fetchedStateInstance
         }
       }));
 
@@ -262,6 +320,22 @@ export default function useWorkflow() {
     try {
       const { data, error } = await supabase
         .from('statetypes')
+        .select('*')
+        .eq('id', stateId);
+
+      if (error) throw error;
+
+      return data[0];
+    } catch (error) {
+      WorkflowError.value = error.message;
+      console.error('Error fetching state:', error.message);
+    }
+  }
+
+  async function fetchStateInstance(stateId) {
+    try {
+      const { data, error } = await supabase
+        .from('stateinstances')
         .select('*')
         .eq('id', stateId);
 
@@ -316,6 +390,7 @@ export default function useWorkflow() {
     deleteWorkflowModal,
     deleteWorkflow,
     fetchWorkflowStates,
+    fetchWorkflowStateInstances,
     fetchStates,
     renderStateName,
     fetchAssociatedProjects

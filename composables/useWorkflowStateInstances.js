@@ -2,19 +2,12 @@ import {ref} from 'vue';
 
 export default function useWorkflowStateInstances() {
 
-  const StateInstanceData = ref(null);
   const StateInstancesData = ref([]);
+  const StateInstancesError = ref(null);
+  const StateInstanceData = ref(null);
   const StateInstanceError = ref(null);
   const supabase = useSupabaseClient();
 
-  // createStateInstance
-  // - Creates a new state instance
-  // - Accepts an object with the following properties:
-  //   - created_at: timestamp
-  //   - statetype: numeric, the id of the state type
-  //   - created_by: uuid
-  //   - assigned_to: uuid
-  //   - actions: json of actions which include
   async function createStateInstance(stateInstance) {
 
     try {
@@ -46,8 +39,6 @@ export default function useWorkflowStateInstances() {
     return StateInstancesData;
   }
 
-  // updateStateInstance
-  // - Updates an existing state instance
   async function updateStateInstance(stateInstance) {
     try {
       const { data, error } = await supabase
@@ -87,6 +78,9 @@ export default function useWorkflowStateInstances() {
   }
 
   async function fetchSingleStateInstance(stateInstanceId) {
+
+    console.log('Fetching state instance:', stateInstanceId);
+
     try {
       const { data, error } = await supabase
         .from('stateinstances')
@@ -121,16 +115,34 @@ export default function useWorkflowStateInstances() {
     }
   }
 
+  async function fetchStateInstances(stateInstanceIds) {
+
+    for (let i = 0; i < stateInstanceIds.length; i++) {
+      const stateInstanceId = stateInstanceIds[i];
+
+      const { data, error } = await fetchSingleStateInstance(stateInstanceId);
+
+      if (error) throw error;
+
+      StateInstancesData.value.push(data[0]);
+    }
+  
+    return StateInstancesData;
+
+  }
+
   return {
     StateInstanceData,
     StateInstancesData,
     StateInstanceError,
+    StateInstancesError,
     createStateInstance,
     createStateInstances,
     updateStateInstance,
     deleteStateInstance,
     fetchSingleStateInstance,
-    fetchStateInstanceName
+    fetchStateInstanceName,
+    fetchStateInstances
   }
 
 }
