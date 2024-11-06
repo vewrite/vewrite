@@ -578,7 +578,7 @@ button,
     border: $border;
     text-align: center;
     text-decoration: none;
-    padding: $spacing-xxxs $spacing-sm;
+    padding: $spacing-xxxs $spacing-xs;
     cursor: pointer;
     font-size: $font-size-xs;
     font-weight: 500;
@@ -586,7 +586,7 @@ button,
     font-family: $font-family-main;
     display: flex;
     justify-content: center;
-    gap: calc($spacing-xs - 2px);
+    gap: calc($spacing-xxs - 2px);
     align-items: center;
     text-transform: capitalize;
     min-height: 24px;
@@ -599,10 +599,13 @@ button,
         outline: 4px solid rgba($brand, 0.05);
     }
 
-    &:disabled {
+    &:disabled,
+    &.disabled {
         cursor: not-allowed;
-        background: rgba($black, 0.1);
-        color: rgba($black, 0.5);
+        background: rgba($gray, 0.1);
+        color: rgba($black, 0.25);
+        border: 1px solid rgba($black, 0.1);
+        outline: none;
     }
 }
 

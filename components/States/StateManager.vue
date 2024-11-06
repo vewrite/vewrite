@@ -1,8 +1,14 @@
 <template>
+  <!-- <span>{{ previousPositionInWorkflow }}</span>
+  <span>{{ currentPositionInWorkflow }}</span>
+  <span>{{ nextPositionInWorkflow }}</span> -->
   <section class="state-manager" v-if="props.states.length > 0">
-    <StateButton :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveTo" />
-    <StateButton :deliverableId="deliverable.id" :state="deliverable.workflow_state" type="displayCurrent" />
-    <StateButton :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveTo" />
+    <Loading v-if="loading" type="small" />
+    <StateButton v-if="!loading && previousPositionInWorkflow == 0" type="disabledPrev" />
+    <StateButton v-if="!loading && currentPositionInWorkflow > 1" :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveToPrev" />
+    <StateButton v-if="!loading" :deliverableId="deliverable.id" :state="deliverable.workflow_state" type="displayCurrent" />
+    <StateButton v-if="!loading && currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
+    <StateButton v-if="!loading && currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
   </section>
 </template>
 
@@ -16,23 +22,25 @@ const currentPositionInWorkflow = ref(null);
 const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
 
+const loading = ref(true);
+
 watch(() => props.states, () => {
-  console.log('Got props.states:', props.states);
+  loading.value = true;
   currentPositionInWorkflow.value = props.states.findIndex((state) => state == props.deliverable.workflow_state);
-
-  // Calculate the previous position
-  if (currentPositionInWorkflow.value > 0) {
+  
+  if (currentPositionInWorkflow.value == 0) {
+    previousPositionInWorkflow.value = 0;
+  } else {
     previousPositionInWorkflow.value = currentPositionInWorkflow.value - 1;
-  } else {
-    previousPositionInWorkflow.value = null; // No previous position if current is the first
   }
-
-  // Calculate the next position
-  if (currentPositionInWorkflow.value < props.states.length - 1) {
+  
+  if (currentPositionInWorkflow.value == props.states.length - 1) {
+    nextPositionInWorkflow.value = props.states.length;
+  } else {
     nextPositionInWorkflow.value = currentPositionInWorkflow.value + 1;
-  } else {
-    nextPositionInWorkflow.value = null; // No next position if current is the last
   }
+  
+  loading.value = false;
 });
 
 </script>
@@ -44,6 +52,7 @@ watch(() => props.states, () => {
 .state-manager {
   display: flex;
   flex-direction: row;
+  flex: 1 3 1;
   align-items: center;
   gap: $spacing-xxs;
   height: 100%;

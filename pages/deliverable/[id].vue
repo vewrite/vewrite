@@ -170,8 +170,25 @@ function updateDeliverable() {
 // Fetch the deliverable data when the component is mounted
 onMounted(async () => {
   try {
+    
+
+    const subscription = supabase
+      .from('deliverables')
+      .on('UPDATE', payload => {
+        console.log('Deliverable updated:', payload.new);
+        getDeliverable(deliverableId);
+        fetchWorkflowStates();
+      })
+      .subscribe();
+
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+
     await getDeliverable(deliverableId);
     await fetchWorkflowStates();
+
   } catch (error) {
     console.error(error);
   }

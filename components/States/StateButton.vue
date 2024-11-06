@@ -2,18 +2,37 @@
   <div class="state-button">
 
     <div class="display" v-if="type == 'displayCurrent'">
-      <Loading v-if="loading" type="small" />
-      <span v-if="StateInstanceData && !loading">
+      <span v-if="StateInstanceData">
         <small>Current State</small>
         <p>{{ StateInstanceData[0].instance_name }}</p>
       </span> 
     </div>
 
-    <div v-if="type == 'moveTo'">
-      <Loading v-if="loading" type="small" />
-      <div class="button vertical" v-if="StateInstanceData && !loading" @click="updateDeliverableWorkflowState(deliverableId, state)">
-        <small>Move to</small>
-        <p>{{ StateInstanceData[0].instance_name }}</p>
+    <div v-if="type == 'disabledPrev'">
+      <div class="button disabled" disabled>
+        <Icon name="mdi:chevron-left" size="1.5rem" />
+        <p>Prev state</p>
+      </div> 
+    </div>
+
+    <div v-if="type == 'moveToPrev'">
+      <div class="button" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
+        <Icon name="mdi:chevron-left" size="1.5rem" />
+        <p>Prev state</p>
+      </div> 
+    </div>
+
+    <div v-if="type == 'moveToNext'">
+      <div class="button" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
+        <p>Next state</p>
+        <Icon name="mdi:chevron-right" size="1.5rem" />
+      </div> 
+    </div>
+
+    <div v-if="type == 'disabledNext'">
+      <div class="button disabled" disabled>
+        <p>Next state</p>
+        <Icon name="mdi:chevron-right" size="1.5rem" />
       </div> 
     </div>
 
@@ -30,11 +49,12 @@ const { fetchSingleStateInstance, StateInstanceData, StateInstanceError } = useW
 import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState } = useDeliverables();
 
-const loading = ref(true);
-
 onMounted(async () => {
   await fetchSingleStateInstance(props.state);
-  loading.value = false;
+});
+
+watch(() => props.state, async () => {
+  await fetchSingleStateInstance(props.state);
 });
 
 </script>
@@ -56,6 +76,7 @@ onMounted(async () => {
     border-radius: $br-md;
     background-color: rgba($brand, 0.05);
     height: 100%;
+    min-width: 200px;
   }
 
   small {
