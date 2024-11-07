@@ -399,6 +399,7 @@ const filteredProjects = computed(() => {
       padding: $spacing-sm;
       align-content: flex-start;
       width: 100%;
+      gap: $spacing-xxs;
 
       .project-card {
         padding: $spacing-sm;
