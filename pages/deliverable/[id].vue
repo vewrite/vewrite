@@ -30,13 +30,7 @@
         <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
       </aside>
       <div class="deliverable-editor" v-if="deliverable && !loading">
-        <Toolbar :textareaRef="$refs.textareaRef" />
-        <textarea 
-          ref="textareaRef" 
-          v-if="deliverable.markdown !== ''" 
-          v-model="deliverable.markdown" 
-          @input="updateDeliverable" 
-        />
+        <TipTapEditor v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" :deliverable="deliverable" />
       </div>
     </template>
   </AppPanel>
@@ -261,9 +255,9 @@ onMounted(async () => {
 
 .deliverable-editor {
   width: 100%;
-  height: calc(100% - 140px);
-  padding: 0 $spacing-md $spacing-md $spacing-md;
-  background-color: $white;
+  height: 100%;
+  padding: 0;
+  background-color: rgba($brand, 0.025);
 
   textarea {
     width: 100%;
