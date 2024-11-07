@@ -658,6 +658,23 @@ button.clear,
     }
 }
 
+button.toolbar,
+.button.toolbar {
+    border: 1px solid rgba($brand-dark, 0);
+    background-color: rgba($brand, 0);
+    color: $black;
+    outline: 0px solid rgba($brand, 0);
+    outline-offset: 0px;
+    box-shadow: none;
+
+    &:hover {
+        border: 1px solid rgba($brand-dark, 0);
+        background-color: rgba($brand, 0);
+        outline: 4px solid rgba($brand, 0);
+        color: $brand;
+    }
+}
+
 button.green,
 .button.green {
     border: 1px solid rgba($mint-dark, 0.3);
@@ -805,4 +822,20 @@ button.vertical,
       }
   
     }
+  }
+
+  /* TipTap */
+
+  .ProseMirror {
+    padding: $spacing-md $spacing-lg;
+    margin: 0 $spacing-md;
+    background-color: $white;
+    border-radius: $br-md;
+    border: $border;
+    box-shadow: $soft-shadow;
+    min-height: 60vh;
+  }
+
+  .ProseMirror-focused {
+    outline: none;
   }
