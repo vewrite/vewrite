@@ -12,7 +12,9 @@ import useClient from '~/composables/useClient'
 export default function useProject() {
 
   const projectData = ref(null)
+  const ProjectsData = ref(null)
   const projectError = ref(null)
+  const ProjectsError = ref(null)
   const supabase = useSupabaseClient();
   const router = useRouter();
   const { deleteProjectDeliverables } = useDeliverables();
@@ -198,6 +200,23 @@ export default function useProject() {
     }
   }
 
+  async function fetchClientProjects(clientId) {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('client_id', clientId);
+
+      if (error) throw error;
+
+      ProjectsData.value = data;
+      return data;
+
+    } catch (error) {
+      ProjectsError.value = error.message;
+    }
+  }
+
   return {
     createProject,
     createProjectModal,
@@ -208,7 +227,10 @@ export default function useProject() {
     deleteProjectModal,
     getProjectDetails,
     fetchProjectWorkflow,
+    fetchClientProjects,
     projectData,
-    projectError
+    ProjectsData,
+    projectError,
+    ProjectsError,
   }
 }

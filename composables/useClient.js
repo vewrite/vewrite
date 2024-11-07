@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { useModal } from '~/stores/modal'
+import { useRouter } from 'vue-router';
 
 export default function useClient() {
 
@@ -8,6 +9,7 @@ export default function useClient() {
   const clientsData = ref(null)
   const ClientProjects = ref([])
   const supabase = useSupabaseClient()
+  const router = useRouter();
 
 
   async function createClient(client) {
@@ -73,6 +75,48 @@ export default function useClient() {
     ClientData.value = data[0]
     return data[0]
   
+  }
+
+  async function deleteClient(deliverables, projects, clientId) {
+    // First we delete all associated deliverables
+    // Then we delete all associated projects
+    // Then we delete the client
+
+    useModal().toggleLoading();
+
+    Promise.all(deliverables.map(async deliverable => {
+      await supabase
+        .from('deliverables')
+        .delete()
+        .eq('id', deliverable[0].id);
+        console.log('Deleting deliverable',  deliverable[0].id);
+      }
+    ))
+
+    Promise.all(projects.map(async project => {
+      await supabase
+        .from('projects')
+        .delete()
+        .eq('id', project.id);
+        console.log('Deleting project', project.id);
+      }
+    ))
+
+    try {
+      await supabase
+        .from('clients')
+        .delete()
+        .eq('client_id', clientId);
+    } catch (error) {
+      console.error('Error deleting client:', error.message);
+      ClientError.value = error.message
+    }
+
+    useModal().toggleVisibility();
+    useModal().reset();
+
+    router.push('/clients');
+
   }
 
   async function fetchProjectsFromSpecificClient(clientId) {
@@ -160,6 +204,13 @@ export default function useClient() {
     useModal().toggleVisibility();
   }
 
+  function deleteClientModal() {
+    useModal().setType('medium');
+    useModal().setHeader('Delete Client');
+    useModal().setContent('DeleteClientModal');
+    useModal().toggleVisibility();
+  }
+
   return {
     ClientData,
     ClientProjects,
@@ -167,6 +218,8 @@ export default function useClient() {
     clientsData,
     createClient,
     createClientModal,  
+    deleteClientModal,
+    deleteClient,
     updateClient,
     fetchClient,
     fetchClients,

@@ -15,7 +15,7 @@
             </svg>
           </template>
           <template v-slot:menu>
-            <div class="dropdown-item" @click="deleteClientModal(client.client_id)">Delete client</div>
+            <div class="dropdown-item" @click="deleteClientModal()">Delete client</div>
           </template>
         </Dropdown>
       </div>
@@ -67,7 +67,7 @@ const route = useRoute();
 const clientId = route.params.id;
 
 import useClient from '~/composables/useClient';
-const { fetchClient, fetchProjectsFromSpecificClient, updateClient, ClientData, ClientProjects, ClientError } = useClient();
+const { fetchClient, fetchProjectsFromSpecificClient, deleteClientModal, updateClient, ClientData, ClientProjects, ClientError } = useClient();
 
 // Manual debounce function
 function debounce(func, wait) {

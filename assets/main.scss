@@ -85,12 +85,18 @@ body,
 /* Notifications */
 
 .notification {
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-md;
     border-radius: $br-md;
     color: $brand;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+
+    .iconify {
+        margin: 0 0 $spacing-sm 0;
+    }
 
     &.info {
         background: rgba($brand, 0.05);

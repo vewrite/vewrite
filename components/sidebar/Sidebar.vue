@@ -8,7 +8,7 @@
 
       <div class="button clear toggle-sidebar" @click="toggleSidebar">
         <Icon name="fluent:chevron-double-left-16-regular" size="1.5rem" v-if="!collapsed" />
-        <Icon name="fluent:chevron-double-right-16-regular" size="1.5rem" v-if="collapsed" />
+        
       </div>
 
     </div>
