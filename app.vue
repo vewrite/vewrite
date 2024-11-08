@@ -4,81 +4,54 @@
   </NuxtLayout>   
 </template>
 
-<!-- <template>
-  <Loading class="on-top" :hasLogo="true" v-if="loading" />
-  <div id="vewrite">
-    <div class="app" v-if="HasUser">
-      <main v-if="userStore.firstTime == false">
-        <section class="zoom">
-          <Sidebar />
-          <NuxtPage />
-        </section>
-        <Modal />
-      </main>
-      <main v-else>
-        <FirstTime v-if="!loading && userStore.firstTime == true" />
-      </main>
-    </div>
-    <div class="app" v-else>
-      <Auth />
-    </div>
-  </div>
-</template> -->
+<script setup>
 
-<!-- <script setup>
-
-import FirstTime from '~/components/Onboarding/Firsttime.vue'
+// import FirstTime from '~/components/Onboarding/Firsttime.vue'
 
 // Supabase setup
-const supabase = useSupabaseClient()
-const user = useSupabaseUser()
+// const supabase = useSupabaseClient()
+// const user = useSupabaseUser()
 
-const loading = ref(true)
+// const loading = ref(true)
 
-// User store
-import { useUser } from '@/stores/user'
-const userStore = useUser()
+// // User store
+// import { useUser } from '@/stores/user'
+// const userStore = useUser()
 
-// Profile composable
-import useProfile from '~/composables/useProfile'
-const { createProfile, fetchSingleProfile, ProfileData, ProfileError } = useProfile()
-  
-const HasUser = ref(false)
+// // Profile composable
+// import useProfile from '~/composables/useProfile'
+// const { createProfile, fetchSingleProfile, ProfileData, ProfileError } = useProfile()
 
-async function checkUser() {
-  if (user.value) {
-    await fetchSingleProfile(user.value.id);
-    // console.log('Current ProfileData:', ProfileData.value);
-    if (ProfileData.value === undefined) {
-      // console.log("Creating profile because ProfileData was undefined");
-      await createProfile(user.value);
-      await checkUser();
-    } else {
-      // console.log("ProfileData found. Setting user store with ProfileData", ProfileData.value);
-      userStore.setUser(ProfileData.value);
-      HasUser.value = true;
-    }
-    loading.value = false;
-  } else {
-    HasUser.value = false;
-    loading.value = false;
-  }
-}
+// async function checkUser() {
+//   if (user.value) {
+//     await fetchSingleProfile(user.value.id);
+//     // console.log('Current ProfileData:', ProfileData.value);
+//     if (ProfileData.value === undefined) {
+//       // console.log("Creating profile because ProfileData was undefined");
+//       await createProfile(user.value);
+//       await checkUser();
+//     } else {
+//       // console.log("ProfileData found. Setting user store with ProfileData", ProfileData.value);
+//       userStore.setUser(ProfileData.value);
+//     }
+//     loading.value = false;
+//   } else {
+//     loading.value = false;
+//   }
+// }
 
-// Watch for changes in the user object
-watch(user, async (newUser) => {
-  console.log('User changed', newUser);
-  if (newUser) {
-    await checkUser();
-  } else {
-    HasUser.value = false;
-    loading.value = false;
-  }
-});
+// // Watch for changes in the user object
+// watch(user, async (newUser) => {
+//   if (newUser) {
+//     await checkUser();
+//   } else {
+//     loading.value = false;
+//   }
+// });
 
-onMounted(async () => {
-  await checkUser();
-});
+// onMounted(async () => {
+//   await checkUser();
+// });
 
 // const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
 //     if (event === 'SIGNED_IN') {
@@ -96,7 +69,7 @@ onMounted(async () => {
 //     }
 // });
 
-</script> -->
+</script>
 
 <style lang="scss" scoped>
 

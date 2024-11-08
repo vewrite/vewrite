@@ -31,8 +31,6 @@ async function fetchClientLogo(client) {
     return null
   }
 
-  console.log('Client logo:', data.logo_url)
-
   const logoBlob = await downloadImage(data.logo_url);
   src.value = URL.createObjectURL(logoBlob);
   loading.value = false
@@ -54,7 +52,6 @@ const downloadImage = async (path) => {
 // Watch for changes to the client prop
 watch(() => props.client, (newClient) => {
   if (newClient) {
-    console.log('New client:', newClient);
     fetchClientLogo(newClient);
   }
 }, { immediate: true });

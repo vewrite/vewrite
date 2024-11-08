@@ -25,13 +25,7 @@
         </div>
       </div>
       <div class="user-section">
-        <router-link to="/account" class="button clear user" v-if="userStore">
-          <div class="user-identity">
-            <Avatar :uuid="userStore.uuid" />
-            <p class="user">{{ userStore.username }}</p>
-          </div>
-          <Icon name="mdi:chevron-right" size="1.5rem" />
-        </router-link>
+        <User />
       </div>
     </nav>
     <div @click="toggleMobile" class="blur" :class="menu ? 'active' : ''"></div>
@@ -39,6 +33,8 @@
 </template>
 
 <script setup>
+
+import User from '~/components/Sidebar/User.vue'
 
 const menu = ref(false)
 
