@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
 
 const props = defineProps({
   completedDeliverables: Number,

@@ -30,7 +30,7 @@
     </div>
 
     <div :class="['projects-list', viewMode]" v-if="!loading && projects.length > 0">
-      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id">
+      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == totalDeliverables ? 'completed' : ''">
         <div class="project-card-header">
           <div class="image-wrapper">
             <ClientImage :client="project.client_id" size="medium" table="logos" />
@@ -48,7 +48,7 @@
             </div>
             <div class="deliverables" v-else>
               <div class="progress-bar">
-                <div class="progress" :style="{ width: (project.completedDeliverables / project.deliverables.length) * 100 + '%' }"></div>
+                <div class="progress" :class="project.completedDeliverables == totalDeliverables ? 'completed' : ''" :style="{ width: (project.completedDeliverables / project.deliverables.length) * 100 + '%' }"></div>
               </div>
             </div>
           </div>
@@ -73,7 +73,8 @@ const { fetchProjectDeliverables } = useDeliverables();
 import { useModal } from '~/stores/modal';
 const modal = useModal();
 
-
+import useWorkflow from '~/composables/useWorkflow';
+const { fetchStates, WorkflowStates } = useWorkflow();
 
 const edit = () => {
   modal.visible = 1;
@@ -107,13 +108,14 @@ async function fetchProjects() {
 
   projects.value = await Promise.all(projects.value.map(async project => {
     const deliverables = await fetchProjectDeliverables(project.id);
-
-    // TODO: Calculate the progress of the project based on the deliverable status 
-    const completedDeliverables = deliverables.filter(deliverable => deliverable.workflow_state == 6).length;
+    const states = await fetchStates(project.workflow);
+    const LastState = states[states.length - 1];
+    const completedDeliverables = deliverables.filter(deliverable => deliverable.workflow_state == LastState).length;
     return {
       ...project,
       deliverables: deliverables,
-      completedDeliverables: completedDeliverables
+      completedDeliverables: completedDeliverables,
+      states: states,
     };
   }));
 
@@ -245,7 +247,7 @@ const filteredProjects = computed(() => {
 
       .project-card {
         padding: $spacing-md;
-        background-color: $white;
+        background: $white;
         box-shadow: $soft-shadow;
         border-radius: $br-md;
         border: $border;
@@ -264,6 +266,10 @@ const filteredProjects = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
+
+        &.completed {
+          background: $white linear-gradient(30deg, $white 80%, rgba($mint, 0.5));
+        }
 
         $project-cards: ();
 
@@ -380,7 +386,11 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background-color: $brand;
+                background: linear-gradient(to right, $brand, $brand, $mint);
+
+                &.completed {
+                  background: $mint;
+                }
               }
 
             }

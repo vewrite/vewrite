@@ -115,6 +115,9 @@ const { fetchClient, ClientData } = useClient();
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance, fetchStateInstanceName, StateInstanceData } = useWorkflowStateInstances();
 
+import useWorkflow from '~/composables/useWorkflow';
+const { fetchStates, WorkflowStates } = useWorkflow();
+
 const supabase = useSupabaseClient();
 const loading = ref({
   global: true,
@@ -160,7 +163,7 @@ async function getProject(id) {
 
     fetchClient(project.value.client_id);
     fetchDeliverables(project.value.id);
-    fetchProjectWorkflow(project.value.workflow);
+    fetchStates(project.value.workflow);
     fetchWorkflowStates(project.value.workflow);
 
   } catch (error) {
@@ -168,21 +171,21 @@ async function getProject(id) {
   }
 }
 
-// TODO - migrate to composable
-async function fetchProjectWorkflow(workflowId) {
-  try {
-    const { data, error } = await supabase
-      .from('workflows')
-      .select('*')
-      .eq('id', workflowId);
+// TODO - migrate to composable -> fetchStates
+// async function fetchProjectWorkflow(workflowId) {
+//   try {
+//     const { data, error } = await supabase
+//       .from('workflows')
+//       .select('*')
+//       .eq('id', workflowId);
 
-    if (error) throw error;
+//     if (error) throw error;
 
-    workflow.value = data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+//     workflow.value = data;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 // // TODO - migrate to composable
 async function renderStateName(stateId) {
@@ -385,9 +388,11 @@ onMounted(async () => {
   loading.value.global = false;
 });
 
+const LastState = ref(null);
+
 watchEffect(() => {
-  // TODO this is hard-coding the approved state for now
-  completedDeliverables.value = deliverables.value.filter(d => d.workflow_state === 6).length;
+  LastState.value = WorkflowStates.value[WorkflowStates.value.length - 1];
+  completedDeliverables.value = deliverables.value.filter(d => d.workflow_state === LastState.value).length;
 });
 
 </script>

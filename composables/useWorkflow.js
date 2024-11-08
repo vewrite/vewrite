@@ -14,47 +14,15 @@ export default function useWorkflow() {
   const { listStates, fetchSingleState } = useWorkflowStateTypes();
   const { createStateInstances, updateStateInstance, deleteStateInstance, StateInstanceData, StateInstancesData } = useWorkflowStateInstances();
 
-  /*
-  createWorkflow
-  - Creates a new workflow
-  - Accepts an object with the following properties:
-    - name: string
-    - description: string
-    - created_by: uuid
-    - states: json state instance ids
-    - type: numeric, but will always be 2 as that is a custom workflow
-    - completion_step: numeric, the state that the workflow ends on
-
-    When I create a workflow, I'm creating both the workflow and the state instances
-    These instances are created in the stateinstances table and require an object per instance
-
-    This stateinstances object should contain:
-      - created_at: timestamp
-      - statetype: numeric, the id of the state type
-      - created_by: uuid
-      - assigned_to: uuid
-      - actions: json of actions which include
-
-  */
   async function createWorkflow(workflow, stateInstances) {
 
     useModal().toggleLoading();
 
     try {
 
-      /*
-      The expected flow here is to:
-      1. Pass the instances into createStateInstances
-      2. createStateInstances will iterate over each instance and pass them to createStateInstance
-      3. createStateInstance will create the instance and push the ids of the created state instances to StateInstancesData
-      4. We can then use the ids in StateInstancesData to update the workflow object
-      */
-
-      // First we'll create the state instances
       await createStateInstances(stateInstances);
       console.log("Final output of StateInstancesData is: ", StateInstancesData);
       
-      // Now we'll update the workflow object with the state instance ids
       workflow.states = StateInstancesData;
 
       const { data: workflowData, error: workflowError } = await supabase
@@ -63,29 +31,19 @@ export default function useWorkflow() {
   
       if (workflowError) throw workflowError;
 
-  
+      WorkflowData.value = workflowData[0];
+
       useModal().toggleVisibility();
       useModal().reset();
+
+      return workflowData[0];
   
-      // return { workflowData, stateInstancesData };
     } catch (error) {
       console.error('Error creating workflow and state instances:', error);
       throw error;
     }
   }
 
-  /*
-  updateWorkflow
-  - Updates an existing workflow
-  - Accepts an object with the following properties:
-    - id: uuid
-    - name: string
-    - description: string
-    - created_by: uuid
-    - states: array of state ids
-    - type: numeric, but will always be 2 as that is a custom workflow
-    - completion_step: numeric, the state that the workflow ends on
-  */
   async function updateWorkflow(workflow) {
     try {
       const { data, error } = await supabase
@@ -220,6 +178,8 @@ export default function useWorkflow() {
         .eq('id', workflowId);
 
       if (error) throw error;
+
+      WorkflowStates.value = data[0].states;
 
       return data[0].states;
 
