@@ -84,38 +84,62 @@ export default function useClient() {
 
     useModal().toggleLoading();
 
-    Promise.all(deliverables.map(async deliverable => {
-      await supabase
-        .from('deliverables')
-        .delete()
-        .eq('id', deliverable[0].id);
-        console.log('Deleting deliverable',  deliverable[0].id);
-      }
-    ))
-
-    Promise.all(projects.map(async project => {
-      await supabase
-        .from('projects')
-        .delete()
-        .eq('id', project.id);
-        console.log('Deleting project', project.id);
-      }
-    ))
-
     try {
-      await supabase
+      
+      // Promise.all(deliverables.map(async deliverable => {
+      //   await supabase
+      //     .from('deliverables')
+      //     .delete()
+      //     .eq('id', deliverable[0].id);
+      //     console.log('Deleting deliverable',  deliverable[0].id);
+      //   }
+      // ))
+  
+      // Promise.all(projects.map(async project => {
+      //   await supabase
+      //     .from('projects')
+      //     .delete()
+      //     .eq('id', project.id);
+      //     console.log('Deleting project', project.id);
+      //   }
+      // ))
+
+      for (let i = 0; i < deliverables.length; i++) {
+        await supabase
+          .from('deliverables')
+          .delete()
+          .eq('id', deliverables[i].id);
+          console.log('Deleting deliverable',  deliverables[i].id);
+      }
+
+      for (let i = 0; i < projects.length; i++) {
+        await supabase
+          .from('projects')
+          .delete()
+          .eq('id', projects[i].id);
+          console.log('Deleting project', projects[i].id);
+      }
+
+      const { data, error } = await supabase
         .from('clients')
         .delete()
         .eq('client_id', clientId);
+
+      if (error) throw error;
+
+      useModal().toggleVisibility();
+      useModal().reset();
+  
+      router.push('/clients');
+
+      return data;
+
     } catch (error) {
       console.error('Error deleting client:', error.message);
       ClientError.value = error.message
     }
 
-    useModal().toggleVisibility();
-    useModal().reset();
 
-    router.push('/clients');
 
   }
 

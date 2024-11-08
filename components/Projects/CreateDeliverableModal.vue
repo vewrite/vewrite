@@ -17,14 +17,14 @@
             <div class="form-input">
               <label for="name">Type</label>
               <select v-model="deliverable.type" id="type">
-                <option value="markdown">Markdown</option>
+                <option value="markdown">Internal Editor</option>
                 <option value="link">External Link</option>
                 <option value="file">External File</option>
               </select>
             </div>
 
             <span v-if="deliverable.type == 'markdown'" class="notification info">
-              <p>Markdown is a lightweight markup language with plain-text-formatting syntax. It is often used to format readme files, for writing messages in online discussion forums, and to create rich text using a plain text editor.</p>
+              <p>The internal editor allows your team to work entirely within Vewrite, ensuring the most smooth process.</p>
             </span>
 
             <!-- If the deliverable has an external link -->
