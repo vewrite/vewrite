@@ -30,7 +30,7 @@
     </div>
 
     <div :class="['projects-list', viewMode]" v-if="!loading && projects.length > 0">
-      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == totalDeliverables ? 'completed' : ''">
+      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == project.deliverables.length ? 'completed' : ''">
         <div class="project-card-header">
           <div class="image-wrapper">
             <ClientImage :client="project.client_id" size="medium" table="logos" />
@@ -48,7 +48,7 @@
             </div>
             <div class="deliverables" v-else>
               <div class="progress-bar">
-                <div class="progress" :class="project.completedDeliverables == totalDeliverables ? 'completed' : ''" :style="{ width: (project.completedDeliverables / project.deliverables.length) * 100 + '%' }"></div>
+                <div class="progress" :class="project.completedDeliverables == project.deliverables.length ? 'completed' : ''" :style="{ width: (project.completedDeliverables / project.deliverables.length) * 100 + '%' }"></div>
               </div>
             </div>
           </div>
@@ -560,6 +560,10 @@ const filteredProjects = computed(() => {
                 height: 6px;
                 border-radius: $br-md;
                 background-color: $brand;
+
+                &.completed {
+                  background: $mint;
+                }
               }
 
             }
