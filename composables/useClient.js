@@ -78,31 +78,10 @@ export default function useClient() {
   }
 
   async function deleteClient(deliverables, projects, clientId) {
-    // First we delete all associated deliverables
-    // Then we delete all associated projects
-    // Then we delete the client
 
     useModal().toggleLoading();
 
     try {
-      
-      // Promise.all(deliverables.map(async deliverable => {
-      //   await supabase
-      //     .from('deliverables')
-      //     .delete()
-      //     .eq('id', deliverable[0].id);
-      //     console.log('Deleting deliverable',  deliverable[0].id);
-      //   }
-      // ))
-  
-      // Promise.all(projects.map(async project => {
-      //   await supabase
-      //     .from('projects')
-      //     .delete()
-      //     .eq('id', project.id);
-      //     console.log('Deleting project', project.id);
-      //   }
-      // ))
 
       for (let i = 0; i < deliverables.length; i++) {
         await supabase
@@ -138,8 +117,6 @@ export default function useClient() {
       console.error('Error deleting client:', error.message);
       ClientError.value = error.message
     }
-
-
 
   }
 
