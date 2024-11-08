@@ -44,8 +44,6 @@ export default function useRoles() {
   }
 
   async function fetchSingleRole(id) {
-
-    console.log('fetchSingleRole', id)
     try {
       const { data, error } = await supabase
         .from('roles')
@@ -54,7 +52,6 @@ export default function useRoles() {
 
       if (error) throw error
 
-      console.log(data)
       RoleData.value = data[0]
       return data
 
@@ -66,7 +63,7 @@ export default function useRoles() {
 
   async function setRole(userId, teamId, roleId, roleName) {
 
-    console.log('Setting role', userId, teamId, roleId)
+    // console.log('Setting role', userId, teamId, roleId)
 
     try {
       const { data, error } = await supabase

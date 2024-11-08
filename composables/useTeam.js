@@ -83,9 +83,6 @@ export default function useTeam() {
   }
 
   async function fetchSingleTeam(team_id) {
-
-    console.log('Fetching single team', team_id);
-
     try {
       const { data, error } = await supabase
         .from('teams')

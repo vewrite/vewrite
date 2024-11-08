@@ -27,7 +27,7 @@ onMounted(async () => {
   loading.value = true;
 
   try {
-    console.log('Fetching role:', props.role);
+    // console.log('Fetching role:', props.role);
     await fetchRoles();
     await fetchSingleRole(props.role);
     loading.value = false;

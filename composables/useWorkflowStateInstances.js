@@ -79,7 +79,7 @@ export default function useWorkflowStateInstances() {
 
   async function fetchSingleStateInstance(stateInstanceId) {
 
-    console.log('Fetching state instance:', stateInstanceId);
+    // console.log('Fetching state instance:', stateInstanceId);
 
     try {
       const { data, error } = await supabase
