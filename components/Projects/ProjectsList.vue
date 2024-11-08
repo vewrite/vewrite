@@ -249,7 +249,7 @@ const filteredProjects = computed(() => {
         padding: $spacing-md;
         background: $white;
         box-shadow: $soft-shadow;
-        border-radius: $br-md;
+        border-radius: $br-lg;
         border: $border;
         text-decoration: none;
         height: 220px;
@@ -268,7 +268,7 @@ const filteredProjects = computed(() => {
         transform: scale(0.9);
 
         &.completed {
-          background: $white linear-gradient(30deg, $white 80%, rgba($mint, 0.5));
+          background: $white linear-gradient(to bottom, $white 70%, rgba($mint, 0.25) 90%, rgba($mint, 0.1) 100%);
         }
 
         $project-cards: ();

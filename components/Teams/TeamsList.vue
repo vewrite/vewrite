@@ -209,7 +209,7 @@ const filteredTeams = computed(() => {
       .team-card {
         padding: $spacing-md;
         background-color: $white;
-        border-radius: $br-md;
+        border-radius: $br-lg;
         border: $border;
         text-decoration: none;
         color: $black;
