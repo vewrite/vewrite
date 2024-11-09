@@ -68,6 +68,7 @@ function toggleSidebar() {
   background: $brand-dark linear-gradient(180deg, $brand-dark 50%, $brand 100%);
   box-shadow: inset -30px 10px 40px rgba($brand, 0.25);
   margin: $spacing-sm 0;
+  padding-right: $spacing-sm;
 
   &.collapsed {
     min-width: 88px;
@@ -89,7 +90,7 @@ function toggleSidebar() {
     }
 
     .sidebar-content {
-      padding: $spacing-md $spacing-md $spacing-xs $spacing-xs;
+      padding: $spacing-md $spacing-sm $spacing-xs $spacing-xs;
       opacity: 0;
 
       .link-group {
