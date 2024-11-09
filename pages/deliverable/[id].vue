@@ -46,13 +46,11 @@ definePageMeta({
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
-import Toolbar from '~/components/Toolbar.vue';
 import StateManager from '~/components/States/StateManager.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
 const projectId = ref(null);
-const textareaRef = ref(null);
 
 // Get the route object
 const route = useRoute();
@@ -65,14 +63,8 @@ const deliverable = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
+const { deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
 
-// import useWorkflow from '~/composables/useWorkflow';
-// const { fetchWorkflowStates, WorkflowStates, WorkflowData, WorkflowError } = useWorkflow();
-
-// useWorkflowStateInstances composable
-import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
-const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
 const workflowStates = ref([]);
 
 async function getDeliverable(id) {
@@ -144,28 +136,9 @@ async function fetchWorkflowStates() {
   }
 }
 
-// Manual debounce function
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
-
-// Debounced save function
-const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
-
-// Update deliverable function
-function updateDeliverable() {
-  debouncedSaveDeliverable();
-}
-
 // Fetch the deliverable data when the component is mounted
 onMounted(async () => {
   try {
-    
-
     const subscription = supabase
       .from('deliverables')
       .on('UPDATE', payload => {
@@ -174,7 +147,6 @@ onMounted(async () => {
         fetchWorkflowStates();
       })
       .subscribe();
-
 
     onUnmounted(() => {
       supabase.removeSubscription(subscription);

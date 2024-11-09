@@ -157,6 +157,7 @@ function toggleSidebar() {
     pointer-events: all;
     padding: 0;
     z-index: 1000;
+    border-radius: 0 $br-lg $br-lg 0;
 
     &:hover {
       color: $white;
