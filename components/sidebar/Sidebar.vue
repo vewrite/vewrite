@@ -60,12 +60,14 @@ function toggleSidebar() {
 }
 
 #Sidebar {
-  height: 100%;
+  height: calc(100% - $spacing-sm * 2);
+  border-radius: 0 $br-lg $br-lg 0;
   min-width: 340px;
   transition: all 0.2s ease;
   position: relative;
   background: $brand-dark;
   box-shadow: inset -1px 0px 1px rgba($brand, 0.025), inset -4px 0px 4px rgba($brand, 0.025), inset -10px 0px 20px rgba(0, 0, 0, 0.01);
+  margin: $spacing-sm 0;
 
   &.collapsed {
     min-width: 88px;

@@ -24,9 +24,11 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
+  margin: $spacing-sm;
+  border: $border;
+  border-radius: $br-lg;
 
   .header {
-    border-left: $border;
     color: $brand;
     display: flex;
     flex-direction: row;
@@ -63,7 +65,6 @@ export default {
     overflow-y: hidden;
     position: relative;
     background: rgba($gray-light, 0.1);
-    border-left: $border;
     border-top: $border;
   }
 }
