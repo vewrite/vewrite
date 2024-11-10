@@ -60,14 +60,14 @@ function toggleSidebar() {
 }
 
 #Sidebar {
-  height: calc(100% - $spacing-sm * 2);
-  border-radius: 0 $br-lg $br-lg 0;
+  height: 100%;
+  border-radius: 0;
   min-width: 300px;
   transition: all 0.2s ease;
   position: relative;
   background: $brand-dark linear-gradient(180deg, $brand-dark 50%, $brand 100%);
   box-shadow: inset -30px 10px 40px rgba($brand, 0.25);
-  margin: $spacing-sm 0;
+  margin: 0;
   padding-right: $spacing-sm;
 
   &.collapsed {
@@ -145,7 +145,7 @@ function toggleSidebar() {
   .toggle-sidebar {
     height: 100%;
     background-color: rgba($brand, 0.4);
-    border-left: 1px solid rgba($white, 0.3);
+    border-left: 1px solid rgba($white, 0.1);
     color: rgba($white, 0.75);
     position: absolute;
     right: 0;
