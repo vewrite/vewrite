@@ -33,23 +33,19 @@ const props = defineProps({
 
 const stateDetails = ref(null)
 
-// State type composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 const { fetchSingleState, StateData } = useWorkflowStateTypes();
 
-// State instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
 
 onMounted(async () => {
   try {
-    // Get the state instance
     await fetchSingleStateInstance(props.state)
     if (!StateInstanceData.value) {
       throw new Error('Failed to fetch state instance')
     }
 
-    // Get the state type
     await fetchSingleState(StateInstanceData.value[0].state_type)
     if (!StateData.value) {
       throw new Error('Failed to fetch state type')

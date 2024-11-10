@@ -34,7 +34,6 @@
 
                     <div class="state-fill">
 
-
                       <div class="grabby-mcgrab-face">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M13 7L7 7" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
@@ -141,8 +140,6 @@
 
             <div v-if="states.length === 0" class="no-states">No states added yet.</div>
             
-            <hr>
-            
             <div class="button add-new-state" @click="addState()">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#1759D5"/>
@@ -197,10 +194,7 @@ const states = ref({
   ]
 });
 
-// And now these are the state types that will populate the select dropdown
 const stateTypes = ref([]);
-
-const state_type_img = ref('')
 
 function toggleOpenState(state) {
   state.is_open = !state.is_open
@@ -244,10 +238,6 @@ const workflow = reactive({
 onMounted(async () => {
   stateTypes.value = await listStates();
 })
-
-// watch(states, (newStates) => {
-//   console.log('States updated:', newStates)
-// }, { deep: true })
 
 </script>
 
@@ -356,8 +346,9 @@ onMounted(async () => {
           width: 100%;
 
           .state-type-icon {
-            background: $brand;
+            background: $white;
             border-radius: $br-md;
+            border: $border;
             display: flex;
             justify-content: center;
             align-items: center;

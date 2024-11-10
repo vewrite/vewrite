@@ -19,7 +19,6 @@
           </div>
         </div>
         <section class="single-workflow">
-          <!-- <StateRow v-for="state in states" :key="state" :deliverableId="deliverable.id" :state="state" :status="states[currentPositionInWorkflow] == state ? 'current' : 'default'" /> -->
           <StateRow
             v-for="(state, index) in states"
             :key="state"
@@ -34,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import StateButton from '~/components/States/StateButton.vue';
 import StateRow from '~/components/States/StateRow.vue';
 

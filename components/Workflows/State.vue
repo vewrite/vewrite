@@ -2,8 +2,7 @@
   <div class="state">
     <div v-if="stateDetails && stateDetails.state_type" class="details">
       <div class="icon">
-        <img :src="'/states/' + stateDetails.state_type.icon" alt="State type icon" />
-        <p class="state-type">{{ stateDetails.state_type.name }}</p>
+        <Icon :name="stateDetails.state_type.icon" size="2rem" />
       </div>
       <div class="text">
         <p class="instance-name" v-if="stateDetails.state_instance && stateDetails.state_instance.length > 0">
@@ -32,11 +31,9 @@ const props = defineProps(['state'])
 const stateDetails = ref(null)
 const error = ref(null)
 
-// State type composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 const { fetchSingleState, StateData } = useWorkflowStateTypes();
 
-// State instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
 
@@ -86,7 +83,8 @@ onMounted(async () => {
     gap: $spacing-sm;
 
     .icon {
-      width: 68px;
+      width: 44px;
+      height: 44px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -94,7 +92,8 @@ onMounted(async () => {
       position: relative;
       border-radius: $br-md;
       overflow: hidden;
-      background: $brand;
+      background: $white;
+      border: $border;
 
       img {
         width: 100%;

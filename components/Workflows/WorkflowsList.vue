@@ -23,7 +23,6 @@
             <p>{{ workflow.description }}</p>
           </div>
           <div class="header-actions" v-if="workflow.type == 2">
-            <!-- <button class="button red" @click="deleteWorkflowModal(workflow.id)">Delete workflow</button> -->
             <Dropdown>
               <template v-slot:trigger>
                 <svg width="2" height="10" viewBox="0 0 2 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +53,6 @@
 import { ref, onMounted } from 'vue'
 import State from '/components/Workflows/State.vue'
 
-// Supabase
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
