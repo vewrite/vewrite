@@ -1,13 +1,6 @@
 <template>
   <div class="state-button">
 
-    <div class="display" v-if="type == 'displayCurrent'">
-      <span v-if="StateInstanceData">
-        <small>Current State</small>
-        <p>{{ StateInstanceData[0].instance_name }}</p>
-      </span> 
-    </div>
-
     <div v-if="type == 'disabledPrev'">
       <div class="button disabled" disabled>
         <Icon name="mdi:chevron-left" size="1.5rem" />
@@ -23,7 +16,7 @@
     </div>
 
     <div v-if="type == 'moveToNext'">
-      <div class="button" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
+      <div class="button primary" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
         <p>Next state</p>
         <Icon name="mdi:chevron-right" size="1.5rem" />
       </div> 

@@ -1,0 +1,134 @@
+<template>
+  <div class="state-row" v-if="stateDetails">
+    <div class="state-location" :class="status">
+      <Icon :name="'fluent:checkmark-16-filled'" size="1rem" :class="status" v-if="status == 'complete'" />
+      <Icon :name="'radix-icons:dot-filled'" size="1rem" :class="status" v-if="status == 'current'" />
+    </div>
+    <div class="state-icon" :class="status">
+       <Icon :name="stateDetails.state_type.icon" size="2rem" />
+    </div>
+    <div class="state-details" >
+      <p>{{ stateDetails.state_type.name }}</p>
+      <p><small>{{ stateDetails.state_instance[0].instance_name }}</small></p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+
+const props = defineProps({
+  deliverableId: {
+    type: Number,
+    required: true,
+  },
+  state: {
+    type: Number,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: false,
+  }
+})
+
+const stateDetails = ref(null)
+
+// State type composable
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
+const { fetchSingleState, StateData } = useWorkflowStateTypes();
+
+// State instance composable
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+
+onMounted(async () => {
+  try {
+    // Get the state instance
+    await fetchSingleStateInstance(props.state)
+    if (!StateInstanceData.value) {
+      throw new Error('Failed to fetch state instance')
+    }
+
+    // Get the state type
+    await fetchSingleState(StateInstanceData.value[0].state_type)
+    if (!StateData.value) {
+      throw new Error('Failed to fetch state type')
+    }
+
+    stateDetails.value = {
+      state_instance: StateInstanceData.value,
+      state_type: StateData.value
+    }
+  } catch (error) {
+    console.error('Error fetching state:', error.message)
+    error.value = error.message
+  }
+})
+
+</script>
+
+<style scoped lang="scss">
+
+@use 'assets/variables' as *;
+
+.state-row {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-xs;
+  align-items: center;
+
+  .state-location {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: $white;
+    border: $border;
+
+    &.complete {
+      background-color: $mint;
+      border-color: $mint;
+      color: $white;
+    }
+  }
+
+  .state-icon {
+    border: $border;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: $br-md;
+
+    &.complete {
+      color: $mint;
+    }
+
+    &.current {
+      background-color: $brand;
+      color: $white;
+    }
+  }
+
+  .state-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    p {
+      margin: 0;
+      text-transform: capitalize;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+
+      small {
+        color: rgba($black, 0.5);
+        text-transform: none;
+      }
+    }
+  }
+}
+
+</style>

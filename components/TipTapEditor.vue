@@ -189,8 +189,13 @@ function updateDeliverable() {
       gap: $spacing-xxxs;
       padding: $spacing-xxxs;
       border-radius: $br-md;
-      background-color: rgba($brand, 0.05);
+      border-right: $border;
+      padding-right: $spacing-sm;
       min-height: 35px;
+
+      &:last-child {
+        border-right: none;
+      }
     }
 
     button {

@@ -386,7 +386,7 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background: linear-gradient(to right, $brand, $brand, $mint);
+                background: linear-gradient(to right, $mint, $mint 80%, $brand 100%);
 
                 &.completed {
                   background: $mint;
@@ -559,7 +559,7 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background-color: $brand;
+                background: linear-gradient(to right, $mint, $mint 80%, $brand 100%);
 
                 &.completed {
                   background: $mint;

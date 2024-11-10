@@ -67,7 +67,7 @@ const props = defineProps({
       .progress {
         height: 6px;
         border-radius: $br-md;
-        background: linear-gradient(to right, $brand, $brand, $mint);
+        background: linear-gradient(to right, $mint, $mint 80%, $brand 100%);
         transition: width 0.42s ease-in-out;
 
         &.completed {

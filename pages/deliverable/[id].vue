@@ -27,11 +27,13 @@
           <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
           <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
         </div>
-        <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
       </aside>
-      <div class="deliverable-editor" v-if="deliverable && !loading">
-        <TipTapEditor v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" :deliverable="deliverable" />
-      </div>
+      <section class="deliverable-manager">
+        <div class="deliverable-editor" v-if="deliverable && !loading">
+          <TipTapEditor v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" :deliverable="deliverable" />
+        </div>
+        <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
+      </section>
     </template>
   </AppPanel>
 </template>
@@ -225,20 +227,17 @@ onMounted(async () => {
   }
 }
 
-.deliverable-editor {
-  width: 100%;
+.deliverable-manager {
+  display: flex;
+  flex-direction: row;
   height: 100%;
-  padding: 0;
-  background-color: rgba($brand, 0.025);
 
-  textarea {
+  .deliverable-editor {
     width: 100%;
     height: 100%;
-    border: none;
-    outline: none;
-    resize: none;
-    font-size: $font-size-md;
-    padding: $spacing-sm 0 0 0;
+    padding: 0;
+    background-color: rgba($brand, 0.025);
+
   }
 }
 
