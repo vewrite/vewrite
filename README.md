@@ -1,5 +1,4 @@
 ![Vewrite](https://github.com/ramijames/vewrite/blob/main/public/images/github-readme.png?raw=true)
-![Preview](https://github.com/ramijames/vewrite/blob/main/public/images/screenshot.png?raw=true)
 
 # Vewrite
 
@@ -11,7 +10,7 @@ At the end of the day, the goal is to allow writers to be more independent, whil
 
 If you'd like to be a beta tester, make sure to sign up for the waiting list at [Vewrite.com](https://www.vewrite.com).
 
----
+![Preview](https://github.com/ramijames/vewrite/blob/main/public/images/screenshot.png?raw=true)
 
 Over the years, I've lead technical teams, devrel units, and written a lot of technical materials. What I've found to always be a complicating factor in projects is that there needs to be someone who is **really on top of things** who can ensure that all the moving pieces get followed up on. If you're writing a dozen articles with half as many different writers, and you need some external stakeholder to review things, what you end up with is a very large set of "things to do".
 
