@@ -1,4 +1,5 @@
 ![Vewrite](https://github.com/ramijames/vewrite/blob/main/public/images/github-readme.png?raw=true)
+![Preview](https://github.com/ramijames/vewrite/blob/main/public/images/screenshot.png?raw=true)
 
 # Vewrite
 
