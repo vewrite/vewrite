@@ -32,11 +32,16 @@
     <div :class="['projects-list', viewMode]" v-if="!loading && projects.length > 0">
       <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == project.deliverables.length ? 'completed' : ''">
         <div class="project-card-header">
-          <div class="image-wrapper">
-            <ClientImage :client="project.client_id" size="medium" table="logos" />
+          <div class="project-card-owner">
+            test
+          </div>
+          <div class="project-card-details">
+            <div class="image-wrapper">
+              <ClientImage :client="project.client_id" size="medium" table="logos" />
+            </div>
+            <h3>{{ project.name }}</h3>
           </div>
         </div>
-        <h3>{{ project.name }}</h3>
         <div class="project-deliverables-status">
           <div class="progress-status">
             <span>Progress</span>
@@ -70,15 +75,8 @@ const user = useSupabaseUser();
 import useDeliverables from '~/composables/useDeliverables';
 const { fetchProjectDeliverables } = useDeliverables();
 
-import { useModal } from '~/stores/modal';
-const modal = useModal();
-
 import useWorkflow from '~/composables/useWorkflow';
-const { fetchStates, WorkflowStates } = useWorkflow();
-
-const edit = () => {
-  modal.visible = 1;
-};
+const { fetchStates } = useWorkflow();
 
 const viewMode = ref('grid');
 
@@ -257,7 +255,7 @@ const filteredProjects = computed(() => {
         position: relative;
         overflow: hidden;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         gap: $spacing-sm;
         justify-content: space-between;
         transition: border, transform 0.18s ease;
@@ -284,12 +282,31 @@ const filteredProjects = computed(() => {
           transform: scale(1.05);
         }
 
+        .project-card-owner {
+          border: $border;
+          color: rgba($brand, 0.5);
+          position: absolute;
+          right: $spacing-xxs;
+          top: $spacing-xxs;
+          padding: $spacing-xxxs $spacing-sm;
+          border-radius: $br-md;
+          font-size: $font-size-xs;
+        }
+
         .project-card-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          margin-bottom: $spacing-md;
-          flex-direction: row;
+          flex-direction: column;
+          margin-top: $spacing-sm;
+
+          .project-card-details {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            gap: $spacing-sm;
+          }
 
           .image-wrapper {
             border-radius: $br-md;
