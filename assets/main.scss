@@ -596,15 +596,10 @@ button,
     align-items: center;
     text-transform: capitalize;
     min-height: 24px;
-    outline: 0px solid rgba($brand, 0.4);
-    outline-offset: 0px;
-    box-shadow: $small-shadow;
-    
 
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
         background-color: rgba($brand, 0.05);
-        outline: 4px solid rgba($brand, 0.05);
     }
 
     &:disabled,
@@ -631,22 +626,18 @@ button.wide,
 button.primary,
 .button.primary {
     border: 1px solid rgba($brand-dark, 0.3);
-    background-color: rgba($brand, 0.85);
+    background-color: rgba($brand, 1);
     color: $white;
-    outline: 0px solid rgba($brand, 0.4);
-    outline-offset: 0px;
 
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 0.95);
-        outline: 4px solid rgba($brand, 0.3);
+        background-color: rgba($brand, 0.85);
     }
 
     &:disabled {
         cursor: not-allowed;
-        background: rgba($black, 0.1);
-        color: rgba($black, 0.5);
-        outline: none;
+        background: rgba($brand, 0.1);
+        color: rgba($brand, 0.5);
     }
 }
 
@@ -655,13 +646,10 @@ button.clear,
     border: 1px solid rgba($brand-dark, 0);
     background-color: rgba($brand, 0);
     color: $white;
-    outline: 0px solid rgba($brand, 0);
-    outline-offset: 0px;
 
     &:hover {
         border: 1px solid rgba($brand-dark, 0);
         background-color: rgba($brand, 0);
-        outline: 4px solid rgba($brand, 0);
     }
 }
 
@@ -670,14 +658,10 @@ button.toolbar,
     border: 1px solid rgba($brand-dark, 0);
     background-color: rgba($brand, 0);
     color: $black;
-    outline: 0px solid rgba($brand, 0);
-    outline-offset: 0px;
-    box-shadow: none;
 
     &:hover {
         border: 1px solid rgba($brand-dark, 0);
         background-color: rgba($brand, 0);
-        outline: 4px solid rgba($brand, 0);
         color: $brand;
     }
 }
@@ -687,13 +671,10 @@ button.green,
     border: 1px solid rgba($mint-dark, 0.3);
     background-color: rgba($mint, 0.75);
     color: $black;
-    outline: 0px solid rgba($mint, 0.4);
-    outline-offset: 0px;
 
     &:hover {
         border: 1px solid rgba($mint-dark, 1);
         background-color: rgba($mint, 1);
-        outline: 4px solid rgba($mint, 0.3);
     }
 }
 
@@ -702,12 +683,10 @@ button.red,
     border: 1px solid rgba($red-dark, 0.3);
     background-color: rgba($red, 0.05);
     color: $red;
-    outline-color: rgba($red, 0.4);
 
     &:hover {
         border: 1px solid rgba($red-dark, 1);
         background-color: rgba($red, 0.1);
-        outline: 4px solid rgba($red, 0.3);
     }
 }
 

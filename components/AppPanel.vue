@@ -26,7 +26,7 @@ export default {
   overflow: hidden;
   margin: $spacing-sm;
   border: $border;
-  border-radius: $br-lg;
+  border-radius: $br-xl;
 
   .header {
     color: $brand;
