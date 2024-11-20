@@ -81,6 +81,10 @@ function toggleDropdown() {
 
   &:hover {
     background-color: rgba($brand, 0.05);
+
+    &.active {
+      background-color: rgba($brand, 0.9);
+    }
   }
 }
 
