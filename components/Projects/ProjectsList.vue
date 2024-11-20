@@ -33,7 +33,7 @@
       <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == project.deliverables.length ? 'completed' : ''">
         <div class="project-card-header">
           <div class="project-card-owner">
-            test
+            {{ project.tag }}
           </div>
           <div class="project-card-details">
             <div class="image-wrapper">
@@ -84,7 +84,17 @@ const listToggle = () => {
   viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid';
 };
 
-async function fetchProjects() {
+function assignProjectTag(project) {
+  let tag = '';
+  if (user.value.id === project.created_by) {
+    tag = 'Owner'
+  } else {
+    tag = 'Member'
+  }
+  return tag;
+}
+
+async function fetchOwnedProjects() {
   const { data, error } = await supabase
     .from('projects')
     .select('*')
@@ -95,7 +105,50 @@ async function fetchProjects() {
     return
   }
 
-  projects.value = await Promise.all(data.map(async project => {
+  return data;
+  
+}
+
+async function fetchAssignedProjects() {
+  // Get all team_ids that the user is a member of
+  // The go get all of the projects that are assigned to those teams
+
+  const { data: teamMembers, error: teamMembersError } = await supabase
+    .from('team_members')
+    .select('team_id')
+    .eq('user_id', user.value.id)
+
+  if (teamMembersError) {
+    console.error('Error fetching team members:', teamMembersError.message)
+    return
+  }
+
+  const teamIds = teamMembers.map(team => team.team_id);
+
+  const { data: assignedProjects, error: assignedProjectsError } = await supabase
+    .from('projects')
+    .select('*')
+    .in('assigned_team', teamIds)
+
+  if (assignedProjectsError) {
+    console.error('Error fetching assigned projects:', assignedProjectsError.message)
+    return
+  }
+
+  return assignedProjects;
+}
+
+async function fetchProjects() {
+  
+  const ownedProjects = await fetchOwnedProjects();
+  const assignedProjects = await fetchAssignedProjects();
+
+  const allProjects = Array.from(new Set([...ownedProjects, ...assignedProjects].map(project => project.id)))
+    .map(id => {
+      return [...ownedProjects, ...assignedProjects].find(project => project.id === id);
+    });
+
+  projects.value = await Promise.all(allProjects.map(async project => {
     return {
       ...project,
       client: {
@@ -109,8 +162,10 @@ async function fetchProjects() {
     const states = await fetchStates(project.workflow);
     const LastState = states[states.length - 1];
     const completedDeliverables = deliverables.filter(deliverable => deliverable.workflow_state == LastState).length;
+    const tag = assignProjectTag(project);
     return {
       ...project,
+      tag: tag,
       deliverables: deliverables,
       completedDeliverables: completedDeliverables,
       states: states,
@@ -118,18 +173,6 @@ async function fetchProjects() {
   }));
 
   loading.value = false
-}
-
-const downloadImage = async (path) => {
-  try {
-    const { data, error } = await supabase.storage
-          .from('logos')
-          .download(path)
-      if (error) throw error
-      return data
-  } catch (error) {
-      console.error("Error downloading image: ", error.message)
-  }
 }
 
 onMounted(async () => {
