@@ -441,7 +441,6 @@ const filteredProjects = computed(() => {
               border-radius: $br-md;
               background-color: $white;
               border: $border;
-              box-shadow: $soft-shadow;
 
               .progress {
                 height: 6px;

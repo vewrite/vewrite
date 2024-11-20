@@ -61,7 +61,9 @@ function toggleDropdown() {
 
   &.open {
     .dropdown-content {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xxs;
       animation: scaleBounce 0.3s ease;
     }
   }
@@ -71,6 +73,11 @@ function toggleDropdown() {
   padding: $spacing-xxs $spacing-xs;
   cursor: pointer !important;
   border-radius: $br-md;
+
+  &.active {
+    background-color: rgba($brand, 1);
+    color: $white;
+  }
 
   &:hover {
     background-color: rgba($brand, 0.05);

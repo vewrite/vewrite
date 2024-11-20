@@ -50,7 +50,7 @@
                 Last updated {{ deliverable.formattedUpdatedAt }}
               </div>
 
-              <div class="deliverable-workflow-state">
+              <!-- <div class="deliverable-workflow-state">
                 <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-if="deliverable.workflow_state">
                   <Loading v-if="!deliverable" />
                   {{ deliverable.state_name }}
@@ -65,16 +65,32 @@
                   </div>
                 </div>
                 
-              </div>
+              </div> -->
+              <Dropdown>
+                <template v-slot:trigger>
+                  <span class="deliverable-workflow-state-bubble no-uppercase" v-if="deliverable.workflow_state">
+                    <Loading v-if="!deliverable" />
+                    {{ deliverable.state_name }}
+                  </span>
+                  <span class="deliverable-workflow-state-bubble red no-uppercase" v-else>
+                    Set state
+                  </span>
+                </template>
+                <template v-slot:menu>
+                  <div v-for="state in states" :key="state[0]?.id" :class="deliverable.workflow_state == state[0]?.id ? 'dropdown-item active' : 'dropdown-item'" @click="state[0] && onWorkflowStateSelect(deliverable.id, state[0].id, state[0].instance_name)">
+                    {{ state[0]?.instance_name }}
+                  </div>
+                </template>
+              </Dropdown>
               
-              <div class="deliverable-calendar">
-                <span class="deliverable-duedate button" @click="toggleCalendar" v-if="deliverable.formattedDueDate">Due {{ deliverable.formattedDueDate }}</span>
-                <span class="deliverable-duedate button red" @click="toggleCalendar"v-else>Set due date</span>
-
-                <div class="deliverable-calendar-popup popup right clean" :id="'deliverable-calendar-' + deliverable.id">
+              <Dropdown>
+                <template v-slot:trigger>
+                  Due {{ deliverable.formattedDueDate }}
+                </template>
+                <template v-slot:menu>
                   <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
-                </div>
-              </div>
+                </template>
+              </Dropdown>
             </div>
           </div>
         </div>
