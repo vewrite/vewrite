@@ -2,9 +2,7 @@
   <AppPanel>
     <template v-slot:header>
       <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button">
-        <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M5.35356 1.35355C5.54882 1.15829 5.54882 0.841705 5.35356 0.646443C5.1583 0.451181 4.84172 0.451181 4.64645 0.646443L1.35356 3.93934C0.767773 4.52512 0.767774 5.47487 1.35356 6.06066L4.64645 9.35355C4.84172 9.54881 5.1583 9.54881 5.35356 9.35355C5.54882 9.15829 5.54882 8.84171 5.35356 8.64644L2.20711 5.5L11.5 5.5C11.7761 5.5 12 5.27614 12 5C12 4.72385 11.7761 4.5 11.5 4.5L2.20711 4.5L5.35356 1.35355Z" fill="black"/>
-        </svg>
+        <Icon name="fluent:chevron-left-16-regular" size="1rem" />
         Back
       </router-link>
       <div class="app-panel-header-buttons">
@@ -231,12 +229,13 @@ onMounted(async () => {
   display: flex;
   flex-direction: row;
   height: 100%;
+  background-color: $white;
 
   .deliverable-editor {
     width: 100%;
     height: 100%;
     padding: 0;
-    background-color: rgba($brand, 0.025);
+    background-color: rgba($white, 0.025);
 
   }
 }

@@ -5,7 +5,7 @@
       <Avatar :uuid="user.id" size="large" />
       <p>{{ ProfileData.username }}</p>
     </div>
-    <Icon name="mdi:chevron-right" size="1.5rem" />
+    <Icon name="fluent:chevron-right-16-regular" size="1.5rem" />
   </router-link>
 </template>
 
@@ -47,8 +47,12 @@ onMounted(async () => {
 
     p {
       margin: 0;
-      color: $white;
+      color: $black;
     }
+  }
+  
+  .iconify {
+    color: $brand;
   }
 }
 

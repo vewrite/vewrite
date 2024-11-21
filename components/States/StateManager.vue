@@ -1,17 +1,17 @@
 <template>
-  <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? 'collapsed' : ''">
-    <div class="button clear toggle-panel" @click="toggleStateManagerPanel">
-      <Icon name="fluent:chevron-double-right-16-regular" size="1rem" v-if="!collapsed" />
-      <Icon name="fluent:chevron-double-left-16-regular" size="1rem" v-if="collapsed" />
+  <div class="state-manager-toggle"  v-if="StateInstanceData">
+    <StateButton v-if="currentPositionInWorkflow == 0" type="disabledPrev" />
+    <StateButton v-if="currentPositionInWorkflow > 0" :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveToPrev" />
+    <div class="state-icon">
+      <Loading v-if="loading" type="small" class="loading-icon" />
+      <Icon v-else :name="stateDetails.state_type.icon" size="2rem" @click="toggleStateManagerPanel" />
     </div>
+    <StateButton v-if="currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
+    <StateButton v-if="currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
+  </div>
+  <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? 'collapsed' : ''">
     <Loading v-if="loading" type="small" />
     <section v-else class="state-manager-wrapper">
-      <div class="state-manager-buttons">
-        <StateButton v-if="!loading && currentPositionInWorkflow == 0" type="disabledPrev" />
-        <StateButton v-if="!loading && currentPositionInWorkflow > 0" :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveToPrev" />
-        <StateButton v-if="!loading && currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
-        <StateButton v-if="!loading && currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
-      </div>
       <div class="state-manager-workflow">
         <div class="workflow-progress">
           <div class="progress-bar">
@@ -39,6 +39,8 @@ import StateRow from '~/components/States/StateRow.vue';
 
 const props = defineProps(['deliverable', 'states']);
 
+// console.log(props.deliverable)
+
 const currentPositionInWorkflow = ref(null);
 const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
@@ -50,6 +52,14 @@ const collapsed = ref(false)
 function toggleStateManagerPanel() {
   collapsed.value = !collapsed.value
 }
+
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
+const { fetchSingleState, StateData } = useWorkflowStateTypes();
+
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+
+const stateDetails = ref(null);
 
 watch(() => props.states, () => {
   loading.value = true;
@@ -70,6 +80,8 @@ watch(() => props.states, () => {
   loading.value = false;
 });
 
+
+
 function getStatus(index) {
   if (index === currentPositionInWorkflow.value) {
     return 'current';
@@ -80,26 +92,102 @@ function getStatus(index) {
   }
 }
 
+async function setIcon(){
+  loading.value = true;
+  try {
+    await fetchSingleStateInstance(props.deliverable.workflow_state)
+    if (!StateInstanceData.value) {
+      throw new Error('Failed to fetch state instance')
+    }
+
+    await fetchSingleState(StateInstanceData.value[0].state_type)
+    if (!StateData.value) {
+      throw new Error('Failed to fetch state type')
+    }
+
+    stateDetails.value = {
+      state_instance: StateInstanceData.value,
+      state_type: StateData.value
+    }
+
+    loading.value = false;
+
+  } catch (error) {
+    console.error('Error fetching state:', error.message)
+    error.value = error.message
+  }
+}
+
+onMounted(async () => {
+  setIcon()
+})
+
+watch(() => currentPositionInWorkflow.value, () => {
+  console.log('currentPositionInWorkflow changed')
+  setIcon()
+})
+
 </script>
 
 <style scoped lang="scss">
 
 @use 'assets/variables' as *;
 
+.state-manager-toggle {
+  position: fixed;
+  bottom: $spacing-md;
+  right: $spacing-md;
+  z-index: 1000;
+  background-color: rgba($white, 0.6);
+  backdrop-filter: blur(8px);
+  border: $border;
+  border-radius: $br-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $main-shadow;
+  flex-direction: row;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-md;
+  
+  .state-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .loading-icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+  .iconify {
+    background-color: $brand;
+    color: $white;
+  }
+}
+
 .state-manager-panel {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  border-left: $border;
-  height: 100%;
-  width: 480px;
-  position: relative;
-  background-color: $white;
+  border: $border;
+  width: 340px;
+  height: calc(60% - 200px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: fixed;
+  bottom: $spacing-xl;
+  right: $spacing-md;
+  background-color: rgba($white, 0.6);
+  backdrop-filter: blur(8px);
   transition: width 0.3s ease;
-  overflow: hidden;
+  border-radius: $br-lg;
+  box-shadow: $main-shadow;
 
   &.collapsed {
-    width: 16px;
+    width: 0px;
+    right: -1px;
 
     .state-manager-wrapper {
 
@@ -113,30 +201,6 @@ function getStatus(index) {
     }
   }
 
-  .toggle-panel {
-    height: 100%;
-    background-color: $white;
-    border: none;
-    border-radius: 0;
-    border-right: $border;
-    color: rgba($brand, 0.75);
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: all;
-    padding: 0;
-    z-index: 1000;
-    box-shadow: none;
-
-    &:hover {
-      color: $brand;
-    }
-  }
-
   .state-manager-wrapper {
     display: flex;
     flex-direction: column;
@@ -144,6 +208,7 @@ function getStatus(index) {
     width: 100%;
     padding: 0 0 0 $spacing-sm;
     height: 100%;
+    justify-content: center;
 
     .state-manager-buttons {
       height: auto;
