@@ -26,10 +26,17 @@
         </linearGradient>
         </defs>
       </svg>
-
-
-
     </div>
+
+    <div class="sidebar-content">
+      <div class="link-group">
+        <router-link to="/projects" class="link"><Icon name="fluent:folder-16-regular" size="1.5rem" /> Projects</router-link>
+        <router-link to="/workflows" class="link"><Icon name="fluent:flow-16-regular" size="1.5rem" /> Workflows</router-link>
+        <router-link to="/teams" class="link"><Icon name="fluent:people-16-regular" size="1.5rem" /> Teams</router-link>
+        <router-link to="/clients" class="link"><Icon name="fluent:star-16-regular" size="1.5rem" /> Clients</router-link>
+      </div>
+    </div>
+
     <div class="sidebar-content">
       <div class="link-group">
         <div class="title">Work</div>
@@ -49,6 +56,7 @@
         <!-- <router-link to="/analytics" class="link">Analytics</router-link> -->
       </div>
     </div>
+
     <div class="user-section">
       <User />
     </div>
@@ -147,7 +155,7 @@ function toggleSidebar() {
 
   .sidebar-header {
     color: $brand;
-    padding: 0 $spacing-sm;
+    padding: 0 $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -182,7 +190,7 @@ function toggleSidebar() {
   }
 
   .sidebar-content {
-    padding: $spacing-sm;
+    padding: 0 $spacing-sm $spacing-sm $spacing-sm;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -207,7 +215,7 @@ function toggleSidebar() {
         border-radius: $br-md;
         transition: background-color 0.18s ease;
         color:$black;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-family: $font-family-main;
         font-weight: 400;
         text-decoration: none;

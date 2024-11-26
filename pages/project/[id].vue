@@ -2,9 +2,7 @@
   <AppPanel>
     <template v-slot:header>
       <router-link to="/projects/" class="button">
-        <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M5.35356 1.35355C5.54882 1.15829 5.54882 0.841705 5.35356 0.646443C5.1583 0.451181 4.84172 0.451181 4.64645 0.646443L1.35356 3.93934C0.767773 4.52512 0.767774 5.47487 1.35356 6.06066L4.64645 9.35355C4.84172 9.54881 5.1583 9.54881 5.35356 9.35355C5.54882 9.15829 5.54882 8.84171 5.35356 8.64644L2.20711 5.5L11.5 5.5C11.7761 5.5 12 5.27614 12 5C12 4.72385 11.7761 4.5 11.5 4.5L2.20711 4.5L5.35356 1.35355Z" fill="black"/>
-        </svg>
+        <Icon name="fluent:chevron-left-16-regular" size="1rem" />
         Back
       </router-link>
       <div class="app-panel-header" v-if="project">
@@ -27,45 +25,22 @@
     <template v-slot:body>
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" />
         <ProjectDetails v-if="project && loading.global == false" :client="project.client_id" :team="project.assigned_team" />
         <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
-
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
           <p>No deliverables found for this project</p>
         </div>
-
         <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
-
             <div class="deliverable-details">
               <span class="deliverable-id">{{ deliverable.id }}</span>
               <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
             </div>
-            
             <div class="deliverable-actions">
-
               <div class="deliverable-updated-at">
                 Last updated {{ deliverable.formattedUpdatedAt }}
               </div>
-
-              <!-- <div class="deliverable-workflow-state">
-                <span class="deliverable-workflow-state-bubble button no-uppercase" @click="toggleWorkflowState" v-if="deliverable.workflow_state">
-                  <Loading v-if="!deliverable" />
-                  {{ deliverable.state_name }}
-                </span>
-                <span class="deliverable-workflow-state-bubble button red no-uppercase" @click="toggleWorkflowState" v-else>
-                  Set state
-                </span>
-
-                <div class="deliverable-workflow-state-popup popup right list" :id="'deliverable-workflow-state-' + deliverable.id" v-if="states">
-                  <div v-for="state in states" :key="state[0]?.id" :class="deliverable.workflow_state == state[0]?.id ? 'active' : ''" @click="state[0] && onWorkflowStateSelect(deliverable.id, state[0].id, state[0].instance_name)">
-                    {{ state[0]?.instance_name }}
-                  </div>
-                </div>
-                
-              </div> -->
               <Dropdown>
                 <template v-slot:trigger>
                   <span class="deliverable-workflow-state-bubble no-uppercase" v-if="deliverable.workflow_state">
@@ -82,7 +57,6 @@
                   </div>
                 </template>
               </Dropdown>
-              
               <Dropdown>
                 <template v-slot:trigger>
                   Due {{ deliverable.formattedDueDate }}
