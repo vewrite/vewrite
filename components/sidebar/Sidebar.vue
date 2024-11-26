@@ -50,14 +50,6 @@ function toggleSidebar() {
   &.collapsed {
     min-width: 88px;
 
-    .toggle-sidebar {
-      color: rgba($brand, 0.85);
-
-      &:hover {
-        color: $brand;
-      }
-    }
-
     .sidebar-header { 
       display: none;
     }
@@ -117,7 +109,7 @@ function toggleSidebar() {
 
   .toggle-sidebar {
     height: 100%;
-    color: rgba($brand, 0.75);
+    color: $black;
     position: absolute;
     right: 0;
     top: 0;

@@ -1,8 +1,8 @@
 <template>
-  <Dropdown :size="small">
+  <Dropdown class="top-bar-user" :size="small">
     <template v-slot:trigger>
-      <Loading v-if="loading" type="small" />
-      <Avatar v-else :uuid="user.id" size="small" />
+      <Avatar :uuid="user.id" size="small" />
+      <Icon name="fluent:chevron-down-16-regular" size="1rem" />
     </template>
     <template v-slot:menu>
        <router-link to="/account" class="dropdown-item">Account</router-link>
@@ -31,28 +31,12 @@ onMounted(async () => {
 
 @use 'assets/variables' as *;
 
-.side-bar-user {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: $spacing-xs;
-  gap: $spacing-xs;
+.top-bar-user {
+  height: 40px;
 
-  .user-identity {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: $spacing-xs;
-
-    p {
-      margin: 0;
-      color: $black;
-    }
-  }
-  
-  .iconify {
-    color: $brand;
+  .button {
+    width: 32px;
+    height: 32px;
   }
 }
 

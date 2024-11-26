@@ -9,7 +9,7 @@
 
 const props = defineProps(['uuid', 'size'])
 const supabase = useSupabaseClient()
-const loading = ref(false)
+const loading = ref(true)
 const src = ref("")
 const path = ref("")
 
@@ -23,6 +23,7 @@ const downloadImage = async (path) => {
             .download(path)
         if (error) throw error
         src.value = URL.createObjectURL(data)
+        loading.value = false
     } catch (error) {
         console.error("Error downloading image: ", error.message)
     }
