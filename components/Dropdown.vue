@@ -47,6 +47,12 @@ function toggleDropdown() {
   position: relative;
   display: inline-block;
 
+  .button {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xxs;
+  }
+
   .dropdown-content {
     display: none;
     position: absolute;
@@ -55,7 +61,7 @@ function toggleDropdown() {
     box-shadow: $big-shadow;
     z-index: 2;
     right: 0;
-    padding: $spacing-xxs;
+    padding: $spacing-xs;
     border-radius: $br-lg;
     animation: scaleBounce 0.3s ease;
   }

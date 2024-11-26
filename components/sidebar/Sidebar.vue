@@ -6,10 +6,10 @@
     </div>
     <div class="sidebar-content">
       <div class="link-group">
-        <router-link to="/projects" class="link"><Icon name="fluent:folder-16-regular" size="1.5rem" /> Projects</router-link>
-        <router-link to="/workflows" class="link"><Icon name="fluent:flow-16-regular" size="1.5rem" /> Workflows</router-link>
-        <router-link to="/teams" class="link"><Icon name="fluent:people-16-regular" size="1.5rem" /> Teams</router-link>
-        <router-link to="/clients" class="link"><Icon name="fluent:star-16-regular" size="1.5rem" /> Clients</router-link>
+        <router-link to="/projects" :class="['link', isProjects ? 'router-link-active' : '']"><Icon name="fluent:folder-16-regular" size="1.5rem" /> Projects</router-link>
+        <router-link to="/workflows" :class="['link', isWorkflows ? 'router-link-active' : '']"><Icon name="fluent:flow-16-regular" size="1.5rem" /> Workflows</router-link>
+        <router-link to="/teams" :class="['link', isTeams ? 'router-link-active' : '']"><Icon name="fluent:people-16-regular" size="1.5rem" /> Teams</router-link>
+        <router-link to="/clients" :class="['link', isClients ? 'router-link-active' : '']"><Icon name="fluent:star-16-regular" size="1.5rem" /> Clients</router-link>
       </div>
     </div>
   </div>
@@ -17,11 +17,32 @@
 
 <script setup>
 
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
 const collapsed = ref(false)
 
 function toggleSidebar() {
   collapsed.value = !collapsed.value
 }
+
+const isProjects = computed(() => {
+  return route.path.startsWith('/project/');
+});
+
+const isWorkflows = computed(() => {
+  console.log(route.path)
+  return route.path.startsWith('/workflow/');
+});
+
+const isTeams = computed(() => {
+  return route.path.startsWith('/team/');
+});
+
+const isClients = computed(() => {
+  return route.path.startsWith('/client/');
+});
 
 </script>
 

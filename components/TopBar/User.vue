@@ -2,6 +2,7 @@
   <Dropdown class="top-bar-user" :size="small">
     <template v-slot:trigger>
       <Avatar :uuid="user.id" size="small" />
+      {{ loading ? 'Loading' : ProfileData.username }}
       <Icon name="fluent:chevron-down-16-regular" size="1rem" />
     </template>
     <template v-slot:menu>
@@ -27,17 +28,17 @@ onMounted(async () => {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 @use 'assets/variables' as *;
 
 .top-bar-user {
   height: 40px;
 
-  .button {
-    width: 32px;
-    height: 32px;
-  }
+    .button {
+      border-color: transparent;
+    }
+
 }
 
 </style>
