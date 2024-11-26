@@ -10,14 +10,15 @@
     <StateButton v-if="currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
   </div>
   <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? 'collapsed' : ''">
-    <Loading v-if="loading" type="small" />
-    <section v-else class="state-manager-wrapper">
-      <div class="state-manager-workflow">
+    <section class="state-manager-wrapper">
+      <Loading v-if="loading" type="small" />
+      <div v-else class="state-manager-workflow">
+        <!-- TODO - REMOVED until I can figure out how to make it work without 100% height in the parent
         <div class="workflow-progress">
           <div class="progress-bar">
             <div class="progress" :style="{ height: (currentPositionInWorkflow + 1) / states.length * 100 + '%' }"></div>
           </div>
-        </div>
+        </div> -->
         <section class="single-workflow">
           <StateRow
             v-for="(state, index) in states"
@@ -156,6 +157,7 @@ watch(() => currentPositionInWorkflow.value, () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     .loading-icon {
       width: 28px;
@@ -173,10 +175,11 @@ watch(() => currentPositionInWorkflow.value, () => {
   flex-direction: row;
   border: $border;
   width: 340px;
-  height: calc(60% - 200px);
+  height: auto;
   overflow-y: auto;
   overflow-x: hidden;
   position: fixed;
+  align-items: flex-start;
   bottom: $spacing-xl;
   right: $spacing-md;
   background-color: rgba($white, 0.6);
@@ -206,7 +209,7 @@ watch(() => currentPositionInWorkflow.value, () => {
     flex-direction: column;
     gap: $spacing-xs;
     width: 100%;
-    padding: 0 0 0 $spacing-sm;
+    padding: $spacing-sm;
     height: 100%;
     justify-content: center;
 
