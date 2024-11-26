@@ -1,18 +1,20 @@
 <template>
   <main id="Vewrite">
-    <Mobile />
-    <Sidebar />
-    <main>
-      <slot />
-    </main>
-    <Modal />
+    <TopBar />
+    <section class="go">
+      <Sidebar />
+      <main>
+        <slot />
+      </main>
+      <Modal />
+    </section>
   </main>
 </template>
 
 <script setup>
 
+import TopBar from '~/components/TopBar/TopBar.vue'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
-import Mobile from '~/components/Sidebar/Mobile.vue'
 
 </script>
 
@@ -22,7 +24,7 @@ import Mobile from '~/components/Sidebar/Mobile.vue'
 
 #Vewrite {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
   width: 100%;
 
@@ -34,6 +36,13 @@ import Mobile from '~/components/Sidebar/Mobile.vue'
     width: 100%;
     height: 100%;
     display: flex;
+  }
+
+  .go {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
   }
 }
 

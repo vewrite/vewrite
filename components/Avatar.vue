@@ -1,8 +1,8 @@
 <template>
-  <router-link to="/" class="user-avatar">
+  <span :class="['user-avatar', size]">
     <Loading v-if="loading" type="small" />
-    <img :src="src" alt="" v-else />
-  </router-link>
+    <img :src="src" alt="" :class="size" v-else />
+  </span>
 </template>
 
 <script setup>
@@ -56,9 +56,11 @@ watch(path, () => {
   border-radius: $br-lg;
   overflow: hidden;
   font-size: 0;
-  border: 1px solid $white;
-  outline: 1px solid rgba($black, 0.1);
-  outline-offset: -2px;
+
+  &.small {
+    width: 32px;
+    height: 32px;
+  }
 
   img {
     width: 42px;
@@ -69,6 +71,11 @@ watch(path, () => {
     margin: -1px;
     object-fit: cover;
     text-indent: -9999px;
+
+    &.small {
+      width: 32px;
+      height: 32px;
+    }
   }
 }
 

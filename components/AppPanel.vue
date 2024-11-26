@@ -24,7 +24,7 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  border: $border;
+  border-left: $border;
 
   .header {
     color: $brand;
