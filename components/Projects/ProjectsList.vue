@@ -480,6 +480,7 @@ const filteredProjects = computed(() => {
         overflow: hidden;
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
         gap: $spacing-md;
         border: 1px solid transparent;
         border-radius: $br-md;
@@ -490,9 +491,20 @@ const filteredProjects = computed(() => {
         .project-card-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: center;
           flex-direction: row;
-          width: 54px;
+          gap: $spacing-md;
+          width: auto;
+
+          .project-card-owner {
+            border: $border;
+            color: rgba($brand, 0.5);
+            padding: $spacing-xxxs $spacing-sm;
+            border-radius: $br-md;
+            font-size: $font-size-xs;
+            min-width: 80px;
+            text-align: center;
+          }
 
           .image-wrapper {
             width: 54px;
@@ -510,6 +522,16 @@ const filteredProjects = computed(() => {
               height: 100%;
             }
           }
+
+        }
+
+        .project-card-details {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-direction: row;
+          gap: $spacing-md;
+          width: 100%;
 
         }
 

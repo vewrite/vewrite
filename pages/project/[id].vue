@@ -161,23 +161,7 @@ async function getProject(id) {
   }
 }
 
-// TODO - migrate to composable -> fetchStates
-// async function fetchProjectWorkflow(workflowId) {
-//   try {
-//     const { data, error } = await supabase
-//       .from('workflows')
-//       .select('*')
-//       .eq('id', workflowId);
-
-//     if (error) throw error;
-
-//     workflow.value = data;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
-// // TODO - migrate to composable
+// TODO - migrate to composable
 async function renderStateName(stateId) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -269,12 +253,6 @@ async function fetchDeliverables(projectId) {
   }
 }
 
-function toggleCalendar(event) {
-  const id = event.target.parentElement.querySelector('.deliverable-calendar-popup').id;
-  const popup = document.getElementById(id);
-  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
-}
-
 const onDateSelect = async (deliverableId, newDate) => {
   await updateDeliverableDate(deliverableId, newDate);
   const popup = document.getElementById(`deliverable-calendar-${deliverableId}`);
@@ -306,13 +284,7 @@ const updateDeliverableDate = async (deliverableId, newDate) => {
 
 /**
  * WORKFLOW STATE
- */ 
-
-function toggleWorkflowState(event) {
-  const id = event.target.parentElement.querySelector('.deliverable-workflow-state-popup').id;
-  const popup = document.getElementById(id);
-  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
-}
+ */
 
 const onWorkflowStateSelect = async (deliverableId, newWorkflowState, newStateName) => {
   await updateDeliverableWorkflowState(deliverableId, newWorkflowState);
