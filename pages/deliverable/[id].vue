@@ -24,8 +24,10 @@
       <Loading v-if="loading" />
       <aside class="object-overview" v-if="deliverable && !loading">
         <div class="object-summary">
-          <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" />
-          <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" />
+          <!-- <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" /> -->
+          <!-- <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" /> -->
+          <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverable" />
+          <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverable" />
         </div>
       </aside>
       <section class="deliverable-manager">
@@ -62,7 +64,7 @@ const CurrentState = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchSingleProjectDeliverableByState, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription, DeliverableData, DeliverableError } = useDeliverables();
+const { saveDeliverable, fetchSingleProjectDeliverableByState, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription, DeliverableData, DeliverableError } = useDeliverables();
 
 async function getCurrentState(deliverableId) {
   try {
@@ -181,6 +183,20 @@ onMounted(async () => {
     console.error(error);
   }
 });
+
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
+
+function updateDeliverable() {
+  debouncedSaveDeliverable();
+}
 
 </script>
 

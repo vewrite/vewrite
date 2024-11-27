@@ -79,7 +79,7 @@
 <script setup>
 
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
+const { saveDeliverableContent, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
@@ -130,10 +130,10 @@ function debounce(func, wait) {
   };
 }
 
-const debouncedSaveDeliverable = debounce(() => saveDeliverable(tiptapDeliverable.value), 1000);
+const debouncedSaveDeliverableContent = debounce(() => saveDeliverableContent(tiptapDeliverable.value), 1000);
 
 function updateDeliverable() {
-  debouncedSaveDeliverable();
+  debouncedSaveDeliverableContent();
 }
 
 </script>

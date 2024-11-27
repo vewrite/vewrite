@@ -34,6 +34,21 @@ export default function useDeliverables() {
       console.log('Updating deliverable', deliverable);
       
       const { error } = await supabase
+        .from('deliverables')
+        .update(deliverable)
+        .eq('id', deliverable.id);
+
+      if (error) throw error;
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function saveDeliverableContent(deliverable) {
+    try {
+      console.log('Updating deliverable', deliverable);
+      
+      const { error } = await supabase
         .from('deliverable_content')
         .update({ content: deliverable.content, updated_at: new Date() })
         .eq('id', deliverable.id);
@@ -334,6 +349,7 @@ export default function useDeliverables() {
     DeliverableError,
     DeliverableStates,
     saveDeliverable,
+    saveDeliverableContent,
     deleteDeliverable,
     updateDeliverableTitle,
     updateDeliverableDescription,
