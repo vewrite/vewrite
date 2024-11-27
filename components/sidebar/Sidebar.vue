@@ -28,7 +28,9 @@ function toggleSidebar() {
 }
 
 const isProjects = computed(() => {
-  return route.path.startsWith('/project/');
+  if(route.path.startsWith('/project/') || route.path.startsWith('/deliverable/')) {
+    return true;
+  }
 });
 
 const isWorkflows = computed(() => {
