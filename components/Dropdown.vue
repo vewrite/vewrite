@@ -63,7 +63,7 @@ function toggleDropdown() {
     right: 0;
     padding: $spacing-xs;
     border-radius: $br-md;
-    animation: scaleBounce 0.3s ease;
+    animation: scaleBounce 0.35s ease;
   }
 
   &.open {
@@ -71,7 +71,7 @@ function toggleDropdown() {
       display: flex;
       flex-direction: column;
       gap: $spacing-xxs;
-      animation: scaleBounce 0.3s ease;
+      animation: scaleBounce 0.5s ease;
     }
   }
 }
@@ -81,6 +81,12 @@ function toggleDropdown() {
   cursor: pointer !important;
   border-radius: $br-md;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xxs;
+  font-size: $font-size-xs;
+  color: $black;
+  font-weight: bold;
 
   &.active {
     background-color: rgba($brand, 1);

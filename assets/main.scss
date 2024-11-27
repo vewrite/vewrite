@@ -585,7 +585,7 @@ button,
     padding: $spacing-xxxs $spacing-xs;
     cursor: pointer;
     font-size: $font-size-xs;
-    font-weight: 500;
+    font-weight: bold;
     transition: all 0.2s ease;
     font-family: $font-family-main;
     display: flex;
@@ -629,7 +629,7 @@ button.primary,
 
     &:hover {
         border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 0.85);
+        background-color: rgba($brand, .8);
     }
 
     &:disabled {

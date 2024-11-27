@@ -2,7 +2,7 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <button class="dark" @click="logout">Logout</button>
+      <button @click="logout">Logout</button>
     </template>
     <template v-slot:body>
       <AccountContent />
@@ -18,7 +18,6 @@ definePageMeta({
 });
 
 import AppPanel from '~/components/AppPanel.vue';
-import AccountContent from '~/components/AccountContent.vue';
 
 export default {
   setup() {
