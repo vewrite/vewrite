@@ -55,7 +55,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createDeliverable(deliverable)" class="primary wide">Create</button>
+      <button @click="createDeliverable(deliverable, projectId,)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
@@ -88,8 +88,6 @@ const deliverable = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   project: projectId,
-  status: 0,
-  workflow_state: 1,
   type: 'markdown',
   due_date: new Date(),
   markdown: '# Hello World',

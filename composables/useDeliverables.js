@@ -222,54 +222,126 @@ export default function useDeliverables() {
 
     useModal().toggleLoading();
 
+    // if(deliverable.type === 'markdown') {
+    //   console.log('Deliverable is Markdown');
+    //   deliverable.markdown = deliverable.markdown;
+    //   delete deliverable.type;
+    // }
+
+    // if(deliverable.type === 'file') {
+    //   console.log('Deliverable has a file');
+    //   deliverable.file = deliverable.file;
+    //   delete deliverable.type;
+    // }
+
+    // if(deliverable.type === 'link') {
+    //   console.log('Deliverable has an external link');
+    //   deliverable.link = deliverable.link;
+    //   delete deliverable.type;
+    // }
+
+    const deliverableContent = ref({});
+
     if(deliverable.type === 'markdown') {
-      console.log('Deliverable is Markdown');
-      deliverable.markdown = deliverable.markdown;
+      deliverableContent.value = {
+        type: 'markdown',
+        content: 'Hello World'
+      };
       delete deliverable.type;
     }
 
     if(deliverable.type === 'file') {
-      console.log('Deliverable has a file');
-      deliverable.file = deliverable.file;
+      deliverableContent.value = {
+        type: 'file',
+        content: deliverable.file
+      };
       delete deliverable.type;
     }
 
     if(deliverable.type === 'link') {
-      console.log('Deliverable has an external link');
-      deliverable.link = deliverable.link;
+      deliverableContent.value = {
+        type: 'link',
+        content: deliverable.link
+      };
       delete deliverable.type;
     }
 
+    let deliverableId;
+    const projectId = deliverable.project;
+
+    // const ProjectWorkflow = await fetchProjectWorkflow(deliverable.project);
+    // const States = await fetchStates(ProjectWorkflow);
+    const ProjectWorkflow = ref(null);
+    const States = ref(null);
+
     try {
-      const { data, error } = await supabase
-        .from('deliverables')
-        .insert(deliverable);
+      ProjectWorkflow.value = await fetchProjectWorkflow(deliverable.project);
+      console.log('Project Workflow:', ProjectWorkflow.value);
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
 
-      useModal().toggleVisibility();
-      useModal().reset();
+    try {
+      States.value = await fetchStates(ProjectWorkflow.value);
+      console.log('States:', States.value);
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
 
-      // We also need to set the deliverable state to the first state in the list
-      // await updateDeliverableWorkflowState(data[0].id, DeliverableStates.value[0].id);
+    try {
 
-      /*
-      1. Get the project id
-      2. Get the workflow associated with that project
-      3. Get the first state in the workflow
-      4. Update the deliverable with the first state
+      let { data, error } = await supabase.from('deliverables').insert(deliverable, {
+        returning: 'representation', // Return the value after inserting. We use this to identify the deliverables below
+      })
+
+      deliverableId = data[0].id;
+
+      /* 
+      We also need to set the deliverable state to the first state in the list
+        1. Get the project id
+        2. Get the workflow associated with that project
+        3. Get the first state in the workflow
+        4. Update the deliverable with the first state
       */
 
-      const ProjectWorkflow = await fetchProjectWorkflow(deliverable.project);
-      const States = await fetchStates(ProjectWorkflow);
-      await updateDeliverableWorkflowState(data[0].id, States[0]);
+      console.log(States.value[0]);
+      await updateDeliverableWorkflowState(data[0].id, States.value[0]);
 
+      // if (error) throw error;
 
-      if (error) throw error;
-
-      return data;
+      // return data;
 
     } catch (error) {
       DeliverableError.value = error.message;
     }
+
+    // For each state, I need a new deliverable_content row
+    States.value.forEach(async (state) => {
+      console.log(state);
+      const deliverable = {
+        project_id: projectId,
+        deliverable_id: deliverableId,
+        stateinstance_id: state,
+        created_at: new Date(),
+        updated_at: new Date(),
+        content: deliverableContent.value
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('deliverable_content')
+          .insert(deliverable);
+
+        if (error) throw error;
+
+        console.log('Deliverable created:', data[0]);
+      } catch (error) {
+        console.error('Error creating deliverable:', error);
+      }
+    });
+
+    useModal().toggleVisibility();
+    useModal().reset();
   }
 
   return {

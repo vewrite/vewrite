@@ -2,8 +2,6 @@ import { ref } from 'vue';
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 
-
-
 export default function useWorkflow() {
 
   const WorkflowData = ref(null);
@@ -236,7 +234,7 @@ export default function useWorkflow() {
         console.log('Workflow states:', data);
 
         WorkflowStates.value = data.states;
-        return data.states;
+        return data[0];
   
       } catch (error) {
         WorkflowError.value = error.message;
