@@ -245,7 +245,7 @@ export default function useDeliverables() {
     if(deliverable.type === 'markdown') {
       deliverableContent.value = {
         type: 'markdown',
-        content: 'Hello World'
+        content: ''
       };
       delete deliverable.type;
     }

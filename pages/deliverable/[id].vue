@@ -30,9 +30,8 @@
       </aside>
       <section class="deliverable-manager">
         <div class="deliverable-editor" v-if="DeliverableData && !loading">
-          <!-- <TipTapEditor v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" :deliverable="deliverable" /> -->
-           <TipTapEditor :deliverable="DeliverableData" />
-           <!-- DeliverableData.value.content.type == 'markdown' -->
+           <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
+           <span v-if="DeliverableData.content.type == 'link'" >{{ DeliverableData.content.content }}</span>
         </div>
         <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
       </section>

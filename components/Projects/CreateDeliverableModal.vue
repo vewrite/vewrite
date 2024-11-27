@@ -64,10 +64,6 @@
 
 // TODO - Add validation to the form
 
-// Project composable
-// import useProject from '~/composables/useProject';
-// const { deleteProject, getProjectDetails, projectData, projectError } = useProject();
-
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
 const { createDeliverable } = useDeliverables();
@@ -90,7 +86,7 @@ const deliverable = reactive({
   project: projectId,
   type: 'markdown',
   due_date: new Date(),
-  markdown: '# Hello World',
+  markdown: 'DEPRECATED, YOU SHOULD NOT SEE THIS',
   link: '',
   file: '',
 })
