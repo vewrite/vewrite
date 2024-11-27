@@ -141,15 +141,14 @@ watch(() => currentPositionInWorkflow.value, () => {
   z-index: 1000;
   background-color: rgba($white, 0.6);
   backdrop-filter: blur(8px);
-  border: $border;
-  border-radius: $br-lg;
+  border-radius: $br-md;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: $main-shadow;
+  box-shadow: $big-shadow;
   flex-direction: row;
   gap: $spacing-xs;
-  padding: $spacing-xs $spacing-md;
+  padding: $spacing-xxs $spacing-sm;
   
   .state-icon {
     width: 44px;
@@ -173,7 +172,6 @@ watch(() => currentPositionInWorkflow.value, () => {
 .state-manager-panel {
   display: flex;
   flex-direction: row;
-  border: $border;
   width: 340px;
   height: auto;
   overflow-y: auto;
@@ -185,8 +183,8 @@ watch(() => currentPositionInWorkflow.value, () => {
   background-color: rgba($white, 0.6);
   backdrop-filter: blur(8px);
   transition: width 0.3s ease;
-  border-radius: $br-lg;
-  box-shadow: $main-shadow;
+  border-radius: $br-md;
+  box-shadow: $big-shadow;
 
   &.collapsed {
     width: 0px;

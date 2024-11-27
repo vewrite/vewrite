@@ -577,9 +577,9 @@ textarea {
 button,
 .button {
     color: $black;
-    background: rgba($white, .35);
-    border-radius: $br-md;
-    border: $border;
+    background: rgba($brand, 0.05);
+    border-radius: $br-lg;
+    border: 1px solid rgba($brand, 0.05);
     text-align: center;
     text-decoration: none;
     padding: $spacing-xxxs $spacing-xs;

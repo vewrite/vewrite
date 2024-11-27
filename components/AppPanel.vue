@@ -38,8 +38,8 @@ export default {
     border-top: $border;
     border-left: $border;
     border-right: $border;
-    border-top-left-radius: $br-md;
-    border-top-right-radius: $br-md;
+    border-top-left-radius: $br-lg;
+    border-top-right-radius: $br-lg;
     background: rgba($white, 0.35);
 
     @media (max-width: 960px) {
@@ -68,8 +68,8 @@ export default {
     border-bottom: $border;
     border-left: $border;
     border-right: $border;
-    border-bottom-left-radius: $br-md;
-    border-bottom-right-radius: $br-md;
+    border-bottom-left-radius: $br-lg;
+    border-bottom-right-radius: $br-lg;
     box-shadow: $main-shadow;
 
     @media (max-width: 960px) {

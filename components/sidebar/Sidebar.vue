@@ -153,18 +153,20 @@ const isClients = computed(() => {
         align-items: center;
         gap: $spacing-xs;
         padding: $spacing-xs $spacing-sm;
-        border-radius: $br-md;
+        border-radius: $br-lg;
         transition: background-color 0.18s ease;
-        color:$black;
+        color: $black;
         font-size: $font-size-xs;
         font-family: $font-family-main;
         font-weight: bold;
         text-decoration: none;
+        border: 1px solid rgba($brand, 0.0);
 
         &:hover,
         &.router-link-active,
         &.router-link-exact-active {
           background-color: rgba($brand, 0.05);
+          border: 1px solid rgba($brand, 0.05);
           color: $brand;
 
           .icon {
