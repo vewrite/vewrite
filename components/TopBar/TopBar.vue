@@ -70,6 +70,20 @@ function toggleMobile() {
   }
 }
 
+@keyframes scaleBounce {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.005);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 header {
   display: flex;
   flex-direction: row;
@@ -183,17 +197,21 @@ header {
       position: fixed;
       width: 100%;
       max-width: 300px;
-      top: 0px;
-      left: -100vw;
-      bottom: 0;
-      height: 100%;
-      background: linear-gradient(to right, rgba($brand-dark, 1) 70%, rgba($brand-dark, 0.86) 100%);
-      backdrop-filter: blur(10px);
+      top: $spacing-sm;
+      left: $spacing-sm;
+      opacity: 0;
+      box-shadow: $big-shadow;
+      border-radius: $br-lg;
+      background-color: rgba($white, 0.65);
+      backdrop-filter: blur(20px);
       z-index: 9998;
       transition: all .3s ease;
+      pointer-events: none;
 
       &.active {
-        left: 0;
+        animation: scaleBounce 0.35s ease;
+        opacity: 1;
+        pointer-events: all;
       }
 
       .sidebar-content {
@@ -211,7 +229,7 @@ header {
           display: flex;
           flex-direction: column;
           gap: 2px;
-          margin-bottom: $spacing-md;
+          margin-bottom: 0;
 
           a {
             display: flex;
@@ -221,7 +239,7 @@ header {
             padding: $spacing-xs $spacing-sm;
             border-radius: $br-md;
             transition: background-color 0.18s ease;
-            color: rgba($white, 0.85);
+            color: $black;
             font-size: $font-size-sm;
             font-family: $font-family-main;
             font-weight: 400;
@@ -230,8 +248,8 @@ header {
             &:hover,
             &.router-link-active,
             &.router-link-exact-active {
-              background-color: rgba($brand, 1);
-              color: $white;
+              background-color: rgba($brand, .1);
+              color: $brand;
 
               .icon {
                 transform: scale(1.15);
@@ -258,8 +276,9 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(25, 60, 115, 0.1);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(120deg, rgba($brand,.25) 0%, rgba($mint,.1) 10%, rgba($mint,0) 65%);
+    backdrop-filter: blur(3px);
+    mask-image: linear-gradient(110deg, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 55%);
     z-index: 9997;
     opacity: 0;
     pointer-events: none;

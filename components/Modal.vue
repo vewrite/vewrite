@@ -147,7 +147,7 @@ computed(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(25, 60, 115, 0.1);
+    background-color: rgba($white, 0.05);
     backdrop-filter: blur(10px);
   }
 
@@ -161,12 +161,8 @@ computed(() => {
     overflow: auto;
     width: 100%;
     height: 100%;
-    background: $white linear-gradient(-135deg, rgba($brand, 0.1) 0%, rgba($brand, 0.025) 35%);
-    box-shadow: inset 0 0 20px white, 
-                      0 2px 4px 0 rgba($black, 0.1), 
-                      0 10px 20px 0 rgba($black, 0.1),  
-                      0 20px 40px 0 rgba($brand, 0.1),
-                      0 -20px 40px 0 rgba($white, .2);
+    background-color: rgba($white, 1);
+    box-shadow: $big-shadow;
 
     .inner-container {
       padding: 0 !important;

@@ -54,7 +54,8 @@ function toggleDropdown() {
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: $white;
+    background-color: rgba($white, 0.65);
+    backdrop-filter: blur(20px);
     min-width: 240px;
     box-shadow: $big-shadow;
     z-index: 2;
