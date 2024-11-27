@@ -24,7 +24,10 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  border-left: $border;
+  background: rgba($brand, 0.02);
+  margin: 0 $spacing-sm $spacing-sm $spacing-sm;
+  border-radius: $br-md;
+  border: $border;
 
   .header {
     color: $brand;
@@ -36,6 +39,7 @@ export default {
     width: 100%;
     padding: 0 $spacing-sm;
     position: relative;
+    background: rgba($brand, 0.035);
 
     .app-panel-header {
       margin:0;
@@ -62,8 +66,6 @@ export default {
     height: calc(100% - 44px);
     overflow-y: hidden;
     position: relative;
-    background: rgba($gray-light, 0.1);
-    border-top: $border;
   }
 }
 

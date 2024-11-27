@@ -154,7 +154,6 @@ const filteredClients = computed(() => {
       border-radius: $br-lg;
       transition: all 0.2s ease;
       border: $border;
-      box-shadow: $soft-shadow;
       background-color: $white;
 
       &:hover {

@@ -224,7 +224,6 @@ const filteredTeams = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
-        box-shadow: $soft-shadow;
 
         $project-cards: ();
 
@@ -348,7 +347,6 @@ const filteredTeams = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
-        box-shadow: $soft-shadow;
 
         $project-cards: ();
 

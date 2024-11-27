@@ -359,14 +359,12 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-sm;
+    padding: $spacing-sm $spacing-sm 0 $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: $spacing-sm;
-    border-bottom: $border;
-    background: rgba($white, 1);
 
     input {
         color: $black;

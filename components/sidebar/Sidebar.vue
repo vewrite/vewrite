@@ -65,8 +65,6 @@ const isClients = computed(() => {
   transition: all 0.2s ease;
   position: relative;
   background: $white;
-  padding-right: $spacing-sm;
-  background-color: rgba($brand, 0.02);
 
   &.collapsed {
     min-width: 88px;
@@ -76,7 +74,7 @@ const isClients = computed(() => {
     }
 
     .sidebar-content {
-      padding: $spacing-xs;
+      padding: 0 0 $spacing-sm $spacing-sm;
       opacity: 0;
 
       .link-group {
@@ -112,22 +110,6 @@ const isClients = computed(() => {
     display: none;
   }
 
-  .sidebar-header {
-    color: $brand;
-    padding: 0 $spacing-md;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 60px;
-
-    svg {
-      animation: fadeIn 0.8s ease forwards;
-      opacity: 0;
-    }
-
-  }
-
   .toggle-sidebar {
     height: 100%;
     color: $black;
@@ -141,7 +123,6 @@ const isClients = computed(() => {
     pointer-events: all;
     padding: 0;
     z-index: 1000;
-    border-left: $border;
 
     &:hover {
       color: $brand;
@@ -149,7 +130,7 @@ const isClients = computed(() => {
   }
 
   .sidebar-content {
-    padding: $spacing-sm;
+    padding: 0 0 $spacing-sm $spacing-sm;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -170,19 +151,19 @@ const isClients = computed(() => {
         flex-direction: row;
         align-items: center;
         gap: $spacing-xs;
-        padding: $spacing-xxs $spacing-xs;
+        padding: $spacing-xs $spacing-sm;
         border-radius: $br-md;
         transition: background-color 0.18s ease;
         color:$black;
         font-size: $font-size-xs;
         font-family: $font-family-main;
-        font-weight: 400;
+        font-weight: bold;
         text-decoration: none;
 
         &:hover,
         &.router-link-active,
         &.router-link-exact-active {
-          background-color: rgba($brand, 0.1);
+          background-color: rgba($brand, 0.05);
           color: $brand;
 
           .icon {

@@ -56,6 +56,8 @@ export default function useProject() {
         assigned_team: project.assigned_team,
       }
 
+      // TODO here I will want to go and precreate all of the project's deliverable_content rows
+
       let { error } = await supabase.from('projects').upsert(updates, {
           returning: 'minimal', // Don't return the value after inserting
       })

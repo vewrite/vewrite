@@ -75,16 +75,23 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-xxs $spacing-sm;
+  padding: $spacing-sm;
   background-color: $white;
   width: 100%;
-  border-bottom: $border;
 
   .left {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: $spacing-xs;
+
+    svg {
+      margin-left: $spacing-xs;
+
+      @media (max-width: 960px) {
+        margin-left: 0;
+      }
+    }
     
     .toggle-mobile {
       display: none;
@@ -211,7 +218,7 @@ header {
             flex-direction: row;
             align-items: center;
             gap: $spacing-xs;
-            padding: $spacing-xxs $spacing-xs;
+            padding: $spacing-xs $spacing-sm;
             border-radius: $br-md;
             transition: background-color 0.18s ease;
             color: rgba($white, 0.85);

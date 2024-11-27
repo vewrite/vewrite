@@ -131,7 +131,7 @@ onMounted(async () => {
     gap: 0;
     width: 280px;
     height: 100%;
-    border-right: 1px solid rgba($brand, 0.15);
+    background: rgba($brand, 0.035);
     padding: $spacing-sm;
 
     .workflow-group {
@@ -146,9 +146,9 @@ onMounted(async () => {
         border-radius: $br-md;
         transition: background-color 0.18s ease;
         color: $black;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-family: $font-family-main;
-        font-weight: 400;
+        font-weight: bold;
         text-decoration: none;
         line-height: 36px;
         white-space: nowrap;

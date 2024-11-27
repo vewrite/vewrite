@@ -62,7 +62,7 @@ function toggleDropdown() {
     z-index: 2;
     right: 0;
     padding: $spacing-xs;
-    border-radius: $br-lg;
+    border-radius: $br-md;
     animation: scaleBounce 0.3s ease;
   }
 

@@ -27,18 +27,3 @@ onMounted(async () => {
 })
 
 </script>
-
-<style lang="scss">
-
-@use 'assets/variables' as *;
-
-.top-bar-user {
-  height: 40px;
-
-    .button {
-      border-color: transparent;
-    }
-
-}
-
-</style>
