@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useModal } from '~/stores/modal'
 import useWorkflow from '~/composables/useWorkflow'
-import useProject from '~/composables/useProject'
 
 export default function useDeliverables() {
 
@@ -35,8 +34,8 @@ export default function useDeliverables() {
       console.log('Updating deliverable', deliverable);
       
       const { error } = await supabase
-        .from('deliverables')
-        .update({ markdown: deliverable.markdown, updated_at: new Date() })
+        .from('deliverable_content')
+        .update({ content: deliverable.content, updated_at: new Date() })
         .eq('id', deliverable.id);
 
       if (error) throw error;
@@ -102,6 +101,25 @@ export default function useDeliverables() {
         .from('deliverables')
         .select('*')
         .eq('id', deliverableId);
+
+      if (error) throw error;
+
+      DeliverableData.value = data[0];
+      return data[0];
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
+  async function fetchSingleProjectDeliverableByState(deliverableId, stateId) {
+    console.log('Fetching deliverable content for deliverable and state:', deliverableId, stateId);
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .select('*')
+        .eq('deliverable_id', deliverableId)
+        .eq('stateinstance_id', stateId);
 
       if (error) throw error;
 
@@ -222,24 +240,6 @@ export default function useDeliverables() {
 
     useModal().toggleLoading();
 
-    // if(deliverable.type === 'markdown') {
-    //   console.log('Deliverable is Markdown');
-    //   deliverable.markdown = deliverable.markdown;
-    //   delete deliverable.type;
-    // }
-
-    // if(deliverable.type === 'file') {
-    //   console.log('Deliverable has a file');
-    //   deliverable.file = deliverable.file;
-    //   delete deliverable.type;
-    // }
-
-    // if(deliverable.type === 'link') {
-    //   console.log('Deliverable has an external link');
-    //   deliverable.link = deliverable.link;
-    //   delete deliverable.type;
-    // }
-
     const deliverableContent = ref({});
 
     if(deliverable.type === 'markdown') {
@@ -266,11 +266,8 @@ export default function useDeliverables() {
       delete deliverable.type;
     }
 
-    let deliverableId;
+    const deliverableId = ref(null);
     const projectId = deliverable.project;
-
-    // const ProjectWorkflow = await fetchProjectWorkflow(deliverable.project);
-    // const States = await fetchStates(ProjectWorkflow);
     const ProjectWorkflow = ref(null);
     const States = ref(null);
 
@@ -290,26 +287,14 @@ export default function useDeliverables() {
 
     try {
 
-      let { data, error } = await supabase.from('deliverables').insert(deliverable, {
-        returning: 'representation', // Return the value after inserting. We use this to identify the deliverables below
+      let { data } = await supabase.from('deliverables').insert(deliverable, {
+        returning: 'representation', // Return the new deliverable id
       })
 
-      deliverableId = data[0].id;
+      deliverableId.value = data[0].id;
 
-      /* 
-      We also need to set the deliverable state to the first state in the list
-        1. Get the project id
-        2. Get the workflow associated with that project
-        3. Get the first state in the workflow
-        4. Update the deliverable with the first state
-      */
-
-      console.log(States.value[0]);
+      // We also need to set the deliverable state to the first state in the list
       await updateDeliverableWorkflowState(data[0].id, States.value[0]);
-
-      // if (error) throw error;
-
-      // return data;
 
     } catch (error) {
       DeliverableError.value = error.message;
@@ -320,7 +305,7 @@ export default function useDeliverables() {
       console.log(state);
       const deliverable = {
         project_id: projectId,
-        deliverable_id: deliverableId,
+        deliverable_id: deliverableId.value,
         stateinstance_id: state,
         created_at: new Date(),
         updated_at: new Date(),
@@ -356,6 +341,7 @@ export default function useDeliverables() {
     deleteDeliverableModal,
     createDeliverable,
     fetchSingleProjectDeliverable,
+    fetchSingleProjectDeliverableByState,
     fetchProjectDeliverables,
     fetchDeliverableStates,
     updateDeliverableWorkflowState,

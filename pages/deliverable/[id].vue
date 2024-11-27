@@ -19,6 +19,8 @@
       </div>
     </template>
     <template v-slot:body>
+      <!-- <pre v-if="DeliverableData">{{ DeliverableData }}</pre>
+      <pre v-if="deliverable">{{ deliverable }}</pre> -->
       <Loading v-if="loading" />
       <aside class="object-overview" v-if="deliverable && !loading">
         <div class="object-summary">
@@ -27,8 +29,10 @@
         </div>
       </aside>
       <section class="deliverable-manager">
-        <div class="deliverable-editor" v-if="deliverable && !loading">
-          <TipTapEditor v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" :deliverable="deliverable" />
+        <div class="deliverable-editor" v-if="DeliverableData && !loading">
+          <!-- <TipTapEditor v-if="deliverable.markdown !== ''" v-model="deliverable.markdown" :deliverable="deliverable" /> -->
+           <TipTapEditor :deliverable="DeliverableData" />
+           <!-- DeliverableData.value.content.type == 'markdown' -->
         </div>
         <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
       </section>
@@ -51,21 +55,34 @@ import StateManager from '~/components/States/StateManager.vue';
 const supabase = useSupabaseClient();
 const loading = ref(true);
 const projectId = ref(null);
-
-// Get the route object
 const route = useRoute();
-
-// Extract the deliverable ID from the route parameters
 const deliverableId = route.params.id;
-
-// Fetch the project data from supabase
 const deliverable = ref(null);
+const workflowStates = ref([]);
+const CurrentState = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
+const { fetchSingleProjectDeliverableByState, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription, DeliverableData, DeliverableError } = useDeliverables();
 
-const workflowStates = ref([]);
+async function getCurrentState(deliverableId) {
+  try {
+    const { data, error } = await supabase
+      .from('deliverables')
+      .select('*')
+      .eq('id', deliverableId)
+      .single();
+
+    if (error) throw error;
+
+    CurrentState.value = data.workflow_state;
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+}
 
 async function getDeliverable(id) {
   try {
@@ -82,6 +99,7 @@ async function getDeliverable(id) {
     }
 
     deliverable.value = data;
+    console.log(data);
 
     projectId.value = data.project;
   } catch (error) {
@@ -90,6 +108,7 @@ async function getDeliverable(id) {
     loading.value = false;
   }
 }
+
 
 async function fetchWorkflowStates() {
   try {
@@ -143,7 +162,9 @@ onMounted(async () => {
       .from('deliverables')
       .on('UPDATE', payload => {
         console.log('Deliverable updated:', payload.new);
+        getCurrentState(deliverableId);
         getDeliverable(deliverableId);
+        fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
         fetchWorkflowStates();
       })
       .subscribe();
@@ -152,7 +173,9 @@ onMounted(async () => {
       supabase.removeSubscription(subscription);
     });
 
+    await getCurrentState(deliverableId);
     await getDeliverable(deliverableId);
+    await fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
     await fetchWorkflowStates();
 
   } catch (error) {

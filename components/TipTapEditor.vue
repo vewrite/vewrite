@@ -95,19 +95,25 @@ const props = defineProps({
 const deliverable = ref(props.deliverable);
 
 const editor = useEditor({
-  content: deliverable.value.markdown,
+  content: deliverable.value.content.content, // this is what should be pulling from 
   extensions: [TiptapStarterKit],
 });
 
 const tiptapDeliverable = ref({
   ...deliverable.value, 
-  markdown: ''
+  content: {
+    type: 'markdown',
+    content: ''
+  }
 });
+
+console.log('tiptapDeliverable', tiptapDeliverable);
 
 watch(editor, (newEditor) => {
   if (newEditor) {
     newEditor.on('update', () => {
-      tiptapDeliverable.value.markdown = newEditor.getHTML();
+      tiptapDeliverable.value.content.content = newEditor.getHTML();
+      console.log('tiptapDeliverable', tiptapDeliverable);
     });
   }
 });
@@ -115,30 +121,6 @@ watch(editor, (newEditor) => {
 onBeforeUnmount(() => {
   unref(editor).destroy();
 });
-
-async function getDeliverable(id) {
-  try {
-    const { data, error } = await supabase
-      .from('deliverables')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) throw error;
-
-    if(data.description === null) {
-      data.description = 'No description provided';
-    }
-
-    deliverable.value = data;
-
-    projectId.value = data.project;
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
-}
 
 function debounce(func, wait) {
   let timeout;

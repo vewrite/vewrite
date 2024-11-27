@@ -59,6 +59,7 @@ export default {
       align-items: center;
       justify-content: flex-end;
       gap: $spacing-xs;
+      width: 100%;
     }
   }
 
