@@ -90,8 +90,12 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: $spacing-sm;
-  background-color: $white;
+  background: rgba($brand, 0.05);
   width: 100%;
+
+  @media (max-width: 960px) {
+    padding-bottom: 0;
+  }
 
   .left {
     display: flex;

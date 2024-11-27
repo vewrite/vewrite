@@ -63,17 +63,17 @@ const isClients = computed(() => {
   min-width: 240px;
   transition: all 0.2s ease;
   position: relative;
-  background: $white;
+  background: rgba($brand, 0.05);
 
   &.collapsed {
-    min-width: 88px;
+    min-width: 60px;
 
     .sidebar-header { 
       display: none;
     }
 
     .sidebar-content {
-      padding: 0 0 $spacing-sm $spacing-sm;
+      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
       opacity: 0;
 
       .link-group {
@@ -129,7 +129,7 @@ const isClients = computed(() => {
   }
 
   .sidebar-content {
-    padding: 0 0 $spacing-sm $spacing-sm;
+    padding: 0 $spacing-sm $spacing-sm $spacing-sm;
     display: flex;
     flex-direction: column;
     gap: 2px;

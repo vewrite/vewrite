@@ -24,33 +24,29 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  background: rgba($brand, 0.02);
-  margin: 0 $spacing-sm $spacing-sm $spacing-sm;
-  border-radius: $br-md;
-  border: $border;
+  background: rgba($brand, 0.05);
 
   .header {
-    color: $brand;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 44px;
-    width: 100%;
+    height: 54px;
     padding: 0 $spacing-sm;
     position: relative;
-    background: rgba($brand, 0.035);
+    margin-right: $spacing-sm;
+    border-top: $border;
+    border-left: $border;
+    border-right: $border;
+    border-top-left-radius: $br-md;
+    border-top-right-radius: $br-md;
+    background: rgba($white, 0.35);
 
-    .app-panel-header {
-      margin:0;
-      text-align: center;
-      font-size: $font-size-lg;
-      font-family: $font-family-secondary;
-      font-weight: 400;
-      position: absolute;
-      left:0;
-      right:0;
-      pointer-events: none;
+    @media (max-width: 960px) {
+      border: none;
+      border-radius: 0;
+      border-bottom: $border;
+      margin: 0;
     }
 
     .app-panel-header-buttons {
@@ -59,14 +55,28 @@ export default {
       align-items: center;
       justify-content: flex-end;
       gap: $spacing-xs;
-      width: 100%;
     }
   }
 
   .body {
-    height: calc(100% - 44px);
+    height: calc(100% - 54px);
     overflow-y: hidden;
     position: relative;
+    background: $white;
+    margin-right: $spacing-sm;
+    margin-bottom: $spacing-sm;
+    border-bottom: $border;
+    border-left: $border;
+    border-right: $border;
+    border-bottom-left-radius: $br-md;
+    border-bottom-right-radius: $br-md;
+    box-shadow: $main-shadow;
+
+    @media (max-width: 960px) {
+      border: none;
+      margin: 0;
+      border-radius: 0;
+    }
   }
 }
 
