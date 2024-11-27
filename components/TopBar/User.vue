@@ -1,7 +1,7 @@
 <template>
-  <Dropdown class="top-bar-user" :size="small">
+  <Dropdown class="top-bar-user">
     <template v-slot:trigger>
-      <Avatar :uuid="user.id" size="small" />
+      <Avatar :uuid="user.id" />
       {{ loading ? 'Loading' : ProfileData.username }}
       <Icon name="fluent:chevron-down-16-regular" size="1rem" />
     </template>

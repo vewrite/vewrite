@@ -1,5 +1,5 @@
 <template>
-  <div :class="[ 'dropdown', size, isOpen ? 'open' : '' ]">
+  <div :class="[ 'dropdown', isOpen ? 'open' : '' ]">
     <div @click="toggleDropdown" class="button">
       <slot name="trigger"></slot>
     </div>
@@ -13,8 +13,6 @@
 <script setup>
 
 import { ref } from 'vue';
-
-const props = defineProps('size');
 
 const isOpen = ref(false);
 

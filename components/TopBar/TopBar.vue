@@ -244,7 +244,7 @@ header {
             text-transform: uppercase;
             font-family: $font-family-main;
             font-weight: bold;
-            color: lighten($brand,20%);
+            color: rgba($brand,.6);
             margin-bottom: $spacing-xs;
           }
         }

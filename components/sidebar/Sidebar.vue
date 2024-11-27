@@ -32,7 +32,6 @@ const isProjects = computed(() => {
 });
 
 const isWorkflows = computed(() => {
-  console.log(route.path)
   return route.path.startsWith('/workflow/');
 });
 
