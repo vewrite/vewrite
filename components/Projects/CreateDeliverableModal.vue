@@ -85,10 +85,7 @@ const deliverable = reactive({
   updated_at: new Date(),
   project: projectId,
   type: 'markdown',
-  due_date: new Date(),
-  markdown: 'DEPRECATED, YOU SHOULD NOT SEE THIS',
-  link: '',
-  file: '',
+  due_date: new Date()
 })
 
 </script>
