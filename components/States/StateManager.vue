@@ -178,17 +178,16 @@ watch(() => currentPositionInWorkflow.value, () => {
   overflow-x: hidden;
   position: fixed;
   align-items: flex-start;
-  bottom: $spacing-xl;
+  bottom: 7rem;
   right: $spacing-md;
   background-color: rgba($white, 0.6);
   backdrop-filter: blur(8px);
-  transition: width 0.3s ease;
+  transition: all 0.46s ease-in-out;
   border-radius: $br-md;
   box-shadow: $big-shadow;
 
   &.collapsed {
-    width: 0px;
-    right: -1px;
+    right: -100%;
 
     .state-manager-wrapper {
 
