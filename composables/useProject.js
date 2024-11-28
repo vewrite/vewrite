@@ -143,6 +143,10 @@ export default function useProject() {
   }
 
   async function deleteProject(projectId) {
+
+    // Remove all associate deliverables
+    await deleteProjectDeliverables(projectId);
+
     try {
       const { error } = await supabase
         .from('projects')
@@ -153,9 +157,6 @@ export default function useProject() {
     } catch (error) {
       projectError.value = error.message
     }
-
-    // Remove all associate deliverables
-    deleteProjectDeliverables(projectId);
 
     // Reset the modal
     useModal().setType('');

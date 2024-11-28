@@ -93,6 +93,21 @@ export default function useDeliverables() {
 
   async function deleteProjectDeliverables(projectId) {
     console.log('Deleting all deliverables for project: ', projectId);
+
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .delete()
+        .eq('project_id', projectId);
+
+      if (error) throw error;
+      
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+
+    console.log('Deleted all deliverable content for project: ', projectId);
+
     try {
       const { data, error } = await supabase
         .from('deliverables')
@@ -101,7 +116,7 @@ export default function useDeliverables() {
 
       if (error) throw error;
 
-      console.log(data);
+      console.log('Deleted project deliverables', data);
 
       return data;
 
@@ -210,6 +225,18 @@ export default function useDeliverables() {
   async function deleteDeliverable(deliverableId, projectId) {
 
     useModal().toggleLoading();
+
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .delete()
+        .eq('deliverable_id', deliverableId);
+
+      if (error) throw error;
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
     
     try {
       const { data, error } = await supabase
