@@ -40,12 +40,11 @@ export default {
     border-right: $border;
     border-top-left-radius: $br-xl;
     border-top-right-radius: $br-xl;
-    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, .6) 50%);
+    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, 1) 50%);
 
     @media (max-width: 960px) {
       border: none;
       border-radius: 0;
-      border-bottom: $border;
       margin: 0;
     }
 

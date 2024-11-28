@@ -78,6 +78,7 @@ const logout = async () => {
     height: 1px;
     border: none;
     background-color: $gray-light;
+    box-shadow: 1px 0 1px rgba(white, 0.5);
   }
 }
 

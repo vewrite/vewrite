@@ -93,6 +93,10 @@ header {
   background: rgba($black, 0.05);
   width: 100%;
 
+  @media (max-width: 960px) {
+    padding: $spacing-sm $spacing-sm 0 $spacing-sm;
+  }
+
   .left {
     display: flex;
     flex-direction: row;
