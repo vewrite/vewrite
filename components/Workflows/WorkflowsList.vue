@@ -131,8 +131,7 @@ onMounted(async () => {
     gap: 0;
     width: 280px;
     height: 100%;
-    background: rgba($brand, 0.035);
-    padding: $spacing-sm;
+    padding: $spacing-md 0 $spacing-md $spacing-md;
 
     .workflow-group {
       display: flex;
