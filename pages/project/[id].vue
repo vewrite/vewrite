@@ -20,6 +20,7 @@
       </div>
     </template>
     <template v-slot:body>
+      {{ DeliverableError }}
       <div class="deliverables-list">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" />
@@ -92,7 +93,7 @@ const { deleteProjectModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { createDeliverableModal } = useDeliverables();
+const { createDeliverableModal, DeliverableError } = useDeliverables();
 
 // Client composable
 import useClient from '~/composables/useClient';

@@ -280,6 +280,8 @@ export default function useDeliverables() {
 
   async function createDeliverable(deliverable) {
 
+    console.log('Creating deliverable:', deliverable);
+
     useModal().toggleLoading();
 
     const deliverableContent = ref({});
@@ -289,23 +291,25 @@ export default function useDeliverables() {
         type: 'markdown',
         content: ''
       };
-      delete deliverable.type;
+      console.log('Markdown content:', deliverableContent.value);
+      delete deliverable.markdown;
     }
 
-    if(deliverable.type === 'file') {
-      deliverableContent.value = {
-        type: 'file',
-        content: deliverable.file
-      };
-      delete deliverable.type;
-    }
+    // if(deliverable.type === 'file') {
+    //   deliverableContent.value = {
+    //     type: 'file',
+    //     content: deliverable.file
+    //   };
+    //   delete deliverable.type;
+    // }
 
     if(deliverable.type === 'link') {
       deliverableContent.value = {
         type: 'link',
         content: deliverable.link
       };
-      delete deliverable.type;
+      console.log('Link content:', deliverableContent.value);
+      delete deliverable.link;
     }
 
     const deliverableId = ref(null);
@@ -328,6 +332,10 @@ export default function useDeliverables() {
     }
 
     try {
+
+      delete deliverable.type;
+
+      console.log('Last try Creating deliverable:', deliverable);
 
       let { data } = await supabase.from('deliverables').insert(deliverable, {
         returning: 'representation', // Return the new deliverable id

@@ -15,11 +15,11 @@
               <input v-model="deliverable.description" id="description" type="text" placeholder="Quickly summarize your deliverable" />
             </div>
             <div class="form-input">
-              <label for="name">Type</label>
-              <select v-model="deliverable.type" id="type">
+              <label for="type">Type</label>
+              <select v-model="deliverable.type" id="type" @change="showType">
                 <option value="markdown">Internal Editor</option>
                 <option value="link">External Link</option>
-                <option value="file">External File</option>
+                <!-- <option value="file">External File</option> -->
               </select>
             </div>
 
@@ -30,14 +30,14 @@
             <!-- If the deliverable has an external link -->
             <div class="form-input" v-if="deliverable.type == 'link'">
               <label for="link">External Link</label>
-              <input v-model="deliverable.link" id="link" type="text" placeholder="Input your deliverables's link" />
+              <input v-model="deliverable.link" id="link" type="text" placeholder="Input a link to the initial summary of the request for this deliverable" />
             </div>
 
             <!-- If a file is being uploaded -->
-            <div class="form-input" v-if="deliverable.type == 'file'">
+            <!-- <div class="form-input" v-if="deliverable.type == 'file'">
               <label for="file">External File</label>
               <input v-model="deliverable.file" id="file" type="text" placeholder="Input your deliverables's link" />
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -87,6 +87,10 @@ const deliverable = reactive({
   type: 'markdown',
   due_date: new Date()
 })
+
+function showType(event){
+  console.log(deliverable)
+}
 
 </script>
 
