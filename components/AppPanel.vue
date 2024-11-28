@@ -24,23 +24,23 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  background: rgba($brand, 0.05);
+  background: rgba($black, 0.05);
 
   .header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 54px;
+    height: 60px;
     padding: 0 $spacing-sm;
     position: relative;
-    margin-right: $spacing-sm;
+    margin: 0 $spacing-sm;
     border-top: $border;
     border-left: $border;
     border-right: $border;
-    border-top-left-radius: $br-lg;
-    border-top-right-radius: $br-lg;
-    background: rgba($white, 0.35);
+    border-top-left-radius: $br-xl;
+    border-top-right-radius: $br-xl;
+    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, .6) 50%);
 
     @media (max-width: 960px) {
       border: none;
@@ -59,17 +59,17 @@ export default {
   }
 
   .body {
-    height: calc(100% - 54px);
+    height: calc(100% - 60px);
     overflow-y: hidden;
     position: relative;
     background: $white;
-    margin-right: $spacing-sm;
+    margin: 0 $spacing-sm;
     margin-bottom: $spacing-sm;
     border-bottom: $border;
     border-left: $border;
     border-right: $border;
-    border-bottom-left-radius: $br-lg;
-    border-bottom-right-radius: $br-lg;
+    border-bottom-left-radius: $br-xl;
+    border-bottom-right-radius: $br-xl;
     box-shadow: $main-shadow;
 
     @media (max-width: 960px) {

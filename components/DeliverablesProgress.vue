@@ -34,7 +34,7 @@ const props = defineProps({
   justify-content: flex-start;
   padding: 0 $spacing-md $spacing-md;
   border-bottom: $border;
-  background: $white linear-gradient(180deg, $white 80%, rgba($brand, 0.05));
+  background: $white linear-gradient(180deg, $white 80%, rgba($black, 0.025));
   width: calc(100%);
   transition: bottom 0.2s ease;
 
@@ -62,7 +62,7 @@ const props = defineProps({
       border-radius: $br-md;
       background-color: $white;
       border: $border;
-      box-shadow: $soft-shadow;
+      box-shadow: $main-shadow;
 
       .progress {
         height: 6px;

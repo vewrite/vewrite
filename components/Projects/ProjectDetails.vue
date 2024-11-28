@@ -26,7 +26,7 @@ const props = defineProps(['team', 'client'])
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  box-shadow: $soft-shadow;
+  box-shadow: $main-shadow;
 }
 
 </style>

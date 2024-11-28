@@ -87,7 +87,7 @@ $width-lg: 70rem;
 $width-xl: 90rem;
 
 /* Shadows */
-$main-shadow: 0px 3px 5px rgba($brand, 0.025), 0px 2px 2px rgba(0, 0, 0, 0.025), 0px 4px 4px rgba($brand, 0.01);
-$big-shadow: 0px 0px 2px 1px rgba($brand, 0.15), 0px 10px 18px rgba(0, 0, 0, 0.1), 0px 6px 25px rgba($brand, 0.01);
-$soft-shadow: 0px 1px 1px rgba($brand, 0.05), 0px 8px 8px rgba($brand, 0.05);
-$small-shadow: rgba($brand, 0.04) 0px 1px 6px 0px, rgba($brand, 0.12) 0px -2px 4px 0px inset, rgba($black, 0.14) 0px -1px 2px 0px inset;
+$main-shadow: 0px 3px 5px rgba($black, 0.025), 0px 2px 2px rgba(0, 0, 0, 0.025), 0px 4px 4px rgba($black, 0.01);
+$big-shadow: 0px 0px 2px 1px rgba($black, 0.15), 0px 10px 18px rgba(0, 0, 0, 0.1), 0px 6px 25px rgba($black, 0.01);
+$soft-shadow: 0px 1px 1px rgba($black, 0.05), 0px 8px 8px rgba($black, 0.05);
+$small-shadow: rgba($black, 0.04) 0px 1px 6px 0px, rgba($black, 0.12) 0px -2px 4px 0px inset, rgba($black, 0.14) 0px -1px 2px 0px inset;

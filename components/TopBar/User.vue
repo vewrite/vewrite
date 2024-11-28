@@ -3,13 +3,13 @@
     <template v-slot:trigger>
       <Avatar :uuid="user.id" />
       {{ loading ? 'Loading' : ProfileData.username }}
-      <Icon name="fluent:chevron-down-16-regular" size="1rem" />
+      <Icon name="fluent:chevron-down-16-regular" size="1.5rem" />
     </template>
     <template v-slot:menu>
       <section class="dropdown-header">
         {{ loading ? 'Loading' : ProfileData.username }}
         <section class="dropdown-plan">
-          <span>Free Plan</span>
+          <span>Using the free plan</span>
           <button class="button green">Upgrade</button>
         </section>
       </section>
@@ -52,6 +52,10 @@ const logout = async () => {
 .top-bar-user {
   display: flex;
   align-items: flex-start;
+  
+  .button:not(.green) {
+    background: transparent;
+  }
 
   .dropdown-header {
     padding: $spacing-xs;

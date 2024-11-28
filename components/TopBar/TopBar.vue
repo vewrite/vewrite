@@ -90,12 +90,8 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: $spacing-sm;
-  background: rgba($brand, 0.05);
+  background: rgba($black, 0.05);
   width: 100%;
-
-  @media (max-width: 960px) {
-    padding-bottom: 0;
-  }
 
   .left {
     display: flex;
@@ -104,7 +100,7 @@ header {
     gap: $spacing-xs;
 
     svg {
-      margin-left: $spacing-xs;
+      margin-left: $spacing-sm;
 
       @media (max-width: 960px) {
         margin-left: 0;

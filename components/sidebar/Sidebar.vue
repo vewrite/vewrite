@@ -1,16 +1,16 @@
 <template>
   <div id="Sidebar" :class="collapsed ? 'collapsed' : ''">
-    <div class="button clear toggle-sidebar" @click="toggleSidebar">
-      <Icon name="fluent:chevron-left-16-regular" size="1rem" v-if="!collapsed" />
-      <Icon name="fluent:chevron-right-16-regular" size="1rem" v-if="collapsed" />
-    </div>
     <div class="sidebar-content">
       <div class="link-group">
-        <router-link to="/projects" :class="['link', isProjects ? 'router-link-active' : '']"><Icon name="fluent:folder-16-regular" size="1.5rem" /> Projects</router-link>
-        <router-link to="/workflows" :class="['link', isWorkflows ? 'router-link-active' : '']"><Icon name="fluent:flow-16-regular" size="1.5rem" /> Workflows</router-link>
-        <router-link to="/teams" :class="['link', isTeams ? 'router-link-active' : '']"><Icon name="fluent:people-16-regular" size="1.5rem" /> Teams</router-link>
-        <router-link to="/clients" :class="['link', isClients ? 'router-link-active' : '']"><Icon name="fluent:star-16-regular" size="1.5rem" /> Clients</router-link>
+        <router-link to="/projects" :class="['link', isProjects ? 'router-link-active' : '']"><Icon name="fluent:folder-16-regular" size="1.75rem" /> Projects</router-link>
+        <router-link to="/workflows" :class="['link', isWorkflows ? 'router-link-active' : '']"><Icon name="fluent:flow-16-regular" size="1.75rem" /> Workflows</router-link>
+        <router-link to="/teams" :class="['link', isTeams ? 'router-link-active' : '']"><Icon name="fluent:people-16-regular" size="1.75rem" /> Teams</router-link>
+        <router-link to="/clients" :class="['link', isClients ? 'router-link-active' : '']"><Icon name="fluent:star-16-regular" size="1.75rem" /> Clients</router-link>
       </div>
+    </div>
+    <div class="button clear toggle-sidebar" @click="toggleSidebar">
+      <Icon name="fluent:chevron-left-16-regular" size="1.5rem" v-if="!collapsed" />
+      <Icon name="fluent:chevron-right-16-regular" size="1.5rem" v-if="collapsed" />
     </div>
   </div>
 </template>
@@ -65,7 +65,11 @@ const isClients = computed(() => {
   min-width: 240px;
   transition: all 0.2s ease;
   position: relative;
-  background: rgba($brand, 0.05);
+  background: rgba($black, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 0 $spacing-sm $spacing-sm;
 
   &.collapsed {
     min-width: 60px;
@@ -75,7 +79,6 @@ const isClients = computed(() => {
     }
 
     .sidebar-content {
-      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
       opacity: 0;
 
       .link-group {
@@ -112,18 +115,16 @@ const isClients = computed(() => {
   }
 
   .toggle-sidebar {
-    height: 100%;
     color: $black;
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: all;
     padding: 0;
     z-index: 1000;
+    padding: $spacing-xxs;
+    border-radius: $br-lg;
+    background: rgba($black, 0.05);
 
     &:hover {
       color: $brand;
@@ -131,11 +132,9 @@ const isClients = computed(() => {
   }
 
   .sidebar-content {
-    padding: 0 $spacing-sm $spacing-sm $spacing-sm;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    height: calc(100% - 60px);
     overflow-y: auto;
     animation: fadeIn 0.8s ease forwards;
     opacity: 0;
@@ -146,6 +145,7 @@ const isClients = computed(() => {
       flex-direction: column;
       gap: 2px;
       margin-bottom: $spacing-md;
+      padding-top: 2px;
 
       a {
         display: flex;
@@ -155,7 +155,7 @@ const isClients = computed(() => {
         padding: $spacing-xs $spacing-sm;
         border-radius: $br-lg;
         transition: background-color 0.18s ease;
-        color: $black;
+        color: rgba($black, 0.5);
         font-size: $font-size-xs;
         font-family: $font-family-main;
         font-weight: bold;
@@ -165,9 +165,9 @@ const isClients = computed(() => {
         &:hover,
         &.router-link-active,
         &.router-link-exact-active {
-          background-color: rgba($brand, 0.05);
-          border: 1px solid rgba($brand, 0.05);
-          color: $brand;
+          background-color: rgba($black, 0.05);
+          border: 1px solid rgba($black, 0.0);
+          color: $black;
 
           .icon {
             transform: scale(1.15);

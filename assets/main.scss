@@ -359,7 +359,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-sm $spacing-sm 0 $spacing-sm;
+    padding: 0 $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -371,7 +371,7 @@ textarea {
         background: rgba($white, .35);
         border-radius: $br-md;
         border: $border;
-        padding: $spacing-xxxs $spacing-sm;
+        padding: $spacing-xxs $spacing-sm;
         width: 100%;
         font-size: $font-size-xs;
         outline: 1px solid rgba($brand, 0);
@@ -577,12 +577,11 @@ textarea {
 button,
 .button {
     color: $black;
-    background: rgba($brand, 0.05);
+    background: rgba($black, 0.05);
     border-radius: $br-lg;
-    border: 1px solid rgba($brand, 0.05);
     text-align: center;
     text-decoration: none;
-    padding: $spacing-xxxs $spacing-xs;
+    padding: $spacing-xxs $spacing-sm;
     cursor: pointer;
     font-size: $font-size-xs;
     font-weight: bold;
@@ -594,10 +593,14 @@ button,
     align-items: center;
     text-transform: capitalize;
     min-height: 24px;
+    border: none;
 
     &:hover {
-        border: 1px solid rgba($brand-dark, 1);
-        background-color: rgba($brand, 0.05);
+        background: rgba($black, 0.075);
+    }
+
+    &:active {
+        background: rgba($black, 0.1);
     }
 
     &:disabled,
@@ -605,7 +608,6 @@ button,
         cursor: not-allowed;
         background: rgba($gray, 0.1);
         color: rgba($black, 0.25);
-        border: 1px solid rgba($black, 0.1);
         outline: none;
     }
 }
@@ -623,12 +625,10 @@ button.wide,
 
 button.primary,
 .button.primary {
-    border: 1px solid rgba($brand-dark, 0.3);
     background-color: rgba($brand, 1);
     color: $white;
 
     &:hover {
-        border: 1px solid rgba($brand-dark, 1);
         background-color: rgba($brand, .8);
     }
 
@@ -641,23 +641,19 @@ button.primary,
 
 button.clear,
 .button.clear {
-    border: 1px solid rgba($brand-dark, 0);
     background-color: rgba($brand, 0);
 
     &:hover {
-        border: 1px solid rgba($brand-dark, 0);
         background-color: rgba($brand, 0);
     }
 }
 
 button.toolbar,
 .button.toolbar {
-    border: 1px solid rgba($brand-dark, 0);
     background-color: rgba($brand, 0);
     color: $black;
 
     &:hover {
-        border: 1px solid rgba($brand-dark, 0);
         background-color: rgba($brand, 0);
         color: $brand;
     }
@@ -665,24 +661,20 @@ button.toolbar,
 
 button.green,
 .button.green {
-    border: 1px solid rgba($mint-dark, 0.3);
     background-color: rgba($mint, 0.75);
     color: $black;
 
     &:hover {
-        border: 1px solid rgba($mint-dark, 1);
         background-color: rgba($mint, 1);
     }
 }
 
 button.red,
 .button.red {
-    border: 1px solid rgba($red-dark, 0.3);
     background-color: rgba($red, 0.05);
     color: $red;
 
     &:hover {
-        border: 1px solid rgba($red-dark, 1);
         background-color: rgba($red, 0.1);
     }
 }
