@@ -1,17 +1,14 @@
 <template>
   <div :class="['client-logo-wrapper', 'client-logo', 'image', size]">
     <Loading v-if="loading" type="small" />
-    <div v-if="!loading" class="client-logo image" :class="size" :style="{ backgroundImage: `url(${src})` }" />
+    <div v-if="!loading" class="client-logo-bg" :class="size" :style="{ backgroundImage: `url(${src})` }" />
+    <div v-if="!loading" class="client-logo-image" :class="size" :style="{ backgroundImage: `url(${src})` }" />
   </div>
 </template>
 
 <script setup>
 
-// ClientImage component
-// expects a client object with an id!
-
 const props = defineProps(['client', 'size', 'table'])
-const { client, size, table } = toRefs(props)
 
 const supabase = useSupabaseClient()
 const loading = ref(true)
@@ -80,21 +77,63 @@ watch(() => props.client, (newClient) => {
   background-repeat: no-repeat;
   background-color: $gray-light;
 
+  .client-logo-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      &.small {
+          min-width: 42px;
+          min-height: 42px;
+          border-radius: $br-md;
+      }
+
+      &.medium {
+          min-width: 60px;
+          min-height: 60px;
+          border-radius: $br-md;
+      }
+
+      &.large {
+          min-width: 100px;
+          min-height: 100px;
+          border-radius: $br-lg;
+      }
+  }
+
+  .client-logo-bg {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(5px);
+      mix-blend-mode: color;
+  }
+
   &.small {
-      width: 42px;
-      height: 42px;
+      min-width: 42px;
+      min-height: 42px;
       border-radius: $br-md;
   }
 
   &.medium {
-      width: 60px;
-      height: 60px;
+      min-width: 60px;
+      min-height: 60px;
       border-radius: $br-md;
   }
 
   &.large {
-      width: 100px;
-      height: 100px;
+      min-width: 100px;
+      min-height: 100px;
       border-radius: $br-lg;
   }
 

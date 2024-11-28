@@ -36,9 +36,7 @@
             {{ project.tag }}
           </div>
           <div class="project-card-details">
-            <div class="image-wrapper">
-              <ClientImage :client="project.client_id" size="medium" table="logos" />
-            </div>
+            <ClientImage :client="project.client_id" size="medium" table="logos" />
             <h3>{{ project.name }}</h3>
           </div>
         </div>
