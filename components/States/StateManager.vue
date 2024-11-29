@@ -124,7 +124,6 @@ onMounted(async () => {
 })
 
 watch(() => currentPositionInWorkflow.value, () => {
-  console.log('currentPositionInWorkflow changed')
   setIcon()
 })
 

@@ -43,7 +43,9 @@ import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState } = useDeliverables();
 
 onMounted(async () => {
-  await fetchSingleStateInstance(props.state);
+  if(props.state){
+    await fetchSingleStateInstance(props.state);
+  }
 });
 
 watch(() => props.state, async () => {

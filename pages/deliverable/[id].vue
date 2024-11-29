@@ -21,17 +21,27 @@
       <Loading v-if="loading" />
       <aside class="object-overview" v-if="deliverable && !loading">
         <div class="object-summary">
-          <!-- <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverableTitle(deliverable.id, $event.target.value)" /> -->
-          <!-- <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverableDescription(deliverable.id, $event.target.value)" /> -->
           <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverable" />
           <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverable" />
         </div>
       </aside>
+      <pre v-if="StateInstanceData && StateType">
+        - Current state: {{ CurrentState }}
+        - All states: {{ workflowStates }}
+        <!-- <p>State instance is: {{ StateInstanceData }}</p> -->
+        - State type is: {{ StateType.name }}
+        - Is first state: {{ isFirstState }}
+        - Is last state: {{ isLastState }}
+      </pre>
       <section class="deliverable-manager">
-        <div class="deliverable-editor" v-if="DeliverableData && !loading">
+        <div v-if="DeliverableData && !loading">
+          <!-- New state -->
+          <!-- - Only show the requirement that the client define the expectations of the deliverable -->
+        </div>
+        <!-- <div class="deliverable-editor" v-if="DeliverableData && !loading">
            <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
            <span v-if="DeliverableData.content.type == 'link'" >{{ DeliverableData.content.content }}</span>
-        </div>
+        </div> -->
         <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
       </section>
     </template>
@@ -58,10 +68,21 @@ const deliverableId = route.params.id;
 const deliverable = ref(null);
 const workflowStates = ref([]);
 const CurrentState = ref(null);
+const StateType = ref(null);
+const isFirstState = ref(false);
+const isLastState = ref(false);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, fetchSingleProjectDeliverableByState, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription, DeliverableData, DeliverableError } = useDeliverables();
+const { saveDeliverable, fetchSingleProjectDeliverableByState, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
+
+// useWorkflowStateInstances composable
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+
+// useWorkflowStateTypes composable
+import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
+const { fetchSingleState, StateData } = useWorkflowStateTypes();
 
 async function getCurrentState(deliverableId) {
   try {
@@ -97,7 +118,6 @@ async function getDeliverable(id) {
     }
 
     deliverable.value = data;
-    console.log(data);
 
     projectId.value = data.project;
   } catch (error) {
@@ -143,9 +163,17 @@ async function fetchWorkflowStates() {
       .single();
 
     if (workflowError) throw workflowError;
-    console.log(workflowData.states);
 
     workflowStates.value = workflowData.states;
+
+    if (workflowStates.value[0] === CurrentState.value) {
+      isFirstState.value = true;
+    }
+
+    if (workflowStates.value[workflowStates.value.length - 1] === CurrentState.value) {
+      isLastState.value = true;
+    }
+
   } catch (error) {
     console.error('Error fetching workflow states:', error);
   } finally {
@@ -164,6 +192,8 @@ onMounted(async () => {
         getDeliverable(deliverableId);
         fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
         fetchWorkflowStates();
+        fetchSingleStateInstance(CurrentState.value);
+        StateType.value = fetchSingleState(StateInstanceData.value[0].state_type);
       })
       .subscribe();
 
@@ -175,6 +205,8 @@ onMounted(async () => {
     await getDeliverable(deliverableId);
     await fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
     await fetchWorkflowStates();
+    await fetchSingleStateInstance(CurrentState.value);
+    StateType.value = await fetchSingleState(StateInstanceData.value[0].state_type);
 
   } catch (error) {
     console.error(error);

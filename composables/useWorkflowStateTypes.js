@@ -136,8 +136,8 @@ export default function useWorkflowStateTypes() {
       if (error) throw error;
 
       StateData.value = data[0];
-      // console.log(data[0]);
-      // return data[0];
+      return data[0];
+
     } catch (error) {
       StateError.value = error;
       console.log(StateError.value);
