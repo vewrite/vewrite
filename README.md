@@ -4,7 +4,7 @@
 
 ## Introduction
 
-**Hey there!** What is this? Simply put, Vewrite is a project management tool for technical writers, teams, and developer relations units. The core concept behind Vewrite is that teams who are managing projects with deliverables should be able to create a workflow that supports them, so that they can quickly create their deliverables. Automated workflows should allow teams to avoid manually pushing deliverable through the process. 
+**Hey there!** What is this? Simply put, Vewrite is a project management tool for teams of content writers. The core concept behind Vewrite is that teams who are managing projects with deliverables should be able to create a workflow that supports them, so that they can quickly create their deliverables. Automated workflows should allow teams to avoid manually pushing deliverable through the process. 
 
 At the end of the day, the goal is to allow writers to be more independent, while increasing visibility for leaders and stakeholders.
 
@@ -12,7 +12,7 @@ If you'd like to be a beta tester, make sure to sign up for the waiting list at 
 
 ![Preview](https://github.com/ramijames/vewrite/blob/main/public/images/screenshot.png?raw=true)
 
-Over the years, I've lead technical teams, devrel units, and written a lot of technical materials. What I've found to always be a complicating factor in projects is that there needs to be someone who is **really on top of things** who can ensure that all the moving pieces get followed up on. If you're writing a dozen articles with half as many different writers, and you need some external stakeholder to review things, what you end up with is a very large set of "things to do".
+Over the years, I've lead technical writing teams and have written a lot of materials aimed at teaching developers how to use specific features. What I've found to always be a complicating factor in projects is that there needs to be someone who is **really on top of things** who can ensure that all the moving pieces get followed up on. If you're writing a dozen articles with half as many different writers, and you need some external stakeholder to review things, what you end up with is a very large set of "things to do".
 
 Typically this large set of "things to do" is dumped into some version of a todo list like Monday, Trell, or JIRA. 
 
