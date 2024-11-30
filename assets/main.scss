@@ -625,11 +625,13 @@ button.wide,
 
 button.primary,
 .button.primary {
-    background-color: rgba($brand, 1);
+    // background: linear-gradient(to top, $brand 0%, $brand-light 100%);
+    background: $brand;
+    box-shadow: $main-shadow;
     color: $white;
 
     &:hover {
-        background-color: rgba($brand, .8);
+        background: rgba($brand, 0.9);
     }
 
     &:disabled {

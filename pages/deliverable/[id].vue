@@ -33,13 +33,14 @@
         - Is first state: {{ isFirstState }}
         - Is last state: {{ isLastState }}
       </pre> -->
+      <Loading v-if="loading" />
       <section class="deliverable-manager" v-if="DeliverableData && StateType && !loading">
         <!-- New state -->
         <!-- - Only show the requirement that the client define the expectations of the deliverable -->
         <button class="button large toggle-information" @click="toggleInformation" v-if="!displayInformation">
           <Icon name="fluent:info-20-regular" size="2rem" />
         </button>
-        <section class="deliverable-instruction" v-if="displayInformation && StateType.name == 'new'">
+        <!-- <section class="deliverable-instruction" v-if="displayInformation && StateType.name == 'new'">
           <div class="deliverable-instruction-content">
             <section>
               <p class="instruction-information">{{ StateType.name }} deliverable</p>
@@ -49,15 +50,24 @@
               <Icon name="fluent:checkmark-20-filled" size="1.15rem" />
             </button>
           </div>
-        </section>
+        </section> -->
         <div class="deliverable-editor" v-if="DeliverableData && !loading">
            <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
            <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
+            <section class="instruction-set">
+              <p class="instruction-information">{{ StateType.name }} deliverable</p>
+              <p>{{ StateType.description }}</p>
+            </section>
             <section class="link-set">
-              <input class="form-input link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliverable" />
-              <button class="button large" @click="copyLink">
-                <Icon name="fluent:copy-16-regular" size="1.5rem" />
-              </button>
+              <section class="link-content">
+                <input class="form-input link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliverable" />
+                <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
+                  <Icon name="fluent:open-16-regular" size="1.5rem" />
+                </button>
+                <button class="button large" @click="copyToClipboard(DeliverableData.content.content)">
+                  <Icon name="fluent:copy-16-regular" size="1.5rem" />
+                </button>
+              </section>
             </section>
           </section>
         </div>
@@ -103,6 +113,10 @@ const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstance
 // useWorkflowStateTypes composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 const { fetchSingleState, StateData } = useWorkflowStateTypes();
+
+// useUtils composable
+import useUtils from '~/composables/useUtils';
+const { copyToClipboard, openInNewTab } = useUtils();
 
 async function getCurrentState(deliverableId) {
   try {
@@ -319,7 +333,7 @@ function updateDeliverable() {
 .deliverable-manager {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - 60px - 60px);
   background-color: $white;
 
   .toggle-information {
@@ -394,31 +408,37 @@ function updateDeliverable() {
 
   .deliverable-editor {
     width: 100%;
-    height: calc(100% - 60px);
+    height: calc(100%);
     padding: 0;
     background-color: rgba($white, 0.025);
 
     .external-link {
-      width: calc(100% - 2 * $spacing-md);
-      height: calc(100% - 2 * $spacing-md);
+      width: calc(100% - 2 * $spacing-sm);
+      height: calc(100% - $spacing-sm);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       border: $border;
-      border-radius: $br-xl;
-      margin: $spacing-md;
+      border-radius: $br-lg;
+      margin: $spacing-sm $spacing-sm 0 ;
 
       .link-set {
         display: flex;
         height: 44px;
         gap: $spacing-xs;
-        flex-direction: row;
+        flex-direction: column;
+
+        .link-content {
+          display: flex;
+          flex-direction: row;
+          gap: $spacing-xs;
+        }
       }
 
       .link-value {
         align-self: center;
         width: auto;
-        min-width: 400px;
         padding: $spacing-xs;
         text-align: center;
         overflow: hidden;

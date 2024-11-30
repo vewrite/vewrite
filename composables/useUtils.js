@@ -16,4 +16,25 @@ export default function useUtils() {
     };
   }
 
+  // Copy to clipboard function
+  function copyToClipboard(text) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
+
+  function openInNewTab(url) {
+    const win = window.open(url, '_blank');
+    win.focus();
+  }
+
+  return {
+    debounce,
+    copyToClipboard,
+    openInNewTab
+  }
+
 }

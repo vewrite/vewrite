@@ -2,9 +2,11 @@
   <div class="state-manager-toggle"  v-if="StateInstanceData">
     <StateButton v-if="currentPositionInWorkflow == 0" type="disabledPrev" />
     <StateButton v-if="currentPositionInWorkflow > 0" :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveToPrev" />
-    <div class="state-icon">
+    <div @click="toggleStateManagerPanel" :class="['state-icon', collapsed ? 'collapsed' : '']">
       <Loading v-if="loading" type="small" class="loading-icon" />
-      <Icon v-else :name="stateDetails.state_type.icon" size="2rem" @click="toggleStateManagerPanel" />
+      <Icon v-if="!loading" :name="stateDetails.state_type.icon" size="2rem" />
+      <span v-if="!loading" class="state-name">{{ stateDetails.state_type.name }}</span>
+      <Icon name="fluent:chevron-up-16-regular" class="state-arrow" size="1.5rem" />
     </div>
     <StateButton v-if="currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
     <StateButton v-if="currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
@@ -136,28 +138,41 @@ watch(() => currentPositionInWorkflow.value, () => {
 @use 'assets/variables' as *;
 
 .state-manager-toggle {
-  position: fixed;
-  bottom: $spacing-md;
-  right: $spacing-md;
-  z-index: 1000;
+  height: 60px;
+  margin: 0 $spacing-sm;
   background-color: rgba($white, 0.15);
   backdrop-filter: blur(10px);
-  border-radius: $br-lg;
+  border-radius: $br-lg $br-lg 0 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: $big-shadow;
+  justify-content: space-between;
   flex-direction: row;
   gap: $spacing-xs;
-  padding: $spacing-xxs $spacing-sm;
+  padding: $spacing-xxs 0;
   
   .state-icon {
-    width: 44px;
     height: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+
+    &.collapsed {
+      .state-arrow {
+        transform: rotate(180deg);
+      }
+    }
+
+    .state-name {
+      text-transform: capitalize;
+      margin: 0 $spacing-xxs;
+      color: $brand;
+    }
+
+    .state-arrow {
+      transform: rotate(0deg);
+      transition: transform 0.3s ease;
+    }
 
     .loading-icon {
       width: 28px;
@@ -177,18 +192,22 @@ watch(() => currentPositionInWorkflow.value, () => {
   height: auto;
   overflow-y: auto;
   overflow-x: hidden;
-  position: fixed;
+  position: absolute;
   align-items: flex-start;
-  bottom: 7rem;
-  right: $spacing-md;
-  background-color: rgba($white, 0.15);
-  backdrop-filter: blur(10px);
-  transition: all 0.46s ease-in-out;
+  bottom: 5rem;
+  right: 50%;
+  transform: translateX(50%) scale(1);
+  background-color: rgba($white, 0.25);
+  backdrop-filter: blur(40px);
+  transition: all 0.26s ease-in-out;
   border-radius: $br-lg;
   box-shadow: $big-shadow;
+  transform-origin: center bottom;
+  opacity: 1;
 
   &.collapsed {
-    right: -100%;
+    transform: translateX(50%) scale(0.5);
+    opacity: 0;
 
     .state-manager-wrapper {
 
