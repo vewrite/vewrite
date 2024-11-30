@@ -732,7 +732,7 @@ button.vertical,
 /* Editable Object Title */
 
 .object-overview {
-    padding: $spacing-sm;
+    padding: 0 $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -740,8 +740,8 @@ button.vertical,
     gap: $spacing-md;
     margin: 0 auto;
     background-color: $white;
-    border-bottom: $border;
     width: 100%;
+    height: 60px;
 
     &.no-border {
         border-bottom: none;
@@ -750,7 +750,9 @@ button.vertical,
     .object-summary {
       display: flex;
       flex-direction: column;
-      gap: 0;
+      justify-content: center;
+      align-items: center;
+      gap: $spacing-xs;
       width: 100%;
       position: relative;
   
@@ -759,9 +761,10 @@ button.vertical,
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: $spacing-xs;
+        padding: $spacing-xxs;
         padding-top: 2px;
         padding-bottom: 6px;
+        text-align: center;
   
         &:focus,
         &:active {
@@ -774,9 +777,9 @@ button.vertical,
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: $spacing-xs;
+        padding: $spacing-xxs;
         margin-top: -16px;
-        margin-bottom: 6px;
+        text-align: center;
   
         &:focus,
         &:active {

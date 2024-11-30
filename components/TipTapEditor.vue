@@ -165,6 +165,8 @@ function updateDeliverable() {
     margin: $spacing-sm $spacing-md 0;
     align-items: center;
     justify-content: center;
+    background: rgba($brand, 0.05);
+    border-radius: $br-xl;
 
     .button-group {
       display: flex;

@@ -18,7 +18,6 @@
       <div class="object-overview" v-if="TeamData && !loading">
         <div class="object-summary">
           <input class="object-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
-          <span>Click to edit</span>
         </div>
       </div>
       <div class="team-management" v-if="!loading && TeamData">

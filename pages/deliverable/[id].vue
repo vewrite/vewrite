@@ -22,28 +22,47 @@
       <aside class="object-overview" v-if="deliverable && !loading">
         <div class="object-summary">
           <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverable" />
-          <input class="object-title-description" v-model="deliverable.description" @input="updateDeliverable" />
+          <input class="object-description-input" v-model="deliverable.description" @input="updateDeliverable" />
         </div>
       </aside>
-      <pre v-if="StateInstanceData && StateType">
+      <!-- <pre v-if="StateInstanceData && StateType">
         - Current state: {{ CurrentState }}
         - All states: {{ workflowStates }}
-        <!-- <p>State instance is: {{ StateInstanceData }}</p> -->
+        - State instance is: {{ StateInstanceData }}
         - State type is: {{ StateType.name }}
         - Is first state: {{ isFirstState }}
         - Is last state: {{ isLastState }}
-      </pre>
-      <section class="deliverable-manager">
-        <div v-if="DeliverableData && !loading">
-          <!-- New state -->
-          <!-- - Only show the requirement that the client define the expectations of the deliverable -->
-        </div>
-        <!-- <div class="deliverable-editor" v-if="DeliverableData && !loading">
+      </pre> -->
+      <section class="deliverable-manager" v-if="DeliverableData && StateType && !loading">
+        <!-- New state -->
+        <!-- - Only show the requirement that the client define the expectations of the deliverable -->
+        <button class="button large toggle-information" @click="toggleInformation" v-if="!displayInformation">
+          <Icon name="fluent:info-20-regular" size="2rem" />
+        </button>
+        <section class="deliverable-instruction" v-if="displayInformation && StateType.name == 'new'">
+          <div class="deliverable-instruction-content">
+            <section>
+              <p class="instruction-information">{{ StateType.name }} deliverable</p>
+              <p>{{ StateType.description }}</p>
+            </section>
+            <button class="button green large" @click="toggleInformation">
+              <Icon name="fluent:checkmark-20-filled" size="1.15rem" />
+            </button>
+          </div>
+        </section>
+        <div class="deliverable-editor" v-if="DeliverableData && !loading">
            <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
-           <span v-if="DeliverableData.content.type == 'link'" >{{ DeliverableData.content.content }}</span>
-        </div> -->
-        <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
+           <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
+            <section class="link-set">
+              <input class="form-input link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliverable" />
+              <button class="button large" @click="copyLink">
+                <Icon name="fluent:copy-16-regular" size="1.5rem" />
+              </button>
+            </section>
+          </section>
+        </div>
       </section>
+      <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
     </template>
   </AppPanel>
 </template>
@@ -71,6 +90,7 @@ const CurrentState = ref(null);
 const StateType = ref(null);
 const isFirstState = ref(false);
 const isLastState = ref(false);
+const displayInformation = ref(true);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
@@ -179,6 +199,10 @@ async function fetchWorkflowStates() {
   } finally {
     loading.value = false;
   }
+}
+
+function toggleInformation() {
+  displayInformation.value = !displayInformation.value;
 }
 
 // Fetch the deliverable data when the component is mounted
@@ -294,16 +318,115 @@ function updateDeliverable() {
 
 .deliverable-manager {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
   background-color: $white;
 
+  .toggle-information {
+    position: absolute;
+    bottom: $spacing-sm;
+    left: $spacing-sm;
+    z-index: 1;
+    background-color: rgba($white, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: $br-lg;
+    box-shadow: $big-shadow;
+    padding: $spacing-xs;
+    color: $brand;
+  }
+
+  .deliverable-instruction {
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    background-color: rgba($white, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: $br-lg;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    align-self: center;
+    gap: $spacing-xs;
+    max-width: 400px;
+    width: calc(100% - 2 * $spacing-sm);
+    position: absolute;
+    bottom: $spacing-sm;
+    left: $spacing-sm;
+    box-shadow: $big-shadow;
+    z-index: 1;
+
+    .deliverable-instruction-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: $spacing-md;
+
+      section {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xxs;
+      }
+
+      h4 {
+        font-size: $font-size-sm;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      p {
+        font-size: $font-size-sm;
+        font-weight: 400;
+        margin: 0;
+        opacity: 0.5;
+
+        &.instruction-information {
+          font-size: $font-size-sm;
+          font-weight: 500;
+          text-transform: uppercase;
+          opacity: 1;
+          color: $brand;
+          border-radius: $br-md;
+        }
+      }
+    }
+  }
+
   .deliverable-editor {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 60px);
     padding: 0;
     background-color: rgba($white, 0.025);
 
+    .external-link {
+      width: calc(100% - 2 * $spacing-md);
+      height: calc(100% - 2 * $spacing-md);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: $border;
+      border-radius: $br-xl;
+      margin: $spacing-md;
+
+      .link-set {
+        display: flex;
+        height: 44px;
+        gap: $spacing-xs;
+        flex-direction: row;
+      }
+
+      .link-value {
+        align-self: center;
+        width: auto;
+        min-width: 400px;
+        padding: $spacing-xs;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0;
+      }
+    }
   }
 }
 

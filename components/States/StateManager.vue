@@ -40,6 +40,8 @@ import StateRow from '~/components/States/StateRow.vue';
 
 const props = defineProps(['deliverable', 'states']);
 
+console.log(props.deliverable)
+
 // console.log(props.deliverable)
 
 const currentPositionInWorkflow = ref(null);
@@ -48,7 +50,7 @@ const nextPositionInWorkflow = ref(null);
 
 const loading = ref(true);
 
-const collapsed = ref(false)
+const collapsed = ref(true)
 
 function toggleStateManagerPanel() {
   collapsed.value = !collapsed.value
@@ -138,9 +140,9 @@ watch(() => currentPositionInWorkflow.value, () => {
   bottom: $spacing-md;
   right: $spacing-md;
   z-index: 1000;
-  background-color: rgba($white, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: $br-md;
+  background-color: rgba($white, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: $br-lg;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,10 +181,10 @@ watch(() => currentPositionInWorkflow.value, () => {
   align-items: flex-start;
   bottom: 7rem;
   right: $spacing-md;
-  background-color: rgba($white, 0.6);
-  backdrop-filter: blur(8px);
+  background-color: rgba($white, 0.15);
+  backdrop-filter: blur(10px);
   transition: all 0.46s ease-in-out;
-  border-radius: $br-md;
+  border-radius: $br-lg;
   box-shadow: $big-shadow;
 
   &.collapsed {

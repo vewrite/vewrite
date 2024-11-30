@@ -18,16 +18,15 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
+      <div class="client-image" v-if="ClientData && !loading">
+        <ClientImage :client="ClientData.client_id" size="large" table="logos" />
+      </div>
       <div class="object-overview" v-if="ClientData && !loading">
         <div class="object-summary">
           <input class="object-title-input" v-model="ClientData.name" @input="updateClientWithDebounce(ClientData.client_id, $event.target.value)" />
-          <span>Click to edit</span>
         </div>
       </div>
       <div class="inner-container" v-if="ClientData && !loading">
-        <div class="client-image" v-if="ClientData && !loading">
-          <ClientImage :client="ClientData.client_id" size="large" table="logos" />
-        </div>
         <h3>Projects</h3>
         <div v-for="client in ClientProjects" :key="client.client_id">
           <div v-for="project in client.projects" :key="project.id">
@@ -101,6 +100,8 @@ onMounted(async () => {
 
 .client-image {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>
