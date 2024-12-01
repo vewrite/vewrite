@@ -3,29 +3,27 @@
 
     <div v-if="type == 'disabledPrev'">
       <div class="button disabled" disabled>
-        <Icon name="mdi:chevron-left" size="1.5rem" />
-        <p>Prev state</p>
+        <p>No state</p>
       </div> 
     </div>
 
     <div v-if="type == 'moveToPrev'">
       <div class="button" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
         <Icon name="mdi:chevron-left" size="1.5rem" />
-        <p>Prev state</p>
+        <p>Back to {{ StateInstanceData[0].instance_name }}</p>
       </div> 
     </div>
 
     <div v-if="type == 'moveToNext'">
       <div class="button primary" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
-        <p>Next state</p>
+        <p>Move to {{ StateInstanceData[0].instance_name }}</p>
         <Icon name="mdi:chevron-right" size="1.5rem" />
       </div> 
     </div>
 
     <div v-if="type == 'disabledNext'">
       <div class="button disabled" disabled>
-        <p>Next state</p>
-        <Icon name="mdi:chevron-right" size="1.5rem" />
+        <p>No state</p>
       </div> 
     </div>
 

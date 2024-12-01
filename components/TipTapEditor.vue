@@ -146,8 +146,11 @@ function updateDeliverable() {
   display: flex;
   flex-direction: column;
   gap: $spacing-sm;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 2 * $spacing-sm);
+  height: calc(100% - $spacing-sm);
+  margin: $spacing-sm;
+  border: $border;
+  border-radius: $br-lg;
 
   div {
 
@@ -162,11 +165,11 @@ function updateDeliverable() {
     display: flex;
     flex-wrap: wrap;
     gap: $spacing-sm;
-    margin: $spacing-sm $spacing-md 0;
+    margin: 0;
     align-items: center;
     justify-content: center;
     background: rgba($brand, 0.05);
-    border-radius: $br-xl;
+    border-radius: $br-md;
 
     .button-group {
       display: flex;

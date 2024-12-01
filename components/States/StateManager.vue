@@ -2,10 +2,13 @@
   <div class="state-manager-toggle"  v-if="StateInstanceData">
     <StateButton v-if="currentPositionInWorkflow == 0" type="disabledPrev" />
     <StateButton v-if="currentPositionInWorkflow > 0" :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveToPrev" />
-    <div @click="toggleStateManagerPanel" :class="['state-icon', collapsed ? 'collapsed' : '']">
+    <div @click="toggleStateManagerPanel" :class="[' button state-icon', collapsed ? 'collapsed' : '']">
       <Loading v-if="loading" type="small" class="loading-icon" />
       <Icon v-if="!loading" :name="stateDetails.state_type.icon" size="2rem" />
-      <span v-if="!loading" class="state-name">{{ stateDetails.state_type.name }}</span>
+      <span v-if="!loading" class="state-name">
+        <small>Current state</small>
+        <span>{{ stateDetails.state_type.name }}</span>
+      </span>
       <Icon name="fluent:chevron-up-16-regular" class="state-arrow" size="1.5rem" />
     </div>
     <StateButton v-if="currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
@@ -149,6 +152,11 @@ watch(() => currentPositionInWorkflow.value, () => {
   flex-direction: row;
   gap: $spacing-xs;
   padding: $spacing-xxs 0;
+  position: absolute;
+  bottom: 0;
+  left:0;
+  right: 0;
+  width: calc(100% - 2 * $spacing-sm);
   
   .state-icon {
     height: 44px;
@@ -165,8 +173,23 @@ watch(() => currentPositionInWorkflow.value, () => {
 
     .state-name {
       text-transform: capitalize;
-      margin: 0 $spacing-xxs;
-      color: $brand;
+      margin: 0 $spacing-xs;
+      display: flex;
+      flex-direction: column;;
+
+      section {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-xxxs;
+        align-items: center;
+        color: $black;
+      }
+
+      small {
+        color: rgba($black, 0.5);
+        font-size: $font-size-xs;
+        font-weight: 500;
+      }
     }
 
     .state-arrow {

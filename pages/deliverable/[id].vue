@@ -164,6 +164,7 @@ async function getDeliverable(id) {
 
 async function fetchWorkflowStates() {
   try {
+    loading.value = true;
     // 1. Get the current deliverable ID
     const deliverableId = route.params.id;
 
@@ -225,6 +226,7 @@ onMounted(async () => {
     const subscription = supabase
       .from('deliverables')
       .on('UPDATE', payload => {
+        loading.value = true;
         console.log('Deliverable updated:', payload.new);
         getCurrentState(deliverableId);
         getDeliverable(deliverableId);
@@ -232,6 +234,7 @@ onMounted(async () => {
         fetchWorkflowStates();
         fetchSingleStateInstance(CurrentState.value);
         StateType.value = fetchSingleState(StateInstanceData.value[0].state_type);
+        loading.value = false;
       })
       .subscribe();
 
@@ -239,12 +242,14 @@ onMounted(async () => {
       supabase.removeSubscription(subscription);
     });
 
+    loading.value = true;
     await getCurrentState(deliverableId);
     await getDeliverable(deliverableId);
     await fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
     await fetchWorkflowStates();
     await fetchSingleStateInstance(CurrentState.value);
     StateType.value = await fetchSingleState(StateInstanceData.value[0].state_type);
+    loading.value = false;
 
   } catch (error) {
     console.error(error);
@@ -333,7 +338,7 @@ function updateDeliverable() {
 .deliverable-manager {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 60px - 60px);
+  height: calc(100% - 60px - 80px);
   background-color: $white;
 
   .toggle-information {

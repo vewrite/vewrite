@@ -39,7 +39,8 @@
               <div class="deliverable-updated-at">
                 Last updated {{ deliverable.formattedUpdatedAt }}
               </div>
-              <Dropdown>
+              <span class="deliverable-state">{{ deliverable.state_name }}</span>
+              <!-- <Dropdown>
                 <template v-slot:trigger>
                   <span class="deliverable-workflow-state-bubble no-uppercase" v-if="deliverable.workflow_state">
                     <Loading v-if="!deliverable" />
@@ -54,7 +55,7 @@
                     {{ state[0]?.instance_name }}
                   </div>
                 </template>
-              </Dropdown>
+              </Dropdown> -->
               <Dropdown>
                 <template v-slot:trigger>
                   Due {{ deliverable.formattedDueDate }}
@@ -432,6 +433,14 @@ watchEffect(() => {
       display: flex;
       align-items: center;
       gap: $spacing-xs;
+
+      .deliverable-state {
+        color: $black;
+        font-size: $font-size-xs;
+        border: $border;
+        padding: $spacing-xxxs $spacing-xs;
+        border-radius: $br-lg;
+      }
 
       .deliverable-updated-at {
         color: $gray-dark;
