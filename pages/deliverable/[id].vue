@@ -52,7 +52,11 @@
           </div>
         </section> -->
         <div class="deliverable-editor" v-if="DeliverableData && !loading">
-           <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
+          
+          <!-- Internal Editor  -->
+          <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
+           
+           <!-- External Link -->
            <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
             <section class="instruction-set">
               <p class="instruction-information">{{ StateType.name }} deliverable</p>

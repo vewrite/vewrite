@@ -2,7 +2,7 @@
   <div class="state-manager-toggle"  v-if="StateInstanceData">
     <StateButton v-if="currentPositionInWorkflow == 0" type="disabledPrev" />
     <StateButton v-if="currentPositionInWorkflow > 0" :deliverableId="deliverable.id" :state="states[previousPositionInWorkflow]" type="moveToPrev" />
-    <div @click="toggleStateManagerPanel" :class="[' button state-icon', collapsed ? 'collapsed' : '']">
+    <div @click="toggleStateManagerPanel" :class="[' button state-icon', collapsed ? '' : 'open']">
       <Loading v-if="loading" type="small" class="loading-icon" />
       <Icon v-if="!loading" :name="stateDetails.state_type.icon" size="2rem" />
       <span v-if="!loading" class="state-name">
@@ -14,7 +14,7 @@
     <StateButton v-if="currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
     <StateButton v-if="currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
   </div>
-  <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? 'collapsed' : ''">
+  <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? '' : 'open'">
     <section class="state-manager-wrapper">
       <Loading v-if="loading" type="small" />
       <div v-else class="state-manager-workflow">
@@ -140,6 +140,20 @@ watch(() => currentPositionInWorkflow.value, () => {
 
 @use 'assets/variables' as *;
 
+@keyframes bounceScale {
+  0% {
+    opacity: 0;
+    transform: translateY(10%) translateX(50%) scale(0.5);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0px) translateX(50%) scale(1.05);
+  }
+  100% {
+    transform: translateY(0px) translateX(50%) scale(1);
+  }
+} 
+
 .state-manager-toggle {
   height: 60px;
   margin: 0 $spacing-sm;
@@ -165,7 +179,7 @@ watch(() => currentPositionInWorkflow.value, () => {
     align-items: center;
     cursor: pointer;
 
-    &.collapsed {
+    &.open {
       .state-arrow {
         transform: rotate(180deg);
       }
@@ -222,15 +236,15 @@ watch(() => currentPositionInWorkflow.value, () => {
   transform: translateX(50%) scale(1);
   background-color: rgba($white, 0.25);
   backdrop-filter: blur(40px);
-  transition: all 0.26s ease-in-out;
+  transition: all 0.26s ease;
   border-radius: $br-lg;
   box-shadow: $big-shadow;
   transform-origin: center bottom;
-  opacity: 1;
+  opacity: 0;
 
-  &.collapsed {
-    transform: translateX(50%) scale(0.5);
-    opacity: 0;
+  &.open {
+    animation: bounceScale 0.35s ease;
+    opacity: 1;
 
     .state-manager-wrapper {
 
