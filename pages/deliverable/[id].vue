@@ -64,7 +64,10 @@
             </section>
             <section class="link-set">
               <section class="link-content">
-                <input class="form-input link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliverable" />
+                <div class="form-input">
+                  <label for="external-link">This state's content location</label>
+                  <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliverable" />
+                </div>
                 <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
                   <Icon name="fluent:open-16-regular" size="1.5rem" />
                 </button>
@@ -432,6 +435,27 @@ function updateDeliverable() {
       border-radius: $br-lg;
       margin: $spacing-sm $spacing-sm 0 ;
 
+      .instruction-set {
+        width: 100%;
+        max-width: 600px;
+        background: rgba($brand, 0.05);
+        border-radius: $br-lg;
+        padding: $spacing-md;
+        margin-bottom: $spacing-sm;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xxs;
+
+        p {
+          margin: 0;
+        }
+
+        .instruction-information {
+          color: $brand;
+          text-transform: capitalize;
+        }
+      }
+
       .link-set {
         display: flex;
         height: 44px;
@@ -442,6 +466,16 @@ function updateDeliverable() {
           display: flex;
           flex-direction: row;
           gap: $spacing-xs;
+          width: 100%;
+          min-width: 600px;
+          
+          .form-input {
+            margin: 0;
+          }
+
+          input {
+            width: 100%;
+          }
         }
       }
 
@@ -449,7 +483,6 @@ function updateDeliverable() {
         align-self: center;
         width: auto;
         padding: $spacing-xs;
-        text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
