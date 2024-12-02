@@ -25,6 +25,7 @@
         </linearGradient>
         </defs>
       </svg>
+      <PlanStatus class="topbar-plan" />
     </section>
     <User />
   </header>
@@ -48,6 +49,7 @@
 <script setup>
 
 import User from '~/components/TopBar/User.vue'
+import PlanStatus from '~/components/TopBar/PlanStatus.vue'
 
 const menu = ref(false)
 
@@ -102,6 +104,11 @@ header {
     flex-direction: row;
     align-items: center;
     gap: $spacing-xs;
+
+    .topbar-plan {
+      border-left: $border;
+      padding-left: $spacing-sm;
+    }
 
     svg {
       margin-left: $spacing-sm;

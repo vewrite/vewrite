@@ -618,6 +618,12 @@ button.large,
     padding: $spacing-sm $spacing-md;
 }
 
+button.small,
+.button.small {
+    padding: $spacing-xxxs $spacing-xs;
+    font-size: $font-size-xxs;
+}
+
 button.wide,
 .button.wide {
     padding: $spacing-xs;

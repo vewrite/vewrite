@@ -7,11 +7,8 @@
     </template>
     <template v-slot:menu>
       <section class="dropdown-header">
-        {{ loading ? 'Loading' : ProfileData.username }}
-        <section class="dropdown-plan">
-          <span>Using the free plan</span>
-          <button class="button green">Upgrade</button>
-        </section>
+        <span class="user-name">{{ loading ? 'Loading' : ProfileData.username }}</span>
+        <PlanStatus />
       </section>
       <hr class="dropdown-divider" />
       <router-link to="/account" class="dropdown-item"><Icon name="solar:user-linear" size="1.5rem" /> Account</router-link>
@@ -21,6 +18,8 @@
 </template>
 
 <script setup>
+
+import PlanStatus from '~/components/TopBar/PlanStatus.vue' 
 
 const user = useSupabaseUser()
 const loading = ref(true)
@@ -52,6 +51,11 @@ const logout = async () => {
 .top-bar-user {
   display: flex;
   align-items: flex-start;
+
+  .user-name {
+    font-weight: bold;
+    margin-bottom: $spacing-xxs;
+  }
   
   .button:not(.green) {
     background: transparent;
