@@ -597,6 +597,7 @@ button,
 
     &:hover {
         background: rgba($black, 0.075);
+        transform: scale(1.035);
     }
 
     &:active {

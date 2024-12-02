@@ -241,10 +241,12 @@ watch(() => currentPositionInWorkflow.value, () => {
   box-shadow: $big-shadow;
   transform-origin: center bottom;
   opacity: 0;
+  pointer-events: none;
 
   &.open {
     animation: bounceScale 0.35s ease;
     opacity: 1;
+    pointer-events: all;
 
     .state-manager-wrapper {
 
