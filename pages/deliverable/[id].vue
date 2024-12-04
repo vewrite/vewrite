@@ -49,7 +49,6 @@
             </section>
             <section class="link-set">
               <section class="link-content">
-                {{ DeliverableData }}
                 <div class="form-input">
                   <label for="external-link">This state's content location</label>
                   <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliContent" />
@@ -254,8 +253,7 @@ function debounce(func, wait) {
 }
 
 const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
-console.log(DeliverableData);
-const debouncedUpdateDeliverableContent = debounce(() => updateDeliverableContent(DeliverableData.deliverable_id, DeliverableData.stateinstance_id, DeliverableData.content.content), 1000);
+const debouncedUpdateDeliverableContent = debounce(() => updateDeliverableContent(DeliverableData.value.deliverable_id, DeliverableData.value.stateinstance_id, DeliverableData.value.content), 1000);
 
 function updateDeliverable() {
   debouncedSaveDeliverable();

@@ -162,19 +162,21 @@ export default function useDeliverables() {
   }
 
   async function updateDeliverableContent(deliverableId, stateinstance_id, content) {
+    console.log(deliverableId, stateinstance_id, content)
     try {
       const { data, error } = await supabase
         .from('deliverable_content')
-        .select('*')
+        .update({ content: content })
         .eq('deliverable_id', deliverableId)
         .eq('stateinstance_id', stateinstance_id)
-        .update({ content: content });
 
       if (error) throw error;
 
+      console.log('returns', data)
       return data;
 
     } catch (error) {
+      console.log(error)
       DeliverableError.value = error.message;
     }
   }
