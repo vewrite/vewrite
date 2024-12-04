@@ -107,7 +107,7 @@ const isClients = computed(() => {
   }
 
   @media (max-width: 1024px) {
-    min-width: 260px;
+    min-width: 160px;
   }
 
   @media (max-width: 960px) {

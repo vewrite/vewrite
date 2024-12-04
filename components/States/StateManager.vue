@@ -13,29 +13,30 @@
     </div>
     <StateButton v-if="currentPositionInWorkflow < states.length - 1" :deliverableId="deliverable.id" :state="states[nextPositionInWorkflow]" type="moveToNext" />
     <StateButton v-if="currentPositionInWorkflow >= states.length - 1" type="disabledNext" />
-  </div>
-  <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? '' : 'open'">
-    <section class="state-manager-wrapper">
-      <Loading v-if="loading" type="small" />
-      <div v-else class="state-manager-workflow">
-        <!-- TODO - REMOVED until I can figure out how to make it work without 100% height in the parent
-        <div class="workflow-progress">
-          <div class="progress-bar">
-            <div class="progress" :style="{ height: (currentPositionInWorkflow + 1) / states.length * 100 + '%' }"></div>
-          </div>
-        </div> -->
-        <section class="single-workflow">
-          <StateRow
-            v-for="(state, index) in states"
-            :key="state"
-            :deliverableId="deliverable.id"
-            :state="state"
-            :status="getStatus(index)"
-          />
-        </section>
-      </div>
+    <section class="state-manager-panel" v-if="props.states.length > 0" :class="collapsed ? '' : 'open'">
+      <section class="state-manager-wrapper">
+        <Loading v-if="loading" type="small" />
+        <div v-else class="state-manager-workflow">
+          <!-- TODO - REMOVED until I can figure out how to make it work without 100% height in the parent
+          <div class="workflow-progress">
+            <div class="progress-bar">
+              <div class="progress" :style="{ height: (currentPositionInWorkflow + 1) / states.length * 100 + '%' }"></div>
+            </div>
+          </div> -->
+          <section class="single-workflow">
+            <StateRow
+              v-for="(state, index) in states"
+              :key="state"
+              :deliverableId="deliverable.id"
+              :state="state"
+              :status="getStatus(index)"
+            />
+          </section>
+        </div>
+      </section>
     </section>
-  </section>
+  </div>
+  
 </template>
 
 <script setup>
@@ -234,14 +235,14 @@ watch(() => currentPositionInWorkflow.value, () => {
   bottom: 5rem;
   right: 50%;
   transform: translateX(50%) scale(1);
-  background-color: rgba($white, 0.25);
-  backdrop-filter: blur(40px);
+  background-color: rgba($white, 1);
   transition: all 0.26s ease;
   border-radius: $br-lg;
   box-shadow: $big-shadow;
   transform-origin: center bottom;
   opacity: 0;
   pointer-events: none;
+  z-index: 10;
 
   &.open {
     animation: bounceScale 0.35s ease;

@@ -46,21 +46,22 @@
             <section class="instruction-set">
               <p class="instruction-information">{{ StateType.name }} deliverable</p>
               <p>{{ StateType.description }}</p>
-            </section>
-            <section class="link-set">
-              <section class="link-content">
-                <div class="form-input">
-                  <label for="external-link">This state's content location</label>
-                  <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliContent" />
-                </div>
-                <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
-                  <Icon name="fluent:open-16-regular" size="1.5rem" />
-                </button>
-                <button class="button large" @click="copyToClipboard(DeliverableData.content.content)">
-                  <Icon name="fluent:copy-16-regular" size="1.5rem" />
-                </button>
+              <section class="link-set">
+                <section class="link-content">
+                  <div class="form-input">
+                    <label for="external-link">This state's content location</label>
+                    <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliContent" />
+                  </div>
+                  <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
+                    <Icon name="fluent:open-16-regular" size="1.5rem" />
+                  </button>
+                  <button class="button large" @click="copyToClipboard(DeliverableData.content.content)">
+                    <Icon name="fluent:copy-16-regular" size="1.5rem" />
+                  </button>
+                </section>
               </section>
             </section>
+            
           </section>
         </div>
       </section>
@@ -92,7 +93,6 @@ const CurrentState = ref(null);
 const StateType = ref(null);
 const isFirstState = ref(false);
 const isLastState = ref(false);
-const displayInformation = ref(true);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
@@ -417,20 +417,21 @@ function updateDeliContent() {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border: $border;
       border-radius: $br-lg;
       margin: $spacing-sm $spacing-sm 0 ;
+      background: rgba($black, 0.05);
 
       .instruction-set {
         width: 100%;
         max-width: 600px;
-        background: rgba($brand, 0.05);
+        background: $white;
         border-radius: $br-lg;
         padding: $spacing-md;
         margin-bottom: $spacing-sm;
         display: flex;
         flex-direction: column;
         gap: $spacing-xxs;
+        box-shadow: $main-shadow;
 
         p {
           margin: 0;
@@ -444,16 +445,15 @@ function updateDeliContent() {
 
       .link-set {
         display: flex;
-        height: 44px;
         gap: $spacing-xs;
         flex-direction: column;
+        margin-top: $spacing-sm;
 
         .link-content {
           display: flex;
           flex-direction: row;
           gap: $spacing-xs;
           width: 100%;
-          min-width: 600px;
           
           .form-input {
             margin: 0;
