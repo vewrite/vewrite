@@ -145,12 +145,12 @@ function updateDeliverable() {
 #TipTapEditor {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
   width: calc(100% - 2 * $spacing-sm);
   height: calc(100% - $spacing-sm);
-  margin: $spacing-sm;
+  margin: $spacing-sm $spacing-sm 0;
   border: $border;
   border-radius: $br-lg;
+  overflow: hidden;
 
   div {
 

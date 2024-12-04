@@ -142,19 +142,37 @@ export default function useDeliverables() {
     }
   }
 
-  async function fetchSingleProjectDeliverableByState(deliverableId, stateId) {
-    console.log('Fetching deliverable content for deliverable and state:', deliverableId, stateId);
+  async function fetchSingleProjectDeliverableByState(deliverableId, stateinstance_id) {
+    console.log('Fetching deliverable content for deliverable and state:', deliverableId, stateinstance_id);
     try {
       const { data, error } = await supabase
         .from('deliverable_content')
         .select('*')
         .eq('deliverable_id', deliverableId)
-        .eq('stateinstance_id', stateId);
+        .eq('stateinstance_id', stateinstance_id);
 
       if (error) throw error;
 
       DeliverableData.value = data[0];
       return data[0];
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
+  async function updateDeliverableContent(deliverableId, stateinstance_id, content) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .select('*')
+        .eq('deliverable_id', deliverableId)
+        .eq('stateinstance_id', stateinstance_id)
+        .update({ content: content });
+
+      if (error) throw error;
+
+      return data;
 
     } catch (error) {
       DeliverableError.value = error.message;
@@ -203,6 +221,23 @@ export default function useDeliverables() {
       if (error) throw error;
 
       return data[0];
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function fetchDeliverableContentType(deliverableId, stateId){
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .select('*')
+        .eq('deliverable_id', deliverableId)
+        .eq('stateinstance_id', stateId)
+
+      if (error) throw error;
+
+      return data
+
     } catch (error) {
       alert(error.message);
     }
@@ -257,7 +292,6 @@ export default function useDeliverables() {
       DeliverableError.value = error.message;
     }
   }
-
 
   async function updateDeliverableWorkflowState(deliverableId, newWorkflowState) {
 
@@ -351,15 +385,32 @@ export default function useDeliverables() {
     }
 
     // For each state, I need a new deliverable_content row
-    States.value.forEach(async (state) => {
-      console.log(state);
-      const deliverable = {
-        project_id: projectId,
-        deliverable_id: deliverableId.value,
-        stateinstance_id: state,
-        created_at: new Date(),
-        updated_at: new Date(),
-        content: deliverableContent.value
+    for (let i = 0; i < States.value.length; i++) {
+      
+      const state = States.value[i];
+
+      if (i == 0) {
+        // First state of a link will already have its value filled in by the project manager
+        deliverable = {
+          project_id: projectId,
+          deliverable_id: deliverableId.value,
+          stateinstance_id: state,
+          created_at: new Date(),
+          updated_at: new Date(),
+          content: deliverableContent.value
+        }
+      } else {
+        deliverable = {
+          project_id: projectId,
+          deliverable_id: deliverableId.value,
+          stateinstance_id: state,
+          created_at: new Date(),
+          updated_at: new Date(),
+          content: {
+            type: 'link',
+            content:''
+          }
+        }
       }
 
       try {
@@ -373,7 +424,7 @@ export default function useDeliverables() {
       } catch (error) {
         console.error('Error creating deliverable:', error);
       }
-    });
+    };
 
     useModal().toggleVisibility();
     useModal().reset();
@@ -386,6 +437,7 @@ export default function useDeliverables() {
     saveDeliverable,
     saveDeliverableContent,
     deleteDeliverable,
+    fetchDeliverableContentType,
     updateDeliverableTitle,
     updateDeliverableDescription,
     createDeliverableModal,
@@ -393,6 +445,7 @@ export default function useDeliverables() {
     createDeliverable,
     fetchSingleProjectDeliverable,
     fetchSingleProjectDeliverableByState,
+    updateDeliverableContent,
     fetchProjectDeliverables,
     fetchDeliverableStates,
     updateDeliverableWorkflowState,

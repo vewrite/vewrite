@@ -36,21 +36,6 @@
       <Loading v-if="loading" />
       <section class="deliverable-manager" v-if="DeliverableData && StateType && !loading">
         <!-- New state -->
-        <!-- - Only show the requirement that the client define the expectations of the deliverable -->
-        <button class="button large toggle-information" @click="toggleInformation" v-if="!displayInformation">
-          <Icon name="fluent:info-20-regular" size="2rem" />
-        </button>
-        <!-- <section class="deliverable-instruction" v-if="displayInformation && StateType.name == 'new'">
-          <div class="deliverable-instruction-content">
-            <section>
-              <p class="instruction-information">{{ StateType.name }} deliverable</p>
-              <p>{{ StateType.description }}</p>
-            </section>
-            <button class="button green large" @click="toggleInformation">
-              <Icon name="fluent:checkmark-20-filled" size="1.15rem" />
-            </button>
-          </div>
-        </section> -->
         <div class="deliverable-editor" v-if="DeliverableData && !loading">
           
           <!-- Internal Editor  -->
@@ -64,9 +49,10 @@
             </section>
             <section class="link-set">
               <section class="link-content">
+                {{ DeliverableData }}
                 <div class="form-input">
                   <label for="external-link">This state's content location</label>
-                  <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliverable" />
+                  <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliContent" />
                 </div>
                 <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
                   <Icon name="fluent:open-16-regular" size="1.5rem" />
@@ -111,7 +97,7 @@ const displayInformation = ref(true);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, fetchSingleProjectDeliverableByState, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
+const { saveDeliverable, fetchSingleProjectDeliverableByState, updateDeliverableContent, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
 
 // useWorkflowStateInstances composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
@@ -223,10 +209,6 @@ async function fetchWorkflowStates() {
   }
 }
 
-function toggleInformation() {
-  displayInformation.value = !displayInformation.value;
-}
-
 // Fetch the deliverable data when the component is mounted
 onMounted(async () => {
   try {
@@ -272,9 +254,15 @@ function debounce(func, wait) {
 }
 
 const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
+console.log(DeliverableData);
+const debouncedUpdateDeliverableContent = debounce(() => updateDeliverableContent(DeliverableData.deliverable_id, DeliverableData.stateinstance_id, DeliverableData.content.content), 1000);
 
 function updateDeliverable() {
   debouncedSaveDeliverable();
+}
+
+function updateDeliContent() {
+  debouncedUpdateDeliverableContent();
 }
 
 </script>

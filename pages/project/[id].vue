@@ -32,12 +32,16 @@
         <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
           <div class="single-deliverable" v-for="deliverable in deliverables">
             <div class="deliverable-details">
+              <div class="deliverable-type">
+                <Icon v-if="deliverable.content_type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
+                <Icon v-if="deliverable.content_type == 'markdown'" name="fluent:document-16-regular" size="1.5rem" />
+              </div>
               <span class="deliverable-id">{{ deliverable.id }}</span>
               <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
             </div>
             <div class="deliverable-actions">
               <div class="deliverable-updated-at">
-                Last updated {{ deliverable.formattedUpdatedAt }}
+                Updated {{ deliverable.formattedUpdatedAt }}
               </div>
               <span class="deliverable-state">{{ deliverable.state_name }}</span>
               <!-- <Dropdown>
@@ -94,7 +98,7 @@ const { deleteProjectModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { createDeliverableModal, DeliverableError } = useDeliverables();
+const { createDeliverableModal, fetchDeliverableContentType, DeliverableError } = useDeliverables();
 
 // Client composable
 import useClient from '~/composables/useClient';
@@ -219,6 +223,13 @@ async function fetchDeliverables(projectId) {
         deliverable.state_name = state_name[0].instance_name;
       } catch (error) {
         console.error('Error fetching state:', error.message);
+      }
+
+      try {
+        const content_type = await fetchDeliverableContentType(deliverable.id, deliverable.workflow_state);
+        deliverable.content_type = content_type[0].content.type;
+      } catch (error) {
+        console.error('Error fetching content type:', error.message);
       }
 
       // Due date
@@ -404,13 +415,21 @@ watchEffect(() => {
     .deliverable-details {
       display: flex;
       align-items: center;
-      gap: $spacing-sm;
+      justify-content: center;
+      gap: $spacing-xs;
 
       .deliverable-id {
         color: $gray-dark;
         font-size: $font-size-sm;
-        padding-right: $spacing-sm;
-        min-width: 44px;
+        padding-right: $spacing-xs;
+        border-right: $border;
+      }
+
+      .deliverable-type {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $gray-dark;
       }
 
       .deliverable-title {
