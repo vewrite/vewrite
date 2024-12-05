@@ -7,6 +7,8 @@ export default function useDeliverables() {
 
   const DeliverableData = ref(null);
   const DeliverableError = ref(null);
+  const DeliverableWorkflowStateData = ref(null);
+  const DeliverableWorkflowStateError = ref(null);
   const supabase = useSupabaseClient();
   const DeliverableStates = ref([]);
   const router = useRouter();
@@ -143,7 +145,6 @@ export default function useDeliverables() {
   }
 
   async function fetchSingleProjectDeliverableByState(deliverableId, stateinstance_id) {
-    console.log('Fetching deliverable content for deliverable and state:', deliverableId, stateinstance_id);
     try {
       const { data, error } = await supabase
         .from('deliverable_content')
@@ -158,6 +159,23 @@ export default function useDeliverables() {
 
     } catch (error) {
       DeliverableError.value = error.message;
+    }
+  }
+
+  async function fetchDeliverableState(deliverable_id){
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .select('*')
+        .eq('id', deliverable_id)
+        .single();
+  
+      if (error) throw error;
+  
+      DeliverableWorkflowStateData.value = data.workflow_state;
+  
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -296,9 +314,6 @@ export default function useDeliverables() {
   }
 
   async function updateDeliverableWorkflowState(deliverableId, newWorkflowState) {
-
-    console.log('Updating deliverable workflow state', deliverableId, newWorkflowState);
-
     try {
       const { data, error } = await supabase
         .from('deliverables')
@@ -435,11 +450,14 @@ export default function useDeliverables() {
   return {
     DeliverableData,
     DeliverableError,
+    DeliverableWorkflowStateData,
+    DeliverableWorkflowStateError,
     DeliverableStates,
     saveDeliverable,
     saveDeliverableContent,
     deleteDeliverable,
     fetchDeliverableContentType,
+    fetchDeliverableState,
     updateDeliverableTitle,
     updateDeliverableDescription,
     createDeliverableModal,

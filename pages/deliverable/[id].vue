@@ -34,7 +34,7 @@
         - Is last state: {{ isLastState }}
       </pre> -->
       <Loading v-if="loading" />
-      <section class="deliverable-manager" v-if="DeliverableData && StateType && !loading">
+      <section class="deliverable-manager" v-if="DeliverableData && StateData && !loading" @stateChange="handleStateChange">
         <!-- New state -->
         <div class="deliverable-editor" v-if="DeliverableData && !loading">
           
@@ -44,8 +44,8 @@
            <!-- External Link -->
            <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
             <section class="instruction-set">
-              <p class="instruction-information">{{ StateType.name }} deliverable</p>
-              <p>{{ StateType.description }}</p>
+              <p class="instruction-information">{{ StateData.name }} deliverable</p>
+              <p>{{ StateData.description }}</p>
               <section class="link-set">
                 <section class="link-content">
                   <div class="form-input">
@@ -60,6 +60,10 @@
                   </button>
                 </section>
               </section>
+            </section>
+
+            <section class="external-link-warning notification warning" v-if="DeliverableData.content.content == ''">
+              This deliverable does not have a link assigned. It's your job to create a new document and paste the link here.
             </section>
             
           </section>
@@ -89,14 +93,13 @@ const route = useRoute();
 const deliverableId = route.params.id;
 const deliverable = ref(null);
 const workflowStates = ref([]);
-const CurrentState = ref(null);
-const StateType = ref(null);
+// const CurrentState = ref(null);
 const isFirstState = ref(false);
 const isLastState = ref(false);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, fetchSingleProjectDeliverableByState, updateDeliverableContent, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
+const { saveDeliverable, fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, updateDeliverableContent, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
 
 // useWorkflowStateInstances composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
@@ -110,25 +113,7 @@ const { fetchSingleState, StateData } = useWorkflowStateTypes();
 import useUtils from '~/composables/useUtils';
 const { copyToClipboard, openInNewTab } = useUtils();
 
-async function getCurrentState(deliverableId) {
-  try {
-    const { data, error } = await supabase
-      .from('deliverables')
-      .select('*')
-      .eq('id', deliverableId)
-      .single();
-
-    if (error) throw error;
-
-    CurrentState.value = data.workflow_state;
-
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
-}
-
+// TODO - migrate to composable
 async function getDeliverable(id) {
   try {
     const { data, error } = await supabase
@@ -152,7 +137,6 @@ async function getDeliverable(id) {
     loading.value = false;
   }
 }
-
 
 async function fetchWorkflowStates() {
   try {
@@ -193,11 +177,11 @@ async function fetchWorkflowStates() {
 
     workflowStates.value = workflowData.states;
 
-    if (workflowStates.value[0] === CurrentState.value) {
+    if (workflowStates.value[0] === DeliverableWorkflowStateData.value) {
       isFirstState.value = true;
     }
 
-    if (workflowStates.value[workflowStates.value.length - 1] === CurrentState.value) {
+    if (workflowStates.value[workflowStates.value.length - 1] === DeliverableWorkflowStateData.value) {
       isLastState.value = true;
     }
 
@@ -208,20 +192,22 @@ async function fetchWorkflowStates() {
   }
 }
 
-// Fetch the deliverable data when the component is mounted
+async function handleStateChange({ deliverableId, newState }){
+  console.log('State changed:', deliverableId, newState);
+}
+
 onMounted(async () => {
   try {
     const subscription = supabase
       .from('deliverables')
       .on('UPDATE', payload => {
         loading.value = true;
-        console.log('Deliverable updated:', payload.new);
-        getCurrentState(deliverableId);
+        fetchDeliverableState(deliverableId);
         getDeliverable(deliverableId);
-        fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
+        fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
         fetchWorkflowStates();
-        fetchSingleStateInstance(CurrentState.value);
-        StateType.value = fetchSingleState(StateInstanceData.value[0].state_type);
+        fetchSingleStateInstance(DeliverableWorkflowStateData.value);
+        fetchSingleState(StateInstanceData.value[0].state_type);
         loading.value = false;
       })
       .subscribe();
@@ -231,12 +217,12 @@ onMounted(async () => {
     });
 
     loading.value = true;
-    await getCurrentState(deliverableId);
+    await fetchDeliverableState(deliverableId);
     await getDeliverable(deliverableId);
-    await fetchSingleProjectDeliverableByState(deliverableId, CurrentState.value);
+    await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
     await fetchWorkflowStates();
-    await fetchSingleStateInstance(CurrentState.value);
-    StateType.value = await fetchSingleState(StateInstanceData.value[0].state_type);
+    await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
+    await fetchSingleState(StateInstanceData.value[0].state_type);
     loading.value = false;
 
   } catch (error) {
@@ -334,6 +320,10 @@ function updateDeliContent() {
   height: calc(100% - 60px - 80px);
   background-color: $white;
 
+  @media (max-width: 600px) {
+    height: calc(100% - 110px - 80px);
+  }
+
   .toggle-information {
     position: absolute;
     bottom: $spacing-sm;
@@ -422,12 +412,12 @@ function updateDeliContent() {
       background: rgba($black, 0.05);
 
       .instruction-set {
-        width: 100%;
+        width: calc(100% - 2 * $spacing-sm);
         max-width: 600px;
         background: $white;
         border-radius: $br-lg;
         padding: $spacing-md;
-        margin-bottom: $spacing-sm;
+        margin: $spacing-sm;
         display: flex;
         flex-direction: column;
         gap: $spacing-xxs;
@@ -454,6 +444,10 @@ function updateDeliContent() {
           flex-direction: row;
           gap: $spacing-xs;
           width: 100%;
+
+          @media (max-width: 600px) {
+            flex-direction: column;
+          }
           
           .form-input {
             margin: 0;
@@ -474,6 +468,10 @@ function updateDeliContent() {
         white-space: nowrap;
         margin: 0;
       }
+    }
+
+    .external-link-warning {
+      max-width: 600px;
     }
   }
 }

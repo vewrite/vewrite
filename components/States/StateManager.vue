@@ -45,11 +45,6 @@ import StateButton from '~/components/States/StateButton.vue';
 import StateRow from '~/components/States/StateRow.vue';
 
 const props = defineProps(['deliverable', 'states']);
-
-console.log(props.deliverable)
-
-// console.log(props.deliverable)
-
 const currentPositionInWorkflow = ref(null);
 const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
@@ -172,6 +167,27 @@ watch(() => currentPositionInWorkflow.value, () => {
   left:0;
   right: 0;
   width: calc(100% - 2 * $spacing-sm);
+
+  @media (max-width: 600px) {
+    height: 100px;
+    margin: 0 auto;
+    padding: 0;
+
+    .state-button:first-of-type,
+    .state-button:last-of-type {
+      width: 49%;
+      position: absolute;
+      bottom: $spacing-sm;
+    }
+
+    .state-button:first-of-type {
+      left: 0;
+    }
+
+    .state-button:last-of-type {
+      right: 0;
+    }
+  }
   
   .state-icon {
     height: 44px;
@@ -179,6 +195,14 @@ watch(() => currentPositionInWorkflow.value, () => {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @media (max-width: 600px) {
+      width: 100%;
+      top: 0;
+    }
 
     &.open {
       .state-arrow {

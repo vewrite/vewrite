@@ -8,14 +8,14 @@
     </div>
 
     <div v-if="type == 'moveToPrev'">
-      <div class="button" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
+      <div class="button" v-if="StateInstanceData" @click="handleStateChange(deliverableId, state)">
         <Icon name="mdi:chevron-left" size="1.5rem" />
         <p>{{ StateInstanceData[0].instance_name }}</p>
       </div> 
     </div>
 
     <div v-if="type == 'moveToNext'">
-      <div class="button primary" v-if="StateInstanceData" @click="updateDeliverableWorkflowState(deliverableId, state)">
+      <div class="button primary" v-if="StateInstanceData" @click="handleStateChange(deliverableId, state)">
         <p>{{ StateInstanceData[0].instance_name }}</p>
         <Icon name="mdi:chevron-right" size="1.5rem" />
       </div> 
@@ -39,6 +39,16 @@ const { fetchSingleStateInstance, StateInstanceData, StateInstanceError } = useW
 
 import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState } = useDeliverables();
+
+import { useDeliverableStore } from '~/stores/deliverable';
+const deliverableStore = useDeliverableStore();
+
+const emit = defineEmits(['stateChange']);
+
+async function handleStateChange() {
+  await updateDeliverableWorkflowState(props.deliverableId, props.state);
+  deliverableStore.setDeliverableState(props.deliverableId, props.state);
+}
 
 onMounted(async () => {
   if(props.state){
