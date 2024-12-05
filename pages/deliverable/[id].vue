@@ -202,16 +202,20 @@ const deliverableStore = useDeliverableStore();
 watch(
   () => deliverableStore.stateInstanceId,
   async () => {
-    loading.value = true;
-    await fetchDeliverableState(deliverableId);
-    await getDeliverable(deliverableId);
-    await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
-    await fetchWorkflowStates();
-    await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
-    await fetchSingleState(StateInstanceData.value[0].state_type);
-    loading.value = false;
+    refreshDeliverable();
   }
 );
+
+async function refreshDeliverable() {
+  loading.value = true;
+  await fetchDeliverableState(deliverableId);
+  await getDeliverable(deliverableId);
+  await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
+  await fetchWorkflowStates();
+  await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
+  await fetchSingleState(StateInstanceData.value[0].state_type);
+  loading.value = false;
+}
 
 onMounted(async () => {
   try {
@@ -233,14 +237,7 @@ onMounted(async () => {
       supabase.removeSubscription(subscription);
     });
 
-    loading.value = true;
-    await fetchDeliverableState(deliverableId);
-    await getDeliverable(deliverableId);
-    await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
-    await fetchWorkflowStates();
-    await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
-    await fetchSingleState(StateInstanceData.value[0].state_type);
-    loading.value = false;
+    refreshDeliverable();
 
   } catch (error) {
     console.error(error);
