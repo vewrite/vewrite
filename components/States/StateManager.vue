@@ -234,6 +234,7 @@ watch(() => currentPositionInWorkflow.value, () => {
     .state-arrow {
       transform: rotate(0deg);
       transition: transform 0.3s ease;
+      background-color: $black;
     }
 
     .loading-icon {
