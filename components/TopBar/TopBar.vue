@@ -221,6 +221,7 @@ header {
 
       &.active {
         animation: scaleBounce 0.35s ease;
+        animation-fill-mode: forwards;
         opacity: 1;
         pointer-events: all;
       }
