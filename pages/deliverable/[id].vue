@@ -201,13 +201,15 @@ const deliverableStore = useDeliverableStore();
 
 watch(
   () => deliverableStore.stateInstanceId,
-  async (newState) => {
-      loading.value = true;
-      await fetchDeliverableState(deliverableStore.deliverableId);
-      await fetchWorkflowStates();
-      await fetchSingleStateInstance(newState);
-      await fetchSingleState(StateInstanceData.value[0].state_type);
-      loading.value = false;
+  async () => {
+    loading.value = true;
+    await fetchDeliverableState(deliverableId);
+    await getDeliverable(deliverableId);
+    await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
+    await fetchWorkflowStates();
+    await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
+    await fetchSingleState(StateInstanceData.value[0].state_type);
+    loading.value = false;
   }
 );
 

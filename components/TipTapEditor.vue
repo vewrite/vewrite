@@ -107,8 +107,6 @@ const tiptapDeliverable = ref({
   }
 });
 
-console.log('tiptapDeliverable', tiptapDeliverable);
-
 watch(editor, (newEditor) => {
   if (newEditor) {
     newEditor.on('update', () => {
