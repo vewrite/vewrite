@@ -180,7 +180,6 @@ export default function useDeliverables() {
   }
 
   async function updateDeliverableContent(deliverableId, stateinstance_id, content) {
-    console.log(deliverableId, stateinstance_id, content)
     try {
       const { data, error } = await supabase
         .from('deliverable_content')
@@ -190,7 +189,6 @@ export default function useDeliverables() {
 
       if (error) throw error;
 
-      console.log('returns', data)
       return data;
 
     } catch (error) {

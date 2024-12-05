@@ -196,6 +196,21 @@ async function handleStateChange({ deliverableId, newState }){
   console.log('State changed:', deliverableId, newState);
 }
 
+import { useDeliverableStore } from '~/stores/deliverable';
+const deliverableStore = useDeliverableStore();
+
+watch(
+  () => deliverableStore.stateInstanceId,
+  async (newState) => {
+      loading.value = true;
+      await fetchDeliverableState(deliverableStore.deliverableId);
+      await fetchWorkflowStates();
+      await fetchSingleStateInstance(newState);
+      await fetchSingleState(StateInstanceData.value[0].state_type);
+      loading.value = false;
+  }
+);
+
 onMounted(async () => {
   try {
     const subscription = supabase
