@@ -113,7 +113,6 @@ watch(editor, (newEditor) => {
   if (newEditor) {
     newEditor.on('update', () => {
       tiptapDeliverable.value.content.content = newEditor.getHTML();
-      console.log('tiptapDeliverable', tiptapDeliverable);
     });
   }
 });
@@ -163,13 +162,22 @@ function updateDeliverable() {
 
   #TipTapTools {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: $spacing-sm;
     margin: 0;
     align-items: center;
     justify-content: center;
     background: rgba($brand, 0.05);
     border-radius: $br-md;
+
+    @media (max-width: 1180px) {
+      gap: $spacing-xxs;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: $spacing-xs $spacing-sm;
+      align-items: center;
+      justify-content: flex-start;
+    }
 
     .button-group {
       display: flex;
@@ -179,6 +187,10 @@ function updateDeliverable() {
       border-right: $border;
       padding-right: $spacing-sm;
       min-height: 35px;
+      
+      @media (max-width: 1180px) {
+        padding-right: $spacing-xxs;
+      }
 
       &:last-child {
         border-right: none;
@@ -187,6 +199,11 @@ function updateDeliverable() {
 
     button {
       cursor: pointer;
+      
+      @media (max-width: 1480px) {
+        padding: $spacing-xxs $spacing-xxs;
+        min-width: 28px;
+      }
 
       &.is-active {
         background-color: $brand;
