@@ -145,8 +145,6 @@ function updateDeliverable() {
   width: calc(100% - 2 * $spacing-sm);
   height: calc(100% - $spacing-sm);
   margin: $spacing-sm $spacing-sm 0;
-  border: $border;
-  border-radius: $br-lg;
   overflow: hidden;
 
   div {
@@ -166,7 +164,7 @@ function updateDeliverable() {
     align-items: center;
     justify-content: center;
     background: rgba($brand, 0.05);
-    border-radius: $br-md;
+    border-radius: $br-xl;
 
     @media (max-width: 1180px) {
       gap: $spacing-xxs;

@@ -16,8 +16,6 @@
       </div>
     </template>
     <template v-slot:body>
-      <!-- <pre v-if="DeliverableData">{{ DeliverableData }}</pre>
-      <pre v-if="deliverable">{{ deliverable }}</pre> -->
       <Loading v-if="loading" />
       <aside class="object-overview" v-if="deliverable && !loading">
         <div class="object-summary">
@@ -25,14 +23,6 @@
           <input class="object-description-input" v-model="deliverable.description" @input="updateDeliverable" />
         </div>
       </aside>
-      <!-- <pre v-if="StateInstanceData && StateType">
-        - Current state: {{ CurrentState }}
-        - All states: {{ workflowStates }}
-        - State instance is: {{ StateInstanceData }}
-        - State type is: {{ StateType.name }}
-        - Is first state: {{ isFirstState }}
-        - Is last state: {{ isLastState }}
-      </pre> -->
       <Loading v-if="loading" />
       <section class="deliverable-manager" v-if="DeliverableData && StateData && !loading" @stateChange="handleStateChange">
         <!-- New state -->
@@ -93,7 +83,6 @@ const route = useRoute();
 const deliverableId = route.params.id;
 const deliverable = ref(null);
 const workflowStates = ref([]);
-// const CurrentState = ref(null);
 const isFirstState = ref(false);
 const isLastState = ref(false);
 
