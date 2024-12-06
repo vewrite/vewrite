@@ -412,7 +412,8 @@ function updateDeliContent() {
       align-items: center;
       border-radius: $br-lg;
       margin: $spacing-sm $spacing-sm 0 ;
-      background: rgba($black, 0.05);
+      background: rgba($black, 0.025);
+      box-shadow: inset 0 0 40px 20px white;
 
       .instruction-set {
         width: calc(100% - 2 * $spacing-sm);
@@ -424,7 +425,7 @@ function updateDeliContent() {
         display: flex;
         flex-direction: column;
         gap: $spacing-xxs;
-        box-shadow: $main-shadow;
+        box-shadow: $big-shadow;
 
         p {
           margin: 0;
