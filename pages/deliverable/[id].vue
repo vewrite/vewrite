@@ -53,7 +53,11 @@
             </section>
 
             <section class="external-link-warning notification warning" v-if="DeliverableData.content.content == ''">
-              This deliverable does not have a link assigned. It's your job to create a new document and paste the link here.
+              <Icon name="fluent:document-20-regular" size="3.5rem" />
+              <section>
+                <h4>No external link for this state</h4>
+                <p>This deliverable does not have a link assigned. It's your job to create a new document and paste the link here.</p>
+              </section>
             </section>
             
           </section>
@@ -412,8 +416,8 @@ function updateDeliContent() {
       align-items: center;
       border-radius: $br-lg;
       margin: $spacing-sm $spacing-sm 0 ;
-      background: rgba($black, 0.025);
-      box-shadow: inset 0 0 40px 20px white;
+      background: rgba($brand, 0.05);
+      box-shadow: inset 0 0 120px 120px white;
 
       .instruction-set {
         width: calc(100% - 2 * $spacing-sm);

@@ -87,34 +87,55 @@ body,
 .notification {
     padding: $spacing-md;
     border-radius: $br-md;
+    gap: $spacing-sm;
     color: $brand;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    text-align: left;
 
     .iconify {
-        margin: 0 0 $spacing-sm 0;
+        margin: 0;
     }
 
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xxs;
+
+        h4, p {
+            margin: 0;
+        }
+
+        p {
+            opacity: 0.75;   
+        }
+    }
+
+
+
     &.info {
-        background: rgba($brand, 0.05);
+        background: rgba($brand, 0.2);
+        outline: 1px solid rgba($brand, 0.5);
         color: $black-light;
     }
 
     &.warning {
-        background: rgba($orange, 0.05);
+        background: rgba($orange, 0.2);
+        outline: 1px solid rgba($orange, 0.5);
         color: $orange-dark;
     }
 
     &.success {
-        background: rgba($mint, 0.1);
+        background: rgba($mint, 0.2);
+        outline: 1px solid rgba($mint, 0.5);
         color: $mint-dark;
     }
 
     &.error {
-        background: rgba($red, 0.05);
+        background: rgba($red, 0.2);
+        outline: 1px solid rgba($red, 0.5);
         color: $red;
     }
 
