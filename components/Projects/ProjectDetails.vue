@@ -19,7 +19,7 @@ const props = defineProps(['team', 'client'])
 
 #ProjectDetails {
   background-color: $white;
-  margin: 0 $spacing-md $spacing-md;
+  margin: $spacing-sm $spacing-md $spacing-md;
   padding: $spacing-xxs;
   border: $border;
   border-radius: $br-lg;
