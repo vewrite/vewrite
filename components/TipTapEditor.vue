@@ -163,8 +163,6 @@ function updateDeliverable() {
     margin: 0;
     align-items: center;
     justify-content: center;
-    background: rgba($brand, 0.05);
-    border-radius: $br-xl;
 
     @media (max-width: 1180px) {
       gap: $spacing-xxs;
@@ -179,9 +177,8 @@ function updateDeliverable() {
       display: flex;
       gap: $spacing-xxxs;
       padding: $spacing-xxxs;
-      border-radius: $br-md;
-      border-right: $border;
-      padding-right: $spacing-sm;
+      background: rgba($brand, 0.05);
+      border-radius: $br-lg;
       min-height: 35px;
       
       @media (max-width: 1180px) {

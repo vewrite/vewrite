@@ -39,9 +39,7 @@ export default defineNuxtConfig({
   pages: true,
 
   devtools: {
-    timeline: {
-      enabled: true,
-    },
+    enabled: false,
   },
   
 })
