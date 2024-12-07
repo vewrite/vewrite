@@ -227,7 +227,6 @@ watch(() => currentPositionInWorkflow.value, () => {
       small {
         color: rgba($black, 0.5);
         font-size: $font-size-xs;
-        font-weight: 500;
       }
     }
 

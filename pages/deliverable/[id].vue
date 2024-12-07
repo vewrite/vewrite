@@ -24,6 +24,18 @@
         </div>
       </aside>
       <Loading v-if="loading" />
+
+      <section class="deliverable-tabs">
+        <div class="deliverable-tab">
+          <p><small>Previous state</small></p>
+          <p>{{ StateData.name }}</p>
+        </div>
+        <div class="deliverable-tab active">
+          <p><small>Current state</small></p>
+          <p>{{ StateData.name }}</p>
+        </div>
+      </section>
+
       <section class="deliverable-manager" v-if="DeliverableData && StateData && !loading" @stateChange="handleStateChange">
         <!-- New state -->
         <div class="deliverable-editor" v-if="DeliverableData && !loading">
@@ -484,5 +496,47 @@ function updateDeliContent() {
   }
 }
 
+.deliverable-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-md;
+  border-bottom: $border;
+  background: linear-gradient(to bottom, $white 60%, rgba($white-dark, 0.5));
+  margin-top: $spacing-sm;
+
+  .deliverable-tab {
+    padding: $spacing-xxs $spacing-sm;
+    border-radius: $br-md $br-md 0 0;
+    background: transparent;
+    cursor: pointer;
+    width: 40%;
+    text-align: center;
+    margin-bottom: -1px;
+    border: $border;
+    border-bottom: 0;
+    font-weight: bold;
+    font-size: $font-size-xs;
+    color: $black;
+    text-transform: capitalize;
+
+    p {
+      margin: 0;
+
+      small {
+        color: rgba($black, 0.5);
+        font-size: $font-size-xs;
+      }
+    }
+
+    &.active {
+      border: $border;
+      border-bottom: 1px solid $white;
+      background: $white;
+      color: $black;
+    }
+  }
+}
 
 </style>
