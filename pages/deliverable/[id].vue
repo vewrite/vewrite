@@ -24,57 +24,15 @@
         </div>
       </aside>
       <Loading v-if="loading" />
-
       <section class="deliverable-tabs" v-if="StateData && PreviousDeliverableData && PreviousDeliverableId != 0">
         <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
-          <!-- <p><small>Previous state</small></p> -->
           <p>{{ PreviousDeliverableData[0].instance_name }}</p>
         </div>
         <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''" @click="handleTabChange('current')">
-          <!-- <p><small>Current state</small></p> -->
           <p>{{ StateData.name }}</p>
         </div>
       </section>
-
-      <section class="deliverable-manager" v-if="DeliverableData && StateData && !loading" @stateChange="handleStateChange">
-        <!-- New state -->
-        <div class="deliverable-editor" v-if="DeliverableData && !loading">
-          
-          <!-- Internal Editor  -->
-          <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
-           
-           <!-- External Link -->
-           <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
-            <section class="instruction-set">
-              <p class="instruction-information">{{ StateData.name }} deliverable</p>
-              <p>{{ StateData.description }}</p>
-              <section class="link-set">
-                <section class="link-content">
-                  <div class="form-input">
-                    <label for="external-link">This state's content location</label>
-                    <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliContent" />
-                  </div>
-                  <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
-                    <Icon name="fluent:open-16-regular" size="1.5rem" />
-                  </button>
-                  <button class="button large" @click="copyToClipboard(DeliverableData.content.content)">
-                    <Icon name="fluent:copy-16-regular" size="1.5rem" />
-                  </button>
-                </section>
-              </section>
-            </section>
-
-            <section class="external-link-warning notification warning" v-if="DeliverableData.content.content == ''">
-              <Icon name="fluent:document-20-regular" size="3.5rem" />
-              <section>
-                <h4>No external link for this state</h4>
-                <p>This deliverable does not have a link assigned. It's your job to create a new document and paste the link here.</p>
-              </section>
-            </section>
-            
-          </section>
-        </div>
-      </section>
+      <DeliverableManager v-if="DeliverableData && StateData && !loading" :deliverable="deliverable" :DeliverableData="DeliverableData" :StateData="StateData" />
       <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
     </template>
   </AppPanel>
@@ -91,6 +49,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import StateManager from '~/components/States/StateManager.vue';
+import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
