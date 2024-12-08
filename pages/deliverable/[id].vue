@@ -25,13 +25,13 @@
       </aside>
       <Loading v-if="loading" />
 
-      <section class="deliverable-tabs">
-        <div class="deliverable-tab">
-          <p><small>Previous state</small></p>
-          <p>{{ StateData.name }}</p>
+      <section class="deliverable-tabs" v-if="StateData && PreviousDeliverableData && PreviousDeliverableId != 0">
+        <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
+          <!-- <p><small>Previous state</small></p> -->
+          <p>{{ PreviousDeliverableData[0].instance_name }}</p>
         </div>
-        <div class="deliverable-tab active">
-          <p><small>Current state</small></p>
+        <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''" @click="handleTabChange('current')">
+          <!-- <p><small>Current state</small></p> -->
           <p>{{ StateData.name }}</p>
         </div>
       </section>
@@ -101,6 +101,9 @@ const deliverable = ref(null);
 const workflowStates = ref([]);
 const isFirstState = ref(false);
 const isLastState = ref(false);
+const ActiveTab = ref('current');
+const PreviousDeliverableId = ref(null);
+const PreviousDeliverableData = ref(null);
 
 // useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
@@ -118,7 +121,6 @@ const { fetchSingleState, StateData } = useWorkflowStateTypes();
 import useUtils from '~/composables/useUtils';
 const { copyToClipboard, openInNewTab } = useUtils();
 
-// TODO - migrate to composable
 async function getDeliverable(id) {
   try {
     const { data, error } = await supabase
@@ -143,10 +145,27 @@ async function getDeliverable(id) {
   }
 }
 
+function handleTabChange(tab) {
+  ActiveTab.value = tab;
+}
+
+function setPreviousDeliverableId(WorkflowStates, CurrentState) {
+  console.log('WorkflowStates:', WorkflowStates);
+  console.log('CurrentState:', CurrentState);
+  let PreviousState = WorkflowStates[WorkflowStates.indexOf(CurrentState) - 1];
+  
+  // If is first state, set to null
+  if (isFirstState.value) {
+    return 0;
+  } else {
+    return PreviousState;
+  }
+}
+
 async function fetchWorkflowStates() {
   try {
     loading.value = true;
-    // 1. Get the current deliverable ID
+    // 1. Get the current deliverable ID and set the previous state too
     const deliverableId = route.params.id;
 
     // 2. Get the project ID from the deliverable
@@ -189,6 +208,9 @@ async function fetchWorkflowStates() {
     if (workflowStates.value[workflowStates.value.length - 1] === DeliverableWorkflowStateData.value) {
       isLastState.value = true;
     }
+
+    PreviousDeliverableId.value = setPreviousDeliverableId(workflowStates.value, DeliverableWorkflowStateData.value);
+    PreviousDeliverableData.value = await fetchSingleStateInstance(PreviousDeliverableId.value);
 
   } catch (error) {
     console.error('Error fetching workflow states:', error);
@@ -501,25 +523,22 @@ function updateDeliContent() {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: $spacing-md;
-  border-bottom: $border;
-  background: linear-gradient(to bottom, $white 60%, rgba($white-dark, 0.5));
+  gap: $spacing-sm;
   margin-top: $spacing-sm;
 
   .deliverable-tab {
-    padding: $spacing-xxs $spacing-sm;
-    border-radius: $br-md $br-md 0 0;
+    padding: $spacing-xxxs $spacing-xs;
+    border-radius: $br-lg;
     background: transparent;
     cursor: pointer;
-    width: 40%;
+    min-width: 180px;
     text-align: center;
     margin-bottom: -1px;
-    border: $border;
-    border-bottom: 0;
     font-weight: bold;
     font-size: $font-size-xs;
     color: $black;
     text-transform: capitalize;
+    background: rgba($brand, 0.05);
 
     p {
       margin: 0;
@@ -531,9 +550,7 @@ function updateDeliContent() {
     }
 
     &.active {
-      border: $border;
-      border-bottom: 1px solid $white;
-      background: $white;
+      background: rgba($brand, 0.25);
       color: $black;
     }
   }

@@ -177,8 +177,6 @@ function updateDeliverable() {
       display: flex;
       gap: $spacing-xxxs;
       padding: $spacing-xxxs;
-      background: rgba($brand, 0.05);
-      border-radius: $br-lg;
       min-height: 35px;
       
       @media (max-width: 1180px) {
