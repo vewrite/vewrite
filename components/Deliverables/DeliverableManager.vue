@@ -42,6 +42,10 @@
 
 <script setup>
 
+// useUtils composable
+import useUtils from '~/composables/useUtils';
+const { copyToClipboard, openInNewTab } = useUtils();
+
 defineProps({
   deliverable: {
     type: Object,
@@ -59,5 +63,9 @@ defineProps({
     required: true,
   },
 });
+
+async function handleStateChange({ deliverableId, newState }){
+  console.log('State changed:', deliverableId, newState);
+}
 
 </script>

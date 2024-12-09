@@ -17,13 +17,7 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <aside class="object-overview" v-if="deliverable && !loading">
-        <div class="object-summary">
-          <input class="object-title-input" v-model="deliverable.title" @input="updateDeliverable" />
-          <input class="object-description-input" v-model="deliverable.description" @input="updateDeliverable" />
-        </div>
-      </aside>
-      <Loading v-if="loading" />
+      <ObjectOverview v-if="deliverable && !loading" :deliverable="deliverable" />
       <section class="deliverable-tabs" v-if="StateData && PreviousDeliverableData && PreviousDeliverableId != 0">
         <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
           <p>{{ PreviousDeliverableData[0].instance_name }}</p>
@@ -64,21 +58,17 @@ const ActiveTab = ref('current');
 const PreviousDeliverableId = ref(null);
 const PreviousDeliverableData = ref(null);
 
-// useDeliverable composable
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverable, fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, updateDeliverableContent, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
+const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, DeliverableData } = useDeliverables();
 
-// useWorkflowStateInstances composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
 
-// useWorkflowStateTypes composable
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
 const { fetchSingleState, StateData } = useWorkflowStateTypes();
 
-// useUtils composable
-import useUtils from '~/composables/useUtils';
-const { copyToClipboard, openInNewTab } = useUtils();
+import { useDeliverableStore } from '~/stores/deliverable';
+const deliverableStore = useDeliverableStore();
 
 async function getDeliverable(id) {
   try {
@@ -178,13 +168,6 @@ async function fetchWorkflowStates() {
   }
 }
 
-async function handleStateChange({ deliverableId, newState }){
-  console.log('State changed:', deliverableId, newState);
-}
-
-import { useDeliverableStore } from '~/stores/deliverable';
-const deliverableStore = useDeliverableStore();
-
 watch(
   () => deliverableStore.stateInstanceId,
   async () => {
@@ -230,24 +213,24 @@ onMounted(async () => {
   }
 });
 
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
+// function debounce(func, wait) {
+//   let timeout;
+//   return function(...args) {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => func.apply(this, args), wait);
+//   };
+// }
 
-const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
-const debouncedUpdateDeliverableContent = debounce(() => updateDeliverableContent(DeliverableData.value.deliverable_id, DeliverableData.value.stateinstance_id, DeliverableData.value.content), 1000);
+// const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
+// const debouncedUpdateDeliverableContent = debounce(() => updateDeliverableContent(DeliverableData.value.deliverable_id, DeliverableData.value.stateinstance_id, DeliverableData.value.content), 1000);
 
-function updateDeliverable() {
-  debouncedSaveDeliverable();
-}
+// function updateDeliverable() {
+//   debouncedSaveDeliverable();
+// }
 
-function updateDeliContent() {
-  debouncedUpdateDeliverableContent();
-}
+// function updateDeliContent() {
+//   debouncedUpdateDeliverableContent();
+// }
 
 </script>
 
