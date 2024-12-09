@@ -45,23 +45,26 @@ import StateButton from '~/components/States/StateButton.vue';
 import StateRow from '~/components/States/StateRow.vue';
 
 const props = defineProps(['deliverable', 'states']);
+
+console.log(props);
+
 const currentPositionInWorkflow = ref(null);
 const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
-
 const loading = ref(true);
-
 const collapsed = ref(true)
+const StateInstanceData = ref(null)
+const StateData = ref(null)
 
 function toggleStateManagerPanel() {
   collapsed.value = !collapsed.value
 }
 
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
-const { fetchSingleState, StateData } = useWorkflowStateTypes();
+const { fetchSingleState } = useWorkflowStateTypes();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
-const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 const stateDetails = ref(null);
 
@@ -99,12 +102,12 @@ function getStatus(index) {
 async function setIcon(){
   loading.value = true;
   try {
-    await fetchSingleStateInstance(props.deliverable.workflow_state)
+    StateInstanceData.value = await fetchSingleStateInstance(props.deliverable.workflow_state)
     if (!StateInstanceData.value) {
       throw new Error('Failed to fetch state instance')
     }
 
-    await fetchSingleState(StateInstanceData.value[0].state_type)
+    StateData.value = await fetchSingleState(StateInstanceData.value[0].state_type)
     if (!StateData.value) {
       throw new Error('Failed to fetch state type')
     }
@@ -161,7 +164,6 @@ watch(() => currentPositionInWorkflow.value, () => {
   justify-content: space-between;
   flex-direction: row;
   gap: $spacing-xs;
-  padding: $spacing-xxs 0;
   position: absolute;
   bottom: 0;
   left:0;

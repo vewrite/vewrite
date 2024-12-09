@@ -47,11 +47,6 @@ import useUtils from '~/composables/useUtils';
 const { copyToClipboard, openInNewTab } = useUtils();
 
 defineProps({
-  deliverable: {
-    type: Object,
-    default: null,
-    required: true,
-  },
   DeliverableData: {
     type: Object,
     default: null,

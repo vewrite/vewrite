@@ -89,7 +89,7 @@ export default function useWorkflowStateInstances() {
 
       if (error) throw error;
 
-      StateInstanceData.value = data;
+      // StateInstanceData.value = data;
       return data;
 
     } catch (error) {

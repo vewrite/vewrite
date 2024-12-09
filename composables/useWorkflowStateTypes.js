@@ -121,11 +121,6 @@ export default function useWorkflowStateTypes() {
     }
   }
 
-  /*
-  fetchSingleState
-  - Fetches a state by id
-  - Accepts a stateId
-  */
   async function fetchSingleState(stateId) {
     try {
       const { data, error } = await supabase
@@ -135,7 +130,7 @@ export default function useWorkflowStateTypes() {
 
       if (error) throw error;
 
-      StateData.value = data[0];
+      // StateData.value = data[0];
       return data[0];
 
     } catch (error) {

@@ -1,10 +1,10 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link v-if="deliverable && !loading" :to="'/project/' + projectId" class="button">
+      <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
-      <div class="app-panel-header-buttons">
+      <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <Dropdown>
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -17,17 +17,31 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <ObjectOverview v-if="deliverable && !loading" :deliverable="deliverable" />
-      <section class="deliverable-tabs" v-if="StateData && PreviousDeliverableData && PreviousDeliverableId != 0">
+      <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+      <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0">
         <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
-          <p>{{ PreviousDeliverableData[0].instance_name }}</p>
+          <p>{{ PreviousStateData.name }}</p>
         </div>
         <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''" @click="handleTabChange('current')">
           <p>{{ StateData.name }}</p>
         </div>
       </section>
-      <DeliverableManager v-if="DeliverableData && StateData && !loading" :deliverable="deliverable" :DeliverableData="DeliverableData" :StateData="StateData" />
-      <StateManager v-if="deliverable && workflowStates" :deliverable="deliverable" :states="workflowStates" />
+      <section class="deliverables" v-if="PreviousDeliverableContentData && DeliverableContentData && 
+                                          StateData && PreviousStateData && 
+                                          !loading
+      ">
+        <section v-if="ActiveTab == 'previous'">
+          <pre>PreviousDeliverableContentData: {{ PreviousDeliverableContentData }}</pre>
+          <pre>PreviousStateData: {{ PreviousStateData }}</pre>
+        </section>
+        <section v-if="ActiveTab == 'current'">
+          <pre>DeliverableContentData: {{ DeliverableContentData }}</pre>
+          <pre>StateData: {{ StateData }}</pre>
+        </section>
+        <DeliverableManager v-if="ActiveTab == 'previous'" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" />
+        <DeliverableManager v-if="ActiveTab == 'current'" :DeliverableData="DeliverableContentData" :StateData="StateData" />
+      </section>
+      <StateManager v-if="DeliverableData && workflowStates" :deliverable="DeliverableData" :states="workflowStates" />
     </template>
   </AppPanel>
 </template>
@@ -49,28 +63,38 @@ const supabase = useSupabaseClient();
 const loading = ref(true);
 const projectId = ref(null);
 const route = useRoute();
-const deliverableId = route.params.id;
-const deliverable = ref(null);
 const workflowStates = ref([]);
 const isFirstState = ref(false);
 const isLastState = ref(false);
 const ActiveTab = ref('current');
+
+// This deliverable
+const deliverableId = route.params.id;
+const DeliverableData = ref(null);
+const DeliverableContentData = ref(null);
+const StateData = ref(null);
+const StateInstanceData = ref(null);
+
+// Previous deliverable
 const PreviousDeliverableId = ref(null);
-const PreviousDeliverableData = ref(null);
+const PreviousDeliverableContentData = ref(null);
+const PreviousStateData = ref(null);
+const PreviousStateInstanceData = ref(null);
 
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, DeliverableData } = useDeliverables();
+const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal } = useDeliverables();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
-const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
-const { fetchSingleState, StateData } = useWorkflowStateTypes();
+const { fetchSingleState } = useWorkflowStateTypes();
 
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
 async function getDeliverable(id) {
+  console.log('Getting deliverable:', id);
   try {
     const { data, error } = await supabase
       .from('deliverables')
@@ -84,9 +108,8 @@ async function getDeliverable(id) {
       data.description = 'No description provided';
     }
 
-    deliverable.value = data;
+    return data;
 
-    projectId.value = data.project;
   } catch (error) {
     console.error(error);
   } finally {
@@ -99,11 +122,8 @@ function handleTabChange(tab) {
 }
 
 function setPreviousDeliverableId(WorkflowStates, CurrentState) {
-  console.log('WorkflowStates:', WorkflowStates);
-  console.log('CurrentState:', CurrentState);
   let PreviousState = WorkflowStates[WorkflowStates.indexOf(CurrentState) - 1];
   
-  // If is first state, set to null
   if (isFirstState.value) {
     return 0;
   } else {
@@ -116,6 +136,7 @@ async function fetchWorkflowStates() {
     loading.value = true;
     // 1. Get the current deliverable ID and set the previous state too
     const deliverableId = route.params.id;
+    console.log('Deliverable ID is:', deliverableId);
 
     // 2. Get the project ID from the deliverable
     const { data: deliverableData, error: deliverableError } = await supabase
@@ -159,7 +180,6 @@ async function fetchWorkflowStates() {
     }
 
     PreviousDeliverableId.value = setPreviousDeliverableId(workflowStates.value, DeliverableWorkflowStateData.value);
-    PreviousDeliverableData.value = await fetchSingleStateInstance(PreviousDeliverableId.value);
 
   } catch (error) {
     console.error('Error fetching workflow states:', error);
@@ -177,12 +197,22 @@ watch(
 
 async function refreshDeliverable() {
   loading.value = true;
+
   await fetchDeliverableState(deliverableId);
-  await getDeliverable(deliverableId);
   await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
   await fetchWorkflowStates();
-  await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
-  await fetchSingleState(StateInstanceData.value[0].state_type);
+
+  // This is the current deliverable
+  DeliverableData.value = await getDeliverable(deliverableId);
+  DeliverableContentData.value = await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
+  StateInstanceData.value = await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
+  StateData.value = await fetchSingleState(StateInstanceData.value[0].state_type);
+
+  // This is the previous deliverable
+  PreviousStateInstanceData.value = await fetchSingleStateInstance(PreviousDeliverableId.value);
+  PreviousStateData.value = await fetchSingleState(PreviousStateInstanceData.value[0].state_type);
+  PreviousDeliverableContentData.value = await fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
+
   loading.value = false;
 }
 
@@ -192,12 +222,20 @@ onMounted(async () => {
       .from('deliverables')
       .on('UPDATE', payload => {
         loading.value = true;
+
         fetchDeliverableState(deliverableId);
-        getDeliverable(deliverableId);
         fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
         fetchWorkflowStates();
-        fetchSingleStateInstance(DeliverableWorkflowStateData.value);
-        fetchSingleState(StateInstanceData.value[0].state_type);
+
+        // This is the current deliverable
+        // DeliverableData.value = getDeliverable(deliverableId);
+        DeliverableData.value = fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value.id);
+        StateInstanceData.value = fetchSingleStateInstance(DeliverableWorkflowStateData.value);
+        StateData.value = fetchSingleState(StateInstanceData.value[0].state_type);
+
+        // This is the previous deliverable
+        PreviousStateData.value = fetchSingleState(PreviousDeliverableId.value);
+        PreviousDeliverableData.value = fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
         loading.value = false;
       })
       .subscribe();
@@ -295,6 +333,11 @@ onMounted(async () => {
       margin: 0;
     }
   }
+}
+
+.deliverables {
+  height: calc(100% - 120px);
+  overflow-y: auto;
 }
 
 .deliverable-manager {

@@ -33,9 +33,10 @@
 <script setup>
 
 const props = defineProps(['deliverableId', 'state', 'type']);
+const StateInstanceData = ref(null);
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
-const { fetchSingleStateInstance, StateInstanceData, StateInstanceError } = useWorkflowStateInstances();
+const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState } = useDeliverables();
@@ -52,12 +53,12 @@ async function handleStateChange() {
 
 onMounted(async () => {
   if(props.state){
-    await fetchSingleStateInstance(props.state);
+    StateInstanceData.value = await fetchSingleStateInstance(props.state);
   }
 });
 
 watch(() => props.state, async () => {
-  await fetchSingleStateInstance(props.state);
+  StateInstanceData.value = await fetchSingleStateInstance(props.state);
 });
 
 </script>
