@@ -1,7 +1,7 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link v-if=" !loading" :to="'/project/' + projectId" class="button">
+      <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
@@ -153,13 +153,13 @@ async function fetchWorkflowStates() {
 
     if (deliverableError) throw deliverableError;
 
-    const projectId = deliverableData.project;
+    let id = deliverableData.project;
 
     // 3. Get the workflow ID from the project
     const { data: projectData, error: projectError } = await supabase
       .from('projects')
       .select('workflow')
-      .eq('id', projectId)
+      .eq('id', id)
       .single();
 
     if (projectError) throw projectError;
@@ -223,6 +223,7 @@ async function refreshDeliverable() {
 }
 
 onMounted(async () => {
+  projectId.value = route.params.id;
   try {
     const subscription = supabase
       .from('deliverables')
