@@ -70,6 +70,13 @@ const stateDetails = ref(null);
 
 watch(() => props.states, () => {
   loading.value = true;
+
+  setCurrentPositionInWorkflow();
+  
+  loading.value = false;
+});
+
+function setCurrentPositionInWorkflow() {
   currentPositionInWorkflow.value = props.states.findIndex((state) => state == props.deliverable.workflow_state);
   
   if (currentPositionInWorkflow.value == 0) {
@@ -83,13 +90,11 @@ watch(() => props.states, () => {
   } else {
     nextPositionInWorkflow.value = currentPositionInWorkflow.value + 1;
   }
-  
-  loading.value = false;
-});
-
-
+}
 
 function getStatus(index) {
+  console.log("index", index)
+  console.log("currentPositionInWorkflow.value", currentPositionInWorkflow.value)
   if (index === currentPositionInWorkflow.value) {
     return 'current';
   } else if (index < currentPositionInWorkflow.value) {
@@ -101,6 +106,7 @@ function getStatus(index) {
 
 async function setIcon(){
   loading.value = true;
+  
   try {
     StateInstanceData.value = await fetchSingleStateInstance(props.deliverable.workflow_state)
     if (!StateInstanceData.value) {
@@ -126,6 +132,7 @@ async function setIcon(){
 }
 
 onMounted(async () => {
+  setCurrentPositionInWorkflow()
   setIcon()
 })
 

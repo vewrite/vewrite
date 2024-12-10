@@ -227,6 +227,7 @@ function updateDeliverable() {
   overflow: hidden;
   padding: 1px $spacing-lg;
   background-color: $white;
+  color: $black-light;
 
   @media (max-width: 960px) {
       padding: $spacing-md;
