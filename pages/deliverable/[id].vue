@@ -18,26 +18,28 @@
     <template v-slot:body>
       <Loading v-if="loading" />
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
-      <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0">
-        <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
-          <p>{{ PreviousStateData.name }}</p>
-        </div>
-        <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''" @click="handleTabChange('current')">
-          <p>{{ StateData.name }}</p>
-        </div>
-      </section>
+      <div class="deliverable-wrapper max-width sm">
+        <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0" :class="ActiveTab == 'current' ? 'right' : 'left'">
+          <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
+            <p>{{ PreviousStateData.name }}</p>
+          </div>
+          <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''" @click="handleTabChange('current')">
+            <p>{{ StateData.name }}</p>
+          </div>
+        </section>
+      </div>
       <section class="deliverables" v-if="PreviousDeliverableContentData && DeliverableContentData && 
                                           StateData && PreviousStateData && 
                                           !loading
       ">
-        <section v-if="ActiveTab == 'previous'">
+        <!-- <section v-if="ActiveTab == 'previous'">
           <pre>PreviousDeliverableContentData: {{ PreviousDeliverableContentData }}</pre>
           <pre>PreviousStateData: {{ PreviousStateData }}</pre>
         </section>
         <section v-if="ActiveTab == 'current'">
           <pre>DeliverableContentData: {{ DeliverableContentData }}</pre>
           <pre>StateData: {{ StateData }}</pre>
-        </section>
+        </section> -->
         <DeliverableManager v-if="ActiveTab == 'previous'" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" />
         <DeliverableManager v-if="ActiveTab == 'current'" :DeliverableData="DeliverableContentData" :StateData="StateData" />
       </section>
@@ -503,27 +505,58 @@ onMounted(async () => {
   }
 }
 
+.deliverable-wrapper {
+  margin: $spacing-sm auto;
+}
+
 .deliverable-tabs {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: $spacing-sm;
-  margin-top: $spacing-sm;
+  margin: 0 $spacing-sm;
+  background: rgba($brand, 0.05);
+  padding: $spacing-xxs;
+  border-radius: $br-xl;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: $spacing-xxs;
+    top: $spacing-xxs;
+    width: calc(50% - 2 * $spacing-xxs);
+    background: rgba($brand, 0.15);
+    border-radius: $br-lg;
+    transition: all .3s ease;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  &.left {
+    &:after {
+      left: $spacing-xxs;
+    }
+  }
+
+  &.right {
+    &:after {
+      left: calc(50% + $spacing-xxs);
+    }
+  }
 
   .deliverable-tab {
     padding: $spacing-xxxs $spacing-xs;
     border-radius: $br-lg;
     background: transparent;
     cursor: pointer;
-    min-width: 180px;
+    width: 50%;
     text-align: center;
     margin-bottom: -1px;
     font-weight: bold;
     font-size: $font-size-xs;
     color: $black;
     text-transform: capitalize;
-    background: rgba($brand, 0.05);
 
     p {
       margin: 0;
@@ -535,8 +568,7 @@ onMounted(async () => {
     }
 
     &.active {
-      background: rgba($brand, 0.25);
-      color: $black;
+      color: $brand;
     }
   }
 }
