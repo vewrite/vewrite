@@ -210,6 +210,7 @@ async function refreshDeliverable() {
 
   // This is the current deliverable
   DeliverableData.value = await getDeliverable(deliverableId);
+  projectId.value = DeliverableData.value.project;
   DeliverableContentData.value = await fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
   StateInstanceData.value = await fetchSingleStateInstance(DeliverableWorkflowStateData.value);
   StateData.value = await fetchSingleState(StateInstanceData.value[0].state_type);
@@ -223,7 +224,6 @@ async function refreshDeliverable() {
 }
 
 onMounted(async () => {
-  projectId.value = route.params.id;
   try {
     const subscription = supabase
       .from('deliverables')
@@ -235,14 +235,17 @@ onMounted(async () => {
         fetchWorkflowStates();
 
         // This is the current deliverable
-        // DeliverableData.value = getDeliverable(deliverableId);
-        DeliverableData.value = fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value.id);
+        DeliverableData.value = getDeliverable(deliverableId);
+        projectId.value = DeliverableData.value.project;
+        DeliverableContentData.value = fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
         StateInstanceData.value = fetchSingleStateInstance(DeliverableWorkflowStateData.value);
         StateData.value = fetchSingleState(StateInstanceData.value[0].state_type);
 
         // This is the previous deliverable
-        PreviousStateData.value = fetchSingleState(PreviousDeliverableId.value);
-        PreviousDeliverableData.value = fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
+        PreviousStateInstanceData.value = fetchSingleStateInstance(PreviousDeliverableId.value);
+        PreviousStateData.value = fetchSingleState(PreviousStateInstanceData.value[0].state_type);
+        PreviousDeliverableContentData.value = fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
+        
         loading.value = false;
       })
       .subscribe();
