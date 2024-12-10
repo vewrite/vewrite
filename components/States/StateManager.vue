@@ -156,7 +156,7 @@ watch(() => currentPositionInWorkflow.value, () => {
 .state-manager-toggle {
   height: 60px;
   margin: 0 $spacing-sm;
-  background-color: rgba($white, 0.15);
+  background-color: $white;
   backdrop-filter: blur(10px);
   border-radius: $br-lg $br-lg 0 0;
   display: flex;

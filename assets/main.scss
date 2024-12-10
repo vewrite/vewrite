@@ -836,7 +836,14 @@ button.vertical,
   .ProseMirror {
     padding: $spacing-md $spacing-lg;
     background-color: $white;
-    min-height: 60vh;
+
+    @media (max-width: 960px) {
+        padding: $spacing-md;
+    }
+
+    @media (max-width: 600px) {
+        padding: $spacing-md 0;
+    }
   }
 
   .ProseMirror-focused {
