@@ -40,7 +40,7 @@
           <pre>DeliverableContentData: {{ DeliverableContentData }}</pre>
           <pre>StateData: {{ StateData }}</pre>
         </section> -->
-        <DeliverableManager v-if="ActiveTab == 'previous'" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" />
+        <DeliverableManager v-if="ActiveTab == 'previous'" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" :editable="false" />
         <DeliverableManager v-if="ActiveTab == 'current'" :DeliverableData="DeliverableContentData" :StateData="StateData" />
       </section>
       <StateManager v-if="DeliverableData && workflowStates" :deliverable="DeliverableData" :states="workflowStates" />

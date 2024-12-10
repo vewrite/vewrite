@@ -4,7 +4,7 @@
     <div class="deliverable-editor" v-if="DeliverableData">
       
       <!-- Internal Editor  -->
-      <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" />
+      <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" :editable="editable" />
         
         <!-- External Link -->
         <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
@@ -56,6 +56,10 @@ defineProps({
     type: Object,
     default: null,
     required: true,
+  },
+  editable: {
+    type: Boolean,
+    default: true,
   },
 });
 

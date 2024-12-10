@@ -1,5 +1,5 @@
 <template>
-  <div id="TipTapEditor">
+  <div id="TipTapEditor" v-if="editable">
     <div id="TipTapTools" v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" class="toolbar">
@@ -74,6 +74,10 @@
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
+  <div class="max-width xl not-editable" v-else>
+    <section class="notification info small">Reference the content of the previous state. This is not editable.</section>
+    <section v-html="deliverable.content.content"></section>
+  </div>
 </template>
 
 <script setup>
@@ -87,6 +91,10 @@ const props = defineProps({
   deliverable: {
     type: Object,
     default: null,
+  },
+  editable: {
+    type: Boolean,
+    default: true,
   },
 });
 
@@ -204,6 +212,29 @@ function updateDeliverable() {
         opacity: 0.5;
       }
     }
+  }
+}
+
+.not-editable {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2 * $spacing-sm);
+  height: calc(100% - $spacing-sm);
+  margin: $spacing-sm $spacing-sm 0;
+  overflow: hidden;
+  padding: 1px $spacing-lg;
+  background-color: $white;
+
+  @media (max-width: 960px) {
+      padding: $spacing-md;
+  }
+
+  @media (max-width: 600px) {
+      padding: $spacing-md 0;
+  }
+  
+  .notification {
+    margin-bottom: $spacing-md;
   }
 }
 

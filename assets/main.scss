@@ -95,6 +95,10 @@ body,
     align-items: center;
     text-align: left;
 
+    &.small {
+        padding: $spacing-sm;
+    }
+
     .iconify {
         margin: 0;
     }
@@ -112,8 +116,6 @@ body,
             opacity: 0.75;   
         }
     }
-
-
 
     &.info {
         background: rgba($brand, 0.2);
