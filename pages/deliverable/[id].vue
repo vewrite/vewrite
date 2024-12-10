@@ -19,11 +19,11 @@
       <Loading v-if="loading" />
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <div class="deliverable-wrapper max-width sm">
-        <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0" :class="ActiveTab == 'current' ? 'right' : 'left'">
-          <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''" @click="handleTabChange('previous')">
+        <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0" :class="ActiveTab == 'current' ? 'right' : 'left'" @click="handleTabChange">
+          <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''">
             <p>{{ PreviousStateData.name }}</p>
           </div>
-          <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''" @click="handleTabChange('current')">
+          <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''">
             <p>{{ StateData.name }}</p>
           </div>
         </section>
@@ -119,8 +119,12 @@ async function getDeliverable(id) {
   }
 }
 
-function handleTabChange(tab) {
-  ActiveTab.value = tab;
+function handleTabChange() {
+  if (ActiveTab.value === 'current') {
+    ActiveTab.value = 'previous';
+  } else {
+    ActiveTab.value = 'current';
+  }
 }
 
 function setPreviousDeliverableId(WorkflowStates, CurrentState) {
@@ -526,7 +530,7 @@ onMounted(async () => {
     bottom: $spacing-xxs;
     top: $spacing-xxs;
     width: calc(50% - 2 * $spacing-xxs);
-    background: rgba($brand, 0.15);
+    background: rgba($brand, 0.1);
     border-radius: $br-lg;
     transition: all .3s ease;
     mix-blend-mode: multiply;
