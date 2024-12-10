@@ -1,7 +1,7 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
+      <router-link v-if=" !loading" :to="'/project/' + projectId" class="button">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
