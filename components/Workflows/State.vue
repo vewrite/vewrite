@@ -29,24 +29,26 @@ import Loading from '~/components/Loading.vue'
 const props = defineProps(['state'])
 
 const stateDetails = ref(null)
+const StateData = ref(null)
+const StateInstanceData = ref(null)
 const error = ref(null)
 
 import useWorkflowStateTypes from '~/composables/useWorkflowStateTypes';
-const { fetchSingleState, StateData } = useWorkflowStateTypes();
+const { fetchSingleState } = useWorkflowStateTypes();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
-const { fetchSingleStateInstance, StateInstanceData } = useWorkflowStateInstances();
+const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 onMounted(async () => {
   try {
     // Get the state instance
-    await fetchSingleStateInstance(props.state)
+    StateInstanceData.value = await fetchSingleStateInstance(props.state)
     if (!StateInstanceData.value) {
       throw new Error('Failed to fetch state instance')
     }
 
     // Get the state type
-    await fetchSingleState(StateInstanceData.value[0].state_type)
+    StateData.value = await fetchSingleState(StateInstanceData.value[0].state_type)
     if (!StateData.value) {
       throw new Error('Failed to fetch state type')
     }
