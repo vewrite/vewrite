@@ -79,10 +79,8 @@
 <script setup>
 
 import useDeliverables from '~/composables/useDeliverables';
-const { saveDeliverableContent, deleteDeliverableModal, updateDeliverableTitle, updateDeliverableDescription } = useDeliverables();
+const { saveDeliverableContent } = useDeliverables();
 
-const supabase = useSupabaseClient();
-const loading = ref(true);
 const textareaRef = ref(null);
 
 const props = defineProps({
@@ -95,7 +93,7 @@ const props = defineProps({
 const deliverable = ref(props.deliverable);
 
 const editor = useEditor({
-  content: deliverable.value.content.content, // this is what should be pulling from 
+  content: deliverable.value.content.content,
   extensions: [TiptapStarterKit],
 });
 
