@@ -1,6 +1,6 @@
 <template>
   <div id="TipTapEditor" v-if="editable">
-    <div id="TipTapTools" v-if="editor">
+    <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -75,7 +75,7 @@
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
   <div class="max-width xl not-editable" v-else>
-    <section class="notification info small">Reference the content of the previous state. This is not editable.</section>
+    <section class="notification warning small">Reference the content of the previous state. This is not editable.</section>
     <section v-html="deliverable.content.content"></section>
   </div>
 </template>
@@ -152,6 +152,7 @@ function updateDeliverable() {
   height: calc(100% - $spacing-sm);
   margin: $spacing-sm $spacing-sm 0;
   overflow: hidden;
+  padding: 1px $spacing-lg;
 
   div {
 
@@ -169,6 +170,10 @@ function updateDeliverable() {
     margin: 0;
     align-items: center;
     justify-content: center;
+    background: rgba($brand, 0.1);
+    padding: $spacing-xxxs;
+    border-radius: $br-md;
+    min-height: 43.3px;
 
     @media (max-width: 1180px) {
       gap: $spacing-xxs;
@@ -182,8 +187,6 @@ function updateDeliverable() {
     .button-group {
       display: flex;
       gap: $spacing-xxxs;
-      padding: $spacing-xxxs;
-      min-height: 35px;
       
       @media (max-width: 1180px) {
         padding-right: $spacing-xxs;

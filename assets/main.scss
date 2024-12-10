@@ -96,7 +96,7 @@ body,
     text-align: left;
 
     &.small {
-        padding: $spacing-sm;
+        padding: $spacing-xs $spacing-sm;
     }
 
     .iconify {
@@ -118,26 +118,22 @@ body,
     }
 
     &.info {
-        background: rgba($brand, 0.2);
-        outline: 1px solid rgba($brand, 0.5);
-        color: $black-light;
+        background: rgba($brand, 0.1);
+        color: rgba($black, 0.5);
     }
 
     &.warning {
-        background: rgba($orange, 0.2);
-        outline: 1px solid rgba($orange, 0.5);
+        background: rgba($orange, 0.1);
         color: $orange-dark;
     }
 
     &.success {
-        background: rgba($mint, 0.2);
-        outline: 1px solid rgba($mint, 0.5);
+        background: rgba($mint, 0.1);
         color: $mint-dark;
     }
 
     &.error {
-        background: rgba($red, 0.2);
-        outline: 1px solid rgba($red, 0.5);
+        background: rgba($red, 0.1);
         color: $red;
     }
 
@@ -836,7 +832,7 @@ button.vertical,
   /* TipTap */
 
   .ProseMirror {
-    padding: $spacing-md $spacing-lg;
+    padding: $spacing-md 0;
     background-color: $white;
 
     @media (max-width: 960px) {
