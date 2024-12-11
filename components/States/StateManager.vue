@@ -46,8 +46,6 @@ import StateRow from '~/components/States/StateRow.vue';
 
 const props = defineProps(['deliverable', 'states']);
 
-console.log(props);
-
 const currentPositionInWorkflow = ref(null);
 const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
@@ -93,8 +91,6 @@ function setCurrentPositionInWorkflow() {
 }
 
 function getStatus(index) {
-  console.log("index", index)
-  console.log("currentPositionInWorkflow.value", currentPositionInWorkflow.value)
   if (index === currentPositionInWorkflow.value) {
     return 'current';
   } else if (index < currentPositionInWorkflow.value) {
@@ -106,7 +102,7 @@ function getStatus(index) {
 
 async function setIcon(){
   loading.value = true;
-  
+
   try {
     StateInstanceData.value = await fetchSingleStateInstance(props.deliverable.workflow_state)
     if (!StateInstanceData.value) {

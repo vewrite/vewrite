@@ -87,7 +87,7 @@ body,
 .notification {
     padding: $spacing-md;
     border-radius: $br-md;
-    gap: $spacing-sm;
+    gap: $spacing-xs;
     color: $brand;
     display: flex;
     flex-direction: row;
@@ -832,7 +832,7 @@ button.vertical,
   /* TipTap */
 
   .ProseMirror {
-    padding: $spacing-md 0;
+    padding: $spacing-md;
     background-color: $white;
 
     @media (max-width: 960px) {

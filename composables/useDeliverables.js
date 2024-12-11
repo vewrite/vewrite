@@ -145,6 +145,7 @@ export default function useDeliverables() {
   }
 
   async function fetchSingleProjectDeliverableByState(deliverableId, stateinstance_id) {
+    // console.log('Fetching deliverable content for deliverable/state:', deliverableId, stateinstance_id);
     try {
       const { data, error } = await supabase
         .from('deliverable_content')

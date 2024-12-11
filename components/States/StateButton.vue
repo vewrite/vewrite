@@ -44,9 +44,8 @@ const { updateDeliverableWorkflowState } = useDeliverables();
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
-const emit = defineEmits(['stateChange']);
-
 async function handleStateChange() {
+  console.log('State button setting deliverableStore', props.deliverableId, props.state);
   await updateDeliverableWorkflowState(props.deliverableId, props.state);
   deliverableStore.setDeliverableState(props.deliverableId, props.state);
 }
@@ -60,6 +59,8 @@ onMounted(async () => {
 watch(() => props.state, async () => {
   StateInstanceData.value = await fetchSingleStateInstance(props.state);
 });
+
+
 
 </script>
 

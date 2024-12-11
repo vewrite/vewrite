@@ -1,33 +1,33 @@
 <template>
-  <section class="deliverable-manager" v-if="DeliverableData && StateData" @stateChange="handleStateChange">
+  <section class="deliverable-manager" v-if="props.DeliverableData && props.StateData" @stateChange="handleStateChange">
     <!-- New state -->
-    <div class="deliverable-editor" v-if="DeliverableData">
+    <div class="deliverable-editor" v-if="props.DeliverableData">
       
       <!-- Internal Editor  -->
-      <TipTapEditor v-if="DeliverableData.content.type == 'markdown'" :deliverable="DeliverableData" :editable="editable" />
+      <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
         
         <!-- External Link -->
-        <section class="external-link" v-if="DeliverableData.content.type == 'link'" >
+        <section class="external-link" v-if="props.DeliverableData.content.type == 'link'" >
         <section class="instruction-set">
-          <p class="instruction-information">{{ StateData.name }} deliverable</p>
-          <p>{{ StateData.description }}</p>
+          <p class="instruction-information">{{ props.StateData.name }} deliverable</p>
+          <p>{{ props.StateData.description }}</p>
           <section class="link-set">
             <section class="link-content">
               <div class="form-input">
                 <label for="external-link">This state's content location</label>
-                <input name="external-link" class="link-value" type="text" v-model="DeliverableData.content.content" @input="updateDeliContent" />
+                <input name="external-link" class="link-value" type="text" v-model="props.DeliverableData.content.content" @input="updateDeliContent" />
               </div>
-              <button class="button primary large" @click="openInNewTab(DeliverableData.content.content)">
+              <button class="button primary large" @click="openInNewTab(props.DeliverableData.content.content)">
                 <Icon name="fluent:open-16-regular" size="1.5rem" />
               </button>
-              <button class="button large" @click="copyToClipboard(DeliverableData.content.content)">
+              <button class="button large" @click="copyToClipboard(props.DeliverableData.content.content)">
                 <Icon name="fluent:copy-16-regular" size="1.5rem" />
               </button>
             </section>
           </section>
         </section>
 
-        <section class="external-link-warning notification warning" v-if="DeliverableData.content.content == ''">
+        <section class="external-link-warning notification warning" v-if="props.DeliverableData.content.content == ''">
           <Icon name="fluent:document-20-regular" size="3.5rem" />
           <section>
             <h4>No external link for this state</h4>
@@ -46,21 +46,10 @@
 import useUtils from '~/composables/useUtils';
 const { copyToClipboard, openInNewTab } = useUtils();
 
-defineProps({
-  DeliverableData: {
-    type: Object,
-    default: null,
-    required: true,
-  },
-  StateData: {
-    type: Object,
-    default: null,
-    required: true,
-  },
-  editable: {
-    type: Boolean,
-    default: true,
-  },
+const props = defineProps(['DeliverableData', 'StateData', 'editable']);
+
+watch(() => props.DeliverableData, async () => {
+  console.log('(DeliverableManager) DeliverableData changed:', props.DeliverableData);
 });
 
 async function handleStateChange({ deliverableId, newState }){

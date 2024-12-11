@@ -28,7 +28,7 @@
           </div>
         </section>
       </div>
-      <section class="deliverables" v-if="PreviousDeliverableContentData && DeliverableContentData && 
+      <section class="deliverables" v-if="DeliverableContentData && 
                                           StateData && PreviousStateData && 
                                           !loading
       ">
@@ -40,7 +40,7 @@
           <pre>DeliverableContentData: {{ DeliverableContentData }}</pre>
           <pre>StateData: {{ StateData }}</pre>
         </section> -->
-        <DeliverableManager v-if="ActiveTab == 'previous'" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" :editable="false" />
+        <DeliverableManager v-if="ActiveTab == 'previous' && PreviousDeliverableContentData" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" :editable="false" />
         <DeliverableManager v-if="ActiveTab == 'current'" :DeliverableData="DeliverableContentData" :StateData="StateData" />
       </section>
       <StateManager v-if="DeliverableData && workflowStates" :deliverable="DeliverableData" :states="workflowStates" />
@@ -96,7 +96,6 @@ import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
 async function getDeliverable(id) {
-  console.log('Getting deliverable:', id);
   try {
     const { data, error } = await supabase
       .from('deliverables')
@@ -142,7 +141,6 @@ async function fetchWorkflowStates() {
     loading.value = true;
     // 1. Get the current deliverable ID and set the previous state too
     const deliverableId = route.params.id;
-    console.log('Deliverable ID is:', deliverableId);
 
     // 2. Get the project ID from the deliverable
     const { data: deliverableData, error: deliverableError } = await supabase
@@ -196,12 +194,21 @@ async function fetchWorkflowStates() {
 
 watch(
   () => deliverableStore.stateInstanceId,
-  async () => {
-    refreshDeliverable();
+  async (newState) => {
+    if (newState) {
+      console.log('State instance ID changed [id].vue', deliverableStore.stateInstanceId);
+      refreshDeliverable();
+    }
   }
 );
 
+let numRefreshes = 0;
+
 async function refreshDeliverable() {
+
+  numRefreshes++;
+  console.log('Refreshing deliverable', numRefreshes);
+  
   loading.value = true;
 
   await fetchDeliverableState(deliverableId);
@@ -217,8 +224,14 @@ async function refreshDeliverable() {
 
   // This is the previous deliverable
   PreviousStateInstanceData.value = await fetchSingleStateInstance(PreviousDeliverableId.value);
-  PreviousStateData.value = await fetchSingleState(PreviousStateInstanceData.value[0].state_type);
+  if (PreviousStateInstanceData.value[0] !== undefined) {
+    PreviousStateData.value = await fetchSingleState(PreviousStateInstanceData.value[0].state_type);
+  }
   PreviousDeliverableContentData.value = await fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
+  
+  // Set the deliverable state in the store
+  console.log('Setting deliverable state in store in refreshDeliverable()', deliverableId, DeliverableWorkflowStateData.value);
+  deliverableStore.setDeliverableState(deliverableId, DeliverableWorkflowStateData.value);
 
   loading.value = false;
 }
@@ -229,23 +242,7 @@ onMounted(async () => {
       .from('deliverables')
       .on('UPDATE', payload => {
         loading.value = true;
-
-        fetchDeliverableState(deliverableId);
-        fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
-        fetchWorkflowStates();
-
-        // This is the current deliverable
-        DeliverableData.value = getDeliverable(deliverableId);
-        projectId.value = DeliverableData.value.project;
-        DeliverableContentData.value = fetchSingleProjectDeliverableByState(deliverableId, DeliverableWorkflowStateData.value);
-        StateInstanceData.value = fetchSingleStateInstance(DeliverableWorkflowStateData.value);
-        StateData.value = fetchSingleState(StateInstanceData.value[0].state_type);
-
-        // This is the previous deliverable
-        PreviousStateInstanceData.value = fetchSingleStateInstance(PreviousDeliverableId.value);
-        PreviousStateData.value = fetchSingleState(PreviousStateInstanceData.value[0].state_type);
-        PreviousDeliverableContentData.value = fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
-        
+        refreshDeliverable();
         loading.value = false;
       })
       .subscribe();
@@ -260,25 +257,6 @@ onMounted(async () => {
     console.error(error);
   }
 });
-
-// function debounce(func, wait) {
-//   let timeout;
-//   return function(...args) {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(() => func.apply(this, args), wait);
-//   };
-// }
-
-// const debouncedSaveDeliverable = debounce(() => saveDeliverable(deliverable.value), 1000);
-// const debouncedUpdateDeliverableContent = debounce(() => updateDeliverableContent(DeliverableData.value.deliverable_id, DeliverableData.value.stateinstance_id, DeliverableData.value.content), 1000);
-
-// function updateDeliverable() {
-//   debouncedSaveDeliverable();
-// }
-
-// function updateDeliContent() {
-//   debouncedUpdateDeliverableContent();
-// }
 
 </script>
 

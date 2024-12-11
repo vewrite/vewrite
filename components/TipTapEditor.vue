@@ -75,8 +75,8 @@
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
   <div class="max-width xl not-editable" v-else>
-    <section class="notification warning small">Reference the content of the previous state. This is not editable.</section>
-    <section v-html="deliverable.content.content"></section>
+    <section class="notification warning small"><strong>Not editable</strong>Previous state content</section>
+    <section class="content" v-html="deliverable.content.content"></section>
   </div>
 </template>
 
@@ -112,6 +112,13 @@ const tiptapDeliverable = ref({
     content: ''
   }
 });
+
+watch(() => props.deliverable, (newDeliverable) => {
+  deliverable.value = newDeliverable;
+  if (editor.value) {
+    editor.value.commands.setContent(newDeliverable.content.content);
+  }
+}, { immediate: true });
 
 watch(editor, (newEditor) => {
   if (newEditor) {
@@ -152,7 +159,7 @@ function updateDeliverable() {
   height: calc(100% - $spacing-sm);
   margin: $spacing-sm $spacing-sm 0;
   overflow: hidden;
-  padding: 1px $spacing-lg;
+  padding: 1px 0;
 
   div {
 
@@ -225,9 +232,16 @@ function updateDeliverable() {
   height: calc(100% - $spacing-sm);
   margin: $spacing-sm $spacing-sm 0;
   overflow: hidden;
-  padding: 1px $spacing-lg;
+  padding: 1px 0;
   background-color: $white;
   color: $black-light;
+
+  .content {
+    padding: 0 $spacing-md;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 
   @media (max-width: 960px) {
       padding: $spacing-md;
