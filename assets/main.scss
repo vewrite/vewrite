@@ -760,16 +760,15 @@ button.vertical,
 /* Editable Object Title */
 
 .object-overview {
-    padding: 0 $spacing-sm;
+    padding: $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: $spacing-md;
     margin: 0 auto;
-    background-color: $white;
     width: 100%;
-    height: 60px;
+    min-height: 60px;
 
     &.no-border {
         border-bottom: none;
@@ -789,9 +788,7 @@ button.vertical,
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: $spacing-xxs;
-        padding-top: 0px;
-        padding-bottom: 6px;
+        padding: 0;
         text-align: center;
   
         &:focus,

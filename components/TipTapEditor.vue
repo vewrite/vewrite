@@ -177,7 +177,6 @@ function updateDeliverable() {
     margin: 0;
     align-items: center;
     justify-content: center;
-    background: rgba($brand, 0.05);
     padding: $spacing-xxxs;
     border-radius: $br-lg;
     min-height: 43.3px;

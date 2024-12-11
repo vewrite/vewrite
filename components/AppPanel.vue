@@ -31,7 +31,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    min-height: 60px;
     padding: 0 $spacing-sm;
     position: relative;
     margin: 0 $spacing-sm;
@@ -40,7 +40,7 @@ export default {
     border-right: $border;
     border-top-left-radius: $br-xl;
     border-top-right-radius: $br-xl;
-    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, 1) 50%);
+    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, 0.5) 50%);
 
     @media (max-width: 960px) {
       border: none;

@@ -4,6 +4,7 @@
       <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
+      <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <Dropdown>
           <template v-slot:trigger>
@@ -17,7 +18,6 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <!-- <div class="deliverable-wrapper max-width sm">
         <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0" :class="ActiveTab == 'current' ? 'right' : 'left'" @click="handleTabChange">
           <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''">
@@ -416,13 +416,13 @@ function setCurrentPositionInWorkflow() {
 
   .state-manager {
     padding: $spacing-sm;
-    margin: $spacing-sm $spacing-sm $spacing-sm 0;
+    margin: 0 $spacing-sm $spacing-sm 0;
     height: auto;
 
     .single-workflow {
       display: flex;
       flex-direction: column;
-      gap: $spacing-xs;
+      gap: $spacing-xxxs;
 
 
     }

@@ -76,9 +76,12 @@ onMounted(async () => {
   align-items: center;
   padding: $spacing-xxxs $spacing-xs;
   cursor: pointer;
+  background: rgba($brand, 0.05);
+  border-radius: $br-lg;
 
   &.incomplete {
     color: rgba($black, 0.5);
+    background: $white;
     cursor: not-allowed;
   }
 
