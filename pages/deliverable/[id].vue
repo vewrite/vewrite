@@ -45,6 +45,7 @@
           {{ previousPositionInWorkflow }}
           {{ nextPositionInWorkflow }} -->
           <div class="state-manager-workflow" v-if="DeliverableData && workflowStates">
+            <button class="button primary large">Move to Outline</button>
             <section class="single-workflow">
               <StateRow
                 v-for="(state, index) in workflowStates"
@@ -413,18 +414,25 @@ function setCurrentPositionInWorkflow() {
 .deliverables {
   display: grid;
   grid-template-columns: 1fr 280px;
+  height: 100%;
 
   .state-manager {
-    padding: $spacing-sm;
+    padding: $spacing-sm 0;
     margin: 0 $spacing-sm $spacing-sm 0;
     height: auto;
+
+    .state-manager-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+    }
 
     .single-workflow {
       display: flex;
       flex-direction: column;
-      gap: $spacing-xxxs;
-
-
+      border: $border;
+      border-radius: $br-lg;
+      overflow: hidden;
     }
   }
 }

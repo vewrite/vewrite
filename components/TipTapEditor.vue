@@ -153,13 +153,7 @@ function updateDeliverable() {
 @use 'assets/variables' as *;
 
 #TipTapEditor {
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 2 * $spacing-sm);
-  height: calc(100% - $spacing-sm);
-  margin: $spacing-sm $spacing-sm 0;
-  overflow: hidden;
-  padding: 1px 0;
+  margin: $spacing-sm;
 
   div {
 
@@ -177,9 +171,13 @@ function updateDeliverable() {
     margin: 0;
     align-items: center;
     justify-content: center;
+    background: #F3F4F5;
     padding: $spacing-xxxs;
     border-radius: $br-lg;
-    min-height: 43.3px;
+    min-height: 45px;
+    position: sticky;
+    top: $spacing-sm;
+    z-index: 100;
 
     @media (max-width: 1180px) {
       gap: $spacing-xxs;

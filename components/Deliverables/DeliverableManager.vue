@@ -57,3 +57,15 @@ async function handleStateChange({ deliverableId, newState }){
 }
 
 </script>
+
+<style lang="scss" scoped>
+
+@use 'assets/variables' as *;
+
+.deliverable-manager {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+</style>

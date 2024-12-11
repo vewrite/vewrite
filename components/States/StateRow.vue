@@ -77,7 +77,11 @@ onMounted(async () => {
   padding: $spacing-xxxs $spacing-xs;
   cursor: pointer;
   background: rgba($brand, 0.05);
-  border-radius: $br-lg;
+  border-bottom: $border;
+
+  &.complete {
+    background: rgba($mint, 0.1);
+  }
 
   &.incomplete {
     color: rgba($black, 0.5);
@@ -91,10 +95,19 @@ onMounted(async () => {
     border-radius: 50%;
     background-color: $white;
     border: $border;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &.complete {
       background-color: $mint;
       border-color: $mint;
+      color: $white;
+    }
+
+    &.current {
+      background-color: $brand;
+      border-color: $brand;
       color: $white;
     }
   }
@@ -107,9 +120,9 @@ onMounted(async () => {
     align-items: center;
     border-radius: $br-xl;
 
-    // &.complete {
-    //   color: $mint;
-    // }
+    &.complete {
+      color: $mint;
+    }
 
     // &.current {
     //   background-color: $brand;
