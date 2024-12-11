@@ -18,7 +18,7 @@
     <template v-slot:body>
       <Loading v-if="loading" />
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
-      <div class="deliverable-wrapper max-width sm">
+      <!-- <div class="deliverable-wrapper max-width sm">
         <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0" :class="ActiveTab == 'current' ? 'right' : 'left'" @click="handleTabChange">
           <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''">
             <p>{{ PreviousStateData.name }}</p>
@@ -27,23 +27,49 @@
             <p>{{ StateData.name }}</p>
           </div>
         </section>
-      </div>
-      <section class="deliverables" v-if="DeliverableContentData && 
+      </div> -->
+      <!-- 
+        I want to replace all of this with something simpler and more efficient that shows:
+        - A list of all states in the workflow
+        - Highlighting the current state 
+        - Clickable selection of a state to view the deliverable at that state
+
+      -->
+
+      <section class="deliverables">
+        <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
+        <section class="state-manager">
+          <!-- {{ workflowStates }} -->
+          <!-- {{ DeliverableData }} -->
+          <!-- {{ currentPositionInWorkflow }}
+          {{ previousPositionInWorkflow }}
+          {{ nextPositionInWorkflow }} -->
+          <div class="state-manager-workflow" v-if="DeliverableData && workflowStates">
+            <section class="single-workflow">
+              <StateRow
+                v-for="(state, index) in workflowStates"
+                :key="state"
+                :deliverableId="DeliverableData.id"
+                :state="state"
+                :status="getStatus(index)"
+                @click="console.log('Clicked state', state)"
+              />
+              <!-- <div v-for="(state, index) in workflowStates">
+                {{ state }}
+                {{ getStatus(index) }}
+              </div> -->
+            </section>
+          </div>
+        </section>
+      </section>
+      <!-- <section class="deliverables" v-if="DeliverableContentData && 
                                           StateData && PreviousStateData && 
                                           !loading
       ">
-        <!-- <section v-if="ActiveTab == 'previous'">
-          <pre>PreviousDeliverableContentData: {{ PreviousDeliverableContentData }}</pre>
-          <pre>PreviousStateData: {{ PreviousStateData }}</pre>
-        </section>
-        <section v-if="ActiveTab == 'current'">
-          <pre>DeliverableContentData: {{ DeliverableContentData }}</pre>
-          <pre>StateData: {{ StateData }}</pre>
-        </section> -->
         <DeliverableManager v-if="ActiveTab == 'previous' && PreviousDeliverableContentData" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" :editable="false" />
         <DeliverableManager v-if="ActiveTab == 'current'" :DeliverableData="DeliverableContentData" :StateData="StateData" />
       </section>
-      <StateManager v-if="DeliverableData && workflowStates" :deliverable="DeliverableData" :states="workflowStates" />
+      <StateManager v-if="DeliverableData && workflowStates" :deliverable="DeliverableData" :states="workflowStates" /> -->
     </template>
   </AppPanel>
 </template>
@@ -60,6 +86,7 @@ import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import StateManager from '~/components/States/StateManager.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
+import StateRow from '~/components/States/StateRow.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
@@ -68,7 +95,6 @@ const route = useRoute();
 const workflowStates = ref([]);
 const isFirstState = ref(false);
 const isLastState = ref(false);
-const ActiveTab = ref('current');
 
 // This deliverable
 const deliverableId = route.params.id;
@@ -82,6 +108,11 @@ const PreviousDeliverableId = ref(null);
 const PreviousDeliverableContentData = ref(null);
 const PreviousStateData = ref(null);
 const PreviousStateInstanceData = ref(null);
+
+// State manager
+const currentPositionInWorkflow = ref(null);
+const previousPositionInWorkflow = ref(null);
+const nextPositionInWorkflow = ref(null);
 
 import useDeliverables from '~/composables/useDeliverables';
 const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal } = useDeliverables();
@@ -118,13 +149,13 @@ async function getDeliverable(id) {
   }
 }
 
-function handleTabChange() {
-  if (ActiveTab.value === 'current') {
-    ActiveTab.value = 'previous';
-  } else {
-    ActiveTab.value = 'current';
-  }
-}
+// function handleTabChange() {
+//   if (ActiveTab.value === 'current') {
+//     ActiveTab.value = 'previous';
+//   } else {
+//     ActiveTab.value = 'current';
+//   }
+// }
 
 function setPreviousDeliverableId(WorkflowStates, CurrentState) {
   let PreviousState = WorkflowStates[WorkflowStates.indexOf(CurrentState) - 1];
@@ -205,10 +236,6 @@ watch(
 let numRefreshes = 0;
 
 async function refreshDeliverable() {
-
-  numRefreshes++;
-  console.log('Refreshing deliverable', numRefreshes);
-  
   loading.value = true;
 
   await fetchDeliverableState(deliverableId);
@@ -233,6 +260,8 @@ async function refreshDeliverable() {
   console.log('Setting deliverable state in store in refreshDeliverable()', deliverableId, DeliverableWorkflowStateData.value);
   deliverableStore.setDeliverableState(deliverableId, DeliverableWorkflowStateData.value);
 
+  setCurrentPositionInWorkflow();
+
   loading.value = false;
 }
 
@@ -252,11 +281,69 @@ onMounted(async () => {
     });
 
     refreshDeliverable();
+    setIcon();
 
   } catch (error) {
     console.error(error);
   }
 });
+
+// StateManager
+
+function getStatus(index) {
+  if (index === currentPositionInWorkflow.value) {
+    return 'current';
+  } else if (index < currentPositionInWorkflow.value) {
+    return 'complete';
+  } else {
+    return 'incomplete';
+  }
+}
+
+async function setIcon() {
+  loading.value = true;
+
+  try {
+    StateInstanceData.value = await fetchSingleStateInstance(DeliverableData.value.workflow_state);
+    if (!StateInstanceData.value) {
+      throw new Error('Failed to fetch state instance');
+    }
+
+    StateData.value = await fetchSingleState(StateInstanceData.value[0].state_type);
+    if (!StateData.value) {
+      throw new Error('Failed to fetch state type');
+    }
+
+    stateDetails.value = {
+      state_instance: StateInstanceData.value,
+      state_type: StateData.value,
+    };
+
+    loading.value = false;
+  } catch (error) {
+    console.error('Error fetching state:', error.message);
+    error.value = error.message;
+  }
+}
+
+function setCurrentPositionInWorkflow() {
+  console.log(DeliverableData.value.workflow_state);
+  
+  currentPositionInWorkflow.value = workflowStates.value.findIndex((state) => state == DeliverableData.value.workflow_state);
+  console.log('Current position in workflow:', currentPositionInWorkflow.value);
+
+  if (currentPositionInWorkflow.value === 0) {
+    previousPositionInWorkflow.value = 0;
+  } else {
+    previousPositionInWorkflow.value = currentPositionInWorkflow.value - 1;
+  }
+
+  if (currentPositionInWorkflow.value === workflowStates.value.length - 1) {
+    nextPositionInWorkflow.value = workflowStates.value.length;
+  } else {
+    nextPositionInWorkflow.value = currentPositionInWorkflow.value + 1;
+  }
+}
 
 </script>
 
@@ -324,239 +411,253 @@ onMounted(async () => {
 }
 
 .deliverables {
-  height: calc(100% - 120px);
-  overflow-y: auto;
-}
+  display: grid;
+  grid-template-columns: 1fr 280px;
 
-.deliverable-manager {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 60px - 80px);
-  background-color: $white;
+  .state-manager {
+    padding: $spacing-sm;
+    margin: $spacing-sm $spacing-sm $spacing-sm 0;
+    height: auto;
 
-  @media (max-width: 600px) {
-    height: calc(100% - 110px - 80px);
-  }
-
-  .toggle-information {
-    position: absolute;
-    bottom: $spacing-sm;
-    left: $spacing-sm;
-    z-index: 1;
-    background-color: rgba($white, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: $br-lg;
-    box-shadow: $big-shadow;
-    padding: $spacing-xs;
-    color: $brand;
-  }
-
-  .deliverable-instruction {
-    padding: $spacing-md;
-    font-size: $font-size-sm;
-    background-color: rgba($white, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: $br-lg;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    align-self: center;
-    gap: $spacing-xs;
-    max-width: 400px;
-    width: calc(100% - 2 * $spacing-sm);
-    position: absolute;
-    bottom: $spacing-sm;
-    left: $spacing-sm;
-    box-shadow: $big-shadow;
-    z-index: 1;
-
-    .deliverable-instruction-content {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: $spacing-md;
-
-      section {
-        display: flex;
-        flex-direction: column;
-        gap: $spacing-xxs;
-      }
-
-      h4 {
-        font-size: $font-size-sm;
-        font-weight: bold;
-        margin: 0;
-      }
-
-      p {
-        font-size: $font-size-sm;
-        font-weight: 400;
-        margin: 0;
-        opacity: 0.5;
-
-        &.instruction-information {
-          font-size: $font-size-sm;
-          font-weight: 500;
-          text-transform: uppercase;
-          opacity: 1;
-          color: $brand;
-          border-radius: $br-md;
-        }
-      }
-    }
-  }
-
-  .deliverable-editor {
-    width: 100%;
-    height: calc(100%);
-    padding: 0;
-    background-color: rgba($white, 0.025);
-
-    .external-link {
-      width: calc(100% - 2 * $spacing-sm);
-      height: calc(100% - $spacing-sm);
+    .single-workflow {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: $br-lg;
-      margin: $spacing-sm $spacing-sm 0 ;
-      background: rgba($brand, 0.05);
-      box-shadow: inset 0 0 120px 120px white;
+      gap: $spacing-xs;
 
-      .instruction-set {
-        width: calc(100% - 2 * $spacing-sm);
-        max-width: 600px;
-        background: $white;
-        border-radius: $br-lg;
-        padding: $spacing-md;
-        margin: $spacing-sm;
-        display: flex;
-        flex-direction: column;
-        gap: $spacing-xxs;
-        box-shadow: $big-shadow;
 
-        p {
-          margin: 0;
-        }
+    }
+  }
+}
 
-        .instruction-information {
-          color: $brand;
-          text-transform: capitalize;
-        }
-      }
+// .deliverable-manager {
+//   display: flex;
+//   flex-direction: column;
+//   height: calc(100% - 60px - 80px);
+//   background-color: $white;
 
-      .link-set {
-        display: flex;
-        gap: $spacing-xs;
-        flex-direction: column;
-        margin-top: $spacing-sm;
+//   @media (max-width: 600px) {
+//     height: calc(100% - 110px - 80px);
+//   }
 
-        .link-content {
-          display: flex;
-          flex-direction: row;
-          gap: $spacing-xs;
-          width: 100%;
+//   .toggle-information {
+//     position: absolute;
+//     bottom: $spacing-sm;
+//     left: $spacing-sm;
+//     z-index: 1;
+//     background-color: rgba($white, 0.15);
+//     backdrop-filter: blur(10px);
+//     border-radius: $br-lg;
+//     box-shadow: $big-shadow;
+//     padding: $spacing-xs;
+//     color: $brand;
+//   }
 
-          @media (max-width: 600px) {
-            flex-direction: column;
-          }
+//   .deliverable-instruction {
+//     padding: $spacing-md;
+//     font-size: $font-size-sm;
+//     background-color: rgba($white, 0.15);
+//     backdrop-filter: blur(10px);
+//     border-radius: $br-lg;
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: flex-end;
+//     align-items: center;
+//     align-self: center;
+//     gap: $spacing-xs;
+//     max-width: 400px;
+//     width: calc(100% - 2 * $spacing-sm);
+//     position: absolute;
+//     bottom: $spacing-sm;
+//     left: $spacing-sm;
+//     box-shadow: $big-shadow;
+//     z-index: 1;
+
+//     .deliverable-instruction-content {
+//       display: flex;
+//       flex-direction: row;
+//       justify-content: space-between;
+//       align-items: flex-end;
+//       gap: $spacing-md;
+
+//       section {
+//         display: flex;
+//         flex-direction: column;
+//         gap: $spacing-xxs;
+//       }
+
+//       h4 {
+//         font-size: $font-size-sm;
+//         font-weight: bold;
+//         margin: 0;
+//       }
+
+//       p {
+//         font-size: $font-size-sm;
+//         font-weight: 400;
+//         margin: 0;
+//         opacity: 0.5;
+
+//         &.instruction-information {
+//           font-size: $font-size-sm;
+//           font-weight: 500;
+//           text-transform: uppercase;
+//           opacity: 1;
+//           color: $brand;
+//           border-radius: $br-md;
+//         }
+//       }
+//     }
+//   }
+
+//   .deliverable-editor {
+//     width: 100%;
+//     height: calc(100%);
+//     padding: 0;
+//     background-color: rgba($white, 0.025);
+
+//     .external-link {
+//       width: calc(100% - 2 * $spacing-sm);
+//       height: calc(100% - $spacing-sm);
+//       display: flex;
+//       flex-direction: column;
+//       justify-content: center;
+//       align-items: center;
+//       border-radius: $br-lg;
+//       margin: $spacing-sm $spacing-sm 0 ;
+//       background: rgba($brand, 0.05);
+//       box-shadow: inset 0 0 120px 120px white;
+
+//       .instruction-set {
+//         width: calc(100% - 2 * $spacing-sm);
+//         max-width: 600px;
+//         background: $white;
+//         border-radius: $br-lg;
+//         padding: $spacing-md;
+//         margin: $spacing-sm;
+//         display: flex;
+//         flex-direction: column;
+//         gap: $spacing-xxs;
+//         box-shadow: $big-shadow;
+
+//         p {
+//           margin: 0;
+//         }
+
+//         .instruction-information {
+//           color: $brand;
+//           text-transform: capitalize;
+//         }
+//       }
+
+//       .link-set {
+//         display: flex;
+//         gap: $spacing-xs;
+//         flex-direction: column;
+//         margin-top: $spacing-sm;
+
+//         .link-content {
+//           display: flex;
+//           flex-direction: row;
+//           gap: $spacing-xs;
+//           width: 100%;
+
+//           @media (max-width: 600px) {
+//             flex-direction: column;
+//           }
           
-          .form-input {
-            margin: 0;
-          }
+//           .form-input {
+//             margin: 0;
+//           }
 
-          input {
-            width: 100%;
-          }
-        }
-      }
+//           input {
+//             width: 100%;
+//           }
+//         }
+//       }
 
-      .link-value {
-        align-self: center;
-        width: auto;
-        padding: $spacing-xs;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin: 0;
-      }
-    }
+//       .link-value {
+//         align-self: center;
+//         width: auto;
+//         padding: $spacing-xs;
+//         overflow: hidden;
+//         text-overflow: ellipsis;
+//         white-space: nowrap;
+//         margin: 0;
+//       }
+//     }
 
-    .external-link-warning {
-      max-width: 600px;
-    }
-  }
-}
+//     .external-link-warning {
+//       max-width: 600px;
+//     }
+//   }
+// }
 
-.deliverable-wrapper {
-  margin: $spacing-sm auto;
-}
+// .deliverable-wrapper {
+//   margin: $spacing-sm auto;
+// }
 
-.deliverable-tabs {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 0 $spacing-sm;
-  background: rgba($brand, 0.05);
-  padding: $spacing-xxs;
-  border-radius: $br-xl;
-  position: relative;
+// .deliverable-tabs {
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: center;
+//   align-items: center;
+//   margin: 0 $spacing-sm;
+//   background: rgba($brand, 0.05);
+//   padding: $spacing-xxs;
+//   border-radius: $br-xl;
+//   position: relative;
 
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: $spacing-xxs;
-    top: $spacing-xxs;
-    width: calc(50% - 2 * $spacing-xxs);
-    background: rgba($brand, 0.1);
-    border-radius: $br-lg;
-    transition: all .3s ease;
-    mix-blend-mode: multiply;
-    pointer-events: none;
-  }
+//   &:after {
+//     content: '';
+//     position: absolute;
+//     bottom: $spacing-xxs;
+//     top: $spacing-xxs;
+//     width: calc(50% - 2 * $spacing-xxs);
+//     background: rgba($brand, 0.1);
+//     border-radius: $br-lg;
+//     transition: all .3s ease;
+//     mix-blend-mode: multiply;
+//     pointer-events: none;
+//   }
 
-  &.left {
-    &:after {
-      left: $spacing-xxs;
-    }
-  }
+//   &.left {
+//     &:after {
+//       left: $spacing-xxs;
+//     }
+//   }
 
-  &.right {
-    &:after {
-      left: calc(50% + $spacing-xxs);
-    }
-  }
+//   &.right {
+//     &:after {
+//       left: calc(50% + $spacing-xxs);
+//     }
+//   }
 
-  .deliverable-tab {
-    padding: $spacing-xxxs $spacing-xs;
-    border-radius: $br-lg;
-    background: transparent;
-    cursor: pointer;
-    width: 50%;
-    text-align: center;
-    margin-bottom: -1px;
-    font-weight: bold;
-    font-size: $font-size-xs;
-    color: $black;
-    text-transform: capitalize;
+//   .deliverable-tab {
+//     padding: $spacing-xxxs $spacing-xs;
+//     border-radius: $br-lg;
+//     background: transparent;
+//     cursor: pointer;
+//     width: 50%;
+//     text-align: center;
+//     margin-bottom: -1px;
+//     font-weight: bold;
+//     font-size: $font-size-xs;
+//     color: $black;
+//     text-transform: capitalize;
 
-    p {
-      margin: 0;
+//     p {
+//       margin: 0;
 
-      small {
-        color: rgba($black, 0.5);
-        font-size: $font-size-xs;
-      }
-    }
+//       small {
+//         color: rgba($black, 0.5);
+//         font-size: $font-size-xs;
+//       }
+//     }
 
-    &.active {
-      color: $brand;
-    }
-  }
-}
+//     &.active {
+//       color: $brand;
+//     }
+//   }
+// }
 
 </style>

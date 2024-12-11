@@ -1,5 +1,5 @@
 <template>
-  <div class="state-row" v-if="stateDetails">
+  <div class="state-row" v-if="stateDetails" :class="status">
     <div class="state-location" :class="status">
       <Icon :name="'fluent:checkmark-16-filled'" size="1rem" :class="status" v-if="status == 'complete'" />
       <Icon :name="'radix-icons:dot-filled'" size="1rem" :class="status" v-if="status == 'current'" />
@@ -9,7 +9,7 @@
     </div>
     <div class="state-details" >
       <p>{{ stateDetails.state_type.name }}</p>
-      <p><small>{{ stateDetails.state_instance[0].instance_name }}</small></p>
+      <!-- <p><small>{{ stateDetails.state_instance[0].instance_name }}</small></p> -->
     </div>
   </div>
 </template>
@@ -74,6 +74,13 @@ onMounted(async () => {
   flex-direction: row;
   gap: $spacing-xs;
   align-items: center;
+  padding: $spacing-xxxs $spacing-xs;
+  cursor: pointer;
+
+  &.incomplete {
+    color: rgba($black, 0.5);
+    cursor: not-allowed;
+  }
 
   .state-location {
     width: 16px;
@@ -90,22 +97,21 @@ onMounted(async () => {
   }
 
   .state-icon {
-    border: $border;
-    width: 44px;
-    height: 44px;
+    width: 32px;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: $br-md;
+    border-radius: $br-xl;
 
-    &.complete {
-      color: $mint;
-    }
+    // &.complete {
+    //   color: $mint;
+    // }
 
-    &.current {
-      background-color: $brand;
-      color: $white;
-    }
+    // &.current {
+    //   background-color: $brand;
+    //   color: $white;
+    // }
   }
 
   .state-details {
@@ -120,6 +126,7 @@ onMounted(async () => {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      font-size: $font-size-xs;
 
       small {
         color: rgba($black, 0.5);

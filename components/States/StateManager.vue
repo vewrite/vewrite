@@ -17,12 +17,6 @@
       <section class="state-manager-wrapper">
         <Loading v-if="loading" type="small" />
         <div v-else class="state-manager-workflow">
-          <!-- TODO - REMOVED until I can figure out how to make it work without 100% height in the parent
-          <div class="workflow-progress">
-            <div class="progress-bar">
-              <div class="progress" :style="{ height: (currentPositionInWorkflow + 1) / states.length * 100 + '%' }"></div>
-            </div>
-          </div> -->
           <section class="single-workflow">
             <StateRow
               v-for="(state, index) in states"
