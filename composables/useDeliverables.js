@@ -312,6 +312,23 @@ export default function useDeliverables() {
     }
   }
 
+  async function setDeliverableContentStatus(deliverableId, stateId, status) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .update({ status: status })
+        .eq('deliverable_id', deliverableId)
+        .eq('stateinstance_id', stateId);
+
+      if (error) throw error;
+
+      return data;
+
+    } catch (error) {
+      console.error('Error updating deliverable content status:', error.message);
+    }
+  }
+
   async function updateDeliverableWorkflowState(deliverableId, newWorkflowState) {
     try {
       const { data, error } = await supabase
@@ -325,6 +342,24 @@ export default function useDeliverables() {
 
     } catch (error) {
       console.error('Error updating deliverable:', error.message);
+    }
+  }
+
+  async function fetchDeliverableStateStatus(deliverableId, stateId) {
+    try {
+      const {data, error } = await supabase
+        .from('deliverable_content')
+        .select('status')
+        .eq('deliverable_id', deliverableId)
+        .eq('stateinstance_id', stateId)
+      
+      if (error) throw error;
+  
+      return data[0];
+  
+    } catch (error) {
+      console.error('Error fetching state status:', error.message)
+      error.value = error.message
     }
   }
 
@@ -413,7 +448,8 @@ export default function useDeliverables() {
           stateinstance_id: state,
           created_at: new Date(),
           updated_at: new Date(),
-          content: deliverableContent.value
+          content: deliverableContent.value,
+          status: 0
         }
       } else {
         deliverable = {
@@ -425,7 +461,8 @@ export default function useDeliverables() {
           content: {
             type: 'link',
             content:''
-          }
+          },
+          status: 0
         }
       }
 
@@ -464,6 +501,8 @@ export default function useDeliverables() {
     createDeliverable,
     fetchSingleProjectDeliverable,
     fetchSingleProjectDeliverableByState,
+    fetchDeliverableStateStatus,
+    setDeliverableContentStatus,
     updateDeliverableContent,
     fetchProjectDeliverables,
     fetchDeliverableStates,

@@ -44,8 +44,8 @@
           <!-- {{ currentPositionInWorkflow }}
           {{ previousPositionInWorkflow }
           {{ nextPositionInWorkflow }} }-->
-          <div class="state-manager-workflow" v-if="DeliverableData && workflowStates">
-            <button v-if="!isLastState" class="button primary large" @click="handleStateChange(DeliverableData.id, workflowStates[nextPositionInWorkflow])">Complete {{ StateData.name }}</button>
+          <div class="state-manager-workflow" v-if="StateData && DeliverableData && workflowStates">
+            <button v-if="!isLastState" class="button primary large" @click="setComplete(DeliverableData.id, workflowStates[nextPositionInWorkflow])">Complete {{ StateData.name }}</button>
             <section class="single-workflow">
               <StateRow
                 v-for="(state, index) in workflowStates"
@@ -85,7 +85,7 @@ definePageMeta({
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
-import StateManager from '~/components/States/StateManager.vue';
+// import StateManager from '~/components/States/StateManager.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
 import StateRow from '~/components/States/StateRow.vue';
 
@@ -116,7 +116,7 @@ const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
 
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, updateDeliverableWorkflowState } = useDeliverables();
+const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, updateDeliverableWorkflowState, setDeliverableContentStatus } = useDeliverables();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance } = useWorkflowStateInstances();
@@ -256,7 +256,6 @@ async function refreshDeliverable() {
   PreviousDeliverableContentData.value = await fetchSingleProjectDeliverableByState(deliverableId, PreviousDeliverableId.value);
   
   // Set the deliverable state in the store
-  console.log('Setting deliverable state in store in refreshDeliverable()', deliverableId, DeliverableWorkflowStateData.value);
   deliverableStore.setDeliverableState(deliverableId, DeliverableWorkflowStateData.value);
 
   setCurrentPositionInWorkflow();
@@ -313,7 +312,7 @@ async function setIcon() {
       throw new Error('Failed to fetch state type');
     }
 
-    stateDetails.value = {
+    StateDetails.value = {
       state_instance: StateInstanceData.value,
       state_type: StateData.value,
     };
@@ -326,9 +325,7 @@ async function setIcon() {
 }
 
 function setCurrentPositionInWorkflow() {
-  
   currentPositionInWorkflow.value = workflowStates.value.findIndex((state) => state == DeliverableData.value.workflow_state);
-
   if (currentPositionInWorkflow.value === 0) {
     previousPositionInWorkflow.value = 0;
     isFirstState.value = true;
@@ -336,7 +333,6 @@ function setCurrentPositionInWorkflow() {
     previousPositionInWorkflow.value = currentPositionInWorkflow.value - 1;
     isFirstState.value = false;
   }
-
   if (currentPositionInWorkflow.value === workflowStates.value.length - 1) {
     nextPositionInWorkflow.value = workflowStates.value.length;
     isLastState.value = true;
@@ -344,6 +340,12 @@ function setCurrentPositionInWorkflow() {
     nextPositionInWorkflow.value = currentPositionInWorkflow.value + 1;
     isLastState.value = false;
   }
+}
+
+async function setComplete(deliverableId, stateInstanceId) {
+  await setDeliverableContentStatus(deliverableId, workflowStates.value[currentPositionInWorkflow.value], 1);
+  await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
+  await refreshDeliverable();
 }
 
 async function handleStateChange(deliverableId, stateInstanceId) {

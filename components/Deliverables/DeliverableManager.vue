@@ -48,13 +48,13 @@ const { copyToClipboard, openInNewTab } = useUtils();
 
 const props = defineProps(['DeliverableData', 'StateData', 'editable']);
 
-watch(() => props.DeliverableData, async () => {
-  console.log('(DeliverableManager) DeliverableData changed:', props.DeliverableData);
-});
+// watch(() => props.DeliverableData, async () => {
+//   console.log('(DeliverableManager) DeliverableData changed:', props.DeliverableData);
+// });
 
-async function handleStateChange({ deliverableId, newState }){
-  console.log('State changed:', deliverableId, newState);
-}
+// async function handleStateChange({ deliverableId, newState }){
+//   console.log('State changed:', deliverableId, newState);
+// }
 
 </script>
 
