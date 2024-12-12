@@ -42,10 +42,10 @@
           <!-- {{ workflowStates }} -->
           <!-- {{ DeliverableData }} -->
           <!-- {{ currentPositionInWorkflow }}
-          {{ previousPositionInWorkflow }}
-          {{ nextPositionInWorkflow }} -->
+          {{ previousPositionInWorkflow }
+          {{ nextPositionInWorkflow }} }-->
           <div class="state-manager-workflow" v-if="DeliverableData && workflowStates">
-            <button class="button primary large">Move to Outline</button>
+            <button v-if="!isLastState" class="button primary large" @click="handleStateChange(DeliverableData.id, workflowStates[nextPositionInWorkflow])">Complete {{ StateData.name }}</button>
             <section class="single-workflow">
               <StateRow
                 v-for="(state, index) in workflowStates"
@@ -53,7 +53,7 @@
                 :deliverableId="DeliverableData.id"
                 :state="state"
                 :status="getStatus(index)"
-                @click="console.log('Clicked state', state)"
+                @click="handleStateChange(DeliverableData.id, state)"
               />
               <!-- <div v-for="(state, index) in workflowStates">
                 {{ state }}
@@ -116,7 +116,7 @@ const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
 
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal } = useDeliverables();
+const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, updateDeliverableWorkflowState } = useDeliverables();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance } = useWorkflowStateInstances();
@@ -331,15 +331,23 @@ function setCurrentPositionInWorkflow() {
 
   if (currentPositionInWorkflow.value === 0) {
     previousPositionInWorkflow.value = 0;
+    isFirstState.value = true;
   } else {
     previousPositionInWorkflow.value = currentPositionInWorkflow.value - 1;
+    isFirstState.value = false;
   }
 
   if (currentPositionInWorkflow.value === workflowStates.value.length - 1) {
     nextPositionInWorkflow.value = workflowStates.value.length;
+    isLastState.value = true;
   } else {
     nextPositionInWorkflow.value = currentPositionInWorkflow.value + 1;
+    isLastState.value = false;
   }
+}
+
+async function handleStateChange(deliverableId, stateInstanceId) {
+  await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
 }
 
 </script>
@@ -411,6 +419,7 @@ function setCurrentPositionInWorkflow() {
   display: grid;
   grid-template-columns: 1fr 280px;
   height: 100%;
+  gap: $spacing-sm;
 
   .state-manager {
     padding: $spacing-sm 0;
