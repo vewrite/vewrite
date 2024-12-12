@@ -29,10 +29,10 @@ export default {
   .header {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     min-height: 60px;
-    padding: 0 $spacing-sm;
+    padding: $spacing-sm;
     position: relative;
     margin: 0 $spacing-sm;
     border-top: $border;

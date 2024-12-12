@@ -224,17 +224,15 @@ async function fetchWorkflowStates() {
   }
 }
 
-watch(
-  () => deliverableStore.stateInstanceId,
-  async (newState) => {
-    if (newState) {
-      console.log('State instance ID changed [id].vue', deliverableStore.stateInstanceId);
-      refreshDeliverable();
-    }
-  }
-);
-
-let numRefreshes = 0;
+// watch(
+//   () => deliverableStore.stateInstanceId,
+//   async (newState) => {
+//     if (newState) {
+//       console.log('State instance ID changed [id].vue', deliverableStore.stateInstanceId);
+//       refreshDeliverable();
+//     }
+//   }
+// );
 
 async function refreshDeliverable() {
   loading.value = true;
@@ -328,10 +326,8 @@ async function setIcon() {
 }
 
 function setCurrentPositionInWorkflow() {
-  console.log(DeliverableData.value.workflow_state);
   
   currentPositionInWorkflow.value = workflowStates.value.findIndex((state) => state == DeliverableData.value.workflow_state);
-  console.log('Current position in workflow:', currentPositionInWorkflow.value);
 
   if (currentPositionInWorkflow.value === 0) {
     previousPositionInWorkflow.value = 0;
