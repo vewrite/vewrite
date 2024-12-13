@@ -63,7 +63,7 @@
           <Icon name="fluent:document-page-break-24-regular" size="1.5rem" />
         </button>
       </section>
-      <section class="button-group">
+      <section class="button-group undo-redo">
         <button @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()" class="toolbar">
           <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
         </button>
@@ -81,6 +81,8 @@
 </template>
 
 <script setup>
+
+import Dropdown from '~/components/Dropdown.vue';
 
 import useDeliverables from '~/composables/useDeliverables';
 const { saveDeliverableContent } = useDeliverables();
@@ -154,12 +156,13 @@ function updateDeliverable() {
 
 #TipTapEditor {
   position: relative;
+  height: 100%;
 
   div {
 
     &:nth-child(2) {
       width: 100%;
-      height: 100%;
+      height: calc(100% - 72px);
       overflow-y: auto;
     }
   }
@@ -170,20 +173,22 @@ function updateDeliverable() {
     gap: $spacing-sm;
     margin: 0;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     background: rgba($white, 0.95);
     backdrop-filter: blur(20px);
-    padding: $spacing-xxxs;
+    padding: $spacing-sm;
     min-height: 72px;
     position: sticky;
     top: 0;
     z-index: 10;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     @media (max-width: 1180px) {
       gap: $spacing-xxs;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: $spacing-xs $spacing-sm;
+      padding: $spacing-sm;
       align-items: center;
       justify-content: flex-start;
     }

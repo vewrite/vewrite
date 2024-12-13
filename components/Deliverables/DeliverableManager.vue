@@ -68,4 +68,9 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
   overflow-x: hidden;
 }
 
+.deliverable-editor {
+  height: calc(100%);
+}
+
+
 </style>

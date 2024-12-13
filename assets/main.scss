@@ -378,7 +378,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: 4px $spacing-sm 0;
+    padding: $spacing-sm $spacing-sm 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -842,4 +842,8 @@ button.vertical,
 
   .ProseMirror-focused {
     outline: none;
+  }
+
+  .tiptap {
+    height: calc(100% - $spacing-md * 2);
   }

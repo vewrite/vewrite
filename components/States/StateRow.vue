@@ -11,7 +11,7 @@
       <p>{{ StateDetails.state_type.name }}</p>
       <!-- <p><small>{{ StateDetails.state_instance[0].instance_name }}</small></p> -->
     </div>
-    <div class="state-status" :class="StateStatus.status == '0' ? 'pending' : 'complete'">
+    <div class="state-status" :class="[StateStatus.status == '0' ? 'pending' : 'complete', isLastState == true ? 'isLastState' : '']">
       <p v-if="StateStatus.status == 0">Pending</p>
       <p v-if="StateStatus.status == 1">Complete</p>
     </div>
@@ -32,6 +32,11 @@ const props = defineProps({
   status: {
     type: String,
     required: false,
+  },
+  isLastState: {
+    type: Boolean,
+    required: false,
+    default: false,
   }
 })
 
@@ -107,6 +112,7 @@ watch(() => props.state, async (newState) => {
   background: rgba($brand, 0.05);
   border-bottom: $border;
   position: relative;
+  width: 100%;
 
   &:last-of-type {
     border-bottom: none;
@@ -119,8 +125,6 @@ watch(() => props.state, async (newState) => {
   &.incomplete {
     color: rgba($black, 0.5);
     background: $white;
-    cursor: not-allowed;
-    pointer-events: none;
   }
 
   .state-location {
@@ -201,6 +205,10 @@ watch(() => props.state, async (newState) => {
     &.pending {
       background: rgba($black, 0.05);
       color: $black-light;
+    }
+
+    &.isLastState {
+      display: none;
     }
 
     p {

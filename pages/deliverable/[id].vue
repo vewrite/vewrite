@@ -18,49 +18,36 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <!-- <div class="deliverable-wrapper max-width sm">
-        <section class="deliverable-tabs" v-if="StateData && PreviousStateData && PreviousDeliverableId != 0" :class="ActiveTab == 'current' ? 'right' : 'left'" @click="handleTabChange">
-          <div class="deliverable-tab" :class="ActiveTab == 'previous' ? 'active' : ''">
-            <p>{{ PreviousStateData.name }}</p>
-          </div>
-          <div class="deliverable-tab" :class="ActiveTab == 'current' ? 'active' : ''">
-            <p>{{ StateData.name }}</p>
-          </div>
-        </section>
-      </div> -->
-      <!-- 
-        I want to replace all of this with something simpler and more efficient that shows:
-        - A list of all states in the workflow
-        - Highlighting the current state 
-        - Clickable selection of a state to view the deliverable at that state
-
-      -->
-
       <section class="deliverables">
         <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
-        <section class="state-manager">
-          <!-- {{ workflowStates }} -->
-          <!-- {{ DeliverableData }} -->
-          <!-- {{ currentPositionInWorkflow }}
-          {{ previousPositionInWorkflow }
-          {{ nextPositionInWorkflow }} }-->
-          <div class="state-manager-workflow" v-if="StateData && DeliverableData && workflowStates">
-            <button v-if="!isLastState" class="button primary large" @click="setComplete(DeliverableData.id, workflowStates[nextPositionInWorkflow])">Complete {{ StateData.name }}</button>
-            <section class="single-workflow">
-              <StateRow
-                v-for="(state, index) in workflowStates"
-                :key="state"
-                :deliverableId="DeliverableData.id"
-                :state="state"
-                :status="getStatus(index)"
-                @click="handleStateChange(DeliverableData.id, state)"
-              />
-              <!-- <div v-for="(state, index) in workflowStates">
-                {{ state }}
-                {{ getStatus(index) }}
-              </div> -->
+        <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
+        <section class="state-manager" v-if="DeliverableData && workflowStates">
+          <button class="button back" @click="toggleStateManagerPanel">Back one state</button>
+          <!-- <button class="state-panel-toggle">test</button> -->
+          <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
+            <Loading v-if="loading" type="small" class="loading-icon" />
+            <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
+            <span v-if="!loading" class="state-name">
+              <span>{{ StateData.name }}</span>
+            </span>
+            <Icon name="fluent:chevron-up-16-regular" class="state-arrow" size="1.5rem" />
+            <section :class="['state-manager-panel', collapsed ? '' : 'open']">
+              <div class="state-manager-workflow" v-if="StateData && DeliverableData && workflowStates">
+                <section class="single-workflow">
+                  <StateRow
+                    v-for="(state, index) in workflowStates"
+                    :key="state"
+                    :deliverableId="DeliverableData.id"
+                    :state="state"
+                    :status="getStatus(index)"
+                    :isLastState="state == workflowStates[workflowStates.length - 1]"
+                    @click="handleStateChange(DeliverableData.id, state)"
+                  />
+                </section>
+              </div>
             </section>
-          </div>
+          </button>
+          <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button>
         </section>
       </section>
       <!-- <section class="deliverables" v-if="DeliverableContentData && 
@@ -114,6 +101,7 @@ const PreviousStateInstanceData = ref(null);
 const currentPositionInWorkflow = ref(null);
 const previousPositionInWorkflow = ref(null);
 const nextPositionInWorkflow = ref(null);
+const collapsed = ref(true);
 
 import useDeliverables from '~/composables/useDeliverables';
 const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, updateDeliverableWorkflowState, setDeliverableContentStatus } = useDeliverables();
@@ -157,6 +145,10 @@ async function getDeliverable(id) {
 //     ActiveTab.value = 'current';
 //   }
 // }
+
+function toggleStateManagerPanel() {
+  collapsed.value = !collapsed.value
+}
 
 function setPreviousDeliverableId(WorkflowStates, CurrentState) {
   let PreviousState = WorkflowStates[WorkflowStates.indexOf(CurrentState) - 1];
@@ -223,16 +215,6 @@ async function fetchWorkflowStates() {
     loading.value = false;
   }
 }
-
-// watch(
-//   () => deliverableStore.stateInstanceId,
-//   async (newState) => {
-//     if (newState) {
-//       console.log('State instance ID changed [id].vue', deliverableStore.stateInstanceId);
-//       refreshDeliverable();
-//     }
-//   }
-// );
 
 async function refreshDeliverable() {
   loading.value = true;
@@ -419,260 +401,86 @@ async function handleStateChange(deliverableId, stateInstanceId) {
 
 .deliverables {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-rows: 1fr 72px;
   height: 100%;
-  gap: $spacing-sm;
+
+  .deliverable-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($white, 0.0);
+    z-index: 1;
+    transition: all 0.3s ease;
+    pointer-events: none;
+
+    &.blurred {
+      background-color: rgba($white, 0.5);
+      pointer-events: all;
+    }
+  }
 
   .state-manager {
-    padding: $spacing-sm 0;
-    margin: 0 $spacing-sm $spacing-sm 0;
-    height: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: $spacing-sm;
+    gap: $spacing-sm;
+    z-index: 2;
 
-    .state-manager-workflow {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-sm;
+    .back {
+      align-self: center;
+      justify-self: start;
     }
 
-    .single-workflow {
-      display: flex;
-      flex-direction: column;
-      border: $border;
+    .state-panel-toggle {
+      align-self: center;
+      justify-self: center;
+      position: relative;
+
+      .state-arrow {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+      }
+
+      &.open {
+        .state-arrow {
+          transform: rotate(0deg);
+        }
+      }
+    }
+
+    .complete {
+      align-self: center;
+      justify-self: end;
+    }
+
+    .state-manager-panel {
+      display: none;
+      position: absolute;
+      bottom: $spacing-lg;
+      min-width: 280px;
+      background-color: $white;
       border-radius: $br-lg;
       overflow: hidden;
+      box-shadow: $big-shadow;
+
+      &.open {
+        display: block;
+      }
+
+      .state-manager-workflow {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+      }
+
+      .single-workflow {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 }
-
-// .deliverable-manager {
-//   display: flex;
-//   flex-direction: column;
-//   height: calc(100% - 60px - 80px);
-//   background-color: $white;
-
-//   @media (max-width: 600px) {
-//     height: calc(100% - 110px - 80px);
-//   }
-
-//   .toggle-information {
-//     position: absolute;
-//     bottom: $spacing-sm;
-//     left: $spacing-sm;
-//     z-index: 1;
-//     background-color: rgba($white, 0.15);
-//     backdrop-filter: blur(10px);
-//     border-radius: $br-lg;
-//     box-shadow: $big-shadow;
-//     padding: $spacing-xs;
-//     color: $brand;
-//   }
-
-//   .deliverable-instruction {
-//     padding: $spacing-md;
-//     font-size: $font-size-sm;
-//     background-color: rgba($white, 0.15);
-//     backdrop-filter: blur(10px);
-//     border-radius: $br-lg;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: flex-end;
-//     align-items: center;
-//     align-self: center;
-//     gap: $spacing-xs;
-//     max-width: 400px;
-//     width: calc(100% - 2 * $spacing-sm);
-//     position: absolute;
-//     bottom: $spacing-sm;
-//     left: $spacing-sm;
-//     box-shadow: $big-shadow;
-//     z-index: 1;
-
-//     .deliverable-instruction-content {
-//       display: flex;
-//       flex-direction: row;
-//       justify-content: space-between;
-//       align-items: flex-end;
-//       gap: $spacing-md;
-
-//       section {
-//         display: flex;
-//         flex-direction: column;
-//         gap: $spacing-xxs;
-//       }
-
-//       h4 {
-//         font-size: $font-size-sm;
-//         font-weight: bold;
-//         margin: 0;
-//       }
-
-//       p {
-//         font-size: $font-size-sm;
-//         font-weight: 400;
-//         margin: 0;
-//         opacity: 0.5;
-
-//         &.instruction-information {
-//           font-size: $font-size-sm;
-//           font-weight: 500;
-//           text-transform: uppercase;
-//           opacity: 1;
-//           color: $brand;
-//           border-radius: $br-md;
-//         }
-//       }
-//     }
-//   }
-
-//   .deliverable-editor {
-//     width: 100%;
-//     height: calc(100%);
-//     padding: 0;
-//     background-color: rgba($white, 0.025);
-
-//     .external-link {
-//       width: calc(100% - 2 * $spacing-sm);
-//       height: calc(100% - $spacing-sm);
-//       display: flex;
-//       flex-direction: column;
-//       justify-content: center;
-//       align-items: center;
-//       border-radius: $br-lg;
-//       margin: $spacing-sm $spacing-sm 0 ;
-//       background: rgba($brand, 0.05);
-//       box-shadow: inset 0 0 120px 120px white;
-
-//       .instruction-set {
-//         width: calc(100% - 2 * $spacing-sm);
-//         max-width: 600px;
-//         background: $white;
-//         border-radius: $br-lg;
-//         padding: $spacing-md;
-//         margin: $spacing-sm;
-//         display: flex;
-//         flex-direction: column;
-//         gap: $spacing-xxs;
-//         box-shadow: $big-shadow;
-
-//         p {
-//           margin: 0;
-//         }
-
-//         .instruction-information {
-//           color: $brand;
-//           text-transform: capitalize;
-//         }
-//       }
-
-//       .link-set {
-//         display: flex;
-//         gap: $spacing-xs;
-//         flex-direction: column;
-//         margin-top: $spacing-sm;
-
-//         .link-content {
-//           display: flex;
-//           flex-direction: row;
-//           gap: $spacing-xs;
-//           width: 100%;
-
-//           @media (max-width: 600px) {
-//             flex-direction: column;
-//           }
-          
-//           .form-input {
-//             margin: 0;
-//           }
-
-//           input {
-//             width: 100%;
-//           }
-//         }
-//       }
-
-//       .link-value {
-//         align-self: center;
-//         width: auto;
-//         padding: $spacing-xs;
-//         overflow: hidden;
-//         text-overflow: ellipsis;
-//         white-space: nowrap;
-//         margin: 0;
-//       }
-//     }
-
-//     .external-link-warning {
-//       max-width: 600px;
-//     }
-//   }
-// }
-
-// .deliverable-wrapper {
-//   margin: $spacing-sm auto;
-// }
-
-// .deliverable-tabs {
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: center;
-//   margin: 0 $spacing-sm;
-//   background: rgba($brand, 0.05);
-//   padding: $spacing-xxs;
-//   border-radius: $br-xl;
-//   position: relative;
-
-//   &:after {
-//     content: '';
-//     position: absolute;
-//     bottom: $spacing-xxs;
-//     top: $spacing-xxs;
-//     width: calc(50% - 2 * $spacing-xxs);
-//     background: rgba($brand, 0.1);
-//     border-radius: $br-lg;
-//     transition: all .3s ease;
-//     mix-blend-mode: multiply;
-//     pointer-events: none;
-//   }
-
-//   &.left {
-//     &:after {
-//       left: $spacing-xxs;
-//     }
-//   }
-
-//   &.right {
-//     &:after {
-//       left: calc(50% + $spacing-xxs);
-//     }
-//   }
-
-//   .deliverable-tab {
-//     padding: $spacing-xxxs $spacing-xs;
-//     border-radius: $br-lg;
-//     background: transparent;
-//     cursor: pointer;
-//     width: 50%;
-//     text-align: center;
-//     margin-bottom: -1px;
-//     font-weight: bold;
-//     font-size: $font-size-xs;
-//     color: $black;
-//     text-transform: capitalize;
-
-//     p {
-//       margin: 0;
-
-//       small {
-//         color: rgba($black, 0.5);
-//         font-size: $font-size-xs;
-//       }
-//     }
-
-//     &.active {
-//       color: $brand;
-//     }
-//   }
-// }
 
 </style>
