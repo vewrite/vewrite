@@ -110,9 +110,9 @@ watch(() => props.state, async (newState) => {
   padding: $spacing-xxxs $spacing-xs;
   cursor: pointer;
   background: rgba($brand, 0.05);
-  border-bottom: $border;
   position: relative;
   width: 100%;
+  border-radius: $br-md;
 
   &:last-of-type {
     border-bottom: none;

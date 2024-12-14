@@ -21,7 +21,7 @@
       <section class="deliverables">
         <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
         <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
-        <section class="state-manager" v-if="DeliverableData && workflowStates">
+        <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
           <button class="button back" @click="toggleStateManagerPanel">Back one state</button>
           <!-- <button class="state-panel-toggle">test</button> -->
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
@@ -241,6 +241,7 @@ async function refreshDeliverable() {
   deliverableStore.setDeliverableState(deliverableId, DeliverableWorkflowStateData.value);
 
   setCurrentPositionInWorkflow();
+  setIcon();
 
   loading.value = false;
 }
@@ -261,7 +262,6 @@ onMounted(async () => {
     });
 
     refreshDeliverable();
-    setIcon();
 
   } catch (error) {
     console.error(error);
@@ -294,10 +294,10 @@ async function setIcon() {
       throw new Error('Failed to fetch state type');
     }
 
-    StateDetails.value = {
-      state_instance: StateInstanceData.value,
-      state_type: StateData.value,
-    };
+    // StateDetails.value = {
+    //   state_instance: StateInstanceData.value,
+    //   state_type: StateData.value,
+    // };
 
     loading.value = false;
   } catch (error) {
@@ -478,6 +478,8 @@ async function handleStateChange(deliverableId, stateInstanceId) {
       .single-workflow {
         display: flex;
         flex-direction: column;
+        padding: $spacing-sm;
+        gap: $spacing-xxxs;
       }
     }
   }
