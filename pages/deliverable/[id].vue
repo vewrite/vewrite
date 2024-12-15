@@ -22,8 +22,9 @@
         <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
         <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
         <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
-          <button class="button back" @click="toggleStateManagerPanel">Back one state</button>
-          <!-- <button class="state-panel-toggle">test</button> -->
+          <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
+          <div v-else></div>
+
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
@@ -47,17 +48,13 @@
               </div>
             </section>
           </button>
-          <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button>
+
+          <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
+          <button class="button next" @click="nextState()" v-if="currentPositionInWorkflow < workflowStates.length - 1">Next state</button>
+          <div v-else></div>
+          
         </section>
       </section>
-      <!-- <section class="deliverables" v-if="DeliverableContentData && 
-                                          StateData && PreviousStateData && 
-                                          !loading
-      ">
-        <DeliverableManager v-if="ActiveTab == 'previous' && PreviousDeliverableContentData" :DeliverableData="PreviousDeliverableContentData" :StateData="PreviousStateData" :editable="false" />
-        <DeliverableManager v-if="ActiveTab == 'current'" :DeliverableData="DeliverableContentData" :StateData="StateData" />
-      </section>
-      <StateManager v-if="DeliverableData && workflowStates" :deliverable="DeliverableData" :states="workflowStates" /> -->
     </template>
   </AppPanel>
 </template>
@@ -294,11 +291,6 @@ async function setIcon() {
       throw new Error('Failed to fetch state type');
     }
 
-    // StateDetails.value = {
-    //   state_instance: StateInstanceData.value,
-    //   state_type: StateData.value,
-    // };
-
     loading.value = false;
   } catch (error) {
     console.error('Error fetching state:', error.message);
@@ -324,10 +316,29 @@ function setCurrentPositionInWorkflow() {
   }
 }
 
-async function setComplete(deliverableId, stateInstanceId) {
-  await setDeliverableContentStatus(deliverableId, workflowStates.value[currentPositionInWorkflow.value], 1);
-  await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
-  await refreshDeliverable();
+// I'm disabling this for now until I add the extra layer of complexity to the workflow
+// async function setComplete(deliverableId, stateInstanceId) {
+//   await setDeliverableContentStatus(deliverableId, workflowStates.value[currentPositionInWorkflow.value], 1);
+//   await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
+//   await refreshDeliverable();
+// }
+
+async function prevState() {
+  if (previousPositionInWorkflow.value === -1) {
+    return;
+  } else {
+    await handleStateChange(DeliverableData.value.id, workflowStates.value[previousPositionInWorkflow.value]);
+    await refreshDeliverable();
+  }
+}
+
+async function nextState() {
+  if (nextPositionInWorkflow.value === workflowStates.length) {
+    return;
+  } else {
+    await handleStateChange(DeliverableData.value.id, workflowStates.value[nextPositionInWorkflow.value]);
+    await refreshDeliverable();
+  }
 }
 
 async function handleStateChange(deliverableId, stateInstanceId) {
@@ -429,7 +440,7 @@ async function handleStateChange(deliverableId, stateInstanceId) {
     z-index: 2;
 
     .back {
-      align-self: center;
+      align-self: end;
       justify-self: start;
     }
 
@@ -451,7 +462,12 @@ async function handleStateChange(deliverableId, stateInstanceId) {
     }
 
     .complete {
-      align-self: center;
+      align-self: end;
+      justify-self: end;
+    }
+
+    .next {
+      align-self: end;
       justify-self: end;
     }
 

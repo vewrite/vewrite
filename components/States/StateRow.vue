@@ -9,12 +9,11 @@
     </div>
     <div class="state-details" >
       <p>{{ StateDetails.state_type.name }}</p>
-      <!-- <p><small>{{ StateDetails.state_instance[0].instance_name }}</small></p> -->
     </div>
-    <div class="state-status" :class="[StateStatus.status == '0' ? 'pending' : 'complete', isLastState == true ? 'isLastState' : '']">
+    <!-- <div class="state-status" :class="[StateStatus.status == '0' ? 'pending' : 'complete', isLastState == true ? 'isLastState' : '']">
       <p v-if="StateStatus.status == 0">Pending</p>
       <p v-if="StateStatus.status == 1">Complete</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
