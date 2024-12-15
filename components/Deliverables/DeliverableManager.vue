@@ -27,11 +27,10 @@
           </section>
         </section>
 
-        <section class="external-link-warning notification warning" v-if="props.DeliverableData.content.content == ''">
+        <section class="external-link-warning notification warning small" v-if="props.DeliverableData.content.content == ''">
           <Icon name="fluent:document-20-regular" size="3.5rem" />
           <section>
-            <h4>No external link for this state</h4>
-            <p>This deliverable does not have a link assigned. It's your job to create a new document and paste the link here.</p>
+            <p><strong>No external link for this state</strong> - This deliverable does not have a link assigned. It's your job to create a new document and paste the link here.</p>
           </section>
         </section>
         
@@ -48,14 +47,6 @@ const { copyToClipboard, openInNewTab } = useUtils();
 
 const props = defineProps(['DeliverableData', 'StateData', 'editable']);
 
-// watch(() => props.DeliverableData, async () => {
-//   console.log('(DeliverableManager) DeliverableData changed:', props.DeliverableData);
-// });
-
-// async function handleStateChange({ deliverableId, newState }){
-//   console.log('State changed:', deliverableId, newState);
-// }
-
 </script>
 
 <style lang="scss" scoped>
@@ -70,6 +61,43 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
 
 .deliverable-editor {
   height: calc(100%);
+}
+
+.external-link {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-sm;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  .instruction-set {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .instruction-information {
+      font-size: $font-size-sm;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .link-set {
+      .link-content {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-sm;
+
+        .form-input {
+          margin: 0;
+        }
+      }
+    }
+  }
 }
 
 
