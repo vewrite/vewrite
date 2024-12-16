@@ -252,9 +252,8 @@ header {
             border-radius: $br-md;
             transition: background-color 0.18s ease;
             color: $black;
-            font-size: $font-size-sm;
+            font-size: $font-size-xs;
             font-family: $font-family-main;
-            font-weight: 400;
             text-decoration: none;
 
             &:hover,

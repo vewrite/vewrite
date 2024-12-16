@@ -93,7 +93,7 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
     width: 100%;
 
     .instruction-information {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       font-weight: bold;
       text-transform: capitalize;
     }

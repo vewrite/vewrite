@@ -6,7 +6,7 @@ body {
     margin: 0;
     font-family: $font-family-main;
     background-color: $white;
-    font-size: $font-size-sm;
+    font-size: $font-size-xs;
 }
 
 #__nuxt {
@@ -189,7 +189,6 @@ body,
             text-transform: capitalize;
             transition: background-color 0.18s ease;
             color: $black;
-            font-size: $font-size-sm;
             font-family: $font-family-main;
             font-weight: 400;
             text-decoration: none;
@@ -341,7 +340,7 @@ select {
     background-color: $white;
     color: $black;
     border-radius: $br-md;
-    font-size: $font-size-sm;
+    font-size: $font-size-xs;
     font-weight: 400;
     transition: all 0.2s ease;
     font-family: $font-family-main;
@@ -575,7 +574,6 @@ textarea {
     border-radius: $br-md;
     background-color: rgba($red, 0.05);
     color: $red;
-    font-size: $font-size-sm;
     transition: all 0.2s ease;
 }
 

@@ -194,7 +194,7 @@ watch(project, (newVal, oldVal) => {
     padding: $spacing-md;
 
     .modal-confirmation {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       color: $red;
     }
   }
@@ -250,7 +250,7 @@ watch(project, (newVal, oldVal) => {
       align-items: center;
       cursor: pointer;
       justify-content: flex-start;
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       color: $black;
       padding: 0 $spacing-sm;
       width: 100%;

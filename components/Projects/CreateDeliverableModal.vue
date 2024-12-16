@@ -124,7 +124,7 @@ function showType(event){
     padding: $spacing-md;
 
     .modal-confirmation {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       color: $red;
     }
   }

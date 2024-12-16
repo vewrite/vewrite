@@ -378,9 +378,8 @@ async function handleStateChange(deliverableId, stateInstanceId) {
 
     .deliverable-title-description {
       font-family: $font-family-main;
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       color: $gray-dark;
-      font-weight: 400;
       margin: -10px -0.85rem 0 -0.85rem;
       background-color: transparent;
       width: 100%;
@@ -395,8 +394,7 @@ async function handleStateChange(deliverableId, stateInstanceId) {
     }
 
     p {
-      font-size: $font-size-sm;
-      font-weight: 400;
+      font-size: $font-size-xs;
       margin: 0;
     }
   }

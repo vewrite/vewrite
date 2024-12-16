@@ -50,7 +50,7 @@ const props = defineProps(['icon', 'title', 'content']);
       gap: $spacing-xxxs;
       
       h3 {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-weight: bold;
         margin: 0;
       }

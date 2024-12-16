@@ -169,8 +169,7 @@ const filteredTeams = computed(() => {
     }
 
     p {
-      font-size: $font-size-sm;
-      font-weight: 400;
+      font-size: $font-size-xs;
       margin: $spacing-sm 0 $spacing-md;
       color: $gray-dark;
     }
@@ -284,7 +283,7 @@ const filteredTeams = computed(() => {
           }
 
           p {
-            font-size: $font-size-sm;
+            font-size: $font-size-xs;
             font-weight: bold;
             margin: 0;
             text-wrap: nowrap;
@@ -314,7 +313,7 @@ const filteredTeams = computed(() => {
         }
 
         p {
-          font-size: $font-size-sm;
+          font-size: $font-size-xs;
         }
 
         
@@ -377,7 +376,7 @@ const filteredTeams = computed(() => {
           }
 
           p {
-            font-size: $font-size-sm;
+            font-size: $font-size-xs;
             font-weight: bold;
             margin: 0;
           }

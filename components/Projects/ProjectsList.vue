@@ -249,7 +249,7 @@ const filteredProjects = computed(() => {
     }
 
     p {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       font-weight: 400;
       margin: $spacing-sm 0 $spacing-md;
       color: $gray-dark;
@@ -365,9 +365,9 @@ const filteredProjects = computed(() => {
         }
 
         h3 {
-          font-size: $font-size-sm;
+          font-size: $font-size-xs;
           font-family: $font-family-main;
-          font-weight: 600;
+          font-weight: bold;
           margin: 0 0 $spacing-sm;
           
           a {
@@ -377,7 +377,7 @@ const filteredProjects = computed(() => {
         }
 
         p {
-          font-size: $font-size-sm;
+          font-size: $font-size-xs;
           font-weight: 400;
           color: $gray-dark;
         }
@@ -532,7 +532,7 @@ const filteredProjects = computed(() => {
         }
 
         h3 {
-          font-size: $font-size-sm;
+          font-size: $font-size-xs;
           font-family: $font-family-secondary;
           font-weight: bold;
           margin: 0;
@@ -549,8 +549,7 @@ const filteredProjects = computed(() => {
         }
 
         p {
-          font-size: $font-size-sm;
-          font-weight: 400;
+          font-size: $font-size-xs;
           color: $gray-dark;
         }
 

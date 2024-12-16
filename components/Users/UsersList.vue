@@ -94,7 +94,7 @@ const filteredusers = computed(() => {
     }
 
     p {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       font-weight: 400;
       margin: $spacing-sm 0 $spacing-md;
       color: $gray-dark;

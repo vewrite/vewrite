@@ -202,7 +202,7 @@ onMounted(async () => {
 
           p {
             color: $gray-dark;
-            font-size: $font-size-sm;
+            font-size: $font-size-xs;
             margin: 0;
           }
         }

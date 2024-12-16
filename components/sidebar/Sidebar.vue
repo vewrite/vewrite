@@ -209,7 +209,7 @@ const isClients = computed(() => {
       border-radius: $br-lg;
 
       p {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-family: $font-family-main;
         font-weight: 400;
         color: $mint-dark;

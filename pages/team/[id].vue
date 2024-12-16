@@ -342,7 +342,7 @@ function updateTeamWithDebounce() {
       gap: $spacing-sm;
 
       p {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         margin: 0;
       }
     }
@@ -365,7 +365,7 @@ function updateTeamWithDebounce() {
 
     h4 {
       margin-bottom: -15px;
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       color: rgba($black, 0.65);
       padding: $spacing-sm $spacing-sm $spacing-md $spacing-sm;
       background: rgba($gray-light, 0.25);
@@ -423,8 +423,7 @@ function updateTeamWithDebounce() {
     }
 
     p {
-      font-size: $font-size-sm;
-      font-weight: 400;
+      font-size: $font-size-xs;
       margin: $spacing-sm 0 $spacing-md;
       color: $gray-dark;
     }

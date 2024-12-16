@@ -130,7 +130,7 @@ onMounted(async () => {
       }
 
       .description {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         color: $gray-dark;
         margin: 0;
       }

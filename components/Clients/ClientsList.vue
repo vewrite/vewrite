@@ -124,7 +124,7 @@ const filteredClients = computed(() => {
     }
 
     p {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       font-weight: 400;
       margin: $spacing-sm 0 $spacing-md;
       color: $gray-dark;
@@ -186,7 +186,7 @@ const filteredClients = computed(() => {
         display: flex;
         flex-direction: row;
         align-items: center;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-weight: 400;
         color: $gray-dark;
 
