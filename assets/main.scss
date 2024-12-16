@@ -378,12 +378,17 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-sm $spacing-sm 0;
+    padding: $spacing-sm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: $spacing-sm;
+    position: sticky;
+    top: 0;
+    background: rgba($white, .5);
+    backdrop-filter: blur(10px);
+    z-index: 10;
 
     input {
         color: $black;
@@ -395,6 +400,7 @@ textarea {
         font-size: $font-size-xs;
         outline: 1px solid rgba($brand, 0);
         outline-offset: 0px;
+        height: 100%;
 
         &:active,
         &:focus,

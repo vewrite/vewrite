@@ -24,7 +24,6 @@
       <div class="project-details">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
         <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
-        <!-- <ProjectDetails v-if="project && loading.global == false" :client="project.client_id" :team="project.assigned_team" /> -->
         <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
       </div>
       <div class="deliverables-list">
@@ -43,7 +42,7 @@
             </div>
             <div class="deliverable-actions">
               <div class="deliverable-updated-at">
-                Updated {{ deliverable.formattedUpdatedAt }}
+                {{ deliverable.formattedUpdatedAt }}
               </div>
               <span class="deliverable-state">{{ deliverable.state_name }}</span>
               <!-- <Dropdown>
@@ -88,7 +87,6 @@ definePageMeta({
 
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
-import ProjectDetails from '~/components/Projects/ProjectDetails.vue';
 import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';
@@ -378,10 +376,10 @@ watchEffect(() => {
 .project-details {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: $spacing-md;
   padding: $spacing-md;
   margin: $spacing-sm;
-  background: rgba($black, 0.05);
+  background: rgba($black, 0.025);
   backdrop-filter: blur(10px);
   z-index: 2;
   border-radius: $br-lg;

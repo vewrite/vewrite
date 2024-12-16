@@ -5,6 +5,7 @@
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+      <Assigned />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <Dropdown>
           <template v-slot:trigger>
@@ -72,6 +73,7 @@ import AppPanel from '~/components/AppPanel.vue';
 // import StateManager from '~/components/States/StateManager.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
 import StateRow from '~/components/States/StateRow.vue';
+import Assigned from '~/components/deliverable/Assigned.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);

@@ -1,9 +1,9 @@
 <template>
   <div class="project-deliverables-status">
-    <!-- <div class="progress-status" v-if="totalDeliverables > 0">
+    <div class="progress-status" v-if="totalDeliverables > 0">
       <span>Progress</span>
       <span>{{ completedDeliverables }} / {{ totalDeliverables }}</span>
-    </div> -->
+    </div>
     <div class="progress-content">
       <div class="deliverables" v-if="totalDeliverables > 0">
         <div class="progress-bar">
@@ -31,7 +31,7 @@ const props = defineProps({
 .project-deliverables-status {
   display: flex;
   flex-direction: column-reverse;
-  gap: $spacing-sm;
+  gap: $spacing-xxs;
   justify-content: flex-start;
   width: 100%;
   transition: bottom 0.2s ease;
@@ -44,8 +44,7 @@ const props = defineProps({
 
     span {
       font-size: $font-size-xxs;
-      font-weight: 400;
-      color: rgba($black, 0.5);
+      color: rgba($black, 0.25);
     }
   }
 

@@ -186,7 +186,7 @@ const filteredTeams = computed(() => {
       grid-template-columns: repeat(5, 1fr);
       gap: $spacing-sm;
       width: 100%;
-      padding: $spacing-sm;
+      padding: 0 $spacing-sm $spacing-sm;
       align-content: flex-start;
 
       @media (max-width: 1800px) {
@@ -325,8 +325,8 @@ const filteredTeams = computed(() => {
       flex-direction: column;
       align-items: flex-start;
       flex-direction: column;
-      gap: $spacing-xxs;
-      padding: $spacing-sm;
+      gap: $spacing-sm;
+      padding: 0 $spacing-sm $spacing-sm;
 
       .team-card {
         display: flex;

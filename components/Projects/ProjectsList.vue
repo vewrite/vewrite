@@ -224,9 +224,7 @@ const filteredProjects = computed(() => {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  height: 100%;
   margin-bottom: $spacing-lg;
-  overflow-y: auto;
   transition: padding 0.2s ease;
 
   .empty-state {
@@ -265,7 +263,7 @@ const filteredProjects = computed(() => {
       grid-template-columns: repeat(5, 1fr);
       gap: $spacing-sm;
       width: 100%;
-      padding: $spacing-sm;
+      padding: 0 $spacing-sm $spacing-sm;
       align-content: flex-start;
 
       @media (max-width: 1800px) {
@@ -462,10 +460,10 @@ const filteredProjects = computed(() => {
       justify-content: flex-start;
       align-content: center;
       width: calc(100% - $spacing-md - $spacing-md);
-      padding: $spacing-sm;
+      padding: 0 $spacing-sm $spacing-sm;
       align-content: flex-start;
       width: 100%;
-      gap: $spacing-xxs;
+      gap: $spacing-xs;
 
       .project-card {
         padding: $spacing-sm;

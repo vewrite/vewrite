@@ -1,16 +1,13 @@
 <template>
   <section class="team-members">
     <Loading v-if="loading" type="small" />
-    <section class="team-wrapper" v-if="TeamData">
-      <section class="team-info">
-        <p class="assigned"><nuxt-link :to="'/team/' + TeamData.id">{{ TeamData.name }}</nuxt-link></p>
-      </section>
+    <nuxt-link class="team-wrapper" v-if="TeamData" :to="'/team/' + TeamData.id">
       <div class="members">
         <div class="members-image" v-for="member in TeamMembersData" :key="member.id">
           <Avatar :uuid="member.user_id" size="large" />
         </div>
       </div>
-    </section>
+    </nuxt-link>
     <div class="members-image" v-if="!loading && TeamData?.length == 0">
       <img src="/images/team-default.svg" alt="Team avatar" />
     </div>
@@ -78,7 +75,7 @@ onMounted(async () => {
 
   .members {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     position: relative;
     width: 100%;
     height: 40px;
@@ -102,7 +99,7 @@ onMounted(async () => {
 
       &:nth-child(2) {
         z-index: 2;
-        right: 10px;
+        right: -10px;
         top: 0px;
         display: block;
       }
