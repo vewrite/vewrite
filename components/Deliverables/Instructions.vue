@@ -29,15 +29,15 @@ const props = defineProps(['icon', 'title', 'content']);
   right: 0;
   left: 0;
   z-index: 2;
-  background: rgba($white, 0.85);
+  background: rgba($brand, 0.05);
+  border-radius: $br-xl;
   backdrop-filter: blur(6px);
-  border-top: $border;
   
   .notification {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: $spacing-sm 0 0;
+    padding: $spacing-sm;
     gap: $spacing-xxs; 
 
     .iconify {
