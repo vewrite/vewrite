@@ -1,4 +1,5 @@
 <template>
+  <Loading class="saving" v-if="saving" saving="saving" type="small" />
   <div id="TipTapEditor" v-if="editable">
     <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
@@ -82,11 +83,9 @@
 
 <script setup>
 
-import Dropdown from '~/components/Dropdown.vue';
-
 import useDeliverables from '~/composables/useDeliverables';
 const { saveDeliverableContent } = useDeliverables();
-
+const saving = ref(false);
 const textareaRef = ref(null);
 
 const props = defineProps({
@@ -142,10 +141,12 @@ function debounce(func, wait) {
   };
 }
 
-const debouncedSaveDeliverableContent = debounce(() => saveDeliverableContent(tiptapDeliverable.value), 1000);
+const debouncedSaveDeliverableContent = debounce(() => saveDeliverableContent(tiptapDeliverable.value), 250);
 
 function updateDeliverable() {
+  saving.value = true;
   debouncedSaveDeliverableContent();
+  saving.value = false;
 }
 
 </script>

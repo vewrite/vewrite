@@ -60,7 +60,8 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
 }
 
 .deliverable-editor {
-  height: calc(100%);
+  height: 100%;
+  position: relative;
 }
 
 .external-link {

@@ -1,5 +1,5 @@
 <template>
-  <main id="Loading" :class="[zeroHeight]">
+  <main id="Loading" :class="[zeroHeight, saving]">
     <Logo v-if="hasLogo" />
     <div :class="['spinner', type]"></div>
   </main>
@@ -7,8 +7,7 @@
 
 <script setup>
 
-const props = defineProps(['type', 'hasLogo', 'zeroHeight'])
-const { path } = toRefs(props)
+const props = defineProps(['type', 'hasLogo', 'zeroHeight', 'saving'])
 
 </script>
 
@@ -25,6 +24,20 @@ const { path } = toRefs(props)
   height: 100%;
   width: 100%;
   z-index: 10;
+
+  &.saving {
+    padding: $spacing-xxxs;
+    height: 52px;
+    width: 52px;
+    position: absolute;
+    top: $spacing-sm;
+    right: $spacing-sm;
+    z-index: 9999;
+    background: rgba($white, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 50%;
+    box-shadow: $big-shadow;
+  }
 
   &.zero-height {
     height: auto;
