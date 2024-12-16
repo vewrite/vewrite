@@ -22,10 +22,10 @@
         <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
         <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
         <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
-          <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
+          <button class="button large back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
           <div v-else></div>
 
-          <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
+          <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon large', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
             <span v-if="!loading" class="state-name">
@@ -50,7 +50,7 @@
           </button>
 
           <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
-          <button class="button next" @click="nextState()" v-if="currentPositionInWorkflow < workflowStates.length - 1">Next state</button>
+          <button class="button large next" @click="nextState()" v-if="currentPositionInWorkflow < workflowStates.length - 1">Next state</button>
           <div v-else></div>
           
         </section>

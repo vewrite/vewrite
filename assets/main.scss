@@ -636,6 +636,7 @@ button,
 button.large,
 .button.large {
     padding: $spacing-sm $spacing-md;
+    max-height: 44px;
 }
 
 button.small,
@@ -782,6 +783,9 @@ button.vertical,
       gap: $spacing-xs;
       width: 100%;
       position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
   
       .object-title-input {
         font-size: $font-size-lg;
@@ -790,6 +794,13 @@ button.vertical,
         width: 100%;
         padding: 0;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @media (max-width: 600px) {
+            font-size: $font-size-md;
+        }
   
         &:focus,
         &:active {
@@ -805,6 +816,13 @@ button.vertical,
         padding: $spacing-xxs;
         margin-top: -16px;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @media (max-width: 600px) {
+            font-size: $font-size-xs;
+        }
   
         &:focus,
         &:active {
@@ -829,15 +847,11 @@ button.vertical,
   /* TipTap */
 
   .ProseMirror {
-    padding: $spacing-md;
+    padding: $spacing-sm $spacing-md $spacing-md $spacing-md;
     background-color: $white;
 
-    @media (max-width: 960px) {
-        padding: $spacing-md;
-    }
-
     @media (max-width: 600px) {
-        padding: $spacing-md 0;
+        padding: $spacing-sm;
     }
   }
 
