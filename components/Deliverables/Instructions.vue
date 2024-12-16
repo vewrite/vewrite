@@ -1,20 +1,28 @@
 <template>
-  <section class="instructions">
+  <section :class="['instructions', showInstructions ? 'show' : 'hide']">
     <div class="notification small">
       <Icon :name="props.icon" size="2rem" />
       <div class="instruction-set">
         <p>{{ props.content }}</p>
       </div>
-      <button class="button small">
+      <button class="button small" @click="toggleInstructions">
         <Icon name="fluent-mdl2:chrome-close" size="1rem" />
       </button>
     </div>
+    <button class="button small toggle-instruction-button" @click="toggleInstructions">
+      <Icon :name="props.icon" size="2rem" />
+    </button>
   </section>
 </template>
 
 <script setup>
 
 const props = defineProps(['icon', 'title', 'content']);
+const showInstructions = ref(true);
+
+function toggleInstructions() {
+  showInstructions.value = !showInstructions.value;
+}
 
 </script>
 
@@ -33,7 +41,7 @@ const props = defineProps(['icon', 'title', 'content']);
   border-radius: $br-xl;
   backdrop-filter: blur(6px);
   
-  .notification {
+  &.show .notification {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
@@ -60,6 +68,31 @@ const props = defineProps(['icon', 'title', 'content']);
         margin: 0;
       }
     }
+  }
+
+  &.hide .notification {
+    display: none;
+  }
+
+  &.show .toggle-instruction-button {
+    display: none;
+  }
+
+  &.hide .toggle-instruction-button {
+    display: block;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    left: reset;
+    z-index: 2;
+    background: rgba($brand, 0.05);
+    border-radius: $br-xl;
+    color: $brand;
+    padding: $spacing-sm;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
   }
 }
 

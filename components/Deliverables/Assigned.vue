@@ -1,5 +1,5 @@
 <template>
-  <button class="button large">
+  <button class="button">
     assigned
   </button>
 </template>

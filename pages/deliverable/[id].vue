@@ -73,7 +73,7 @@ import AppPanel from '~/components/AppPanel.vue';
 // import StateManager from '~/components/States/StateManager.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
 import StateRow from '~/components/States/StateRow.vue';
-import Assigned from '~/components/deliverable/Assigned.vue';
+import Assigned from '~/components/Deliverables/Assigned.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
