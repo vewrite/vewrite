@@ -2,14 +2,14 @@
   <section class="team-members">
     <Loading v-if="loading" type="small" />
     <section class="team-wrapper" v-if="TeamData">
+      <section class="team-info">
+        <p class="assigned"><nuxt-link :to="'/team/' + TeamData.id">{{ TeamData.name }}</nuxt-link></p>
+      </section>
       <div class="members">
         <div class="members-image" v-for="member in TeamMembersData" :key="member.id">
           <Avatar :uuid="member.user_id" size="large" />
         </div>
       </div>
-      <section class="team-info">
-        <p class="assigned"><nuxt-link :to="'/team/' + TeamData.id">{{ TeamData.name }}</nuxt-link> assigned</p>
-      </section>
     </section>
     <div class="members-image" v-if="!loading && TeamData?.length == 0">
       <img src="/images/team-default.svg" alt="Team avatar" />
@@ -58,7 +58,7 @@ onMounted(async () => {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-right: $spacing-md;
+    gap: $spacing-xs;
 
     .team-info {
       display: flex;
@@ -70,7 +70,7 @@ onMounted(async () => {
         color: $black;
         margin: 0;
         opacity: 0.5;
-        font-size: $font-size-xs;
+        font-size: $font-size-xxs;
         text-wrap: nowrap;
       }
     }
@@ -95,21 +95,21 @@ onMounted(async () => {
 
       &:nth-child(1) {
         z-index: 3;
-        left: 0px;
+        right: 0px;
         top: 0px;
         display: block;
       }
 
       &:nth-child(2) {
         z-index: 2;
-        left: -10px;
+        right: 10px;
         top: 0px;
         display: block;
       }
 
       &:nth-child(3) {
         z-index: 1;
-        left: -20px;
+        right: -20px;
         top: 0px;
         display: block;
       }

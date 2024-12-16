@@ -3,7 +3,6 @@
     <div class="notification small">
       <Icon :name="props.icon" size="2rem" />
       <div class="instruction-set">
-        <h3>{{ props.title }}</h3>
         <p>{{ props.content }}</p>
       </div>
       <button class="button small">
@@ -28,18 +27,18 @@ const props = defineProps(['icon', 'title', 'content']);
   position: absolute;
   bottom: 0;
   right: 0;
+  left: 0;
   z-index: 2;
-  max-width: 400px;
   background: rgba($white, 0.85);
   backdrop-filter: blur(6px);
-  border: $border;
-  border-radius: $br-md;
+  border-top: $border;
   
   .notification {
     display: grid;
-    grid-template-columns: 2rem 1fr auto;
-    align-items: start;
-    gap: $spacing-sm;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: $spacing-sm 0 0;
+    gap: $spacing-xxs; 
 
     .iconify {
       width: 2rem;

@@ -1,7 +1,7 @@
 <template>
   <section id="ProjectDetails">
     <TeamMembers :team="team" />
-    <ClientImage :client="client" size="small" table="logos" />
+    <!-- <ClientImage :client="client" size="small" table="logos" /> -->
   </section>
 </template>
 
@@ -18,15 +18,9 @@ const props = defineProps(['team', 'client'])
 @use 'assets/variables' as *;
 
 #ProjectDetails {
-  background-color: $white;
-  margin: $spacing-sm $spacing-md $spacing-md;
-  padding: $spacing-xxs;
-  border: $border;
-  border-radius: $br-lg;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  box-shadow: $main-shadow;
 }
 
 </style>

@@ -21,11 +21,13 @@
     </template>
     <template v-slot:body>
       {{ DeliverableError }}
-      <div class="deliverables-list">
+      <div class="project-details">
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" />
-        <ProjectDetails v-if="project && loading.global == false" :client="project.client_id" :team="project.assigned_team" />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
+        <!-- <ProjectDetails v-if="project && loading.global == false" :client="project.client_id" :team="project.assigned_team" /> -->
         <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
+      </div>
+      <div class="deliverables-list">
         <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
           <p>No deliverables found for this project</p>
         </div>
@@ -373,12 +375,26 @@ watchEffect(() => {
 
 @use 'assets/variables' as *;
 
+.project-details {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  margin: $spacing-sm;
+  background: rgba($black, 0.05);
+  backdrop-filter: blur(10px);
+  z-index: 2;
+  border-radius: $br-lg;
+  position: sticky;
+  top: $spacing-sm;
+}
+
 .deliverables-list {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 100%;
-  overflow-y: auto;
+  padding: 0 $spacing-sm $spacing-sm;
+  gap: $spacing-sm;
 }
 
 .new-deliverable {
@@ -396,7 +412,6 @@ watchEffect(() => {
 }
 
 .project-deliverables {
-  padding: $spacing-sm;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -420,9 +435,13 @@ watchEffect(() => {
 
       .deliverable-id {
         color: $gray-dark;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         padding-right: $spacing-xs;
         border-right: $border;
+
+        @media (max-width: 960px) {
+          font-size: $font-size-xxs;
+        }
       }
 
       .deliverable-type {
@@ -435,7 +454,11 @@ watchEffect(() => {
       .deliverable-title {
         color: $black;
         text-decoration: none;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
+
+        @media (max-width: 960px) {
+          font-size: $font-size-xxs;
+        }
       }
     }
 
@@ -459,11 +482,19 @@ watchEffect(() => {
         border: $border;
         padding: $spacing-xxxs $spacing-xs;
         border-radius: $br-lg;
+
+        @media (max-width: 960px) {
+          font-size: $font-size-xxs;
+        }
       }
 
       .deliverable-updated-at {
         color: $gray-dark;
         font-size: $font-size-xs;
+
+        @media (max-width: 960px) {
+          font-size: $font-size-xxs;
+        }
       }
 
       .deliverable-workflow-state {

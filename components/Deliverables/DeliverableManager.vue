@@ -5,7 +5,7 @@
       
       <!-- Internal Editor - New Template -->
       <section class="state new" v-if="StateData.name == 'new'">
-        <Instructions :icon="'fluent:document-20-regular'" :title="'New deliverable'" :content="'This has been assigned to the owner of this project. They must add a quick summary of the requirement for this deliverable.'" />
+        <Instructions :icon="'mingcute:question-fill'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" />
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
       </section>
       <!-- <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" /> -->

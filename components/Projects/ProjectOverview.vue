@@ -1,19 +1,20 @@
 <template>
-  <aside class="object-overview no-border">
-    <div class="object-summary">
-      <input class="object-title-input" v-model="project.name" @input="debouncedUpdateProjectName(project.id, $event.target.value)" />
-      <input class="object-description-input" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" placeholder="Add a project description" />
-    </div>
-    <!-- <div class="client-summary">
-      <ClientImage :client="client" size="medium" table="logos" />
-    </div> -->
-  </aside>
+  <section class="project-overview">
+    <ClientImage :client="client" size="small" table="logos" />
+    <aside class="object-overview no-border">
+      <div class="object-summary">
+        <input class="object-title-input" v-model="project.name" @input="debouncedUpdateProjectName(project.id, $event.target.value)" />
+        <input class="object-description-input" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" placeholder="Add a project description" />
+      </div>
+    </aside>
+    <TeamMembers :team="team" />
+  </section>
 </template>
 
 <script setup>
 
-const props = defineProps(['project', 'creator', 'client', 'deliverables'])
-const { client, project } = toRefs(props)
+const props = defineProps(['project', 'creator', 'client', 'deliverables', 'team'])
+const { client, project, team } = toRefs(props)
 
 // useProject composable
 import useProject from '~/composables/useProject';
@@ -38,6 +39,10 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
 
 @use 'assets/variables' as *;
 
-
+.project-overview {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: $spacing-sm;
+}
 
 </style>

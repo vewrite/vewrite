@@ -615,6 +615,10 @@ button,
     min-height: 24px;
     border: none;
 
+    @media (max-width: 960px) {
+        font-size: $font-size-xxs;
+    }
+
     &:hover {
         background: rgba($black, 0.075);
         transform: scale(1.035);
@@ -769,7 +773,6 @@ button.vertical,
     gap: $spacing-md;
     margin: 0 auto;
     width: 100%;
-    min-height: 80px;
 
     &.no-border {
         border-bottom: none;
@@ -780,7 +783,7 @@ button.vertical,
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: $spacing-xs;
+      gap: $spacing-sm;
       width: 100%;
       position: relative;
       overflow: hidden;
@@ -788,12 +791,12 @@ button.vertical,
       white-space: nowrap;
   
       .object-title-input {
-        font-size: $font-size-lg;
+        font-size: $font-size-md;
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: 0;
-        text-align: center;
+        padding: 0 $spacing-xxs;
+        text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -809,13 +812,13 @@ button.vertical,
       }
 
       .object-description-input {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: $spacing-xxs;
+        padding: 0 $spacing-xxs;
         margin-top: -16px;
-        text-align: center;
+        text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

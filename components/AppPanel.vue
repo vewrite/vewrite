@@ -29,10 +29,11 @@ export default {
   .header {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     min-height: 60px;
     padding: $spacing-sm;
+    gap: $spacing-xs;
     position: relative;
     margin: 0 $spacing-sm;
     border-top: $border;
@@ -59,7 +60,7 @@ export default {
 
   .body {
     height: calc(100% - 60px);
-    overflow-y: hidden;
+    overflow-y: auto;
     position: relative;
     background: $white;
     margin: 0 $spacing-sm;
