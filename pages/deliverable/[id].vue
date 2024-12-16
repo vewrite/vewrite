@@ -27,7 +27,6 @@
 
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
-            {{ workflowStates[currentPositionInWorkflow] }}
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
             <span v-if="!loading" class="state-name">
               <span>{{ StateData.name }}</span>
@@ -135,14 +134,6 @@ async function getDeliverable(id) {
     loading.value = false;
   }
 }
-
-// function handleTabChange() {
-//   if (ActiveTab.value === 'current') {
-//     ActiveTab.value = 'previous';
-//   } else {
-//     ActiveTab.value = 'current';
-//   }
-// }
 
 function toggleStateManagerPanel() {
   collapsed.value = !collapsed.value

@@ -1,6 +1,5 @@
 <template>
   <Loading class="saving" v-if="saving" saving="saving" type="small" />
-  <!-- <pre v-if="deliverable">{{ deliverable }}</pre> -->
   <div id="TipTapEditor" v-if="editable">
     <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
