@@ -27,6 +27,7 @@
 
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
+            {{ workflowStates[currentPositionInWorkflow] }}
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
             <span v-if="!loading" class="state-name">
               <span>{{ StateData.name }}</span>
