@@ -78,6 +78,7 @@ const viewMode = ref('grid');
 
 const listToggle = () => {
   viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid';
+  localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
 };
 
 // Team composable
@@ -89,8 +90,14 @@ import useGroup from '~/composables/useGroup';
 const { fetchGroupId, GroupData, GroupError } = useGroup();
 
 onMounted(async () => {
-  try {
+  // grid/list state
+  const savedState = localStorage.getItem('viewMode');
+  if (savedState !== null) {
+    viewMode.value = JSON.parse(savedState);
+  }
 
+  // subscription
+  try {
     // Fetch group ID
     await fetchGroupId(user.value.id)
 

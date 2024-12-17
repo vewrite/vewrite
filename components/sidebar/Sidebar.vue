@@ -25,6 +25,7 @@ const collapsed = ref(false)
 
 function toggleSidebar() {
   collapsed.value = !collapsed.value
+  localStorage.setItem('collapsed', JSON.stringify(collapsed.value));
 }
 
 const isProjects = computed(() => {
@@ -43,6 +44,13 @@ const isTeams = computed(() => {
 
 const isClients = computed(() => {
   return route.path.startsWith('/client/');
+});
+
+onMounted(() => {
+  const savedState = localStorage.getItem('collapsed');
+  if (savedState !== null) {
+    collapsed.value = JSON.parse(savedState);
+  }
 });
 
 </script>

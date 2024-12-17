@@ -47,19 +47,15 @@ import { onMounted, ref } from 'vue'
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const clients = ref([])
-const test = ref([])
 const loading = ref(true)
 const searchQuery = ref('')
 
 // Client composable
 import useClient from '~/composables/useClient';
-const { fetchClients, fetchProjectsFromSpecificClient, clientsData, createClientModal } = useClient();
-
-const ClientProjects = ref([]);
+const { fetchClients, clientsData, createClientModal } = useClient();
 
 onMounted(async () => {
   try {
-
     const subscription = supabase
       .from('clients')
       .on('INSERT', payload => {

@@ -80,6 +80,7 @@ const viewMode = ref('grid');
 
 const listToggle = () => {
   viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid';
+  localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
 };
 
 function assignProjectTag(project) {
@@ -174,6 +175,13 @@ async function fetchProjects() {
 }
 
 onMounted(async () => {
+  // grid/list state
+  const savedState = localStorage.getItem('viewMode');
+  if (savedState !== null) {
+    viewMode.value = JSON.parse(savedState);
+  }
+
+  // subscription
   const subscription = supabase
     .from('projects')
     .on('INSERT', payload => {
@@ -628,7 +636,6 @@ const filteredProjects = computed(() => {
               border-radius: $br-md;
               background-color: $white;
               border: $border;
-              box-shadow: $soft-shadow;
 
               .progress {
                 height: 6px;

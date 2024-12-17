@@ -22,7 +22,15 @@ const showInstructions = ref(true);
 
 function toggleInstructions() {
   showInstructions.value = !showInstructions.value;
+  localStorage.setItem('showInstructions', JSON.stringify(showInstructions.value));
 }
+
+onMounted(() => {
+  const savedState = localStorage.getItem('showInstructions');
+  if (savedState !== null) {
+    showInstructions.value = JSON.parse(savedState);
+  }
+});
 
 </script>
 
