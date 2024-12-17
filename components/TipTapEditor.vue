@@ -181,11 +181,11 @@ function updateDeliverable() {
     gap: $spacing-sm;
     margin: 0;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     background: rgba($white, 0.95);
     backdrop-filter: blur(20px);
-    padding: $spacing-sm;
-    min-height: 72px;
+    padding: 0 $spacing-sm;
+    min-height: 52px;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -196,7 +196,7 @@ function updateDeliverable() {
       gap: $spacing-xxs;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: $spacing-sm;
+      padding: $spacing-xxs $spacing-sm;
       align-items: center;
       justify-content: flex-start;
     }

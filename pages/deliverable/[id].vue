@@ -26,7 +26,7 @@
           <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
           <div v-else></div>
 
-          <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon large', collapsed ? '' : 'open']">
+          <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
             <span v-if="!loading" class="state-name">
@@ -414,7 +414,7 @@ async function handleStateChange(deliverableId, stateInstanceId) {
 
 .deliverables {
   display: grid;
-  grid-template-rows: 1fr 72px;
+  grid-template-rows: 1fr 52px;
   height: 100%;
 
   .deliverable-blur {
@@ -442,7 +442,7 @@ async function handleStateChange(deliverableId, stateInstanceId) {
     z-index: 2;
 
     .back {
-      align-self: end;
+      align-self: center;
       justify-self: start;
     }
 

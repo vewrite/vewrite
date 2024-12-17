@@ -41,8 +41,8 @@ onMounted(() => {
 .instructions {
   margin: 0 $spacing-sm;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 0px;
+  right: 0px;
   left: 0;
   z-index: 2;
   background: rgba($brand, 0.05);
@@ -55,6 +55,7 @@ onMounted(() => {
     align-items: center;
     padding: $spacing-sm;
     gap: $spacing-xxs; 
+    min-height: 48px;
 
     .iconify {
       width: 2rem;
@@ -89,8 +90,8 @@ onMounted(() => {
   &.hide .toggle-instruction-button {
     display: block;
     position: absolute;
-    bottom: 2px;
-    right: 2px;
+    bottom: 0px;
+    right: 0px;
     left: reset;
     z-index: 2;
     background: rgba($brand, 0.05);
@@ -101,6 +102,10 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
     align-self: flex-end;
+
+    &:hover {
+      transform: scale(1);
+    }
   }
 }
 
