@@ -8,6 +8,13 @@
         <Instructions :icon="'mingcute:question-fill'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" />
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
       </section>
+
+      <!-- Internal Editor - Research Template -->
+      <section class="state research" v-if="StateData.name == 'research'">
+        <Instructions :icon="'mingcute:question-fill'" :title="'Research deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" />
+        <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+      </section>
+
       <!-- <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" /> -->
         
       <!-- External Link -->

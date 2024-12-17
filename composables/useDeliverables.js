@@ -61,6 +61,40 @@ export default function useDeliverables() {
     }
   }
 
+  async function duplicateContentToNextState(deliverableId, currentStateId, nextStateId) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverable_content')
+        .select('*')
+        .eq('deliverable_id', deliverableId)
+        .eq('stateinstance_id', currentStateId);
+
+      if (error) throw error;
+
+      const content = data[0].content;
+
+      const newDeliverableContent = {
+        project_id: data[0].project_id,
+        deliverable_id: data[0].deliverable_id,
+        stateinstance_id: nextStateId,
+        created_at: new Date(),
+        updated_at: new Date(),
+        content: content,
+        status: 0
+      }
+
+      const { data: newContent, error: newError } = await supabase
+        .from('deliverable_content')
+        .insert(newDeliverableContent);
+
+      if (newError) throw newError;
+
+      return newContent;
+    } catch (error) {
+      DeliverableError.value = error.message;
+    }
+  }
+
   async function updateDeliverableTitle(deliverableId, title) {
     try {
       const { data, error } = await supabase
@@ -508,7 +542,8 @@ export default function useDeliverables() {
     fetchDeliverableStates,
     updateDeliverableWorkflowState,
     renderStateName,
-    deleteProjectDeliverables
+    deleteProjectDeliverables,
+    duplicateContentToNextState
   }
 
 }

@@ -58,7 +58,7 @@
                 <Icon name="uis:ellipsis-v" size="1.15rem" />
               </template>
               <template v-slot:menu>
-                <div class="dropdown-item" @click="copyContent()">Duplicate to next state</div>
+                <div class="dropdown-item" @click="duplicateContentToNextState(DeliverableData.id, workflowStates[currentPositionInWorkflow], workflowStates[nextPositionInWorkflow])">Duplicate content to next state</div>
               </template>
             </Dropdown>
           </section>
@@ -113,7 +113,7 @@ const nextPositionInWorkflow = ref(null);
 const collapsed = ref(true);
 
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, updateDeliverableWorkflowState, setDeliverableContentStatus } = useDeliverables();
+const { fetchSingleProjectDeliverableByState, fetchDeliverableState, DeliverableWorkflowStateData, deleteDeliverableModal, updateDeliverableWorkflowState, duplicateContentToNextState } = useDeliverables();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance } = useWorkflowStateInstances();
