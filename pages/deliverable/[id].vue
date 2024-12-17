@@ -5,7 +5,7 @@
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
-      <Assigned />
+      <Assigned v-if="DeliverableData && !loading" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <Dropdown>
           <template v-slot:trigger>
@@ -18,12 +18,12 @@
       </div>
     </template>
     <template v-slot:body>
-      <Loading v-if="loading" />
-      <section class="deliverables">
+      <Loading v-if="loading" type="small" />
+      <section class="deliverables" v-if="!loading">
         <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
         <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
         <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
-          <button class="button large back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
+          <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
           <div v-else></div>
 
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon large', collapsed ? '' : 'open']">
@@ -51,8 +51,18 @@
           </button>
 
           <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
-          <button class="button large next" @click="nextState()" v-if="currentPositionInWorkflow < workflowStates.length - 1">Next state</button>
-          <div v-else></div>
+          <section class="next" v-if="currentPositionInWorkflow < workflowStates.length - 1">
+            <button class="button" @click="nextState()" >Next state</button>
+            <Dropdown position="top">
+              <template v-slot:trigger>
+                <Icon name="uis:ellipsis-v" size="1.15rem" />
+              </template>
+              <template v-slot:menu>
+                <div class="dropdown-item" @click="copyContent()">Duplicate to next state</div>
+              </template>
+            </Dropdown>
+          </section>
+          <div v-if="currentPositionInWorkflow == workflowStates.length - 1"></div>
           
         </section>
       </section>
@@ -459,8 +469,13 @@ async function handleStateChange(deliverableId, stateInstanceId) {
     }
 
     .next {
-      align-self: end;
+      align-self: center;
       justify-self: end;
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-xs;
+      align-items: center;
+      justify-content: center;
     }
 
     .state-manager-panel {
