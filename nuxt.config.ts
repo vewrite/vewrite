@@ -41,5 +41,15 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false,
   },
-  
+
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler'
+        }
+      }
+    }
+  },
+
 })
