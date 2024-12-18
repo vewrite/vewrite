@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     "@samk-dev/nuxt-vcalendar",
     '@nuxt/icon',
     'nuxt-tiptap-editor',
+    'nuxt-paypal',
   ],
 
   css: [
@@ -50,6 +51,11 @@ export default defineNuxtConfig({
         }
       }
     }
+  },
+  
+  paypal: {
+    clientId: process.env.PAYPAL_CLIENT_ID,
+    currency: 'USD',
   },
 
 })

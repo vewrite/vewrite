@@ -91,7 +91,7 @@ function toggleDropdown() {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-xs;
   font-size: $font-size-xs;
   color: $black;
   font-weight: bold;

@@ -20,6 +20,12 @@ export default function useProfile() {
         avatar_url: '',
         website: '',
         persona: '',
+        subscription: {
+          "status": "free",
+          "order_id": "",
+          "plan": "free",
+          "current_period_start": ""
+        },
       }
 
       const { data, error } = await supabase

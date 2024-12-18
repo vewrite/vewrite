@@ -12,7 +12,9 @@
     "@samk-dev/nuxt-vcalendar": "^1.0.4",
     "@types/simplemde": "^1.11.11",
     "nuxt": "^3.13.2",
-    "nuxt-tiptap-editor": "^2.0.0"
+    "nuxt-paypal": "^0.0.1-beta",
+    "nuxt-tiptap-editor": "^2.0.0",
+    "nuxt3-paypal": "^1.1.2"
   },
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",

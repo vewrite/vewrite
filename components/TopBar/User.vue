@@ -12,6 +12,7 @@
       </section>
       <hr class="dropdown-divider" />
       <router-link to="/account" class="dropdown-item"><Icon name="solar:user-linear" size="1.5rem" /> Account</router-link>
+      <router-link to="/subscriptions" class="dropdown-item"><Icon name="solar:lock-linear" size="1.5rem" /> Subscriptions</router-link>
       <div class="dropdown-item" @click="logout"><Icon name="fluent:arrow-exit-20-regular" size="1.5rem" /> Logout</div>
     </template>
   </Dropdown>
