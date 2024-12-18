@@ -58,6 +58,85 @@ export default function useProfile() {
     } 
   }
 
+  async function getPaypalAccessToken(clientId, clientSecret) {
+    // console.log('clientId:', clientId);
+    // console.log('clientSecret:', clientSecret);
+    const auth = btoa(`${clientId}:${clientSecret}`);
+
+    // console.log('Auth token:', auth);
+    const response = await $fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+      method: 'POST',
+      body: new URLSearchParams({ grant_type: 'client_credentials' }).toString(),
+      headers: {
+        Authorization: `Basic ${auth}`,
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+    });
+    return response.access_token;
+  }
+  
+  async function verifyPaypalSubscription(subscriptionId, accessToken) {
+    const response = await $fetch(`https://api-m.sandbox.paypal.com/v1/billing/subscriptions/${subscriptionId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  }
+
+  async function setSubscriptionStatus(id, status, subscriptionId) {
+    console.log('Setting subscription status:', id, status);
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', id);
+      
+      if (error) throw error;
+
+      const profile = data[0];
+      const subscription = profile.subscription;
+    
+      // Check with PayPal that the orderId exists
+      const config = useRuntimeConfig();
+      const clientId = config.public.paypal.clientId;
+      const clientSecret = config.public.paypal.clientSecret;
+      const accessToken = await getPaypalAccessToken(clientId, clientSecret);
+      // const orderDetails = await verifyPaypalOrder(orderId, accessToken);
+      console.log('Subscription:', subscriptionId);
+      const subcriptionDetails = await verifyPaypalSubscription(subscriptionId, accessToken);
+
+      console.log('Subscription details:', subcriptionDetails);
+
+      let status = {
+        "status": subcriptionDetails.status,
+        "order_id": subcriptionDetails.id,
+        "current_period_start": subcriptionDetails.start_time,
+        "next_billing_time": subcriptionDetails.billing_info.next_billing_time,
+      }
+
+      if (subcriptionDetails.status === 'ACTIVE') {
+        // If the order exists and is completed, update the subscription status
+        const { data, error } = await supabase
+          .from('profiles')
+          .update({ subscription: status })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        ProfileData.value = data[0];
+      } else {
+        throw new Error('Order is not completed');
+      }
+    } catch (error) {
+      console.error('Error setting subscription status:', error);
+      ProfileError.value = error.message;
+    }
+
+  }
+
+
   async function updateProfile(profile) {
     try {
       const { data, error } = await supabase
@@ -168,6 +247,7 @@ export default function useProfile() {
     fetchProfileViaEmail,
     fetchProfileImage,
     fetchInvitedTeamsForThisProfile,
+    setSubscriptionStatus,
     TeamIds,
     ProfileData,
     ProfileError,

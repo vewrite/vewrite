@@ -108,8 +108,12 @@ definePageMeta({
 
 import AppPanel from '~/components/AppPanel.vue';
 
+const user = useSupabaseUser();
 const config = useRuntimeConfig();
 const status = ref(null);
+
+import useProfile from '~/composables/useProfile';
+const { setSubscriptionStatus, ProfileData, ProfileError } = useProfile();
 
 onMounted(() => {
   const script = document.createElement('script');
@@ -131,6 +135,7 @@ onMounted(() => {
         });
       },
       onApprove: function(data, actions) {
+        setSubscriptionStatus(user.value.id ,'active', data.subscriptionID);
         status.value = 'You have successfully created subscription ' + data.subscriptionID;
       }
     }).render('#paypal-checkout');
