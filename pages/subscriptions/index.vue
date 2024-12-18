@@ -24,7 +24,7 @@
           <p>With Vewrite, you and your team can be more effective, efficient, and profitable.</p>
         </section>
         <p class="notification info" v-if="status">{{ status }}</p>
-        <section class="subscribe-options">
+        <section class="subscribe-options max-width md">
           <div class="subscribe-option">
             <h2>Free</h2>
             <p>No cost to you or your team.</p>
@@ -90,7 +90,7 @@
             </div>
           </div>
         </section>
-        <section class="subscribe-buttons">
+        <section class="subscribe-buttons max-width md">
           <div class="placeholder"></div>
           <div id="paypal-checkout" v-if="!status"></div>
         </section>
@@ -182,15 +182,22 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     width: 100%;
-    max-width: 800px;
     overflow: hidden;
     margin: 0 auto;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
 
     .subscribe-option {
       padding: $spacing-md $spacing-lg;
       text-align: center;
       width: 50%;
       color: $black;
+
+      @media (max-width: 600px) {
+        width: 100%;
+      }
 
       &.pro {
         color: $brand;
@@ -259,15 +266,22 @@ onMounted(() => {
     bottom: 0;
     margin: 0 auto;
     width: 100%;
-    max-width: 800px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background: rgba($white, 1);
     mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0));
 
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+
     .placeholder {
       width: 100%;
       padding: $spacing-md;
+
+      @media (max-width: 600px) {
+        display: none;
+      }
     }
 
     #paypal-checkout {
