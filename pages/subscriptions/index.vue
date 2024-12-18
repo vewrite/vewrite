@@ -1,7 +1,7 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <div></div>
+      <div class="thanks">Thanks for using Vewrite!</div>
     </template>
     <template v-slot:body>
       <main class="subscriptions">
@@ -56,12 +56,30 @@
                   <span>Teams</span>
                   <span>Unlimited</span>
                 </li>
+                <li>
+                  <span>Custom Workflows</span>
+                  <span>Unlimited</span>
+                </li>
+                <li>
+                  <span>Clients</span>
+                  <span>Unlimited</span>
+                </li>
+                <li>
+                  <span>Active Projects</span>
+                  <span>Unlimited</span>
+                </li>
+                <li>
+                  <span>Teams</span>
+                  <span>Unlimited</span>
+                </li>
               </ul>
             </div>
-            <div id="paypal-checkout" v-if="!status"></div>
           </div>
         </section>
-        
+        <section class="subscribe-buttons">
+          <div></div>
+          <div id="paypal-checkout" v-if="!status"></div>
+        </section>
       </main>
     </template>
   </AppPanel>
@@ -112,14 +130,25 @@ onMounted(() => {
 
 @use 'assets/variables' as *;
 
+.thanks {
+  text-align: center;
+  width: 100%;
+  opacity: 0.15;
+}
+
 .subscriptions {
-  padding: $spacing-md;
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
+  position: relative;
 
   .subscribe-intro {
     text-align: center;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     h1 {
       font-size: $font-size-xxl;
@@ -127,7 +156,7 @@ onMounted(() => {
     }
 
     p {
-      color: rgba($black, 0.5);
+      color: rgba($black, 0.85);
     }
   }
 
@@ -135,11 +164,8 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     width: 100%;
-    max-width: 600px;
-    border-radius: $br-xl;
     overflow: hidden;
     margin: 0 auto;
-    box-shadow: $big-shadow;
 
     .subscribe-option {
       padding: $spacing-md $spacing-lg;
@@ -148,26 +174,25 @@ onMounted(() => {
       color: $black;
 
       &.pro {
-        color: $white;
+        color: $brand;
         border-left: $border;
-        background: linear-gradient(to top, $brand, $brand-light);
 
         .cost {
           padding: $spacing-xxxs $spacing-xxs;
           margin-right: $spacing-xxxs;
           border-radius: $br-md;
           border: 1px solid rgba($mint, 1);
-          color: $mint;
+          color: $mint-dark;
           font-weight: bold;
         }
 
         .subscribe-details {
           ul li {
-            color: $white;
+            color: $brand;
 
             span {
               &:last-child {
-                color: $mint;
+                color: $mint-dark;
               }
             }
           }
@@ -214,6 +239,24 @@ onMounted(() => {
           }
         }
       }
+    }
+  }
+
+  .subscribe-buttons {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba($white, 0.1);
+    backdrop-filter: blur(10px);
+
+    #paypal-checkout {
+      background: rgba($white, 0.2);
+      backdrop-filter: blur(10px);
+      padding: $spacing-md;
     }
   }
 }

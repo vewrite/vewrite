@@ -64,12 +64,11 @@ export default {
     position: relative;
     background: $white;
     margin: 0 $spacing-sm;
-    margin-bottom: $spacing-sm;
     border-bottom: $border;
     border-left: $border;
     border-right: $border;
-    border-bottom-left-radius: $br-xl;
-    border-bottom-right-radius: $br-xl;
+    // border-bottom-left-radius: $br-xl;
+    // border-bottom-right-radius: $br-xl;
     box-shadow: $main-shadow;
 
     @media (max-width: 960px) {
