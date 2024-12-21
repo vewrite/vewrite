@@ -101,7 +101,7 @@ export default function useProfile() {
       // Check with PayPal that the orderId exists
       const config = useRuntimeConfig();
       const clientId = config.public.paypal.clientId;
-      const clientSecret = config.public.paypal.clientSecret;
+      const clientSecret = config.private.paypal.clientSecret;
       const accessToken = await getPaypalAccessToken(clientId, clientSecret);
       // const orderDetails = await verifyPaypalOrder(orderId, accessToken);
       console.log('Subscription:', subscriptionId);

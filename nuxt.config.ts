@@ -53,10 +53,18 @@ export default defineNuxtConfig({
     }
   },
   
-  paypal: {
-    clientId: process.env.PAYPAL_CLIENT_ID,
-    clientSecret: process.env.PAYPAL_CLIENT_SECRET,
-    currency: 'USD',
+  // paypal: {
+  //   clientId: process.env.PAYPAL_CLIENT_ID,
+  //   clientSecret: process.env.PAYPAL_CLIENT_SECRET,
+  //   currency: 'USD',
+  // },
+
+  runtimeConfig: {
+    paypal: {
+      clientId: process.env.PAYPAL_CLIENT_ID,
+      clientSecret: process.env.PAYPAL_CLIENT_SECRET,
+      currency: 'USD',
+    },
   },
 
 })

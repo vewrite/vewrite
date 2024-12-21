@@ -26,7 +26,7 @@
         <p class="notification info" v-if="status">{{ status }}</p>
         <section class="subscribe-options max-width md">
           <div class="subscribe-option">
-            <h2>Free</h2>
+            <h2>Free Plan</h2>
             <p>No cost to you or your team.</p>
             <div class="subscribe-details">
               <ul>
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="subscribe-option pro">
-            <h2>Pro</h2>
+            <h2>Pro Plan</h2>
             <p><span class="cost">$29/m</span> for the Project Manager</p>
             <div class="subscribe-details">
               <ul>
@@ -167,10 +167,8 @@ onMounted(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: $spacing-md;
+    padding: $spacing-md $spacing-sm 0;
     gap: $spacing-xxs;
-    margin: $spacing-sm $spacing-sm 0;
-    background: rgba($brand, 0.05);
     border-radius: $br-lg;
 
     h1 {
@@ -195,10 +193,12 @@ onMounted(() => {
     }
 
     .subscribe-option {
-      padding: $spacing-md $spacing-lg;
+      padding: 0 $spacing-md $spacing-lg;
       text-align: center;
       width: 50%;
       color: $black;
+      display: flex;
+      flex-direction: column;
 
       @media (max-width: 600px) {
         width: 100%;
@@ -206,6 +206,10 @@ onMounted(() => {
 
       &.pro {
         color: $brand;
+
+        h2 {
+          background: linear-gradient(150deg, rgba($mint, 0.35), rgba($mint, 1));
+        }
 
         .cost {
           padding: $spacing-xxxs $spacing-xxs;
@@ -230,12 +234,19 @@ onMounted(() => {
       }
 
       h2 {
-        font-size: $font-size-xl;
-        margin: 0 0 $spacing-xs;
+        font-size: $font-size-lg;
+        margin: 0 auto $spacing-xs;
+        background: linear-gradient(150deg, rgba($brand, 0.35), rgba($brand, 1));
+        border-radius: $br-xxl;
+        padding: $spacing-xxxs $spacing-md;
+        align-self: center;
+        color: $white;
+        text-shadow: 0px 1px 1px rgba($black, 0.25);
       }
 
       p {
         margin-bottom: $spacing-md;
+        line-height: 30px;
       }
 
       .subscribe-details {
