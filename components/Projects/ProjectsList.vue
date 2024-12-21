@@ -1,6 +1,6 @@
 <template>
   <main id="ProjectsList">
-    <Loading v-if="loading" />
+    <Loading v-if="loading" type="small" />
 
     <div class="search-bar" v-if="projects.length > 0 && !loading">
       <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" />
@@ -234,6 +234,7 @@ const filteredProjects = computed(() => {
   justify-content: flex-start;
   margin-bottom: $spacing-lg;
   transition: padding 0.2s ease;
+  height: calc(100% - 60px);
 
   .empty-state {
     display: flex;
