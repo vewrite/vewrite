@@ -76,7 +76,6 @@
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
   <div class="max-width xl not-editable" v-else>
-    <section class="notification warning small"><strong>Not editable</strong>Previous state content</section>
     <section class="content" v-html="deliverable.content.content"></section>
   </div>
 </template>
@@ -239,18 +238,19 @@ function updateDeliverable() {
   display: flex;
   flex-direction: column;
   width: calc(100% - 2 * $spacing-sm);
-  height: calc(100% - $spacing-sm);
-  margin: $spacing-sm $spacing-sm 0;
+  height: 100%;
   overflow: hidden;
-  padding: 1px 0;
   background-color: $white;
   color: $black-light;
 
   .content {
-    padding: 0 $spacing-md;
+    padding: $spacing-sm;
+    border-radius: $br-lg;
     overflow-y: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
+    background-color: rgba($black, 0.05);
+    height: 100%;
   }
 
   @media (max-width: 960px) {

@@ -1,13 +1,12 @@
-import { defineEventHandler, getQuery, send } from 'h3';
+import { defineEventHandler, getQuery, send, createError } from 'h3';
 import { createClient } from '@supabase/supabase-js';
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
-  const { id } = query;
+  const { id, type } = query;
 
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_KEY;
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  console.log('id:', id);
+  console.log('type:', type);
 
   if (!id) {
     throw createError({
@@ -15,6 +14,10 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Missing id parameter',
     });
   }
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   const { data, error } = await supabase
     .from('deliverable_content')
@@ -25,23 +28,15 @@ export default defineEventHandler(async (event) => {
   if (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'God dammit, error fetching deliverable content',
+      statusMessage: 'Error fetching deliverable content',
+      data: error.message,
     });
   }
 
-  // const { data, error } = await $fetch('/api/deliverable_content/fetchSingle?id=' + id);
-  // const { data, error } = await $fetch('/api/deliverable_content/fetchSingle', {
-  //   method: 'POST',
-  //   body: JSON.stringify({ id }),
-  // });
-
-  // console.log(data);
-  // console.log(error);
-
-  if (error) {
+  if (!data) {
     throw createError({
-      statusCode: 500,
-      statusMessage: 'God dammit, error fetching deliverable content',
+      statusCode: 404,
+      statusMessage: 'Deliverable content not found',
     });
   }
 
@@ -51,7 +46,16 @@ export default defineEventHandler(async (event) => {
   // Remove double quotes from the beginning and end of the content string
   fileContent = fileContent.replace(/^"|"$/g, '');
 
-  const fileName = `vewrite-export-${id}.md`;
+  let fileName = '';
+
+  // // Simple condition to test if the block runs
+  // if (type === 'html') {
+  //   console.log('HTML export');
+  //   fileName = `vewrite-export-html-${id}.html`;
+  // } else {
+  //   console.log('Default export');
+  //   fileName = `vewrite-export-${id}.md`;
+  // }
 
   // Set the response headers
   event.res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);

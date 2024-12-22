@@ -62,7 +62,9 @@
               </template>
             </Dropdown>
           </section>
-          <div v-if="currentPositionInWorkflow == workflowStates.length - 1"></div>
+
+          <!-- Approved state allows downloads -->
+          <button class="download-approved primary next" @click="downloadFile('html')" v-if="currentPositionInWorkflow == workflowStates.length - 1">Download HTML</button>  
           
         </section>
       </section>
@@ -348,6 +350,33 @@ async function nextState() {
 async function handleStateChange(deliverableId, stateInstanceId) {
   await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
 }
+
+async function downloadFile(type) {
+  console.log('Downloading file in format:', type);
+  try {
+    const response = await $fetch(`/api/deliverable_content/export?id=${DeliverableContentData.value.id}&type=${type}`, {
+      responseType: 'blob',
+    });
+
+    if (!response) {
+      console.error('No response from server');
+      return;
+    }
+
+    if(type == 'html') {
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vewrite-html-export-${DeliverableContentData.value.id}.html`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+  } catch (err) {
+    console.error('Error downloading file:', err);
+  }
+};
 
 </script>
 

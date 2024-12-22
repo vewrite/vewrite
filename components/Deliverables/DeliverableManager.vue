@@ -35,8 +35,9 @@
 
       <!-- Internal Editor - Approved Template -->
       <section class="state approved" v-if="StateData.name == 'approved'">
-        <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" />
-        <Approved :deliverable="props.DeliverableData" />
+        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" /> -->
+        <!-- <Approved :deliverable="props.DeliverableData" /> -->
+        <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
       </section>
 
         
