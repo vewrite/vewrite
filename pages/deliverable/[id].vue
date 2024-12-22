@@ -64,8 +64,18 @@
           </section>
 
           <!-- Approved state allows downloads -->
-          <button class="download-approved primary next" @click="downloadFile('html')" v-if="currentPositionInWorkflow == workflowStates.length - 1">Download HTML</button>  
-          
+          <!-- <button class="download-approved primary next" @click="downloadFile('html')" v-if="currentPositionInWorkflow == workflowStates.length - 1">Download HTML</button>   -->
+          <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next">
+            <template v-slot:trigger>
+              Download
+            </template>
+            <template v-slot:menu>
+              <div class="dropdown-item"  @click="downloadFile('docx')">Microsoft Docx</div>
+              <div class="dropdown-item"  @click="downloadFile('markdown')">Markdown</div>
+              <div class="dropdown-item"  @click="downloadFile('html')">HTML</div>
+            </template>
+          </Dropdown>
+
         </section>
       </section>
     </template>
@@ -516,6 +526,8 @@ async function downloadFile(type) {
       border-radius: $br-lg;
       overflow: hidden;
       box-shadow: $big-shadow;
+      outline: 1px solid rgba($brand, 0.15);
+      outline-offset: -4px;
 
       &.open {
         display: block;

@@ -249,7 +249,6 @@ function updateDeliverable() {
     overflow-y: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
-    background-color: rgba($black, 0.05);
     height: 100%;
   }
 

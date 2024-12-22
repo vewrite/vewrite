@@ -108,22 +108,37 @@ watch(() => props.state, async (newState) => {
   align-items: center;
   padding: $spacing-xxxs $spacing-xs;
   cursor: pointer;
-  background: rgba($brand, 0.05);
+  background: rgba($black, 0.05);
   position: relative;
   width: 100%;
   border-radius: $br-md;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba($black, 0.075);
+
+    &.complete {
+      background: rgba($mint, 0.1);
+    }
+
+    &.incomplete {
+      background: rgba($brand, 0.05);
+    }
+  }
 
   &:last-of-type {
     border-bottom: none;
   }
 
   &.complete {
-    background: rgba($mint, 0.1);
+    background: rgba($white, 1);
+    font-weight: normal;
   }
 
   &.incomplete {
     color: rgba($black, 0.5);
     background: $white;
+    font-weight: normal;
   }
 
   .state-location {
