@@ -1,6 +1,6 @@
 <template>
   <div :class="[ 'dropdown', isOpen ? 'open' : '', props.position ]">
-    <div @click="toggleDropdown" class="button">
+    <div @click="toggleDropdown" :class="['button', props.primary ? 'primary' : '']">
       <slot name="trigger"></slot>
     </div>
     <div class="dropdown-content" @click="toggleDropdown">
@@ -15,7 +15,7 @@
 import { ref } from 'vue';
 
 const isOpen = ref(false);
-const props = defineProps(['position']);
+const props = defineProps(['position', 'primary']);
 
 function toggleDropdown() {
   isOpen.value = !isOpen.value;

@@ -65,14 +65,23 @@
 
           <!-- Approved state allows downloads -->
           <!-- <button class="download-approved primary next" @click="downloadFile('html')" v-if="currentPositionInWorkflow == workflowStates.length - 1">Download HTML</button>   -->
-          <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next">
+          <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next" primary="true">
             <template v-slot:trigger>
               Download
             </template>
             <template v-slot:menu>
-              <div class="dropdown-item"  @click="downloadFile('docx')">Microsoft Docx</div>
-              <div class="dropdown-item"  @click="downloadFile('markdown')">Markdown</div>
-              <div class="dropdown-item"  @click="downloadFile('html')">HTML</div>
+              <div class="dropdown-item"  @click="downloadFile('docx')">
+                <Icon name="tabler:file-type-docx" size="1.15rem" />
+                Microsoft Docx
+              </div>
+              <div class="dropdown-item"  @click="downloadFile('markdown')">
+                <Icon name="gravity-ui:logo-markdown" size="1.15rem" />
+                Markdown
+              </div>
+              <div class="dropdown-item"  @click="downloadFile('html')">
+                <Icon name="ph:file-html-duotone" size="1.15rem" />
+                HTML
+              </div>
             </template>
           </Dropdown>
 
@@ -526,8 +535,7 @@ async function downloadFile(type) {
       border-radius: $br-lg;
       overflow: hidden;
       box-shadow: $big-shadow;
-      outline: 1px solid rgba($brand, 0.15);
-      outline-offset: -4px;
+      transition: all 0.3s ease;
 
       &.open {
         display: block;
