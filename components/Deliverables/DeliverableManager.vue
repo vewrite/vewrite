@@ -24,7 +24,7 @@
       <!-- Internal Editor - Review Template -->
       <section class="state review" v-if="StateData.name == 'review'">
         <Instructions :icon="'mingcute:question-fill'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" />
-        <!-- <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" /> -->
+        <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
       </section>
 
       <!-- Internal Editor - Writing Template -->
@@ -35,11 +35,9 @@
 
       <!-- Internal Editor - Approved Template -->
       <section class="state approved" v-if="StateData.name == 'approved'">
-        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" /> -->
-        <!-- <Approved :deliverable="props.DeliverableData" /> -->
+        <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" />
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
       </section>
-
         
       <!-- External Link -->
       <section class="external-link" v-if="props.DeliverableData.content.type == 'link'" >

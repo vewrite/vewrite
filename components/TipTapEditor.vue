@@ -76,13 +76,20 @@
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
   <div class="max-width xl not-editable" v-else>
-    <section class="content" v-html="deliverable.content.content"></section>
+    <section class="content" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section>
+    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
+      <span v-html="selectedText"></span>
+      <textarea v-model="commentText" placeholder="Add a comment"></textarea>
+      <button @click="addComment">Add Comment</button>
+    </div>
   </div>
 </template>
 
 <script setup>
 
 import useDeliverables from '~/composables/useDeliverables';
+import TiptapStarterKit from '@tiptap/starter-kit';
+
 const { saveDeliverableContent } = useDeliverables();
 const saving = ref(false);
 const textareaRef = ref(null);
@@ -99,11 +106,42 @@ const props = defineProps({
 });
 
 const deliverable = ref(props.deliverable);
+const showCommentInput = ref(false);
+const commentText = ref('');
+const selectedText = ref('');
+const commentPosition = ref({ top: 0, left: 0 });
 
 const editor = useEditor({
   content: deliverable.value.content.content,
   extensions: [TiptapStarterKit],
 });
+
+const handleTextSelection = () => {
+  const selection = window.getSelection();
+  if (selection && selection.toString().length > 0) {
+    selectedText.value = selection.toString();
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    commentPosition.value = {
+      top: rect.bottom + 6,
+      left: rect.left,
+    };
+    showCommentInput.value = true;
+  } else {
+    showCommentInput.value = false;
+  }
+};
+
+const addComment = () => {
+  if (selectedText.value && commentText.value) {
+    // Append the comment to the highlighted text
+    const content = deliverable.value.content.content;
+    const newContent = content.replace(selectedText.value, `<span class="highlighted">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
+    deliverable.value.content.content = newContent;
+    commentText.value = '';
+    showCommentInput.value = false;
+  }
+};
 
 const tiptapDeliverable = ref({
   ...deliverable.value, 
@@ -160,6 +198,36 @@ function updateDeliverable() {
 <style lang="scss" scoped>
 
 @use 'assets/variables' as *;
+
+.floating-comment {
+  position: fixed;
+  background: white;
+  box-shadow: $big-shadow;
+  padding: $spacing-sm;
+  border-radius: $br-md;
+  z-index: 1000;
+  max-width: 300px;
+}
+
+.highlighted {
+  background-color: yellow;
+  position: relative;
+}
+
+.comment {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  z-index: 1000;
+}
+
+  .highlighted:hover .comment {
+    display: block;
+  }
 
 #TipTapEditor {
   position: relative;
@@ -237,16 +305,16 @@ function updateDeliverable() {
 .not-editable {
   display: flex;
   flex-direction: column;
-  width: calc(100% - 2 * $spacing-sm);
+  width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: $white;
   color: $black-light;
 
   .content {
     padding: $spacing-sm;
     border-radius: $br-lg;
-    overflow-y: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
     height: 100%;
