@@ -64,16 +64,11 @@
           </section>
 
           <!-- Approved state allows downloads -->
-          <!-- <button class="download-approved primary next" @click="downloadFile('html')" v-if="currentPositionInWorkflow == workflowStates.length - 1">Download HTML</button>   -->
           <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next" primary="true">
             <template v-slot:trigger>
               Download
             </template>
             <template v-slot:menu>
-              <div class="dropdown-item"  @click="downloadFile('docx')">
-                <Icon name="tabler:file-type-docx" size="1.15rem" />
-                Microsoft Docx
-              </div>
               <div class="dropdown-item"  @click="downloadFile('markdown')">
                 <Icon name="gravity-ui:logo-markdown" size="1.15rem" />
                 Markdown
@@ -105,7 +100,9 @@ import AppPanel from '~/components/AppPanel.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
 import StateRow from '~/components/States/StateRow.vue';
 import Assigned from '~/components/Deliverables/Assigned.vue';
+
 import TurnDownService from 'turndown';
+const turndownService = new TurnDownService();
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
@@ -370,8 +367,6 @@ async function nextState() {
 async function handleStateChange(deliverableId, stateInstanceId) {
   await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
 }
-
-const turndownService = new TurnDownService()
 
 async function downloadFile(type) {
   console.log('Downloading file in format:', type);
