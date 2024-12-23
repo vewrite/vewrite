@@ -105,6 +105,7 @@ import AppPanel from '~/components/AppPanel.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
 import StateRow from '~/components/States/StateRow.vue';
 import Assigned from '~/components/Deliverables/Assigned.vue';
+import TurnDownService from 'turndown';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
@@ -370,6 +371,8 @@ async function handleStateChange(deliverableId, stateInstanceId) {
   await updateDeliverableWorkflowState(deliverableId, stateInstanceId);
 }
 
+const turndownService = new TurnDownService()
+
 async function downloadFile(type) {
   console.log('Downloading file in format:', type);
   try {
@@ -387,6 +390,18 @@ async function downloadFile(type) {
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', `vewrite-html-export-${DeliverableContentData.value.id}.html`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    if(type == 'markdown'){
+      const markdown = await response.text();
+      const html = turndownService.turndown(markdown);
+      const url = window.URL.createObjectURL(new Blob([html], {type: 'text/html'}));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vewrite-markdown-export-${DeliverableContentData.value.id}.md`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
