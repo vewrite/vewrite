@@ -76,8 +76,8 @@
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
   <div class="max-width xl not-editable" v-else>
-    <section class="content" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section>
-    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
+    <section :class="['content', hasComments ? 'with-comments' : '']" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section>
+    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
       <span v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment"></textarea>
       <button @click="addComment">Add Comment</button>
@@ -110,6 +110,7 @@ const showCommentInput = ref(false);
 const commentText = ref('');
 const selectedText = ref('');
 const commentPosition = ref({ top: 0, left: 0 });
+const hasComments = ref(true);
 
 const editor = useEditor({
   content: deliverable.value.content.content,
@@ -122,9 +123,10 @@ const handleTextSelection = () => {
     selectedText.value = selection.toString();
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
+    // console.log(selectedText);
+    // console.log(range);
     commentPosition.value = {
-      top: rect.bottom + 6,
-      left: rect.left,
+      top: rect.bottom + 6
     };
     showCommentInput.value = true;
   } else {
@@ -134,12 +136,19 @@ const handleTextSelection = () => {
 
 const addComment = () => {
   if (selectedText.value && commentText.value) {
-    // Append the comment to the highlighted text
+    // Generate a unique ID for the comment
+    const commentId = `comment-${Date.now()}`;
+
+    // Append the comment to the highlighted text with a unique ID
     const content = deliverable.value.content.content;
-    const newContent = content.replace(selectedText.value, `<span class="highlighted">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
+    const newContent = content.replace(selectedText.value, `<span class="highlighted" data-comment-id="${commentId}">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
     deliverable.value.content.content = newContent;
     commentText.value = '';
     showCommentInput.value = false;
+
+    // Log the comment ID and selected text for debugging
+    console.log(`Comment ID: ${commentId}`);
+    console.log(`Selected Text: ${selectedText.value}`);
   }
 };
 
@@ -204,9 +213,10 @@ function updateDeliverable() {
   background: white;
   box-shadow: $big-shadow;
   padding: $spacing-sm;
-  border-radius: $br-md;
+  border-radius: $br-xl;
   z-index: 1000;
   max-width: 300px;
+  right: $spacing-sm * 3;
 }
 
 .highlighted {
@@ -318,6 +328,10 @@ function updateDeliverable() {
     white-space: pre-wrap;
     word-wrap: break-word;
     height: 100%;
+
+    &.with-comments {
+      margin-right: 300px;
+    }
   }
 
   @media (max-width: 960px) {

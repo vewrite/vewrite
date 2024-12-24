@@ -379,7 +379,7 @@ watchEffect(() => {
   gap: $spacing-md;
   padding: $spacing-md;
   margin: $spacing-sm;
-  background: rgba($black, 0.025);
+  background: rgba($white, 0.025);
   backdrop-filter: blur(10px);
   z-index: 2;
   border-radius: $br-lg;
@@ -423,7 +423,12 @@ watchEffect(() => {
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    border-radius: $br-md;
+    border-radius: $br-xl;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba($black, 0.025);
+    }
 
     .deliverable-details {
       display: flex;
@@ -458,10 +463,6 @@ watchEffect(() => {
           font-size: $font-size-xxs;
         }
       }
-    }
-
-    &:hover {
-      background-color: rgba($brand, 0.05);
     }
 
     .deliverable-title {
