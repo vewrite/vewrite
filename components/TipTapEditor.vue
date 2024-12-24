@@ -97,7 +97,7 @@
       </section>
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
-    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
+    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
       <span v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment"></textarea>
       <button @click="addComment">Add Comment</button>
@@ -166,7 +166,8 @@ const handleTextSelection = () => {
     // console.log(selectedText);
     // console.log(range);
     commentPosition.value = {
-      top: rect.bottom + 6
+      top: rect.bottom + 6,
+      left: rect.right,
     };
     showCommentInput.value = true;
   } else {
@@ -268,7 +269,6 @@ function updateDeliverable() {
   display: none;
   position: absolute;
   top: 100%;
-  left: 0;
   background: white;
   border: 1px solid #ccc;
   padding: 5px;
@@ -279,9 +279,12 @@ function updateDeliverable() {
     display: block;
   }
 
-#TipTapEditor {
-  position: relative;
+#TipTapEditor,
+#TipTapReview {
+  width: 100%;
   height: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 
   div {
 
@@ -297,15 +300,17 @@ function updateDeliverable() {
   display: flex;
   flex-wrap: nowrap;
   gap: $spacing-sm;
-  margin: 0;
+  margin: 0 0 $spacing-sm 0;
   align-items: center;
-  justify-content: center;
-  background: rgba($white, 0.95);
-  backdrop-filter: blur(20px);
-  padding: 0 $spacing-sm;
-  min-height: 52px;
+  justify-content: space-between;
+  background: rgba($white, 0.05);
+  backdrop-filter: blur(6px);
+  padding: $spacing-xs;
   position: sticky;
   top: 0;
+  width: calc(100% - $spacing-sm * 2);
+  border-bottom-left-radius: $br-lg;
+  border-bottom-right-radius: $br-lg;
   z-index: 10;
   overflow-x: auto;
   overflow-y: hidden;
@@ -356,6 +361,8 @@ function updateDeliverable() {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;

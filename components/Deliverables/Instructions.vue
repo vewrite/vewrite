@@ -1,13 +1,12 @@
 <template>
   <section :class="['instructions', showInstructions ? 'show' : 'hide']">
     <div class="notification small">
-      <Icon :name="props.icon" size="2rem" />
+      <button class="button primary" @click="toggleInstructions">
+        <Icon name="fluent:question-24-filled" size="1.5rem" />
+      </button>
       <div class="instruction-set">
         <p>{{ props.content }}</p>
       </div>
-      <button class="button small primary" @click="toggleInstructions">
-        Hide
-      </button>
     </div>
   </section>
 </template>
@@ -40,56 +39,62 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: rgba($brand, 0.1);
-  
-  &.show .notification {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    padding: 0;
-    gap: $spacing-xxs; 
-    height: 100%;
+  position: absolute;
+  left: $spacing-sm;
+  bottom: 0;
+  z-index: 1000;
+  background: rgba($brand, 0.05);
+  backdrop-filter: blur(6px);
+  transition: background 0.5s ease;
+  border-radius: $br-xl;
 
-    .iconify {
+  .notification {
+    button {
+      border-radius: 50%;
       width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+      padding: 0;
     }
-    
-    .instruction-set {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-xxxs;
-      
-      h3 {
-        font-size: $font-size-xs;
-        font-weight: bold;
-        margin: 0;
+  }
+  
+  &.show {
+  
+    .notification {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      padding: 0;
+      gap: $spacing-xs; 
+      height: 100%;
+
+      .iconify {
+        width: 2rem;
       }
       
-      p {
-        font-size: $font-size-xs;
-        margin: 0;
+      .instruction-set {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-xs;
+        
+        p {
+          font-size: $font-size-xs;
+          margin: 0;
+        }
       }
     }
   }
 
   &.hide {
-    display: none;
-  }
-
-  &.show .toggle-instruction-button {
-    display: none;
-  }
-
-  &.hide .toggle-instruction-button {
-    display: flex;
-    background: rgba($brand, 0.05);
-    color: $brand;
-    justify-content: center;
-    align-items: center;
-    align-self: flex-end;
-
-    &:hover {
-      transform: scale(1);
+    background: rgba($brand, 0.0);
+    transition: background 0.5s ease;
+    
+    .notification {
+      padding: 0;
+      
+      .instruction-set {
+        display: none;
+      }
     }
   }
 }
