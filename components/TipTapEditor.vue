@@ -311,21 +311,21 @@ function updateDeliverable() {
   max-width: 800px;
   margin: 0 auto;
 
-  // div {
+  div {
 
-  //   &:nth-child(2) {
-  //     width: 100%;
-  //     height: calc(100% - 72px);
-  //     overflow-y: auto;
-  //   }
-  // }
+    // &:nth-child(2) {
+    //   width: 100%;
+    //   height: calc(100% - 72px);
+    //   overflow-y: auto;
+    // }
+  }
 }
 
 #TipTapTools {
   display: flex;
   flex-wrap: nowrap;
   gap: $spacing-sm;
-  margin: 0 0 $spacing-sm 0;
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
   background: rgba($white, 0.85);
@@ -342,7 +342,7 @@ function updateDeliverable() {
   border-bottom: $border;
   border-radius: 0 0 $br-lg $br-lg;
 
-  @media (max-width: 1180px) {
+  @media (max-width: 1080px) {
     gap: $spacing-xxs;
     overflow-x: auto;
     overflow-y: hidden;

@@ -52,7 +52,6 @@
 
           <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
           <section class="next" v-if="currentPositionInWorkflow < workflowStates.length - 1">
-            <button class="button" @click="nextState()" >Next state</button>
             <Dropdown position="top">
               <template v-slot:trigger>
                 <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -61,6 +60,7 @@
                 <div class="dropdown-item" @click="duplicateContentToNextState(DeliverableData.id, workflowStates[currentPositionInWorkflow], workflowStates[nextPositionInWorkflow])">Duplicate content to next state</div>
               </template>
             </Dropdown>
+            <button class="button primary" @click="nextState()" >Next state</button>
           </section>
 
           <!-- Approved state allows downloads -->
