@@ -234,7 +234,6 @@ const filteredProjects = computed(() => {
   justify-content: flex-start;
   margin-bottom: $spacing-lg;
   transition: padding 0.2s ease;
-  height: calc(100% - 60px);
 
   .empty-state {
     display: flex;
