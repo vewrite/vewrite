@@ -5,37 +5,37 @@
       
       <!-- Internal Editor - New Template -->
       <section class="state new" v-if="StateData.name == 'new'">
-        <Instructions :icon="'fluent:question-20-regular'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" />
+        <!-- <Instructions :icon="'fluent:question-20-regular'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" /> -->
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
       </section>
 
       <!-- Internal Editor - Research Template -->
       <section class="state research" v-if="StateData.name == 'research'">
-        <Instructions :icon="'mingcute:question-fill'" :title="'Research deliverable'" :content="'Using the requirements in the previous state, it is time to do some research. You can use this state as a scratchpad for taking notes.'" />
+        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Research deliverable'" :content="'Using the requirements in the previous state, it is time to do some research. You can use this state as a scratchpad for taking notes.'" /> -->
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
       </section>
 
       <!-- Internal Editor - Outline Template -->
       <section class="state outline" v-if="StateData.name == 'outline'">
-        <Instructions :icon="'mingcute:question-fill'" :title="'Outline deliverable'" :content="'Using the research that you gathered in the previous state, it is time to build an outline.'" />
+        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Outline deliverable'" :content="'Using the research that you gathered in the previous state, it is time to build an outline.'" /> -->
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
       </section>
 
       <!-- Internal Editor - Review Template -->
       <section class="state review" v-if="StateData.name == 'review'">
-        <Instructions :icon="'mingcute:question-fill'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" />
+        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" /> -->
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" :review="true" />
       </section>
 
       <!-- Internal Editor - Writing Template -->
       <section class="state writing" v-if="StateData.name == 'writing'">
-        <Instructions :icon="'mingcute:question-fill'" :title="'Write your deliverable'" :content="'It\'s time for you to write your deliverable. You can always jump back to previous states and reference your work.'" />
+        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Write your deliverable'" :content="'It\'s time for you to write your deliverable. You can always jump back to previous states and reference your work.'" /> -->
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
       </section>
 
       <!-- Internal Editor - Approved Template -->
       <section class="state approved" v-if="StateData.name == 'approved'">
-        <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" />
+        <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" /> -->
         <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
       </section>
         
@@ -92,7 +92,6 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
 .deliverable-manager {
   height: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .deliverable-editor {

@@ -1,5 +1,7 @@
 <template>
   <Loading class="saving" v-if="saving" saving="saving" type="small" />
+  
+  <!-- Writing -->
   <div id="TipTapEditor" v-if="editable && !review">
     <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
@@ -75,6 +77,8 @@
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
+
+  <!-- Review -->
   <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
     <!-- <section :class="['content']" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section> -->
     <div id="TipTapTools" class="max-width xl" v-if="editor">
@@ -103,6 +107,8 @@
       <button @click="addComment">Add Comment</button>
     </div>
   </div>
+
+  <!-- Not editable -->
   <div class="max-width xl not-editable" v-if="!editable">
     <section :class="['content']" v-html="deliverable.content.content"></section>
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
@@ -286,14 +292,14 @@ function updateDeliverable() {
   max-width: 800px;
   margin: 0 auto;
 
-  div {
+  // div {
 
-    &:nth-child(2) {
-      width: 100%;
-      height: calc(100% - 72px);
-      overflow-y: auto;
-    }
-  }
+  //   &:nth-child(2) {
+  //     width: 100%;
+  //     height: calc(100% - 72px);
+  //     overflow-y: auto;
+  //   }
+  // }
 }
 
 #TipTapTools {
@@ -303,17 +309,19 @@ function updateDeliverable() {
   margin: 0 0 $spacing-sm 0;
   align-items: center;
   justify-content: space-between;
-  background: rgba($white, 0.05);
+  background: rgba($white, 0.85);
   backdrop-filter: blur(6px);
   padding: $spacing-xs;
   position: sticky;
   top: 0;
-  width: calc(100% - $spacing-sm * 2);
-  border-bottom-left-radius: $br-lg;
-  border-bottom-right-radius: $br-lg;
+  width: 100%;
   z-index: 10;
   overflow-x: auto;
   overflow-y: hidden;
+  border-left: $border;
+  border-right: $border;
+  border-bottom: $border;
+  border-radius: 0 0 $br-lg $br-lg;
 
   @media (max-width: 1180px) {
     gap: $spacing-xxs;
@@ -322,6 +330,9 @@ function updateDeliverable() {
     padding: $spacing-xxs $spacing-sm;
     align-items: center;
     justify-content: flex-start;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
   }
 
   .button-group {

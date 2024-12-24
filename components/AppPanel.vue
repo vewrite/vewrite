@@ -37,6 +37,7 @@ export default {
     position: relative;
     margin: 0 $spacing-sm;
     border-top: $border;
+    border-bottom: $border;
     border-left: $border;
     border-right: $border;
     border-top-left-radius: $br-xl;

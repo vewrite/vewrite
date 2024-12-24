@@ -35,13 +35,13 @@ onMounted(() => {
 @use 'assets/variables' as *;
 
 .instructions {
-  padding: $spacing-sm;
+  padding: $spacing-xxs;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   position: absolute;
   left: $spacing-sm;
-  bottom: 0;
+  bottom: $spacing-sm;
   z-index: 1000;
   background: rgba($brand, 0.05);
   backdrop-filter: blur(6px);
