@@ -102,7 +102,7 @@
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
-      <span v-html="selectedText"></span>
+      <span class="quote" v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment"></textarea>
       <button @click="addComment">Add Comment</button>
     </div>
@@ -111,7 +111,7 @@
   <!-- Not editable -->
   <div class="max-width xl not-editable" v-if="!editable">
     <section :class="['content']" v-html="deliverable.content.content"></section>
-    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
+    <div v-if="showCommentInput && selectedText" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
       <span v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment"></textarea>
       <button @click="addComment">Add Comment</button>
@@ -172,7 +172,7 @@ const handleTextSelection = () => {
     // console.log(selectedText);
     // console.log(range);
     commentPosition.value = {
-      top: rect.bottom + 6,
+      top: rect.top + 6,
       left: rect.right,
     };
     showCommentInput.value = true;
@@ -259,11 +259,30 @@ function updateDeliverable() {
   position: fixed;
   background: white;
   box-shadow: $big-shadow;
-  padding: $spacing-sm;
   border-radius: $br-xl;
   z-index: 1000;
-  max-width: 300px;
-  right: $spacing-sm * 3;
+  max-width: 400px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .quote {
+    background: rgba($brand, 0.1);
+    padding: $spacing-sm;
+  }
+
+  textarea {
+    padding: $spacing-sm;
+    border: none;
+    border-top: $border;
+    border-radius: 0 0 $br-xl $br-xl;
+    resize: none;
+  }
+
+  button {
+    margin: $spacing-sm;
+  }
 }
 
 .highlighted {
