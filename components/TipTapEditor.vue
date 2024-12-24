@@ -80,7 +80,11 @@
     <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }">
-          Toggle highlight
+          <Icon name="fluent:highlight-16-regular" size="1.5rem" />
+        </button>
+        <!-- Strikethrough -->
+        <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+          <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
         </button>
       </section>
       <section class="button-group undo-redo">
