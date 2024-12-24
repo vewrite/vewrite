@@ -18,26 +18,24 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <div class="client-image" v-if="ClientData && !loading">
-        <ClientImage :client="ClientData.client_id" size="large" table="logos" />
-      </div>
-      <div class="object-overview" v-if="ClientData && !loading">
-        <div class="object-summary">
-          <input class="object-title-input" v-model="ClientData.name" @input="updateClientWithDebounce(ClientData.client_id, $event.target.value)" />
+      <section class="single-client">
+        <div class="client-image" v-if="ClientData && !loading">
+          <ClientImage :client="ClientData.client_id" size="large" table="logos" />
         </div>
-      </div>
-      <div class="inner-container" v-if="ClientData && !loading">
-        <h3>Projects</h3>
-        <div v-for="client in ClientProjects" :key="client.client_id">
-          <div v-for="project in client.projects" :key="project.id">
-            <nuxt-link :to="'/project/' + project.id">{{ project.name }}</nuxt-link>
+        <div class="object-overview" v-if="ClientData && !loading">
+          <div class="object-summary">
+            <input class="object-title-input" v-model="ClientData.name" @input="updateClientWithDebounce(ClientData.client_id, $event.target.value)" />
           </div>
-        </div>  
-      </div>
-      <!-- I want to show: 
-      - Client name
-      - Client image
-      - Client projects -->
+        </div>
+        <section class="client-project-list" v-if="ClientData && !loading">
+          <h3>Projects</h3>
+          <div v-for="client in ClientProjects" :key="client.client_id">
+            <div v-for="project in client.projects" :key="project.id">
+              <nuxt-link :to="'/project/' + project.id">{{ project.name }}</nuxt-link>
+            </div>
+          </div>  
+        </section>
+      </section>
     </template>
   </AppPanel>
 </template>
@@ -102,6 +100,31 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.single-client {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  .client-image {
+    margin-top: $spacing-md;
+  }
+
+  .object-overview {
+    margin-bottom: $spacing-sm;
+
+    .object-summary {
+      input {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.client-project-list {
+  padding: $spacing-md;
+  border-top: $border;
 }
 
 </style>
