@@ -1,6 +1,6 @@
 <template>
   <Loading class="saving" v-if="saving" saving="saving" type="small" />
-  <div id="TipTapEditor" v-if="editable">
+  <div id="TipTapEditor" v-if="editable && !review">
     <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" class="toolbar">
@@ -75,8 +75,32 @@
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
   </div>
-  <div class="max-width xl not-editable" v-else>
-    <section :class="['content', hasComments ? 'with-comments' : '']" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section>
+  <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
+    <!-- <section :class="['content']" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section> -->
+    <div id="TipTapTools" class="max-width xl" v-if="editor">
+      <section class="button-group">
+        <button @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }">
+          Toggle highlight
+        </button>
+      </section>
+      <section class="button-group undo-redo">
+        <button @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()" class="toolbar">
+          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+        </button>
+        <button @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" class="toolbar">
+          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+        </button>
+      </section>
+    </div>
+    <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
+    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
+      <span v-html="selectedText"></span>
+      <textarea v-model="commentText" placeholder="Add a comment"></textarea>
+      <button @click="addComment">Add Comment</button>
+    </div>
+  </div>
+  <div class="max-width xl not-editable" v-if="!editable">
+    <section :class="['content']" v-html="deliverable.content.content"></section>
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
       <span v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment"></textarea>
@@ -89,6 +113,7 @@
 
 import useDeliverables from '~/composables/useDeliverables';
 import TiptapStarterKit from '@tiptap/starter-kit';
+import Highlight from '@tiptap/extension-highlight';
 
 const { saveDeliverableContent } = useDeliverables();
 const saving = ref(false);
@@ -103,6 +128,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  review: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const deliverable = ref(props.deliverable);
@@ -114,7 +143,14 @@ const hasComments = ref(true);
 
 const editor = useEditor({
   content: deliverable.value.content.content,
-  extensions: [TiptapStarterKit],
+  extensions: [TiptapStarterKit,
+    Highlight.configure({
+      multicolors: true,
+      HTMLAttributes: {
+        class: 'highlighted',
+      },
+    }),
+  ],
 });
 
 const handleTextSelection = () => {
@@ -251,63 +287,63 @@ function updateDeliverable() {
       overflow-y: auto;
     }
   }
+}
 
-  #TipTapTools {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: $spacing-sm;
-    margin: 0;
-    align-items: center;
-    justify-content: center;
-    background: rgba($white, 0.95);
-    backdrop-filter: blur(20px);
-    padding: 0 $spacing-sm;
-    min-height: 52px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+#TipTapTools {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: $spacing-sm;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  background: rgba($white, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 0 $spacing-sm;
+  min-height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  @media (max-width: 1180px) {
+    gap: $spacing-xxs;
     overflow-x: auto;
     overflow-y: hidden;
+    padding: $spacing-xxs $spacing-sm;
+    align-items: center;
+    justify-content: flex-start;
+  }
 
+  .button-group {
+    display: flex;
+    gap: $spacing-xxxs;
+    
     @media (max-width: 1180px) {
-      gap: $spacing-xxs;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: $spacing-xxs $spacing-sm;
-      align-items: center;
-      justify-content: flex-start;
+      padding-right: $spacing-xxs;
     }
 
-    .button-group {
-      display: flex;
-      gap: $spacing-xxxs;
-      
-      @media (max-width: 1180px) {
-        padding-right: $spacing-xxs;
-      }
+    &:last-child {
+      border-right: none;
+    }
+  }
 
-      &:last-child {
-        border-right: none;
-      }
+  button {
+    cursor: pointer;
+    
+    @media (max-width: 1480px) {
+      padding: $spacing-xxs $spacing-xxs;
+      min-width: 28px;
     }
 
-    button {
-      cursor: pointer;
-      
-      @media (max-width: 1480px) {
-        padding: $spacing-xxs $spacing-xxs;
-        min-width: 28px;
-      }
+    &.is-active {
+      background-color: $brand;
+      color: $white;
+    }
 
-      &.is-active {
-        background-color: $brand;
-        color: $white;
-      }
-
-      &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-      }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 }

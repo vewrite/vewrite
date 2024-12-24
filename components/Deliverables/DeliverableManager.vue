@@ -24,7 +24,7 @@
       <!-- Internal Editor - Review Template -->
       <section class="state review" v-if="StateData.name == 'review'">
         <Instructions :icon="'mingcute:question-fill'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" />
-        <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
+        <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" :review="true" />
       </section>
 
       <!-- Internal Editor - Writing Template -->
@@ -102,6 +102,8 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
   .state {
     height: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 }
 

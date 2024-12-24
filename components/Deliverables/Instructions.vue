@@ -5,13 +5,10 @@
       <div class="instruction-set">
         <p>{{ props.content }}</p>
       </div>
-      <button class="button small" @click="toggleInstructions">
-        <Icon name="fluent-mdl2:chrome-close" size="1rem" />
+      <button class="button small primary" @click="toggleInstructions">
+        Hide
       </button>
     </div>
-    <button class="button small toggle-instruction-button" @click="toggleInstructions">
-      <Icon :name="props.icon" size="2rem" />
-    </button>
   </section>
 </template>
 
@@ -39,23 +36,19 @@ onMounted(() => {
 @use 'assets/variables' as *;
 
 .instructions {
-  margin: 0 $spacing-sm;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  left: 0;
-  z-index: 2;
-  background: rgba($brand, 0.05);
-  border-radius: $br-xl;
-  backdrop-filter: blur(6px);
+  padding: $spacing-sm;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba($brand, 0.1);
   
   &.show .notification {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: $spacing-sm;
+    padding: 0;
     gap: $spacing-xxs; 
-    min-height: 48px;
+    height: 100%;
 
     .iconify {
       width: 2rem;
@@ -79,7 +72,7 @@ onMounted(() => {
     }
   }
 
-  &.hide .notification {
+  &.hide {
     display: none;
   }
 
@@ -88,17 +81,9 @@ onMounted(() => {
   }
 
   &.hide .toggle-instruction-button {
-    display: block;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    left: reset;
-    z-index: 2;
-    background: rgba($brand, 0.05);
-    border-radius: $br-xl;
-    color: $brand;
-    padding: $spacing-sm;
     display: flex;
+    background: rgba($brand, 0.05);
+    color: $brand;
     justify-content: center;
     align-items: center;
     align-self: flex-end;
