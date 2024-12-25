@@ -104,18 +104,13 @@
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
       <span class="quote" v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment"></textarea>
-      <button @click="addComment">Add Comment</button>
+      <button @click="handleComment">Add Comment</button>
     </div>
   </div>
 
   <!-- Not editable -->
   <div class="max-width xl not-editable" v-if="!editable">
     <section :class="['content']" v-html="deliverable.content.content"></section>
-    <div v-if="showCommentInput && selectedText" class="floating-comment" :style="{ top: `${commentPosition.top}px` }">
-      <span v-html="selectedText"></span>
-      <textarea v-model="commentText" placeholder="Add a comment"></textarea>
-      <button @click="addComment">Add Comment</button>
-    </div>
   </div>
 </template>
 
@@ -124,6 +119,9 @@
 import useDeliverables from '~/composables/useDeliverables';
 import TiptapStarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
+
+import useComments from '~/composables/useComments';
+const { addComment, fetchComments, CommentsData, CommentError } = useComments();
 
 const { saveDeliverableContent } = useDeliverables();
 const saving = ref(false);
@@ -181,7 +179,7 @@ const handleTextSelection = () => {
   }
 };
 
-const addComment = () => {
+const handleComment = () => {
   if (selectedText.value && commentText.value) {
     // Generate a unique ID for the comment
     const commentId = `comment-${Date.now()}`;

@@ -41,9 +41,10 @@ onMounted(() => {
   justify-content: flex-end;
   position: absolute;
   left: $spacing-sm;
-  bottom: $spacing-sm;
-  z-index: 1000;
+  bottom: 68px;
+  z-index: 1;
   background: rgba($brand, 0.05);
+  border: 1px solid rgba($white, 0.8);
   backdrop-filter: blur(6px);
   transition: background 0.5s ease;
   border-radius: $br-xl;
@@ -88,9 +89,14 @@ onMounted(() => {
   &.hide {
     background: rgba($brand, 0.0);
     transition: background 0.5s ease;
-    
+
     .notification {
       padding: 0;
+   
+      button {
+        transform: scale(1.25);
+        opacity: 0.5;
+      }
       
       .instruction-set {
         display: none;

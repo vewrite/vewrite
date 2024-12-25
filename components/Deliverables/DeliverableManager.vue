@@ -1,6 +1,13 @@
 <template>
   <section class="deliverable-manager" v-if="props.DeliverableData && props.StateData" @stateChange="handleStateChange">
-    <!-- New state -->
+  
+    <Instructions :icon="'fluent:question-20-regular'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" v-if="StateData.name == 'new'" />
+    <Instructions :icon="'fluent:question-20-regular'" :title="'Research deliverable'" :content="'Using the requirements in the previous state, it is time to do some research. You can use this state as a scratchpad for taking notes.'" v-if="StateData.name == 'research'" />
+    <Instructions :icon="'fluent:question-20-regular'" :title="'Outline deliverable'" :content="'Using the research that you gathered in the previous state, it is time to build an outline.'" v-if="StateData.name == 'outline'" />
+    <Instructions :icon="'fluent:question-20-regular'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" v-if="StateData.name == 'review'" />
+    <Instructions :icon="'fluent:question-20-regular'" :title="'Write your deliverable'" :content="'It\'s time for you to write your deliverable. You can always jump back to previous states and reference your work.'" v-if="StateData.name == 'writing'" />
+    <Instructions :icon="'fluent:question-20-regular'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" v-if="StateData.name == 'approved'" />
+
     <div class="deliverable-editor" v-if="props.DeliverableData">
       
       <!-- Internal Editor - New Template -->

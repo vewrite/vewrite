@@ -23,9 +23,6 @@
         <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
         <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
         <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
-          <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
-          <div v-else></div>
-
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
@@ -49,36 +46,41 @@
               </div>
             </section>
           </button>
+          
+          <section class="state-buttons">
+            <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
+            <div v-else></div>
 
-          <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
-          <section class="next" v-if="currentPositionInWorkflow < workflowStates.length - 1">
-            <Dropdown position="top">
+            <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
+            <section class="next" v-if="currentPositionInWorkflow < workflowStates.length - 1">
+              <Dropdown position="top">
+                <template v-slot:trigger>
+                  <Icon name="uis:ellipsis-v" size="1.15rem" />
+                </template>
+                <template v-slot:menu>
+                  <div class="dropdown-item" @click="duplicateContentToNextState(DeliverableData.id, workflowStates[currentPositionInWorkflow], workflowStates[nextPositionInWorkflow])">Duplicate content to next state</div>
+                </template>
+              </Dropdown>
+              <button class="button primary" @click="nextState()" >Finish {{ StateData.name }}</button>
+            </section>
+
+            <!-- Approved state allows downloads -->
+            <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next" primary="true">
               <template v-slot:trigger>
-                <Icon name="uis:ellipsis-v" size="1.15rem" />
+                Download
               </template>
               <template v-slot:menu>
-                <div class="dropdown-item" @click="duplicateContentToNextState(DeliverableData.id, workflowStates[currentPositionInWorkflow], workflowStates[nextPositionInWorkflow])">Duplicate content to next state</div>
+                <div class="dropdown-item"  @click="downloadFile('markdown')">
+                  <Icon name="gravity-ui:logo-markdown" size="1.15rem" />
+                  Markdown
+                </div>
+                <div class="dropdown-item"  @click="downloadFile('html')">
+                  <Icon name="ph:file-html-duotone" size="1.15rem" />
+                  HTML
+                </div>
               </template>
             </Dropdown>
-            <button class="button primary" @click="nextState()" >Next state</button>
           </section>
-
-          <!-- Approved state allows downloads -->
-          <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next" primary="true">
-            <template v-slot:trigger>
-              Download
-            </template>
-            <template v-slot:menu>
-              <div class="dropdown-item"  @click="downloadFile('markdown')">
-                <Icon name="gravity-ui:logo-markdown" size="1.15rem" />
-                Markdown
-              </div>
-              <div class="dropdown-item"  @click="downloadFile('html')">
-                <Icon name="ph:file-html-duotone" size="1.15rem" />
-                HTML
-              </div>
-            </template>
-          </Dropdown>
 
         </section>
       </section>
@@ -494,11 +496,18 @@ async function downloadFile(type) {
 
   .state-manager {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: $spacing-xxs $spacing-sm;
+    grid-template-columns: 1fr 1fr;
+    padding: $spacing-xs $spacing-sm;
     gap: $spacing-sm;
     z-index: 2;
     border-top: $border;
+
+    .state-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      gap: $spacing-xs;
+    }
 
     .back {
       align-self: center;
@@ -507,7 +516,7 @@ async function downloadFile(type) {
 
     .state-panel-toggle {
       align-self: center;
-      justify-self: center;
+      justify-self: flex-start;
       position: relative;
 
       .state-arrow {
@@ -540,7 +549,8 @@ async function downloadFile(type) {
     .state-manager-panel {
       display: none;
       position: absolute;
-      bottom: $spacing-lg;
+      bottom: 34px;
+      left: 0;
       min-width: 280px;
       background-color: $white;
       border-radius: $br-lg;
