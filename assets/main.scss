@@ -290,7 +290,9 @@ p.or-select {
 }
 
 pre {
-    background-color: rgba($black, 0.1);
+    background-color: rgba($brand, .05);
+    color: $black;
+    border-radius: $br-md;
     padding: $spacing-sm;
     margin: 0 0 $spacing-md 0;
     overflow-x: auto;
