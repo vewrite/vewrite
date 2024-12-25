@@ -472,7 +472,7 @@ async function downloadFile(type) {
 
 .deliverables {
   display: grid;
-  grid-template-rows: 1fr 52px;
+  grid-template-rows: 1fr auto;
   height: 100%;
 
   .deliverable-blur {
@@ -495,9 +495,10 @@ async function downloadFile(type) {
   .state-manager {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    padding: $spacing-sm;
+    padding: $spacing-xxs $spacing-sm;
     gap: $spacing-sm;
     z-index: 2;
+    border-top: $border;
 
     .back {
       align-self: center;

@@ -324,56 +324,46 @@ function updateDeliverable() {
 #TipTapTools {
   display: flex;
   flex-wrap: nowrap;
-  gap: $spacing-sm;
+  gap: $spacing-xxs;
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
   background: rgba($white, 0.85);
   backdrop-filter: blur(6px);
-  padding: $spacing-xs;
+  padding: $spacing-xxs $spacing-xs;
   position: sticky;
-  top: 0;
+  top: $spacing-xs;
+  margin-bottom: $spacing-md;
   width: 100%;
   z-index: 10;
   overflow-x: auto;
   overflow-y: hidden;
-  border-left: $border;
-  border-right: $border;
-  border-bottom: $border;
-  border-radius: 0 0 $br-lg $br-lg;
+  border: $border;
+  border-radius: $br-lg;
 
   @media (max-width: 1080px) {
     gap: $spacing-xxs;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: $spacing-xxs $spacing-sm;
+    padding: $spacing-xxs $spacing-xs;
     align-items: center;
     justify-content: flex-start;
     border-left: none;
     border-right: none;
+    border-top: none;
     border-radius: 0;
+    top: 0;
   }
 
   .button-group {
     display: flex;
     gap: $spacing-xxxs;
-    
-    @media (max-width: 1180px) {
-      padding-right: $spacing-xxs;
-    }
-
-    &:last-child {
-      border-right: none;
-    }
   }
 
   button {
     cursor: pointer;
-    
-    @media (max-width: 1480px) {
-      padding: $spacing-xxs $spacing-xxs;
-      min-width: 28px;
-    }
+    padding: $spacing-xxs $spacing-xxs;
+    min-width: 28px;
 
     &.is-active {
       background-color: $brand;
