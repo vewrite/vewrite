@@ -4,8 +4,11 @@
     <div class="single-comment" v-if="Comments && Comments.length > 0 && !loading" v-for="comment in Comments" key="comment.id">
       <section class="quote">"{{ comment.quote }}"</section>
       <section class="content">
-        <span class="text">{{ comment.text }}</span>
-        <span class="small">{{ comment.created_at }}</span>
+        <Avatar :uuid="comment.profile_id" size="small" />
+        <div class="text-wrapper">
+          <span class="text">{{ comment.text }}</span>
+          <span class="small">{{ comment.created_at }}</span>
+        </div>
       </section>
       <section class="actions">
         <button class="button" @click="handleDeleteComment(comment.id)">
@@ -93,11 +96,6 @@ onMounted(async () => {
   max-width: 300px;
   width: 100%;
   height: fit-content;
-  // position: sticky;
-  // top: 0;
-  // overflow-y: auto;
-  // scrollbar-width: thin;
-  
 
   .empty-state {
     display: flex;
@@ -137,18 +135,25 @@ onMounted(async () => {
 
     .content {
       padding: $spacing-sm;
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-xs;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: $spacing-xxxs;
       background: rgba($white, 0);
 
-      .text {
-        font-size: $font-size-xxs;
-      }
+      .text-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
 
-      .small {
-        font-size: $font-size-xxs;
-        color: rgba($black, 0.25);
+        .text {
+          font-size: $font-size-xxs;
+        }
+
+        .small {
+          margin-top: $spacing-xxs;
+          font-size: $font-size-xxs;
+          color: rgba($black, 0.25);
+        }
       }
     }
 

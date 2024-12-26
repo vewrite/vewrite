@@ -57,6 +57,8 @@ watch(path, () => {
   border-radius: $br-lg;
   overflow: hidden;
   font-size: 0;
+  outline: $border;
+  outline-offset: -1px;
 
   &.small {
     width: 32px;
