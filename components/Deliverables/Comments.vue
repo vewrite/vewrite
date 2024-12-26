@@ -1,14 +1,14 @@
 <template>
   <section class="deliverable-comments"> 
-    <!-- {{ deliverable.id }} -->
-    <div class="single-comment" v-if="Comments && Comments.length > 0" v-for="comment in Comments" key="comment.id">
+    <Loading v-if="loading" type="small" />
+    <div class="single-comment" v-if="Comments && Comments.length > 0 && !loading" v-for="comment in Comments" key="comment.id">
       <section class="quote">"{{ comment.quote }}"</section>
       <section class="content">
         <span class="text">{{ comment.text }}</span>
         <span class="small">{{ comment.created_at }}</span>
       </section>
       <section class="actions">
-        <button class="button">
+        <button class="button" @click="handleDeleteComment(comment.id)">
           <Icon name="fluent:delete-24-filled" size="1.5rem" />
         </button>
         <button class="button">
@@ -27,9 +27,11 @@
 import { parseISO, format } from 'date-fns';
 
 const props = defineProps(['deliverable']);
+const loading = ref(true);
+const supabase = useSupabaseClient();
 
 import useComments from '~/composables/useComments';
-const { fetchComments } = useComments();
+const { fetchComments, deleteComment } = useComments();
 
 const Comments = ref(null);
 
@@ -38,16 +40,45 @@ function formatCommentDate(date){
   return newDate;
 }
 
-async function init() {
-  console.log(props.deliverable.id);
-  Comments.value = await fetchComments(props.deliverable.id);
-  for (let i = 0; i < Comments.value.length; i++) {
-    Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
+async function handleDeleteComment(id) {
+  try {
+    await deleteComment(id);
+    Comments.value = Comments.value.filter(comment => comment.id !== id);
+  } catch (error) {
+    console.error(error);
   }
-  console.log(Comments.value);
 }
 
-onMounted(init);
+onMounted(async () => {
+  try {
+    const subscription = supabase
+      .from('comments')
+      .on('INSERT', payload => {
+        console.log('New comment:', payload.new);
+        const newComment = { ...payload.new };
+        Comments.value.push(newComment);
+        for (let i = 0; i < Comments.value.length; i++) {
+          Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
+        }
+      })
+      .subscribe();
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+
+    Comments.value = await fetchComments(props.deliverable.id);
+    for (let i = 0; i < Comments.value.length; i++) {
+      Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
+    }
+
+  } catch (error) {
+    console.error('Failed to fetch comments:', error)
+  } finally {
+    loading.value = false
+  }
+  
+})
 
 </script>
 
@@ -61,11 +92,12 @@ onMounted(init);
   gap: $spacing-sm;
   max-width: 300px;
   width: 100%;
+  height: fit-content;
   // position: sticky;
   // top: 0;
   // overflow-y: auto;
   // scrollbar-width: thin;
-  height: fit-content;
+  
 
   .empty-state {
     display: flex;
@@ -86,6 +118,12 @@ onMounted(init);
     margin: 0;
     position: relative;
     overflow: hidden;
+    height: fit-content;
+    transition: all 0.5s ease;
+
+    &:hover {
+      border: 1px solid rgba($brand, 0.35);
+    }
 
     .quote {
       padding: $spacing-sm;
@@ -110,7 +148,7 @@ onMounted(init);
 
       .small {
         font-size: $font-size-xxs;
-        color: rgba($black, 0.5);
+        color: rgba($black, 0.25);
       }
     }
 

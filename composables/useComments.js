@@ -50,10 +50,30 @@ export default function useComments() {
     }
   }
 
+  async function deleteComment(comment_id) {
+    try {
+      const { data, error } = await supabase
+        .from('comments')
+        .delete()
+        .eq('id', comment_id)
+
+      if (error) {
+        CommentsError.value = error.message
+      }
+
+      CommentsData.value = data
+      return data
+
+    } catch (error) {
+      CommentsError.value = error.message
+    }
+  }
+
   return {
     CommentsData,
     CommentsError,
     addComment,
-    fetchComments
+    fetchComments,
+    deleteComment
   }
 }

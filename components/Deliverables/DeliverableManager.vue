@@ -109,7 +109,7 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
   scrollbar-width: thin;
 
   .deliverable-manager {
-    height: 100%;
+    height: fit-content;
     width: 100%;
   }
 
