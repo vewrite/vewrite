@@ -295,7 +295,6 @@ function updateDeliverable() {
     border-bottom: $border;
     background: transparent;
     border-radius: 0;
-    resize: none;
     margin: 0;
   }
 
