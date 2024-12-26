@@ -101,11 +101,14 @@ onMounted(async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    padding: $spacing-sm;
+    background: rgba($brand, 0.05);
+    border-radius: $br-lg;
 
     p {
       color: rgba($black, 0.25);
       font-size: $font-size-xs;
+      margin: 0;
     }
   }
 

@@ -108,6 +108,10 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
   overflow: auto;
   scrollbar-width: thin;
 
+  @media (max-width: 960px) {
+    padding: 0;
+  }
+
   .deliverable-manager {
     height: fit-content;
     width: 100%;
