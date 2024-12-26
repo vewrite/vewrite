@@ -3,47 +3,53 @@
     <section class="deliverable-manager" v-if="props.DeliverableData && props.StateData" @stateChange="handleStateChange">
     
       <Instructions :icon="'fluent:question-20-regular'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" v-if="StateData.name == 'new'" />
+      <Instructions :icon="'fluent:question-20-regular'" :title="'Ready to start'" :content="'This is a preparatory state that you can use to get organized.'" v-if="StateData.name == 'ready'" />
       <Instructions :icon="'fluent:question-20-regular'" :title="'Research deliverable'" :content="'Using the requirements in the previous state, it is time to do some research. You can use this state as a scratchpad for taking notes.'" v-if="StateData.name == 'research'" />
       <Instructions :icon="'fluent:question-20-regular'" :title="'Outline deliverable'" :content="'Using the research that you gathered in the previous state, it is time to build an outline.'" v-if="StateData.name == 'outline'" />
       <Instructions :icon="'fluent:question-20-regular'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" v-if="StateData.name == 'review'" />
       <Instructions :icon="'fluent:question-20-regular'" :title="'Write your deliverable'" :content="'It\'s time for you to write your deliverable. You can always jump back to previous states and reference your work.'" v-if="StateData.name == 'writing'" />
       <Instructions :icon="'fluent:question-20-regular'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" v-if="StateData.name == 'approved'" />
+      <Instructions :icon="'fluent:question-20-regular'" :title="'Holding deliverable'" :content="'Your deliverable is currently paused.'" v-if="StateData.name == 'holding'" />
 
       <div class="deliverable-editor" v-if="props.DeliverableData">
         
         <!-- Internal Editor - New Template -->
         <section class="state new" v-if="StateData.name == 'new'">
-          <!-- <Instructions :icon="'fluent:question-20-regular'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" /> -->
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+        </section>
+
+        <!-- Internal Editor - New Template -->
+        <section class="state ready" v-if="StateData.name == 'ready'">
           <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Research Template -->
         <section class="state research" v-if="StateData.name == 'research'">
-          <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Research deliverable'" :content="'Using the requirements in the previous state, it is time to do some research. You can use this state as a scratchpad for taking notes.'" /> -->
           <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Outline Template -->
         <section class="state outline" v-if="StateData.name == 'outline'">
-          <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Outline deliverable'" :content="'Using the research that you gathered in the previous state, it is time to build an outline.'" /> -->
           <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Review Template -->
         <section class="state review" v-if="StateData.name == 'review'">
-          <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Review deliverable'" :content="'You are the assigned stakeholder and this deliverable is awaiting your feedback.'" /> -->
           <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" :review="true" />
         </section>
 
         <!-- Internal Editor - Writing Template -->
         <section class="state writing" v-if="StateData.name == 'writing'">
-          <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Write your deliverable'" :content="'It\'s time for you to write your deliverable. You can always jump back to previous states and reference your work.'" /> -->
           <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Approved Template -->
         <section class="state approved" v-if="StateData.name == 'approved'">
-          <!-- <Instructions :icon="'mingcute:question-fill'" :title="'Approved deliverable'" :content="'This deliverable has been approved by your stakeholder!'" /> -->
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
+        </section>
+
+        <!-- Internal Editor - Holding Template -->
+        <section class="state holding" v-if="StateData.name == 'holding'">
           <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
         </section>
           
