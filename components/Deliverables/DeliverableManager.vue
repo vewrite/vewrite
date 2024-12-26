@@ -113,17 +113,17 @@ const props = defineProps(['DeliverableData', 'StateData', 'editable']);
     width: 100%;
   }
 
-  .deliverable-comments {
-    max-width: 300px;
-    width: 100%;
-    background: rgba($brand, 0.025);
-    border-radius: $br-lg;
-    padding: $spacing-sm;
-    position: sticky;
-    top: 0;
-    overflow-y: auto;
-    scrollbar-width: thin;
-  }
+  // .deliverable-comments {
+    // max-width: 300px;
+    // width: 100%;
+    // background: rgba($brand, 0.025);
+    // border-radius: $br-lg;
+    // padding: $spacing-sm;
+    // position: sticky;
+    // top: 0;
+    // overflow-y: auto;
+    // scrollbar-width: thin;
+  // }
 }
 
 .deliverable-editor {

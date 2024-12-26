@@ -361,7 +361,7 @@ function updateDeliverable() {
   border-radius: $br-lg;
   box-shadow: $soft-shadow;
 
-  @media (max-width: 1080px) {
+  @media (max-width: 960px) {
     gap: $spacing-xxs;
     overflow-x: auto;
     overflow-y: hidden;
