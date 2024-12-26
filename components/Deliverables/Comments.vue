@@ -14,9 +14,9 @@
         <button class="button" @click="handleDeleteComment(comment.id)">
           <Icon name="fluent:delete-24-filled" size="1.5rem" />
         </button>
-        <button class="button">
+        <!-- <button class="button">
           <Icon name="fluent:checkmark-24-filled" size="1.5rem" />
-        </button>
+        </button> -->
       </section>
     </div>
     <div class="empty-state" v-else>
