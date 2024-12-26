@@ -103,8 +103,8 @@
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
       <span class="quote" v-html="selectedText"></span>
-      <textarea v-model="commentText" placeholder="Add a comment"></textarea>
-      <button @click="handleComment">Add Comment</button>
+      <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
+      <button @click="handleAddComment()">Add Comment</button>
     </div>
   </div>
 
@@ -122,6 +122,15 @@ import Highlight from '@tiptap/extension-highlight';
 
 import useComments from '~/composables/useComments';
 const { addComment, fetchComments, CommentsData, CommentError } = useComments();
+
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
+const showCommentInput = ref(false);
+const commentText = ref('');
+const selectedText = ref('');
+const commentPosition = ref({ top: 0, left: 0 });
+const hasComments = ref(true);
 
 const { saveDeliverableContent } = useDeliverables();
 const saving = ref(false);
@@ -143,11 +152,14 @@ const props = defineProps({
 });
 
 const deliverable = ref(props.deliverable);
-const showCommentInput = ref(false);
-const commentText = ref('');
-const selectedText = ref('');
-const commentPosition = ref({ top: 0, left: 0 });
-const hasComments = ref(true);
+
+const comment = {
+  quote: '',
+  text: '',
+  profile_id: user.value.id,
+  deliverable_content_id: deliverable.value.id,
+  created_at: new Date().toISOString(),
+};
 
 const editor = useEditor({
   content: deliverable.value.content.content,
@@ -167,19 +179,22 @@ const handleTextSelection = () => {
     selectedText.value = selection.toString();
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
-    // console.log(selectedText);
-    // console.log(range);
     commentPosition.value = {
       top: rect.top + 6,
       left: rect.right,
     };
     showCommentInput.value = true;
+    comment.quote = selectedText.value;
   } else {
     showCommentInput.value = false;
   }
 };
 
-const handleComment = () => {
+const handleCommentText = (event) => {
+  comment.text = event.target.value;
+};
+
+const handleAddComment = () => {
   if (selectedText.value && commentText.value) {
     // Generate a unique ID for the comment
     const commentId = `comment-${Date.now()}`;
@@ -190,6 +205,8 @@ const handleComment = () => {
     deliverable.value.content.content = newContent;
     commentText.value = '';
     showCommentInput.value = false;
+
+    addComment(comment);
 
     // Log the comment ID and selected text for debugging
     console.log(`Comment ID: ${commentId}`);
@@ -255,9 +272,10 @@ function updateDeliverable() {
 
 .floating-comment {
   position: fixed;
-  background: white;
+  background: rgba($white, 0.8);
+  backdrop-filter: blur(6px);
   box-shadow: $big-shadow;
-  border-radius: $br-xl;
+  border-radius: $br-lg;
   z-index: 1000;
   max-width: 400px;
   min-width: 300px;
@@ -274,8 +292,11 @@ function updateDeliverable() {
     padding: $spacing-sm;
     border: none;
     border-top: $border;
-    border-radius: 0 0 $br-xl $br-xl;
+    border-bottom: $border;
+    background: transparent;
+    border-radius: 0;
     resize: none;
+    margin: 0;
   }
 
   button {
@@ -330,7 +351,7 @@ function updateDeliverable() {
   backdrop-filter: blur(6px);
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
-  top: $spacing-xs;
+  top: 0;
   margin-bottom: $spacing-md;
   width: 100%;
   z-index: 10;
@@ -338,12 +359,13 @@ function updateDeliverable() {
   overflow-y: hidden;
   border: $border;
   border-radius: $br-lg;
+  box-shadow: $soft-shadow;
 
   @media (max-width: 1080px) {
     gap: $spacing-xxs;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: $spacing-xxs $spacing-xs;
+    padding: $spacing-xxs;
     align-items: center;
     justify-content: flex-start;
     border-left: none;
@@ -351,6 +373,7 @@ function updateDeliverable() {
     border-top: none;
     border-radius: 0;
     top: 0;
+    box-shadow: none;
   }
 
   .button-group {

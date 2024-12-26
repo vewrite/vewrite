@@ -40,16 +40,19 @@ onMounted(() => {
   flex-direction: column;
   justify-content: flex-end;
   position: absolute;
-  left: $spacing-sm;
-  bottom: 68px;
+  left: $spacing-xxs;
+  bottom: 60px;
   z-index: 1;
-  background: rgba($brand, 0.05);
+  background: linear-gradient(110deg, rgba($brand, 0.1) 0%, rgba($brand, 0) 80%, rgba($mint, 0.2) 100%);
   border: 1px solid rgba($white, 0.8);
   backdrop-filter: blur(6px);
   transition: background 0.5s ease;
   border-radius: $br-xl;
+  box-shadow: inset 0 -10px 21px rgba($brand, 0.1);
 
   .notification {
+    color: $brand;
+
     button {
       border-radius: 50%;
       width: 2rem;
@@ -94,8 +97,8 @@ onMounted(() => {
       padding: 0;
    
       button {
-        transform: scale(1.25);
-        opacity: 0.5;
+        transform: scale(1.15);
+        opacity: 0.35;
       }
       
       .instruction-set {
