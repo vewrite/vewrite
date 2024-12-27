@@ -73,12 +73,12 @@
         <button @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
+        <div class="character-count">
+          {{ characterCount }} chars
+        </div>
       </section>
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
-    <div class="character-count">
-      {{ characterCount }} chars
-    </div>
   </div>
 
   <!-- Review -->
@@ -101,6 +101,9 @@
         <button @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
+        <div class="character-count">
+          {{ characterCount }} chars
+        </div>
       </section>
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
@@ -109,6 +112,7 @@
       <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
       <button @click="handleAddComment()">Add Comment</button>
     </div>
+    
   </div>
 
   <!-- Not editable -->
@@ -340,15 +344,14 @@ function updateDeliverable() {
   }
 
   .character-count {
-    position: fixed;
-    bottom: 68px;
-    right: $spacing-md;
+    height: 22px;
     padding: $spacing-xxxs $spacing-xxs;
     font-size: $font-size-xxs;
     background: rgba($white, 0.85);
     color: rgba($black, 0.5);
     border-radius: $br-md;
     border: $border;
+    align-self: center;
   }
 }
 
