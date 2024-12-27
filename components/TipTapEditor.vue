@@ -388,6 +388,10 @@ function updateDeliverable() {
     -moz-user-select: none; 
     -ms-user-select: none; 
     user-select: none;
+
+    &:hover {
+      color: $brand;
+    }
   }
 
   @media (max-width: 960px) {
