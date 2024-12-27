@@ -370,6 +370,7 @@ function updateDeliverable() {
     color: rgba($black, 0.5);
     align-self: center;
     padding: 0 $spacing-xxs;
+    text-wrap: nowrap;
   }
 
   @media (max-width: 960px) {
