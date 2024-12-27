@@ -1,5 +1,8 @@
 <template>
-  <section class="deliverable-content">
+  <section class="deliverable-content" v-if="DeliverableData">
+
+    <!-- {{ props.DeliverableData.content.type }} -->
+
     <section class="deliverable-manager" v-if="props.DeliverableData && props.StateData" @stateChange="handleStateChange">
     
       <Instructions :icon="'fluent:question-20-regular'" :title="'New deliverable'" :content="'You must add a quick summary of the requirement for this deliverable.'" v-if="StateData.name == 'new'" />

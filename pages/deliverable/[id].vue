@@ -5,7 +5,7 @@
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
-      <Assigned v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+      <Assigned v-if="DeliverableData && !loading" :deliverable="DeliverableData" :user="user" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <Dropdown>
           <template v-slot:trigger>
@@ -107,6 +107,7 @@ import TurnDownService from 'turndown';
 const turndownService = new TurnDownService();
 
 const supabase = useSupabaseClient();
+const user = supabase.auth.user();
 const loading = ref(true);
 const projectId = ref(null);
 const route = useRoute();

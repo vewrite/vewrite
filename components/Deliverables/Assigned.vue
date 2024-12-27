@@ -1,12 +1,14 @@
 <template>
-  <button class="button">
-    {{ deliverable }}
+  <button class="button clear">
+    <!-- {{ deliverable }} -->
+      <!-- {{ user.identities[0].id }} -->
+    <!-- <Avatar :deliverable="user.identities[0].id" /> -->
   </button>
 </template>
 
 <script setup>
 
-const props = defineProps(['deliverable']);
+// const props = defineProps(['deliverable', 'user']);
 
 /* 
 
