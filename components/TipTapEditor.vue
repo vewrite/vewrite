@@ -342,17 +342,6 @@ function updateDeliverable() {
   .max-width {
     height: 100%;
   }
-
-  .character-count {
-    height: 22px;
-    padding: $spacing-xxxs $spacing-xxs;
-    font-size: $font-size-xxs;
-    background: rgba($white, 0.85);
-    color: rgba($black, 0.5);
-    border-radius: $br-md;
-    border: $border;
-    align-self: center;
-  }
 }
 
 #TipTapTools {
@@ -375,6 +364,13 @@ function updateDeliverable() {
   border: $border;
   border-radius: $br-lg;
   box-shadow: $soft-shadow;
+
+  .character-count {
+    font-size: $font-size-xxs;
+    color: rgba($black, 0.5);
+    align-self: center;
+    padding: 0 $spacing-xxs;
+  }
 
   @media (max-width: 960px) {
     gap: $spacing-xxs;
