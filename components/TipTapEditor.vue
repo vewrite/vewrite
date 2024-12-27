@@ -73,8 +73,9 @@
         <button @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
-        <div class="character-count">
-          {{ characterCount }} chars
+        <div class="character-count" @click="toggleCount">
+          <span class="chars" v-if="showChar">{{ characterCount }} chars</span>
+          <span class="words" v-if="!showChar">{{ wordCount }} words</span>
         </div>
       </section>
     </div>
@@ -140,6 +141,7 @@ const commentPosition = ref({ top: 0, left: 0 });
 const { saveDeliverableContent } = useDeliverables();
 const saving = ref(false);
 const textareaRef = ref(null);
+const showChar = ref(true);
 
 const props = defineProps({
   deliverable: {
@@ -198,6 +200,14 @@ const handleTextSelection = () => {
 const characterCount = computed(() => {
   return editor.value ? editor.value.getHTML().replace(/<[^>]*>?/gm, '').length : 0;
 });
+
+const wordCount = computed(() => {
+  return editor.value ? editor.value.getHTML().replace(/<[^>]*>?/gm, '').split(/\s+/).length : 0;
+});
+
+const toggleCount = () => {
+  showChar.value = !showChar.value;
+};
 
 const handleCommentText = (event) => {
   comment.text = event.target.value;
@@ -371,6 +381,13 @@ function updateDeliverable() {
     align-self: center;
     padding: 0 $spacing-xxs;
     text-wrap: nowrap;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -khtml-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
   }
 
   @media (max-width: 960px) {
