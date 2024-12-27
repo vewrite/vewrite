@@ -7,6 +7,9 @@ body {
     font-family: $font-family-main;
     background-color: $white;
     font-size: $font-size-xs;
+    font-smooth: antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #__nuxt {
@@ -610,7 +613,6 @@ button,
     padding: $spacing-xxs $spacing-sm;
     cursor: pointer;
     font-size: $font-size-xs;
-    font-weight: bold;
     transition: all 0.2s ease;
     font-family: $font-family-main;
     display: flex;
@@ -789,7 +791,6 @@ button.vertical,
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: $spacing-sm;
       width: 100%;
       position: relative;
       overflow: hidden;
@@ -801,7 +802,7 @@ button.vertical,
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: 0 $spacing-xxs;
+        padding: $spacing-xxs $spacing-xxs 0;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -822,8 +823,7 @@ button.vertical,
         font-weight: 500;
         background-color: transparent;
         width: 100%;
-        padding: 0 $spacing-xxs;
-        margin-top: -16px;
+        padding: 0 $spacing-xxs $spacing-xxs $spacing-xxs;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;

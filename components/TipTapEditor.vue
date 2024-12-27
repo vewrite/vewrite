@@ -76,6 +76,9 @@
       </section>
     </div>
     <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
+    <div class="character-count">
+      {{ characterCount }} chars
+    </div>
   </div>
 
   <!-- Review -->
@@ -121,16 +124,14 @@ import TiptapStarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 
 import useComments from '~/composables/useComments';
-const { addComment, fetchComments, CommentsData, CommentError } = useComments();
+const { addComment } = useComments();
 
-const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 const showCommentInput = ref(false);
 const commentText = ref('');
 const selectedText = ref('');
 const commentPosition = ref({ top: 0, left: 0 });
-const hasComments = ref(true);
 
 const { saveDeliverableContent } = useDeliverables();
 const saving = ref(false);
@@ -189,6 +190,10 @@ const handleTextSelection = () => {
     showCommentInput.value = false;
   }
 };
+
+const characterCount = computed(() => {
+  return editor.value ? editor.value.getHTML().replace(/<[^>]*>?/gm, '').length : 0;
+});
 
 const handleCommentText = (event) => {
   comment.text = event.target.value;
@@ -328,14 +333,22 @@ function updateDeliverable() {
   height: 100%;
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
 
-  div {
+  .max-width {
+    height: 100%;
+  }
 
-    // &:nth-child(2) {
-    //   width: 100%;
-    //   height: calc(100% - 72px);
-    //   overflow-y: auto;
-    // }
+  .character-count {
+    position: fixed;
+    bottom: 68px;
+    right: $spacing-md;
+    padding: $spacing-xxxs $spacing-xxs;
+    font-size: $font-size-xxs;
+    background: rgba($white, 0.85);
+    color: rgba($black, 0.5);
+    border-radius: $br-md;
+    border: $border;
   }
 }
 

@@ -40,8 +40,8 @@ onMounted(() => {
   flex-direction: column;
   justify-content: flex-end;
   position: absolute;
-  left: $spacing-xxs;
-  bottom: 60px;
+  left: $spacing-sm;
+  bottom: 68px;
   z-index: 1;
   background: linear-gradient(110deg, rgba($brand, 0.1) 0%, rgba($brand, 0) 80%, rgba($mint, 0.2) 100%);
   border: 1px solid rgba($white, 0.8);
@@ -92,13 +92,22 @@ onMounted(() => {
   &.hide {
     background: rgba($brand, 0.0);
     transition: background 0.5s ease;
+    box-shadow: none;
+    border: $border;
 
     .notification {
       padding: 0;
-   
+      background: rgba($white, 0.35);
+
       button {
         transform: scale(1.15);
         opacity: 0.35;
+        background: rgba($white, 0.35);
+
+        .iconify {
+          color: $black;
+        }
+        
       }
       
       .instruction-set {

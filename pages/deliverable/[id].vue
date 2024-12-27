@@ -5,7 +5,7 @@
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
-      <Assigned v-if="DeliverableData && !loading" />
+      <Assigned v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <Dropdown>
           <template v-slot:trigger>

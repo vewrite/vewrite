@@ -166,7 +166,6 @@ onMounted(() => {
         color: rgba($black, 0.5);
         font-size: $font-size-xs;
         font-family: $font-family-main;
-        font-weight: bold;
         text-decoration: none;
         border: 1px solid rgba($brand, 0.0);
 
