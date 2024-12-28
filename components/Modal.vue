@@ -145,7 +145,7 @@ computed(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba($white, 0.05);
+    background-color: rgba($brand, 0.05);
     backdrop-filter: blur(10px);
   }
 
