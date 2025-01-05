@@ -314,7 +314,7 @@ const filteredProjects = computed(() => {
         transform: scale(0.9);
 
         &.completed {
-          background: $white linear-gradient(to bottom, $white 70%, rgba($mint, 0.25) 90%, rgba($mint, 0.1) 100%);
+          background: $white linear-gradient(to bottom, $white 70%, rgba($mint-light, 0.25) 90%, rgba($mint-light, 0.1) 100%);
         }
 
         $project-cards: ();
@@ -450,10 +450,10 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background: linear-gradient(to right, $mint, $mint 80%, $brand 100%);
+                background: linear-gradient(to right, $mint-light, $mint-light 80%, $brand 100%);
 
                 &.completed {
-                  background: $mint;
+                  background: $mint-light;
                 }
               }
 
