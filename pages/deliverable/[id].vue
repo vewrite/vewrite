@@ -20,9 +20,10 @@
     <template v-slot:body>
       <Loading v-if="loading" type="small" />
       <section class="deliverables" v-if="!loading">
-        <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" />
-        <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div>
-        <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
+        <DocumentManager v-if="DeliverableContentData && StateData" :DeliverableData="DeliverableContentData" :StateData="StateData" />
+        <!-- <DeliverableManager :DeliverableData="DeliverableContentData" :StateData="StateData" /> -->
+        <!-- <div :class="['deliverable-blur', collapsed ? '' : 'blurred']" @click="toggleStateManagerPanel"></div> -->
+        <!-- <section class="state-manager" v-if="DeliverableData && workflowStates && StateData">
           <button @click="toggleStateManagerPanel" :class="['state-panel-toggle state-icon', collapsed ? '' : 'open']">
             <Loading v-if="loading" type="small" class="loading-icon" />
             <Icon v-if="!loading" :name="StateData.icon" size="2rem" />
@@ -49,10 +50,10 @@
           
           <section class="state-buttons">
             <button class="button back" @click="prevState()" v-if="currentPositionInWorkflow > 0">Previous state</button>
-            <div v-else></div>
+            <div v-else></div> -->
 
             <!-- <button class="button primary complete" @click="setComplete(DeliverableData.id, workflowStates[currentPositionInWorkflow])">Complete {{ StateData.name }}</button> -->
-            <section class="next" v-if="currentPositionInWorkflow < workflowStates.length - 1">
+            <!-- <section class="next" v-if="currentPositionInWorkflow < workflowStates.length - 1">
               <Dropdown position="top">
                 <template v-slot:trigger>
                   <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -62,10 +63,10 @@
                 </template>
               </Dropdown>
               <button class="button primary" @click="nextState()" >Finish {{ StateData.name }}</button>
-            </section>
+            </section> -->
 
             <!-- Approved state allows downloads -->
-            <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next" primary="true">
+            <!-- <Dropdown position="top" v-if="currentPositionInWorkflow == workflowStates.length - 1" class="download-approved next" primary="true">
               <template v-slot:trigger>
                 Download
               </template>
@@ -79,10 +80,10 @@
                   HTML
                 </div>
               </template>
-            </Dropdown>
-          </section>
+            </Dropdown> -->
+          <!-- </section> -->
 
-        </section>
+        <!-- </section> -->
       </section>
     </template>
   </AppPanel>
@@ -100,6 +101,7 @@ import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 // import StateManager from '~/components/States/StateManager.vue';
 import DeliverableManager from '~/components/Deliverables/DeliverableManager.vue';
+import DocumentManager from '~/components/Deliverables/DocumentManager.vue';
 import StateRow from '~/components/States/StateRow.vue';
 import Assigned from '~/components/Deliverables/Assigned.vue';
 
