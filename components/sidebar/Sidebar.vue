@@ -3,7 +3,7 @@
     <div class="sidebar-content">
       <div class="link-group">
         <router-link to="/projects" :class="['link', isProjects ? 'router-link-active' : '']"><Icon name="fluent:folder-16-regular" size="1.75rem" /> Projects</router-link>
-        <router-link to="/workflows" :class="['link', isWorkflows ? 'router-link-active' : '']"><Icon name="fluent:flow-16-regular" size="1.75rem" /> Workflows</router-link>
+        <!-- <router-link to="/workflows" :class="['link', isWorkflows ? 'router-link-active' : '']"><Icon name="fluent:flow-16-regular" size="1.75rem" /> Workflows</router-link> -->
         <router-link to="/teams" :class="['link', isTeams ? 'router-link-active' : '']"><Icon name="fluent:people-16-regular" size="1.75rem" /> Teams</router-link>
         <router-link to="/clients" :class="['link', isClients ? 'router-link-active' : '']"><Icon name="fluent:star-16-regular" size="1.75rem" /> Clients</router-link>
       </div>

@@ -17,13 +17,13 @@
             <div class="form-input">
               <label for="type">Type</label>
               <select v-model="deliverable.type" id="type" @change="showType">
-                <option value="markdown">Internal Editor</option>
+                <option value="content">Internal Editor</option>
                 <option value="link">External Link</option>
                 <!-- <option value="file">External File</option> -->
               </select>
             </div>
 
-            <span v-if="deliverable.type == 'markdown'" class="notification info">
+            <span v-if="deliverable.type == 'content'" class="notification info">
               <p>The internal editor allows your team to work entirely within Vewrite, ensuring the most smooth process.</p>
             </span>
 
@@ -84,8 +84,14 @@ const deliverable = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   project: projectId,
-  type: 'markdown',
-  due_date: new Date()
+  type: 'content',
+  due_date: new Date(),
+  content: {
+    requirements: '',
+    outline: '',
+    research: '',
+    draft: ''
+  }
 })
 
 function showType(event){

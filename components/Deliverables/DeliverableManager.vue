@@ -18,42 +18,42 @@
         
         <!-- Internal Editor - New Template -->
         <section class="state new" v-if="StateData.name == 'new'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - New Template -->
         <section class="state ready" v-if="StateData.name == 'ready'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Research Template -->
         <section class="state research" v-if="StateData.name == 'research'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Outline Template -->
         <section class="state outline" v-if="StateData.name == 'outline'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Review Template -->
         <section class="state review" v-if="StateData.name == 'review'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" :review="true" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="editable" :review="true" />
         </section>
 
         <!-- Internal Editor - Writing Template -->
         <section class="state writing" v-if="StateData.name == 'writing'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="editable" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="editable" />
         </section>
 
         <!-- Internal Editor - Approved Template -->
         <section class="state approved" v-if="StateData.name == 'approved'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="false" />
         </section>
 
         <!-- Internal Editor - Holding Template -->
         <section class="state holding" v-if="StateData.name == 'holding'">
-          <TipTapEditor v-if="props.DeliverableData.content.type == 'markdown'" :deliverable="props.DeliverableData" :editable="false" />
+          <TipTapEditor v-if="props.DeliverableData.content.type == 'content'" :deliverable="props.DeliverableData" :editable="false" />
         </section>
           
         <!-- External Link -->

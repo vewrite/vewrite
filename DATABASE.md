@@ -94,7 +94,7 @@ create table deliverables (
   workflow_state int8,
   file text,
   link text,
-  markdown text,
+  content text,
 
 
   primary key (id)

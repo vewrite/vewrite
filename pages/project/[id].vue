@@ -35,7 +35,7 @@
             <div class="deliverable-details">
               <div class="deliverable-type">
                 <Icon v-if="deliverable.content_type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-                <Icon v-if="deliverable.content_type == 'markdown'" name="fluent:document-16-regular" size="1.5rem" />
+                <Icon v-if="deliverable.content_type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
               </div>
               <span class="deliverable-id">{{ deliverable.id }}</span>
               <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>

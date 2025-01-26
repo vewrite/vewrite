@@ -236,7 +236,7 @@ const handleAddComment = () => {
 const tiptapDeliverable = ref({
   ...deliverable.value, 
   content: {
-    type: 'markdown',
+    type: 'content',
     content: ''
   }
 });
@@ -246,7 +246,7 @@ watch(() => props.deliverable, (newDeliverable) => {
   tiptapDeliverable.value = {
     ...newDeliverable,
     content: {
-      type: 'markdown',
+      type: 'content',
       content: newDeliverable.content.content
     }
   };

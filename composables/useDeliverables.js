@@ -405,13 +405,13 @@ export default function useDeliverables() {
 
     const deliverableContent = ref({});
 
-    if(deliverable.type === 'markdown') {
+    if(deliverable.type === 'content') {
       deliverableContent.value = {
-        type: 'markdown',
-        content: ''
+        type: 'content',
+        content: deliverable.content
       };
-      console.log('Markdown content:', deliverableContent.value);
-      delete deliverable.markdown;
+      console.log('Deliverable content:', deliverableContent.value);
+      delete deliverable.content;
     }
 
     // if(deliverable.type === 'file') {
@@ -469,40 +469,9 @@ export default function useDeliverables() {
       DeliverableError.value = error.message;
     }
 
-    // For each state, I need a new deliverable_content row
-    for (let i = 0; i < States.value.length; i++) {
-      
-      const state = States.value[i];
-
-      if (i == 0) {
-        // First state of a link will already have its value filled in by the project manager
-        deliverable = {
-          project_id: projectId,
-          deliverable_id: deliverableId.value,
-          stateinstance_id: state,
-          created_at: new Date(),
-          updated_at: new Date(),
-          content: deliverableContent.value,
-          status: 0
-        }
-      } else {
-        deliverable = {
-          project_id: projectId,
-          deliverable_id: deliverableId.value,
-          stateinstance_id: state,
-          created_at: new Date(),
-          updated_at: new Date(),
-          content: {
-            type: 'link',
-            content:''
-          },
-          status: 0
-        }
-      }
-
       try {
         const { data, error } = await supabase
-          .from('deliverable_content')
+          .from('deliverable')
           .insert(deliverable);
 
         if (error) throw error;
