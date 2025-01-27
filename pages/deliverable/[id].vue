@@ -66,3 +66,17 @@ onMounted(() => {
 });
 
 </script>
+
+<style lang="scss" scoped>
+
+@use 'assets/variables' as *;
+
+.deliverables {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  height: 100%;
+  padding: $spacing-sm;
+}
+
+</style>

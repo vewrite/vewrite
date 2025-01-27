@@ -2,13 +2,13 @@
   <Loading class="saving" v-if="saving" saving="saving" type="small" />
   
   <!-- Requirements -->
-  <div id="TipTapEditor" v-if="props.type == 'draft'" class="requirements">
+  <div id="TipTapEditor" v-if="props.type == 'requirements'" class="requirements">
     <div class="type-label">Requirements</div>
     <TiptapEditorContent :editor="requirementsEditor" class="max-width xl" ref="textareaRef" />
   </div>
 
   <!-- Outline -->
-  <div id="TipTapEditor" v-if="props.type == 'draft'" class="outline">
+  <div id="TipTapEditor" v-if="props.type == 'outline'" class="outline">
     <div class="type-label">Outline</div>
     <div id="TipTapTools" class="max-width xl" v-if="outlineEditor">
       <section class="button-group">
@@ -245,12 +245,12 @@ const requirementsEditor = useEditor({
 });
 
 const outlineEditor = useEditor({
-  content: deliverable.value.content.draft,
+  content: deliverable.value.content.outline,
   extensions: [TiptapStarterKit],
 });
 
 const researchEditor = useEditor({
-  content: deliverable.value.content.draft,
+  content: deliverable.value.content.research,
   extensions: [TiptapStarterKit],
 });
 
@@ -325,10 +325,10 @@ watch(() => props.deliverable, (newDeliverable) => {
     requirementsEditor.value.commands.setContent(newDeliverable.content.requirements);
   }
   if (outlineEditor.value) {
-    outlineEditor.value.commands.setContent(newDeliverable.content.requirements);
+    outlineEditor.value.commands.setContent(newDeliverable.content.outline);
   }
   if (researchEditor.value) {
-    researchEditor.value.commands.setContent(newDeliverable.content.requirements);
+    researchEditor.value.commands.setContent(newDeliverable.content.research);
   }
   if (draftEditor.value) {
     draftEditor.value.commands.setContent(newDeliverable.content.draft);
@@ -371,37 +371,37 @@ const debouncedSaveDeliverableContent = debounce(async () => {
   }
 }, 250);
 
-watch(draftEditor, (newEditor) => {
-  if (newEditor) {
-    newEditor.on('update', () => {
-      tiptapDeliverable.value.content.draft = newEditor.getHTML();
+watch(draftEditor, (draftEditor) => {
+  if (draftEditor) {
+    draftEditor.on('update', () => {
+      tiptapDeliverable.value.content.draft = draftEditor.getHTML();
       debouncedSaveDeliverableContent();
     });
   }
 });
 
-watch(outlineEditor, (newEditor) => {
-  if (newEditor) {
-    newEditor.on('update', () => {
-      tiptapDeliverable.value.content.requirements = newEditor.getHTML();
+watch(outlineEditor, (outlineEditor) => {
+  if (outlineEditor) {
+    outlineEditor.on('update', () => {
+      tiptapDeliverable.value.content.outline = outlineEditor.getHTML();
       debouncedSaveDeliverableContent();
     });
   }
 });
 
-watch(researchEditor, (newEditor) => {
-  if (newEditor) {
-    newEditor.on('update', () => {
-      tiptapDeliverable.value.content.requirements = newEditor.getHTML();
+watch(researchEditor, (researchEditor) => {
+  if (researchEditor) {
+    researchEditor.on('update', () => {
+      tiptapDeliverable.value.content.research = researchEditor.getHTML();
       debouncedSaveDeliverableContent();
     });
   }
 });
 
-watch(requirementsEditor, (newEditor) => {
-  if (newEditor) {
-    newEditor.on('update', () => {
-      tiptapDeliverable.value.content.requirements = newEditor.getHTML();
+watch(requirementsEditor, (requirementsEditor) => {
+  if (requirementsEditor) {
+    requirementsEditor.on('update', () => {
+      tiptapDeliverable.value.content.requirements = requirementsEditor.getHTML();
       debouncedSaveDeliverableContent();
     });
   }
@@ -411,6 +411,8 @@ onBeforeUnmount(() => {
   debouncedSaveDeliverableContent.cancel();
   unref(draftEditor)?.destroy();
   unref(requirementsEditor)?.destroy();
+  unref(outlineEditor)?.destroy();
+  unref(researchEditor)?.destroy();
 });
 
 
@@ -480,10 +482,6 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   position: relative;
 
-  .max-width {
-    height: 100%;
-  }
-
   &:hover #TipTapTools {
     opacity: 1;
   }
@@ -548,6 +546,9 @@ onBeforeUnmount(() => {
   outline: $border;
   outline-offset: -1px;
   border-radius: $br-lg;
+  align-content: flex-start;
+  justify-content: flex-start;
+  min-height: 80vh;
 
   .type-label {
     background-color: rgba($white, 0.05);
