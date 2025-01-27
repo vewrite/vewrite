@@ -3,37 +3,80 @@
   
   <!-- Requirements -->
   <div id="TipTapEditor" v-if="props.type == 'draft'" class="requirements">
-    <div id="TipTapTools" class="max-width xl" v-if="requirementsEditor">
+    <div class="type-label">Requirements</div>
+    <TiptapEditorContent :editor="requirementsEditor" class="max-width xl" ref="textareaRef" />
+  </div>
+
+  <!-- Outline -->
+  <div id="TipTapEditor" v-if="props.type == 'draft'" class="outline">
+    <div class="type-label">Outline</div>
+    <div id="TipTapTools" class="max-width xl" v-if="outlineEditor">
       <section class="button-group">
-        <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!requirementsEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': requirementsEditor.isActive('bold') }" class="toolbar">
+        <button @click="outlineEditor.chain().focus().toggleBold().run()" :disabled="!outlineEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': outlineEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
         </button>
-        <button @click="requirementsEditor.chain().focus().toggleItalic().run()" :disabled="!requirementsEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': requirementsEditor.isActive('italic') }" class="toolbar">
+        <button @click="outlineEditor.chain().focus().toggleItalic().run()" :disabled="!outlineEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': outlineEditor.isActive('italic') }" class="toolbar">
           <Icon name="fluent-mdl2:italic" size="1rem" /> 
         </button>
-        <button @click="requirementsEditor.chain().focus().toggleStrike().run()" :disabled="!requirementsEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': requirementsEditor.isActive('strike') }" class="toolbar">
+        <button @click="outlineEditor.chain().focus().toggleStrike().run()" :disabled="!outlineEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': outlineEditor.isActive('strike') }" class="toolbar">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
         </button>
-        <button @click="requirementsEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
+        <button @click="outlineEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
           <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
         </button>
-        <button @click="requirementsEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': requirementsEditor.isActive('bulletList') }" class="toolbar">
+        <button @click="outlineEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': outlineEditor.isActive('bulletList') }" class="toolbar">
           <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
         </button>
-        <button @click="requirementsEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': requirementsEditor.isActive('orderedList') }" class="toolbar">
+        <button @click="outlineEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': outlineEditor.isActive('orderedList') }" class="toolbar">
           <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
         </button>
       </section>
       <section class="button-group undo-redo">
-        <button @click="requirementsEditor.chain().focus().undo().run()" :disabled="!requirementsEditor.can().chain().focus().undo().run()" class="toolbar">
+        <button @click="outlineEditor.chain().focus().undo().run()" :disabled="!outlineEditor.can().chain().focus().undo().run()" class="toolbar">
           <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
         </button>
-        <button @click="requirementsEditor.chain().focus().redo().run()" :disabled="!requirementsEditor.can().chain().focus().redo().run()" class="toolbar">
+        <button @click="outlineEditor.chain().focus().redo().run()" :disabled="!outlineEditor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
       </section>
     </div>
-    <TiptapEditorContent :editor="requirementsEditor" class="max-width xl" ref="textareaRef" />
+    <TiptapEditorContent :editor="outlineEditor" class="max-width xl" ref="textareaRef" />
+  </div>
+
+  <!-- Research -->
+  <div id="TipTapEditor" v-if="props.type == 'research'" class="research">
+    <div class="type-label">Research</div>
+    <div id="TipTapTools" class="max-width xl" v-if="researchEditor">
+      <section class="button-group">
+        <button @click="researchEditor.chain().focus().toggleBold().run()" :disabled="!researchEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': researchEditor.isActive('bold') }" class="toolbar">
+          <Icon name="fluent-mdl2:bold" size="1rem" /> 
+        </button>
+        <button @click="researchEditor.chain().focus().toggleItalic().run()" :disabled="!researchEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': researchEditor.isActive('italic') }" class="toolbar">
+          <Icon name="fluent-mdl2:italic" size="1rem" /> 
+        </button>
+        <button @click="researchEditor.chain().focus().toggleStrike().run()" :disabled="!researchEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': researchEditor.isActive('strike') }" class="toolbar">
+          <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
+        </button>
+        <button @click="researchEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
+          <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
+        </button>
+        <button @click="researchEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': researchEditor.isActive('bulletList') }" class="toolbar">
+          <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
+        </button>
+        <button @click="researchEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': researchEditor.isActive('orderedList') }" class="toolbar">
+          <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
+        </button>
+      </section>
+      <section class="button-group undo-redo">
+        <button @click="researchEditor.chain().focus().undo().run()" :disabled="!researchEditor.can().chain().focus().undo().run()" class="toolbar">
+          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+        </button>
+        <button @click="researchEditor.chain().focus().redo().run()" :disabled="!researchEditor.can().chain().focus().redo().run()" class="toolbar">
+          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+        </button>
+      </section>
+    </div>
+    <TiptapEditorContent :editor="researchEditor" class="max-width xl" ref="textareaRef" />
   </div>
 
   <!-- Draft -->
@@ -201,6 +244,16 @@ const requirementsEditor = useEditor({
   extensions: [TiptapStarterKit],
 });
 
+const outlineEditor = useEditor({
+  content: deliverable.value.content.draft,
+  extensions: [TiptapStarterKit],
+});
+
+const researchEditor = useEditor({
+  content: deliverable.value.content.draft,
+  extensions: [TiptapStarterKit],
+});
+
 const draftEditor = useEditor({
   content: deliverable.value.content.draft,
   extensions: [TiptapStarterKit],
@@ -271,6 +324,12 @@ watch(() => props.deliverable, (newDeliverable) => {
   if (requirementsEditor.value) {
     requirementsEditor.value.commands.setContent(newDeliverable.content.requirements);
   }
+  if (outlineEditor.value) {
+    outlineEditor.value.commands.setContent(newDeliverable.content.requirements);
+  }
+  if (researchEditor.value) {
+    researchEditor.value.commands.setContent(newDeliverable.content.requirements);
+  }
   if (draftEditor.value) {
     draftEditor.value.commands.setContent(newDeliverable.content.draft);
   }
@@ -321,6 +380,24 @@ watch(draftEditor, (newEditor) => {
   }
 });
 
+watch(outlineEditor, (newEditor) => {
+  if (newEditor) {
+    newEditor.on('update', () => {
+      tiptapDeliverable.value.content.requirements = newEditor.getHTML();
+      debouncedSaveDeliverableContent();
+    });
+  }
+});
+
+watch(researchEditor, (newEditor) => {
+  if (newEditor) {
+    newEditor.on('update', () => {
+      tiptapDeliverable.value.content.requirements = newEditor.getHTML();
+      debouncedSaveDeliverableContent();
+    });
+  }
+});
+
 watch(requirementsEditor, (newEditor) => {
   if (newEditor) {
     newEditor.on('update', () => {
@@ -342,33 +419,6 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 
 @use 'assets/variables' as *;
-
-.requirements {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: $spacing-sm;
-  background-color: rgba($blue, 0.05);
-  border-radius: $br-lg;
-}
-
-.outline {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: $spacing-sm;
-  background-color: rgba($green, 0.05);
-  border-radius: $br-lg;
-}
-
-.draft {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: $spacing-sm;
-  background-color: rgba($white, 0.05);
-  border-radius: $br-lg;
-}
 
 .floating-comment {
   position: fixed;
@@ -426,12 +476,84 @@ onBeforeUnmount(() => {
 #TipTapReview {
   width: 100%;
   height: 100%;
-  max-width: 800px;
+  max-width: 1180px;
   margin: 0 auto;
   position: relative;
 
   .max-width {
     height: 100%;
+  }
+
+  &:hover #TipTapTools {
+    opacity: 1;
+  }
+
+  .type-label {
+    position: relative;
+    white-space: nowrap;
+    padding: $spacing-xxs $spacing-xs;
+    position: relative;
+    top: -$spacing-sm;
+    left: -$spacing-sm;
+    width: calc(100% + #{$spacing-sm * 2});
+    border-radius: $br-md $br-md 0 0;
+    border-bottom: rgba($black, 0.05) 1px solid;
+  }
+}
+
+.requirements {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-sm;
+  background-color: rgba($blue, 0.05);
+  border-radius: $br-lg;
+
+  .type-label {
+    background-color: rgba($blue, 0.05);
+    color: $blue;
+  }
+}
+
+.outline {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-sm;
+  background-color: rgba($green, 0.05);
+  border-radius: $br-lg;
+
+  .type-label {
+    background-color: rgba($green, 0.05);
+    color: $green;
+  }
+}
+
+.research {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-sm;
+  background-color: rgba($orange, 0.05);
+  border-radius: $br-lg;
+
+  .type-label {
+    background-color: rgba($orange, 0.05);
+    color: $orange;
+  }
+}
+
+.draft {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-sm;
+  background-color: rgba($white, 0.05);
+  outline: $border;
+  outline-offset: -1px;
+  border-radius: $br-lg;
+
+  .type-label {
+    background-color: rgba($white, 0.05);
+    outline: $border;
+    outline-offset: -1px;
+    color: $white;
   }
 }
 
@@ -453,6 +575,8 @@ onBeforeUnmount(() => {
   overflow-x: auto;
   overflow-y: hidden;
   border-radius: $br-md;
+  opacity: 0.25;
+  transition: opacity 0.3s ease;
 
   .character-count {
     font-size: $font-size-xxs;

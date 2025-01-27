@@ -1,9 +1,10 @@
 <template>
   <section class="document-content">
     <!-- <pre>{{ props.DeliverableData }}</pre> -->
-    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements == true" :deliverable="props.DeliverableData" :type="'requirements'" />
-    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasOutline == true" :deliverable="props.DeliverableData" :type="'outline'" />
-    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasDraft == true" :deliverable="props.DeliverableData" :type="'draft'" />
+    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" :deliverable="props.DeliverableData" :type="'requirements'" />
+<TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasOutline" :deliverable="props.DeliverableData" :type="'outline'" />
+<TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasDraft" :deliverable="props.DeliverableData" :type="'draft'" />
+<TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasResearch" :deliverable="props.DeliverableData" :type="'research'" />
   </section>
 </template>
 
