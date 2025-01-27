@@ -482,6 +482,10 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   position: relative;
 
+  &:last-child {
+    margin-bottom: $spacing-xxl;
+  }
+
   &:hover #TipTapTools {
     opacity: 1;
   }
@@ -565,18 +569,18 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
-  background: rgba($white, 0.85);
-  backdrop-filter: blur(6px);
+  background: rgba($white, 0);
+  backdrop-filter: blur(16px);
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
-  top: $spacing-sm;
+  top: 0;
   margin-bottom: $spacing-md;
   width: 100%;
   z-index: 10;
   overflow-x: auto;
   overflow-y: hidden;
   border-radius: $br-md;
-  opacity: 0.25;
+  opacity: 1;
   transition: opacity 0.3s ease;
 
   .character-count {
