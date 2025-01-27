@@ -98,8 +98,6 @@
         <button @click="draftEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
           <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
         </button>
-      </section>
-      <section class="button-group">
         <button @click="draftEditor.chain().focus().setParagraph().run()" :class="{ 'is-active': draftEditor.isActive('paragraph') }" class="toolbar">
           P
         </button>
@@ -121,16 +119,12 @@
         <button @click="draftEditor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 6 }) }" class="toolbar">
           h6
         </button>
-      </section>
-      <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': draftEditor.isActive('bulletList') }" class="toolbar">
           <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
         </button>
         <button @click="draftEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': draftEditor.isActive('orderedList') }" class="toolbar">
           <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
         </button>
-      </section>
-      <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': draftEditor.isActive('codeBlock') }" class="toolbar">
           <Icon name="fluent:code-block-16-regular" size="1.5rem" />
         </button>
@@ -619,7 +613,7 @@ onBeforeUnmount(() => {
 
   .button-group {
     display: flex;
-    gap: $spacing-xxxs;
+    gap: $spacing-xs;
   }
 
   button {
