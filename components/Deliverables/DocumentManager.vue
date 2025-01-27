@@ -1,6 +1,9 @@
 <template>
   <section class="document-content">
-    <pre>{{ props.DeliverableData }}</pre>
+    <!-- <pre>{{ props.DeliverableData }}</pre> -->
+    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements == true" :deliverable="props.DeliverableData" :type="'requirements'" />
+    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasOutline == true" :deliverable="props.DeliverableData" :type="'outline'" />
+    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasDraft == true" :deliverable="props.DeliverableData" :type="'draft'" />
   </section>
 </template>
 
@@ -37,13 +40,10 @@ What I'm actually looking for here:
 
 .document-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: $spacing-sm;
   height: 100%;
   padding: $spacing-sm;
-  overflow: auto;
-  scrollbar-width: thin;
-
 }
 
 </style>

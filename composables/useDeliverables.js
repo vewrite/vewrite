@@ -60,22 +60,22 @@ export default function useDeliverables() {
 
       if (error) throw error;
     } catch (error) {
-      alert(error.message);
+      console.log("Couldn't update the deliverable: ", deliverable);
     }
   }
 
   async function saveDeliverableContent(deliverable) {
     try {
-      console.log('Updating deliverable', deliverable);
+      console.log('Updating deliverable content', deliverable.content, "for deliverable: ", deliverable.id);
       
       const { error } = await supabase
-        .from('deliverable_content')
+        .from('deliverables')
         .update({ content: deliverable.content, updated_at: new Date() })
         .eq('id', deliverable.id);
 
       if (error) throw error;
     } catch (error) {
-      alert(error.message);
+      console.log("Couldn't update the deliverable: ", deliverable);
     }
   }
 

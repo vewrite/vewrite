@@ -1,76 +1,111 @@
 <template>
   <Loading class="saving" v-if="saving" saving="saving" type="small" />
   
-  <!-- Writing -->
-  <div id="TipTapEditor" v-if="editable && !review">
-    <div id="TipTapTools" class="max-width xl" v-if="editor">
+  <!-- Requirements -->
+  <div id="TipTapEditor" v-if="props.type == 'draft'" class="requirements">
+    <div id="TipTapTools" class="max-width xl" v-if="requirementsEditor">
       <section class="button-group">
-        <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!requirementsEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': requirementsEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
         </button>
-        <button @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }" class="toolbar">
+        <button @click="requirementsEditor.chain().focus().toggleItalic().run()" :disabled="!requirementsEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': requirementsEditor.isActive('italic') }" class="toolbar">
           <Icon name="fluent-mdl2:italic" size="1rem" /> 
         </button>
-        <button @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }" class="toolbar">
+        <button @click="requirementsEditor.chain().focus().toggleStrike().run()" :disabled="!requirementsEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': requirementsEditor.isActive('strike') }" class="toolbar">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
         </button>
-        <button @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }" class="toolbar">
+        <button @click="requirementsEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
+          <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
+        </button>
+        <button @click="requirementsEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': requirementsEditor.isActive('bulletList') }" class="toolbar">
+          <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
+        </button>
+        <button @click="requirementsEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': requirementsEditor.isActive('orderedList') }" class="toolbar">
+          <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
+        </button>
+      </section>
+      <section class="button-group undo-redo">
+        <button @click="requirementsEditor.chain().focus().undo().run()" :disabled="!requirementsEditor.can().chain().focus().undo().run()" class="toolbar">
+          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+        </button>
+        <button @click="requirementsEditor.chain().focus().redo().run()" :disabled="!requirementsEditor.can().chain().focus().redo().run()" class="toolbar">
+          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+        </button>
+      </section>
+    </div>
+    <TiptapEditorContent :editor="requirementsEditor" class="max-width xl" ref="textareaRef" />
+  </div>
+
+  <!-- Draft -->
+  <div id="TipTapEditor" v-if="props.type == 'draft'" class="draft">
+    <div id="TipTapTools" class="max-width xl" v-if="draftEditor">
+      <section class="button-group">
+        <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!draftEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': draftEditor.isActive('bold') }" class="toolbar">
+          <Icon name="fluent-mdl2:bold" size="1rem" /> 
+        </button>
+        <button @click="draftEditor.chain().focus().toggleItalic().run()" :disabled="!draftEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': draftEditor.isActive('italic') }" class="toolbar">
+          <Icon name="fluent-mdl2:italic" size="1rem" /> 
+        </button>
+        <button @click="draftEditor.chain().focus().toggleStrike().run()" :disabled="!draftEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': draftEditor.isActive('strike') }" class="toolbar">
+          <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
+        </button>
+        <button @click="draftEditor.chain().focus().toggleCode().run()" :disabled="!draftEditor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': draftEditor.isActive('code') }" class="toolbar">
           <Icon name="fluent:code-16-regular" size="1.5rem" /> 
         </button>
-        <button @click="editor.chain().focus().unsetAllMarks().run()" class="toolbar">
+        <button @click="draftEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
           <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
         </button>
       </section>
       <section class="button-group">
-        <button @click="editor.chain().focus().setParagraph().run()" :class="{ 'is-active': editor.isActive('paragraph') }" class="toolbar">
+        <button @click="draftEditor.chain().focus().setParagraph().run()" :class="{ 'is-active': draftEditor.isActive('paragraph') }" class="toolbar">
           P
         </button>
-        <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 1 }) }" class="toolbar">
           h1
         </button>
-        <button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 2 }) }" class="toolbar">
           h2
         </button>
-        <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 3 }) }" class="toolbar">
           h3
         </button>
-        <button @click="editor.chain().focus().toggleHeading({ level: 4 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleHeading({ level: 4 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 4 }) }" class="toolbar">
           h4
         </button>
-        <button @click="editor.chain().focus().toggleHeading({ level: 5 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleHeading({ level: 5 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 5 }) }" class="toolbar">
           h5
         </button>
-        <button @click="editor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 6 }) }" class="toolbar">
           h6
         </button>
       </section>
       <section class="button-group">
-        <button @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': draftEditor.isActive('bulletList') }" class="toolbar">
           <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
         </button>
-        <button @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': draftEditor.isActive('orderedList') }" class="toolbar">
           <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
         </button>
       </section>
       <section class="button-group">
-        <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock') }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': draftEditor.isActive('codeBlock') }" class="toolbar">
           <Icon name="fluent:code-block-16-regular" size="1.5rem" />
         </button>
-        <button @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }" class="toolbar">
+        <button @click="draftEditor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': draftEditor.isActive('blockquote') }" class="toolbar">
           <Icon name="fluent:text-quote-16-filled" size="1.5rem" />
         </button>
-        <button @click="editor.chain().focus().setHorizontalRule().run()" class="toolbar">
+        <button @click="draftEditor.chain().focus().setHorizontalRule().run()" class="toolbar">
           <Icon name="codicon:horizontal-rule" size="1.5rem" />
         </button>
-        <button @click="editor.chain().focus().setHardBreak().run()" class="toolbar">
+        <button @click="draftEditor.chain().focus().setHardBreak().run()" class="toolbar">
           <Icon name="fluent:document-page-break-24-regular" size="1.5rem" />
         </button>
       </section>
       <section class="button-group undo-redo">
-        <button @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()" class="toolbar">
+        <button @click="draftEditor.chain().focus().undo().run()" :disabled="!draftEditor.can().chain().focus().undo().run()" class="toolbar">
           <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
         </button>
-        <button @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" class="toolbar">
+        <button @click="draftEditor.chain().focus().redo().run()" :disabled="!draftEditor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
         <div class="character-count" @click="toggleCount">
@@ -79,18 +114,16 @@
         </div>
       </section>
     </div>
-    <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef" />
+    <TiptapEditorContent :editor="draftEditor" class="max-width xl" ref="textareaRef" />
   </div>
 
   <!-- Review -->
-  <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
-    <!-- <section :class="['content']" v-html="deliverable.content.content" @mouseup="handleTextSelection"></section> -->
+  <!-- <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
     <div id="TipTapTools" class="max-width xl" v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }">
           <Icon name="fluent:highlight-16-regular" size="1.5rem" />
         </button>
-        <!-- Strikethrough -->
         <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
         </button>
@@ -107,19 +140,18 @@
         </div>
       </section>
     </div>
-    <TiptapEditorContent @input="updateDeliverable" :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
+    <TiptapEditorContent :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
       <span class="quote" v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
       <button @click="handleAddComment()">Add Comment</button>
     </div>
-    
-  </div>
+  </div> -->
 
   <!-- Not editable -->
-  <div class="max-width xl not-editable" v-if="!editable">
+  <!-- <div class="max-width xl not-editable" v-if="!editable">
     <section :class="['content']" v-html="deliverable.content.content"></section>
-  </div>
+  </div> -->
 </template>
 
 <script setup>
@@ -148,14 +180,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  editable: {
-    type: Boolean,
-    default: true,
-  },
-  review: {
-    type: Boolean,
-    default: false,
-  },
+  type: {
+    type: String,
+    default: 'draft',
+  }
 });
 
 const deliverable = ref(props.deliverable);
@@ -168,16 +196,14 @@ const comment = {
   created_at: new Date().toISOString(),
 };
 
-const editor = useEditor({
-  content: deliverable.value.content.content,
-  extensions: [TiptapStarterKit,
-    Highlight.configure({
-      multicolors: true,
-      HTMLAttributes: {
-        class: 'highlighted',
-      },
-    }),
-  ],
+const requirementsEditor = useEditor({
+  content: deliverable.value.content.requirements,
+  extensions: [TiptapStarterKit],
+});
+
+const draftEditor = useEditor({
+  content: deliverable.value.content.draft,
+  extensions: [TiptapStarterKit],
 });
 
 const handleTextSelection = () => {
@@ -198,11 +224,11 @@ const handleTextSelection = () => {
 };
 
 const characterCount = computed(() => {
-  return editor.value ? editor.value.getHTML().replace(/<[^>]*>?/gm, '').length : 0;
+  return draftEditor.value ? draftEditor.value.getHTML().replace(/<[^>]*>?/gm, '').length : 0;
 });
 
 const wordCount = computed(() => {
-  return editor.value ? editor.value.getHTML().replace(/<[^>]*>?/gm, '').split(/\s+/).length : 0;
+  return draftEditor.value ? draftEditor.value.getHTML().replace(/<[^>]*>?/gm, '').split(/\s+/).length : 0;
 });
 
 const toggleCount = () => {
@@ -234,60 +260,115 @@ const handleAddComment = () => {
 };
 
 const tiptapDeliverable = ref({
-  ...deliverable.value, 
-  content: {
-    type: 'content',
-    content: ''
-  }
+  ...deliverable.value
 });
 
 watch(() => props.deliverable, (newDeliverable) => {
   deliverable.value = newDeliverable;
   tiptapDeliverable.value = {
-    ...newDeliverable,
-    content: {
-      type: 'content',
-      content: newDeliverable.content.content
-    }
+    ...newDeliverable
   };
-  if (editor.value) {
-    editor.value.commands.setContent(newDeliverable.content.content);
+  if (requirementsEditor.value) {
+    requirementsEditor.value.commands.setContent(newDeliverable.content.requirements);
+  }
+  if (draftEditor.value) {
+    draftEditor.value.commands.setContent(newDeliverable.content.draft);
   }
 }, { immediate: true });
 
-watch(editor, (newEditor) => {
+function debounce(func, wait) {
+  let timeout;
+  
+  const debouncedFunction = (...args) => {
+    const later = () => {
+      timeout = null;
+      func.apply(this, args);
+    };
+    
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+
+  // Add cleanup method
+  debouncedFunction.cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return debouncedFunction;
+}
+
+const debouncedSaveDeliverableContent = debounce(async () => {
+  try {
+    saving.value = true;
+    console.log('Saving content:', tiptapDeliverable.value);
+    await saveDeliverableContent(tiptapDeliverable.value);
+  } catch (error) {
+    console.error('Error saving content:', error);
+  } finally {
+    saving.value = false;
+  }
+}, 250);
+
+watch(draftEditor, (newEditor) => {
   if (newEditor) {
     newEditor.on('update', () => {
-      tiptapDeliverable.value.content.content = newEditor.getHTML();
+      tiptapDeliverable.value.content.draft = newEditor.getHTML();
+      debouncedSaveDeliverableContent();
+    });
+  }
+});
+
+watch(requirementsEditor, (newEditor) => {
+  if (newEditor) {
+    newEditor.on('update', () => {
+      tiptapDeliverable.value.content.requirements = newEditor.getHTML();
+      debouncedSaveDeliverableContent();
     });
   }
 });
 
 onBeforeUnmount(() => {
-  unref(editor).destroy();
+  debouncedSaveDeliverableContent.cancel();
+  unref(draftEditor)?.destroy();
+  unref(requirementsEditor)?.destroy();
 });
 
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
-
-const debouncedSaveDeliverableContent = debounce(() => saveDeliverableContent(tiptapDeliverable.value), 250);
-
-function updateDeliverable() {
-  saving.value = true;
-  debouncedSaveDeliverableContent();
-  saving.value = false;
-}
 
 </script>
 
 <style lang="scss" scoped>
 
 @use 'assets/variables' as *;
+
+.requirements {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $spacing-sm;
+  background-color: rgba($blue, 0.05);
+  border-radius: $br-lg;
+}
+
+.outline {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $spacing-sm;
+  background-color: rgba($green, 0.05);
+  border-radius: $br-lg;
+}
+
+.draft {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $spacing-sm;
+  background-color: rgba($white, 0.05);
+  border-radius: $br-lg;
+}
 
 .floating-comment {
   position: fixed;
@@ -365,15 +446,13 @@ function updateDeliverable() {
   backdrop-filter: blur(6px);
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
-  top: 0;
+  top: $spacing-sm;
   margin-bottom: $spacing-md;
   width: 100%;
   z-index: 10;
   overflow-x: auto;
   overflow-y: hidden;
-  border: $border;
-  border-radius: $br-lg;
-  box-shadow: $soft-shadow;
+  border-radius: $br-md;
 
   .character-count {
     font-size: $font-size-xxs;
