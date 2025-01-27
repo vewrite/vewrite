@@ -15,6 +15,24 @@ export default function useDeliverables() {
 
   const { fetchProjectWorkflow, fetchStates, WorkflowData, WorkflowError } = useWorkflow();
 
+  async function fetchDeliverable(deliverableId) {
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .select('*')
+        .eq('id', deliverableId);
+
+      if (error) throw error;
+
+      DeliverableData.value = data[0];
+      return data[0];
+
+    } catch (error) {
+      DeliverableError.value = error.message;
+    } 
+  }
+
+
   async function fetchProjectDeliverables(projectId) {
     try {
       const { data, error } = await supabase
@@ -399,88 +417,40 @@ export default function useDeliverables() {
 
   async function createDeliverable(deliverable) {
 
-    console.log('Creating deliverable:', deliverable);
-
     useModal().toggleLoading();
 
-    const deliverableContent = ref({});
-
-    if(deliverable.type === 'content') {
-      deliverableContent.value = {
-        type: 'content',
-        content: deliverable.content
-      };
-      console.log('Deliverable content:', deliverableContent.value);
-      delete deliverable.content;
-    }
-
-    // if(deliverable.type === 'file') {
-    //   deliverableContent.value = {
-    //     type: 'file',
-    //     content: deliverable.file
-    //   };
-    //   delete deliverable.type;
-    // }
-
-    if(deliverable.type === 'link') {
-      deliverableContent.value = {
-        type: 'link',
-        content: deliverable.link
-      };
-      console.log('Link content:', deliverableContent.value);
-      delete deliverable.link;
-    }
-
+    // const deliverableContent = ref({});
     const deliverableId = ref(null);
-    const projectId = deliverable.project;
-    const ProjectWorkflow = ref(null);
-    const States = ref(null);
-
-    try {
-      ProjectWorkflow.value = await fetchProjectWorkflow(deliverable.project);
-      console.log('Project Workflow:', ProjectWorkflow.value);
-    } catch (error) {
-      DeliverableError.value = error.message;
-    }
-
-    try {
-      States.value = await fetchStates(ProjectWorkflow.value);
-      console.log('States:', States.value);
-    } catch (error) {
-      DeliverableError.value = error.message;
-    }
+    const startState = 43; // Workflow 1, first state
 
     try {
 
       delete deliverable.type;
 
-      console.log('Last try Creating deliverable:', deliverable);
-
       let { data } = await supabase.from('deliverables').insert(deliverable, {
-        returning: 'representation', // Return the new deliverable id
+        returning: 'representation', 
       })
 
       deliverableId.value = data[0].id;
 
-      // We also need to set the deliverable state to the first state in the list
-      await updateDeliverableWorkflowState(data[0].id, States.value[0]);
+      // We also need to set the deliverable state to the first state in the list / TODO this isn't working yet
+      await updateDeliverableWorkflowState(data[0].id, startState);
 
     } catch (error) {
       DeliverableError.value = error.message;
     }
 
-      try {
-        const { data, error } = await supabase
-          .from('deliverable')
-          .insert(deliverable);
+    try {
+      const { data, error } = await supabase
+        .from('deliverable')
+        .insert(deliverable);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        console.log('Deliverable created:', data[0]);
-      } catch (error) {
-        console.error('Error creating deliverable:', error);
-      }
-    };
+      console.log('Deliverable created:', data[0]);
+    } catch (error) {
+      console.error('Error creating deliverable:', error);
+    }
 
     useModal().toggleVisibility();
     useModal().reset();
@@ -495,6 +465,7 @@ export default function useDeliverables() {
     saveDeliverable,
     saveDeliverableContent,
     deleteDeliverable,
+    fetchDeliverable,
     fetchDeliverableContentType,
     fetchDeliverableState,
     updateDeliverableTitle,

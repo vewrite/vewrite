@@ -34,8 +34,8 @@
           <div class="single-deliverable" v-for="deliverable in deliverables">
             <div class="deliverable-details">
               <div class="deliverable-type">
-                <Icon v-if="deliverable.content_type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-                <Icon v-if="deliverable.content_type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+                <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
+                <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
               </div>
               <span class="deliverable-id">{{ deliverable.id }}</span>
               <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
@@ -98,7 +98,7 @@ const { deleteProjectModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { createDeliverableModal, fetchDeliverableContentType, DeliverableError } = useDeliverables();
+const { createDeliverableModal, fetchDeliverable, DeliverableError } = useDeliverables();
 
 // Client composable
 import useClient from '~/composables/useClient';
@@ -226,8 +226,7 @@ async function fetchDeliverables(projectId) {
       }
 
       try {
-        const content_type = await fetchDeliverableContentType(deliverable.id, deliverable.workflow_state);
-        deliverable.content_type = content_type[0].content.type;
+        await fetchDeliverable(deliverable.id);
       } catch (error) {
         console.error('Error fetching content type:', error.message);
       }

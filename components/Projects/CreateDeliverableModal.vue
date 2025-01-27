@@ -16,7 +16,7 @@
             </div>
             <div class="form-input">
               <label for="type">Type</label>
-              <select v-model="deliverable.type" id="type" @change="showType">
+              <select v-model="deliverable.content.type" id="type" @change="onChange(deliverable)">
                 <option value="content">Internal Editor</option>
                 <option value="link">External Link</option>
                 <!-- <option value="file">External File</option> -->
@@ -27,10 +27,16 @@
               <p>The internal editor allows your team to work entirely within Vewrite, ensuring the most smooth process.</p>
             </span>
 
+            <!-- If the deliverable is an internal document -->
+            <div class="form-input" v-if="deliverable.content.type == 'content'">
+              <label for="content-requirements">External Link</label>
+              <textarea v-model="deliverable.content.requirements" id="content-requirements" type="text" placeholder="Input the stakeholder's requirements for this deliverable" />
+            </div>
+            
             <!-- If the deliverable has an external link -->
-            <div class="form-input" v-if="deliverable.type == 'link'">
-              <label for="link">External Link</label>
-              <input v-model="deliverable.link" id="link" type="text" placeholder="Input a link to the initial summary of the request for this deliverable" />
+            <div class="form-input" v-if="deliverable.content.type == 'link'">
+              <label for="link-requirements">External Link</label>
+              <input v-model="deliverable.content.requirements" id="link-requirements" type="text" placeholder="Input a link to the stakeholder's requirements for this deliverable" />
             </div>
 
             <!-- If a file is being uploaded -->
@@ -84,9 +90,13 @@ const deliverable = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   project: projectId,
-  type: 'content',
   due_date: new Date(),
   content: {
+    type: 'content',
+    hasRequirements: true,
+    hasOutline: true,
+    hasResearch: true,
+    hasDraft: true,
     requirements: '',
     outline: '',
     research: '',
@@ -94,8 +104,8 @@ const deliverable = reactive({
   }
 })
 
-function showType(event){
-  console.log(deliverable)
+function onChange (value) {
+  console.log(value)
 }
 
 </script>
