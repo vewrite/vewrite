@@ -1,7 +1,6 @@
 <template>
   <section class="document-content">
     <pre>{{ props.DeliverableData }}</pre>
-    <pre>{{ props.StateData }}</pre>
   </section>
 </template>
 
