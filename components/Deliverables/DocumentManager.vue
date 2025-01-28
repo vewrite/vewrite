@@ -4,7 +4,7 @@
   </pre> -->
   <section class="document-content">
     <section class="navigation">
-      <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Details</div>
+      <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Manager</div>
       <div class="nav-item" @click="scrollToSection('requirements')" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</div>
       <div class="nav-item" @click="scrollToSection('outline')" v-if="stateShowsOutline" :class="{ 'primary': selectedSection === 'outline' }">Outline</div>
       <div class="nav-item" @click="scrollToSection('draft')" v-if="stateShowsWriting" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</div>
@@ -15,6 +15,9 @@
         <div class="state-intro">
           <p class="state-summary">You're expected to</p>
           <h2>{{ StateData[0].instance_name }}</h2>
+          <br>
+          <p class="state-summary">When you're ready, you can</p>
+          <StateBar v-if="StateData" :StateData="StateData" />
         </div>
         <div class="state-data">
           <!-- 
@@ -52,6 +55,7 @@
 
 import { ref, onMounted } from 'vue';
 import Assigned from '~/components/Deliverables/Assigned.vue';
+import StateBar from '~/components/Deliverables/StateBar.vue';
 
 const props = defineProps(['DeliverableData', 'StateData']);
 
@@ -215,7 +219,7 @@ onMounted(() => {
       flex-direction: row;
       gap: $spacing-xxs;
       border-radius: $br-xl;
-      border: $border;
+      border: 1px solid rgba($brand, .25);
       overflow: hidden;
 
       .state-intro {

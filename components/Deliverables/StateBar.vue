@@ -72,10 +72,10 @@ Each state type has a different set of buttons that we should show at appropriat
 
 .state-buttons div {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: flex-start;
   gap: $spacing-sm;
-  padding: $spacing-sm;
+  padding: $spacing-sm 0;
   background: rgba($white, 0.1);
   backdrop-filter: blur(10px);
 }
