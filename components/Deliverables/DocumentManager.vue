@@ -13,7 +13,7 @@
     <section class="documents max-width xl">
       <section class="state-details" ref="stateDetails" @click="setSelectedSection('stateDetails')">
         <div class="state-intro">
-          <p class="state-summary">State summary</p>
+          <p class="state-summary">You're expected to</p>
           <h2>{{ StateData[0].instance_name }}</h2>
         </div>
         <div class="state-data">
@@ -196,6 +196,10 @@ onMounted(() => {
     border: $border;
     border-radius: $br-xl;
 
+    @media (max-width: 1000px) {
+      display: none;
+    }
+
     .nav-item {
       cursor: pointer;
       padding: $spacing-sm;
@@ -227,7 +231,9 @@ onMounted(() => {
       .state-intro {
         min-height: 200px;
         width: 100%;
-        min-width: 240px;
+        min-width: 180px;
+        max-width: 300px;
+
         padding: $spacing-md;
         background: rgba($brand, 0.025);
         
@@ -257,12 +263,10 @@ onMounted(() => {
     }
 
     div.tiptap-wrap {
-      border-bottom: 1px dashed rgba($black, 0.15);
       min-height: 300px;
 
       &:last-child {
         margin-bottom: $spacing-xxl;
-        border-bottom: none;
       }
     }
 

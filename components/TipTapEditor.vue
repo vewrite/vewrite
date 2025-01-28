@@ -492,7 +492,10 @@ onBeforeUnmount(() => {
     position: relative;
     margin: 0 0 $spacing-sm $spacing-sm;
     align-self: flex-start;
-    font-size: $font-size-md;
+    font-size: $font-size-lg;
+    border-bottom: $border;
+    width: calc(100% - 2 * $spacing-sm);
+    padding-bottom: $spacing-xs;
   }
 }
 
@@ -540,7 +543,7 @@ onBeforeUnmount(() => {
   overflow-x: auto;
   overflow-y: hidden;
   border-radius: $br-lg;
-  opacity: 0.5;
+  opacity: 0.75;
   transition: opacity 0.3s ease;
   height: 44px;
 
