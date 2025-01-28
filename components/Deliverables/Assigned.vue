@@ -1,6 +1,6 @@
 <template>
   <button class="button clear">
-    <!-- {{ deliverable }} -->
+    {{ deliverable }}
       <!-- {{ user.identities[0].id }} -->
     <!-- <Avatar :deliverable="user.identities[0].id" /> -->
   </button>
@@ -8,7 +8,7 @@
 
 <script setup>
 
-// const props = defineProps(['deliverable', 'user']);
+const props = defineProps(['deliverable', 'user']);
 
 /* 
 

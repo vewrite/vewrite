@@ -1,42 +1,128 @@
 <template>
+  <!-- <pre class="state-data">
+    {{StateData }}
+  </pre> -->
   <section class="document-content">
     <section class="navigation">
-      <button @click="scrollToSection('requirements')" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</button>
-      <button @click="scrollToSection('outline')" :class="{ 'primary': selectedSection === 'outline' }">Outline</button>
-      <button @click="scrollToSection('draft')" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</button>
-      <button @click="scrollToSection('research')" :class="{ 'primary': selectedSection === 'research' }">Research</button>
+      <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Details</div>
+      <div class="nav-item" @click="scrollToSection('requirements')" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</div>
+      <div class="nav-item" @click="scrollToSection('outline')" v-if="stateShowsOutline" :class="{ 'primary': selectedSection === 'outline' }">Outline</div>
+      <div class="nav-item" @click="scrollToSection('draft')" v-if="stateShowsWriting" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</div>
+      <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
     </section>
     <section class="documents max-width xl">
+      <section class="state-details" ref="stateDetails" @click="setSelectedSection('stateDetails')">
+        <h2>{{ StateData[0].instance_name }}</h2>
+      </section>
       <div ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @click="setSelectedSection('requirements')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
       </div>
-      <div ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline" @click="setSelectedSection('outline')">
+      <div ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @click="setSelectedSection('outline')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
       </div>
-      <div ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft" @click="setSelectedSection('draft')">
+      <div ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @click="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
       </div>
-      <div ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch" @click="setSelectedSection('research')">
+      <div ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @click="setSelectedSection('research')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
       </div>
     </section>
+
+
+
   </section>
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue';
+import Assigned from '~/components/Deliverables/Assigned.vue';
 
 const props = defineProps(['DeliverableData', 'StateData']);
 
+/*
+
+Standard workflow is:
+
+[
+  43, // Getting started (new)
+  44, // Gathering information (research)
+  45, // Outline (outline)
+  46, // Review (outline review)
+  47, // Writing (writing)
+  48, // Review (writing review)
+  49  // Approved (approved)
+]
+
+StateTypes reference:
+
+1. new
+2. ready
+3. outline
+4. writing
+5. review
+6. approved
+7. research
+8. holding
+
+Each state type has a different set of buttons that we should show at appropriate times
+
+1. Getting Started should show "Get Started"
+2. Ready should show "Start Work"
+
+*/
+
+const stateDetails = ref(null);
 const requirementsSection = ref(null);
 const outlineSection = ref(null);
 const draftSection = ref(null);
 const researchSection = ref(null);
-
 const selectedSection = ref(null);
+
+const stateShowsOutline = computed(() => {
+  if (
+        props.StateData && 
+        props.StateData[0].state_type === 3 ||
+        props.StateData[0].state_type === 4 ||
+        props.StateData[0].state_type === 5 ||
+        props.StateData[0].state_type === 6 ||
+        props.StateData[0].state_type === 7 ||
+        props.StateData[0].state_type === 8
+      ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const stateShowsResearch = computed(() => {
+  if (
+        props.StateData && 
+        props.StateData[0].state_type === 4 ||
+        props.StateData[0].state_type === 6 ||
+        props.StateData[0].state_type === 7 ||
+        props.StateData[0].state_type === 8
+      ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const stateShowsWriting = computed(() => {
+  if (
+        props.StateData && 
+        props.StateData[0].state_type === 4
+      ) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 const scrollToSection = (section) => {
   const sectionRef = {
+    stateDetails: stateDetails,
     requirements: requirementsSection,
     outline: outlineSection,
     draft: draftSection,
@@ -53,18 +139,10 @@ const setSelectedSection = (section) => {
   selectedSection.value = section;
 };
 
-// Set the initial selected section when the component mounts
+// Set the initial selected section when the component mounts. We'll always want to default to the state details
 onMounted(() => {
   if (props.DeliverableData) {
-    if (props.DeliverableData.content.hasRequirements) {
-      scrollToSection('requirements');
-    } else if (props.DeliverableData.content.hasOutline) {
-      scrollToSection('outline');
-    } else if (props.DeliverableData.content.hasDraft) {
-      scrollToSection('draft');
-    } else if (props.DeliverableData.content.hasResearch) {
-      scrollToSection('research');
-    }
+    scrollToSection('stateDetails');
   }
 });
 </script>
@@ -72,6 +150,23 @@ onMounted(() => {
 <style lang="scss" scoped>
 
 @use 'assets/variables' as *;
+
+.state-details {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: rgba($brand, 0.05);
+  border-radius: $br-xl;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.state-data {
+  min-height: 200px;
+}
 
 .document-content {
   display: flex;
@@ -82,13 +177,27 @@ onMounted(() => {
   .navigation {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
-    align-items: flex-start;
     position: sticky;
-    padding: $spacing-sm;
+    padding: $spacing-xs;
+    margin: $spacing-sm;
     top: $spacing-sm;
     height: fit-content;
-    max-width: 400px;
+    width: 100%;
+    min-width: 180px;
+    max-width: 240px;
+    border: $border;
+    border-radius: $br-xl;
+
+    .nav-item {
+      cursor: pointer;
+      padding: $spacing-sm;
+      border-radius: $br-lg;
+      transition: all 0.2s ease;
+
+      &.primary {
+        background: rgba($brand, 0.05);
+      }
+    }
   }
 
   .documents {

@@ -500,30 +500,18 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-
-  .type-label {
-    color: $blue;
-  }
 }
 
 .outline {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-
-  .type-label {
-    color: $green;
-  }
 }
 
 .research {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-
-  .type-label {
-    color: $orange;
-  }
 }
 
 .draft {
@@ -532,10 +520,6 @@ onBeforeUnmount(() => {
   padding: $spacing-sm;
   align-content: flex-start;
   justify-content: flex-start;
-
-  .type-label {
-    color: $brand;
-  }
 }
 
 #TipTapTools {
