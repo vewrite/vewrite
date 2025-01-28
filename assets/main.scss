@@ -859,7 +859,7 @@ button.vertical,
   /* TipTap */
 
   .ProseMirror {
-    padding: $spacing-sm $spacing-md $spacing-md $spacing-md;
+    padding: $spacing-sm $spacing-sm $spacing-md $spacing-sm;
 
     @media (max-width: 600px) {
         padding: $spacing-sm;

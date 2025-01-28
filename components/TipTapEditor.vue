@@ -4,13 +4,13 @@
   <!-- Requirements -->
   <div id="TipTapEditor" v-if="props.type == 'requirements'" class="requirements">
     <div class="type-label">Requirements</div>
-    <TiptapEditorContent :editor="requirementsEditor" class="max-width xl" ref="textareaRef" />
+    <TiptapEditorContent :editor="requirementsEditor"  ref="textareaRef" />
   </div>
 
   <!-- Outline -->
   <div id="TipTapEditor" v-if="props.type == 'outline'" class="outline">
     <div class="type-label">Outline</div>
-    <div id="TipTapTools" class="max-width xl" v-if="outlineEditor">
+    <div id="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleBold().run()" :disabled="!outlineEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': outlineEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -40,13 +40,13 @@
         </button>
       </section>
     </div>
-    <TiptapEditorContent :editor="outlineEditor" class="max-width xl" ref="textareaRef" />
+    <TiptapEditorContent :editor="outlineEditor" ref="textareaRef" />
   </div>
 
   <!-- Research -->
   <div id="TipTapEditor" v-if="props.type == 'research'" class="research">
-    <div class="type-label">Research</div>
-    <div id="TipTapTools" class="max-width xl" v-if="researchEditor">
+    <div class="type-label">Research, notes, and citations</div>
+    <div id="TipTapTools"  v-if="researchEditor">
       <section class="button-group">
         <button @click="researchEditor.chain().focus().toggleBold().run()" :disabled="!researchEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': researchEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -76,12 +76,13 @@
         </button>
       </section>
     </div>
-    <TiptapEditorContent :editor="researchEditor" class="max-width xl" ref="textareaRef" />
+    <TiptapEditorContent :editor="researchEditor"  ref="textareaRef" />
   </div>
 
   <!-- Draft -->
   <div id="TipTapEditor" v-if="props.type == 'draft'" class="draft">
-    <div id="TipTapTools" class="max-width xl" v-if="draftEditor">
+    <div class="type-label">Writing Draft</div>
+    <div id="TipTapTools"  v-if="draftEditor">
       <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!draftEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': draftEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -151,12 +152,12 @@
         </div>
       </section>
     </div>
-    <TiptapEditorContent :editor="draftEditor" class="max-width xl" ref="textareaRef" />
+    <TiptapEditorContent :editor="draftEditor"  ref="textareaRef" />
   </div>
 
   <!-- Review -->
   <!-- <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
-    <div id="TipTapTools" class="max-width xl" v-if="editor">
+    <div id="TipTapTools"  v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }">
           <Icon name="fluent:highlight-16-regular" size="1.5rem" />
@@ -177,7 +178,7 @@
         </div>
       </section>
     </div>
-    <TiptapEditorContent :editor="editor" class="max-width xl" ref="textareaRef"  @mouseup="handleTextSelection" />
+    <TiptapEditorContent :editor="editor"  ref="textareaRef"  @mouseup="handleTextSelection" />
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
       <span class="quote" v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
@@ -472,28 +473,29 @@ onBeforeUnmount(() => {
 #TipTapReview {
   width: 100%;
   height: 100%;
-  max-width: 1180px;
+  min-height: 300px;
   margin: 0 auto;
   position: relative;
+  padding: $spacing-sm;
+  border-bottom: 1px dashed rgba($black, 0.3);
 
   &:last-child {
     margin-bottom: $spacing-xxl;
+    border-bottom: none;
   }
 
   &:hover #TipTapTools {
+    background: rgba($black, 0.025);
     opacity: 1;
   }
 
   .type-label {
     position: relative;
     white-space: nowrap;
-    padding: $spacing-xxs $spacing-xs;
     position: relative;
-    top: -$spacing-sm;
-    left: -$spacing-sm;
-    width: calc(100% + #{$spacing-sm * 2});
-    border-radius: $br-md $br-md 0 0;
-    border-bottom: rgba($black, 0.05) 1px solid;
+    margin: 0 0 $spacing-sm $spacing-sm;
+    align-self: flex-start;
+    font-size: $font-size-md;
   }
 }
 
@@ -501,11 +503,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-  background-color: rgba($blue, 0.05);
-  border-radius: $br-lg;
 
   .type-label {
-    background-color: rgba($blue, 0.05);
     color: $blue;
   }
 }
@@ -514,11 +513,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-  background-color: rgba($green, 0.05);
-  border-radius: $br-lg;
 
   .type-label {
-    background-color: rgba($green, 0.05);
     color: $green;
   }
 }
@@ -527,11 +523,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-  background-color: rgba($orange, 0.05);
-  border-radius: $br-lg;
 
   .type-label {
-    background-color: rgba($orange, 0.05);
     color: $orange;
   }
 }
@@ -540,19 +533,11 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   padding: $spacing-sm;
-  background-color: rgba($white, 0.05);
-  outline: $border;
-  outline-offset: -1px;
-  border-radius: $br-lg;
   align-content: flex-start;
   justify-content: flex-start;
-  min-height: 80vh;
 
   .type-label {
-    background-color: rgba($white, 0.05);
-    outline: $border;
-    outline-offset: -1px;
-    color: $white;
+    color: $brand;
   }
 }
 
@@ -563,19 +548,20 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
-  background: rgba($white, 0);
+  background: rgba($black, 0);
   backdrop-filter: blur(16px);
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
   top: 0;
-  margin-bottom: $spacing-md;
-  width: 100%;
+  margin: 0 $spacing-sm $spacing-md;
+  width: calc(100% - 2 * #{$spacing-sm});
   z-index: 10;
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: $br-md;
-  opacity: 1;
+  border-radius: $br-lg;
+  opacity: 0.5;
   transition: opacity 0.3s ease;
+  height: 44px;
 
   .character-count {
     font-size: $font-size-xxs;
@@ -637,7 +623,6 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 800px;
   margin: 0 auto;
   height: 100%;
   overflow-x: hidden;

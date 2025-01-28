@@ -1,10 +1,17 @@
 <template>
   <section class="document-content">
-    <!-- <pre>{{ props.DeliverableData }}</pre> -->
-    <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" :deliverable="props.DeliverableData" :type="'requirements'" />
-<TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasOutline" :deliverable="props.DeliverableData" :type="'outline'" />
-<TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasDraft" :deliverable="props.DeliverableData" :type="'draft'" />
-<TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasResearch" :deliverable="props.DeliverableData" :type="'research'" />
+    <section class="navigation">
+      <button>Requirements</button>
+      <button>Outline</button>
+      <button>Writing draft</button>
+      <button>Research</button>
+    </section>
+    <section class="documents max-width xl">
+      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" :deliverable="props.DeliverableData" :type="'requirements'" />
+      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasOutline" :deliverable="props.DeliverableData" :type="'outline'" />
+      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasDraft" :deliverable="props.DeliverableData" :type="'draft'" />
+      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasResearch" :deliverable="props.DeliverableData" :type="'research'" />
+    </section>
   </section>
 </template>
 
@@ -41,8 +48,32 @@ What I'm actually looking for here:
 
 .document-content {
   display: flex;
+  flex-direction: row;
   gap: $spacing-sm;
-  flex-direction: column;
+  position: relative;
+
+  .navigation {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    align-items: flex-start;
+    position: sticky;
+    padding: $spacing-sm;
+    top: $spacing-sm;
+    height: fit-content;
+    max-width: 400px;
+  }
+
+  .documents {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+    margin: 0 auto;
+  }
 }
 
 </style>
