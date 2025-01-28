@@ -80,16 +80,6 @@ StateTypes reference:
 7. research
 8. holding
 
-Each state type has a different set of buttons that we should show at appropriate times
-
-1. "Getting Started" should show "Get Started"
-2. "Gathering Information" should show "Start Outline"
-3. "Outline" should show "Send for Review" and "Back to Research"
-4. "Review" should show "Approve Outline" and "Send back to Writer"
-5. "Writing" should show "Send for Review"
-6. "Review" should show "Approve Draft" and "Send back to Writer"
-7. "Approved" should show "Download"
-
 
 */
 

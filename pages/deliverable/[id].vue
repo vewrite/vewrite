@@ -20,7 +20,11 @@
       <Loading v-if="loading" type="small" />
       <section class="deliverables" v-if="!loading">
         <DocumentManager v-if="DeliverableData" :DeliverableData="DeliverableData" :StateData="StateData" />
+        <section class="state-bar">
+          <StateBar v-if="StateData" :StateData="StateData" />
+        </section>
       </section>
+      
     </template>
   </AppPanel>
 </template>
@@ -36,6 +40,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import DocumentManager from '~/components/Deliverables/DocumentManager.vue';
+import StateBar from '~/components/Deliverables/StateBar.vue';
 
 const supabase = useSupabaseClient();
 const user = supabase.auth.user();
@@ -80,6 +85,14 @@ onMounted(() => {
   gap: $spacing-sm;
   height: 100%;
   padding: $spacing-sm;
+  position: relative;
+
+  .state-bar {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 1;
+  }
 }
 
 </style>
