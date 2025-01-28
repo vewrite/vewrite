@@ -476,7 +476,6 @@ onBeforeUnmount(() => {
   min-height: 300px;
   margin: 0 auto;
   position: relative;
-  padding: $spacing-sm;
   border-bottom: 1px dashed rgba($black, 0.3);
 
   &:last-child {
@@ -487,6 +486,11 @@ onBeforeUnmount(() => {
   &:hover #TipTapTools {
     background: rgba($black, 0.025);
     opacity: 1;
+  }
+
+  div:not(#TipTapTools, .type-label) {
+    height: 100%;
+    min-height: 300px;
   }
 
   .type-label {
