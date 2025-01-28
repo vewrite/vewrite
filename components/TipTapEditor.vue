@@ -140,16 +140,16 @@
         </button>
       </section>
       <section class="button-group undo-redo">
+        <div class="character-count" @click="toggleCount">
+          <span class="chars" v-if="!showChar">{{ characterCount }} chars</span>
+          <span class="words" v-if="showChar">{{ wordCount }} words</span>
+        </div>
         <button @click="draftEditor.chain().focus().undo().run()" :disabled="!draftEditor.can().chain().focus().undo().run()" class="toolbar">
           <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
         </button>
         <button @click="draftEditor.chain().focus().redo().run()" :disabled="!draftEditor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
-        <div class="character-count" @click="toggleCount">
-          <span class="chars" v-if="showChar">{{ characterCount }} chars</span>
-          <span class="words" v-if="!showChar">{{ wordCount }} words</span>
-        </div>
       </section>
     </div>
     <TiptapEditorContent :editor="draftEditor"  ref="textareaRef" />
@@ -479,11 +479,6 @@ onBeforeUnmount(() => {
   &:hover #TipTapTools {
     background: rgba($black, 0.025);
     opacity: 1;
-  }
-
-  div:not(#TipTapTools, .type-label) {
-    height: 100%;
-    min-height: 200px;
   }
 
   .type-label {

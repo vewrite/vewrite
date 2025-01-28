@@ -10,8 +10,8 @@
       <div class="nav-item" @click="scrollToSection('draft')" v-if="stateShowsWriting" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</div>
       <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
     </section>
-    <section class="documents max-width xl">
-      <section class="state-details" ref="stateDetails" @click="setSelectedSection('stateDetails')">
+    <section class="documents max-width xl" ref="stateDetails">
+      <section class="state-details"  @click="setSelectedSection('stateDetails')">
         <div class="state-intro">
           <p class="state-summary">You're expected to</p>
           <h2>{{ StateData[0].instance_name }}</h2>
