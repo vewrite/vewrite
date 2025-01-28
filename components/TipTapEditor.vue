@@ -473,15 +473,8 @@ onBeforeUnmount(() => {
 #TipTapReview {
   width: 100%;
   height: 100%;
-  min-height: 300px;
   margin: 0 auto;
   position: relative;
-  border-bottom: 1px dashed rgba($black, 0.3);
-
-  &:last-child {
-    margin-bottom: $spacing-xxl;
-    border-bottom: none;
-  }
 
   &:hover #TipTapTools {
     background: rgba($black, 0.025);
@@ -490,7 +483,7 @@ onBeforeUnmount(() => {
 
   div:not(#TipTapTools, .type-label) {
     height: 100%;
-    min-height: 300px;
+    min-height: 200px;
   }
 
   .type-label {
@@ -556,7 +549,7 @@ onBeforeUnmount(() => {
   backdrop-filter: blur(16px);
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
-  top: 0;
+  top: $spacing-sm;
   margin: 0 $spacing-sm $spacing-md;
   width: calc(100% - 2 * #{$spacing-sm});
   z-index: 10;

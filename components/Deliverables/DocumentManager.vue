@@ -1,45 +1,72 @@
 <template>
   <section class="document-content">
     <section class="navigation">
-      <button>Requirements</button>
-      <button>Outline</button>
-      <button>Writing draft</button>
-      <button>Research</button>
+      <button @click="scrollToSection('requirements')" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</button>
+      <button @click="scrollToSection('outline')" :class="{ 'primary': selectedSection === 'outline' }">Outline</button>
+      <button @click="scrollToSection('draft')" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</button>
+      <button @click="scrollToSection('research')" :class="{ 'primary': selectedSection === 'research' }">Research</button>
     </section>
     <section class="documents max-width xl">
-      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" :deliverable="props.DeliverableData" :type="'requirements'" />
-      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasOutline" :deliverable="props.DeliverableData" :type="'outline'" />
-      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasDraft" :deliverable="props.DeliverableData" :type="'draft'" />
-      <TipTapEditor v-if="props.DeliverableData && props.DeliverableData.content.hasResearch" :deliverable="props.DeliverableData" :type="'research'" />
+      <div ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @click="setSelectedSection('requirements')">
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
+      </div>
+      <div ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline" @click="setSelectedSection('outline')">
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
+      </div>
+      <div ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft" @click="setSelectedSection('draft')">
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
+      </div>
+      <div ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch" @click="setSelectedSection('research')">
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
+      </div>
     </section>
   </section>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 
 const props = defineProps(['DeliverableData', 'StateData']);
 
-/*
+const requirementsSection = ref(null);
+const outlineSection = ref(null);
+const draftSection = ref(null);
+const researchSection = ref(null);
 
-What I'm actually looking for here:
+const selectedSection = ref(null);
 
-1. A way to display the:
-  - Requirements
-  - Outline
-  - Deliverable + Review comments
-2. Per-state to show the:
-  - Assigned user
-  - Due date
-  - Current state
-  - Button to move to the next state
-  - Gate access to editing certain sections, e.g.:
-      - In the NEW state, only the Requirements are editable
-      - in the OUTLINE state, only the Outline is editable
-      - In the WRITING state, the Deliverable is editable, but also the OUTLINE
-      - in the REVIEW state, the Deliverable is editable, but you can also add comments
+const scrollToSection = (section) => {
+  const sectionRef = {
+    requirements: requirementsSection,
+    outline: outlineSection,
+    draft: draftSection,
+    research: researchSection,
+  }[section];
 
-*/
+  if (sectionRef && sectionRef.value) {
+    sectionRef.value.scrollIntoView({ behavior: 'smooth' });
+    selectedSection.value = section;
+  }
+};
 
+const setSelectedSection = (section) => {
+  selectedSection.value = section;
+};
+
+// Set the initial selected section when the component mounts
+onMounted(() => {
+  if (props.DeliverableData) {
+    if (props.DeliverableData.content.hasRequirements) {
+      scrollToSection('requirements');
+    } else if (props.DeliverableData.content.hasOutline) {
+      scrollToSection('outline');
+    } else if (props.DeliverableData.content.hasDraft) {
+      scrollToSection('draft');
+    } else if (props.DeliverableData.content.hasResearch) {
+      scrollToSection('research');
+    }
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -70,9 +97,18 @@ What I'm actually looking for here:
     gap: $spacing-sm;
     padding: $spacing-sm;
     height: 100%;
-    overflow: auto;
-    scrollbar-width: thin;
     margin: 0 auto;
+
+    div {
+      border-bottom: 1px dashed rgba($black, 0.15);
+      min-height: 300px;
+
+      &:last-child {
+        margin-bottom: $spacing-xxl;
+        border-bottom: none;
+      }
+    }
+
   }
 }
 
