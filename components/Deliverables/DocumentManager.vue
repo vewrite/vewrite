@@ -12,18 +12,33 @@
     </section>
     <section class="documents max-width xl">
       <section class="state-details" ref="stateDetails" @click="setSelectedSection('stateDetails')">
-        <h2>{{ StateData[0].instance_name }}</h2>
+        <div class="state-intro">
+          <p class="state-summary">State summary</p>
+          <h2>{{ StateData[0].instance_name }}</h2>
+        </div>
+        <div class="state-data">
+          <!-- 
+
+            Show here:
+            - The team associated with this project
+            - The assigned user for this state
+            - The due date for this state
+          
+          -->
+          
+          <!-- <Assigned :deliverable="props.DeliverableData" :state="StateData" /> -->
+        </div>
       </section>
-      <div ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @click="setSelectedSection('requirements')">
+      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @click="setSelectedSection('requirements')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
       </div>
-      <div ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @click="setSelectedSection('outline')">
+      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @click="setSelectedSection('outline')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
       </div>
-      <div ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @click="setSelectedSection('draft')">
+      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @click="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
       </div>
-      <div ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @click="setSelectedSection('research')">
+      <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @click="setSelectedSection('research')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
       </div>
     </section>
@@ -67,8 +82,14 @@ StateTypes reference:
 
 Each state type has a different set of buttons that we should show at appropriate times
 
-1. Getting Started should show "Get Started"
-2. Ready should show "Start Work"
+1. "Getting Started" should show "Get Started"
+2. "Gathering Information" should show "Start Outline"
+3. "Outline" should show "Send for Review" and "Back to Research"
+4. "Review" should show "Approve Outline" and "Send back to Writer"
+5. "Writing" should show "Send for Review"
+6. "Review" should show "Approve Draft" and "Send back to Writer"
+7. "Approved" should show "Download"
+
 
 */
 
@@ -151,19 +172,6 @@ onMounted(() => {
 
 @use 'assets/variables' as *;
 
-.state-details {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
-  padding: $spacing-md;
-  background: rgba($brand, 0.05);
-  border-radius: $br-xl;
-
-  h2 {
-    margin: 0;
-  }
-}
-
 .state-data {
   min-height: 200px;
 }
@@ -208,7 +216,47 @@ onMounted(() => {
     height: 100%;
     margin: 0 auto;
 
-    div {
+    .state-details {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-xxs;
+      border-radius: $br-xl;
+      border: $border;
+      overflow: hidden;
+
+      .state-intro {
+        min-height: 200px;
+        width: 100%;
+        min-width: 240px;
+        padding: $spacing-md;
+        background: rgba($brand, 0.025);
+        
+        .state-summary {
+          color: $brand;
+          opacity: 0.5;
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-xxs;
+
+        }
+
+        p {
+          margin: 0;
+        }
+
+        h2 {
+          margin: 0;
+          color: $brand;
+        }
+      }
+
+      .state-data {
+        height: 100%;
+        padding: $spacing-md;
+      }
+    }
+
+    div.tiptap-wrap {
       border-bottom: 1px dashed rgba($black, 0.15);
       min-height: 300px;
 
