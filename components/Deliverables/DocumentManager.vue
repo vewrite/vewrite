@@ -17,7 +17,7 @@
           <h2>{{ StateData[0].instance_name }}</h2>
           <br>
           <p class="state-summary">When you're ready, you can</p>
-          <StateBar v-if="StateData" :StateData="StateData" />
+          <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         </div>
         <div class="state-data">
           <!-- 
@@ -44,6 +44,16 @@
       <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
       </div>
+
+      <!-- 
+      
+        I still need:
+
+        - outline review template
+        - writing review template
+        - approved template 
+      
+      -->
     </section>
 
 
@@ -67,19 +77,19 @@ Standard workflow is:
   43, // Getting started (new)
   44, // Gathering information (research)
   45, // Outline (outline)
-  46, // Review (outline review)
+  46, // Outline Review (outline review)
   47, // Writing (writing)
-  48, // Review (writing review)
+  48, // Draft Review (writing review)
   49  // Approved (approved)
 ]
 
 StateTypes reference:
 
 1. new
-2. ready
+2. outline review
 3. outline
 4. writing
-5. review
+5. draft review
 6. approved
 7. research
 8. holding
@@ -97,11 +107,10 @@ const selectedSection = ref(null);
 const stateShowsOutline = computed(() => {
   if (
         props.StateData && 
+        props.StateData[0].state_type === 2 ||
         props.StateData[0].state_type === 3 ||
         props.StateData[0].state_type === 4 ||
-        props.StateData[0].state_type === 5 ||
         props.StateData[0].state_type === 6 ||
-        props.StateData[0].state_type === 7 ||
         props.StateData[0].state_type === 8
       ) {
     return true;
@@ -113,6 +122,7 @@ const stateShowsOutline = computed(() => {
 const stateShowsResearch = computed(() => {
   if (
         props.StateData && 
+        props.StateData[0].state_type === 3 ||
         props.StateData[0].state_type === 4 ||
         props.StateData[0].state_type === 6 ||
         props.StateData[0].state_type === 7 ||
@@ -127,7 +137,8 @@ const stateShowsResearch = computed(() => {
 const stateShowsWriting = computed(() => {
   if (
         props.StateData && 
-        props.StateData[0].state_type === 4
+        props.StateData[0].state_type === 4 ||
+        props.StateData[0].state_type === 5 
       ) {
     return true;
   } else {

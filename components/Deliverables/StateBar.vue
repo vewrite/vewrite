@@ -1,31 +1,68 @@
 <template>
   <section class="state-buttons">
+
+    <!-- {{StateData}} -->
+
+    <!-- Project just started (43) -->
     <div v-if="props.StateData[0].state_type === 1">
-      <button class="button primary">Get Started</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 44)">Get started</button>
     </div>
+    
+    <!-- Is in research state (44) -->
     <div v-if="props.StateData[0].state_type === 7">
-      <button class="button primary">Start Outline</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 45)">Start outline</button>
     </div>
+    
+    <!-- Is in outline state (45) -->
     <div v-if="props.StateData[0].state_type === 3">
-      <button class="button">Back to Research</button>
-      <button class="button primary">Send for Review</button>
+      <button class="button" @click="handleState(DeliverableData.id, 44)">Back to research</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 46)">Send for review</button>
     </div>
+    
+    <!-- Is in outline review state (46) -->
+    <div v-if="props.StateData[0].state_type === 2">
+      <button class="button" @click="handleState(DeliverableData.id, 45)">Send back to writer</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 47)">Approve outline</button>
+    </div>
+
+    <!-- Is in Writing state (47) -->
+    <div v-if="props.StateData[0].state_type === 4"> 
+      <button class="button primary" @click="handleState(DeliverableData.id, 48)">Send for review</button>
+    </div>
+
+    <!-- Is in draft review state (48) -->
     <div v-if="props.StateData[0].state_type === 5">
-      <button class="button">Send back to Writer</button>
-      <button class="button primary">Approve</button>
+      <button class="button" @click="handleState(DeliverableData.id, 47)">Send back to writer</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 49)">Approve draft</button>
     </div>
-    <div v-if="props.StateData[0].state_type === 4">
-      <button class="button primary">Send for Review</button>
-    </div>
+    
+    <!-- Is approved (49) -->
     <div v-if="props.StateData[0].state_type === 6">
-      <button class="button primary">Download</button>
+      <button class="button primary">Download deliverable</button>
     </div>
+
   </section>
 </template>
 
 <script setup>
 
-const props = defineProps(['StateData']);
+const props = defineProps(['StateData', 'DeliverableData']);
+
+import useDeliverables from '~/composables/useDeliverables';
+const { updateDeliverableWorkflowState } = useDeliverables();
+const loading = ref(false);
+
+async function handleState(stateId, stateType) {
+  loading.value = true;
+  try {
+    console.log(stateId, stateType);
+    await updateDeliverableWorkflowState(stateId, stateType);
+    loading.value = false;
+  } catch (error) {
+    console.error(error);
+    loading.value = false;
+  }
+}
 
 /* 
 
@@ -35,19 +72,19 @@ Standard workflow is:
   43, // Getting started (new)
   44, // Gathering information (research)
   45, // Outline (outline)
-  46, // Review (outline review)
+  46, // Outline Review (outline review)
   47, // Writing (writing)
-  48, // Review (writing review)
+  48, // Draft Review (writing review)
   49  // Approved (approved)
 ]
 
 StateTypes reference:
 
 1. new
-2. ready
+2. outline review
 3. outline
 4. writing
-5. review
+5. draft review
 6. approved
 7. research
 8. holding

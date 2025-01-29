@@ -69,8 +69,30 @@ async function init() {
  }
 }
 
-onMounted(() => {
- init();
+// onMounted(() => {
+//  init();
+// });
+
+onMounted(async () => {
+  try {
+    const subscription = supabase
+      .from('deliverables')
+      .on('UPDATE', payload => {
+        console.log('Deliverable updated:', payload.new);
+        init();
+      })
+      .subscribe();
+
+    onUnmounted(() => {
+      supabase.removeSubscription(subscription);
+    });
+
+    await init();
+  } catch (error) {
+    console.error('Failed to fetch deliverable:', error);
+  } finally {
+    loading.value = false;
+  }
 });
 
 </script>
