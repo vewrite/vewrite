@@ -52,11 +52,20 @@ import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState } = useDeliverables();
 const loading = ref(false);
 
+import { useDeliverableStore } from '~/stores/deliverable';
+const deliverableStore = useDeliverableStore();
+
 async function handleState(stateId, stateType) {
   loading.value = true;
   try {
     console.log(stateId, stateType);
+    
     await updateDeliverableWorkflowState(stateId, stateType);
+    
+    // Set the deliverable state in the store
+    console.log('Setting deliverable state:', stateType);
+    deliverableStore.setDeliverableState(props.DeliverableData.id, stateType);
+    
     loading.value = false;
   } catch (error) {
     console.error(error);

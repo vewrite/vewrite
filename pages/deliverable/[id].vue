@@ -40,10 +40,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import DocumentManager from '~/components/Deliverables/DocumentManager.vue';
-import StateBar from '~/components/Deliverables/StateBar.vue';
 
-const supabase = useSupabaseClient();
-const user = supabase.auth.user();
 const loading = ref(true);
 const projectId = ref(null);
 const route = useRoute();
@@ -56,43 +53,39 @@ const { fetchSingleStateInstance } = useWorkflowStateInstances();
 import useDeliverables from '~/composables/useDeliverables';
 const { fetchDeliverable, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
 
-// Set the basics
+import { useDeliverableStore } from '~/stores/deliverable';
+const deliverableStore = useDeliverableStore();
+
+// In the parent (this), I need to get the deliverable state and pass it to the children (DocumentManager -> StateBar)
+// I also need to set it in the store
 async function init() {
- loading.value = true;
- try {
-   await fetchDeliverable(deliverableId);
-   projectId.value = DeliverableData.value.project;
-   StateData.value = await fetchSingleStateInstance(DeliverableData.value.workflow_state);
-   loading.value = false;
- } catch (error) {
-   console.error(error);
- }
-}
-
-// onMounted(() => {
-//  init();
-// });
-
-onMounted(async () => {
+  loading.value = true;
+  
   try {
-    const subscription = supabase
-      .from('deliverables')
-      .on('UPDATE', payload => {
-        console.log('Deliverable updated:', payload.new);
-        init();
-      })
-      .subscribe();
+    await fetchDeliverable(deliverableId);
+    projectId.value = DeliverableData.value.project;
+    StateData.value = await fetchSingleStateInstance(DeliverableData.value.workflow_state);
 
-    onUnmounted(() => {
-      supabase.removeSubscription(subscription);
-    });
+    // Set the deliverable state in the store
+    deliverableStore.setDeliverableState(deliverableId, DeliverableData.value.workflow_state);
 
-    await init();
+    loading.value = false;
   } catch (error) {
-    console.error('Failed to fetch deliverable:', error);
-  } finally {
+    console.error(error);
     loading.value = false;
   }
+}
+
+onMounted(() => {
+ init();
+});
+
+// Now, I need to watch the store and see if the workflow state changes
+// If it does, I need to update DeliverableData.workflow_state so that the child components can react to it
+watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
+  console.log('Deliverable state changed:', newValue);
+  // DeliverableData.value.workflow_state = newValue;
+  init();
 });
 
 </script>

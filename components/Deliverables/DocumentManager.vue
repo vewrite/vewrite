@@ -1,6 +1,7 @@
 <template>
   <!-- <pre class="state-data">
     {{StateData }}
+    {{ DeliverableData }}
   </pre> -->
   <section class="document-content">
     <section class="navigation">
