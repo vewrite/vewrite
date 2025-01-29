@@ -11,7 +11,7 @@
       <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
     </section>
     <section class="documents max-width xl" ref="stateDetails">
-      <section class="state-details"  @click="setSelectedSection('stateDetails')">
+      <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-intro">
           <p class="state-summary">You're expected to</p>
           <h2>{{ StateData[0].instance_name }}</h2>
@@ -32,16 +32,16 @@
           <!-- <Assigned :deliverable="props.DeliverableData" :state="StateData" /> -->
         </div>
       </section>
-      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @click="setSelectedSection('requirements')">
+      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
       </div>
-      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @click="setSelectedSection('outline')">
+      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
       </div>
-      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @click="setSelectedSection('draft')">
+      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
       </div>
-      <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @click="setSelectedSection('research')">
+      <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
       </div>
     </section>
@@ -182,7 +182,7 @@ onMounted(() => {
     position: sticky;
     padding: $spacing-xs;
     margin: $spacing-sm;
-    top: $spacing-sm;
+    top: $spacing-md;
     height: fit-content;
     width: 100%;
     min-width: 180px;
@@ -257,7 +257,7 @@ onMounted(() => {
     }
 
     div.tiptap-wrap {
-      min-height: 300px;
+      min-height: 100px;
 
       &:last-child {
         margin-bottom: $spacing-xxl;
