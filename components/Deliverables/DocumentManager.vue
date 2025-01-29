@@ -21,16 +21,7 @@
           <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         </div>
         <div class="state-data">
-          <!-- 
-
-            Show here:
-            - The team associated with this project
-            - The assigned user for this state
-            - The due date for this state
-          
-          -->
-          
-          <!-- <Assigned :deliverable="props.DeliverableData" :state="StateData" /> -->
+          <StateIntroData :project="DeliverableData.project" /> 
         </div>
       </section>
       <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')">
@@ -67,6 +58,7 @@
 import { ref, onMounted } from 'vue';
 import Assigned from '~/components/Deliverables/Assigned.vue';
 import StateBar from '~/components/Deliverables/StateBar.vue';
+import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 
 const props = defineProps(['DeliverableData', 'StateData']);
 
@@ -178,10 +170,6 @@ onMounted(() => {
 
 @use 'assets/variables' as *;
 
-.state-data {
-  min-height: 200px;
-}
-
 .document-content {
   display: flex;
   flex-direction: row;
@@ -237,8 +225,8 @@ onMounted(() => {
       .state-intro {
         min-height: 200px;
         width: 100%;
-        min-width: 180px;
-        max-width: 300px;
+        min-width: 240px;
+        max-width: 400px;
 
         padding: $spacing-md;
         background: rgba($brand, 0.025);
@@ -265,6 +253,8 @@ onMounted(() => {
       .state-data {
         height: 100%;
         padding: $spacing-md;
+        min-height: 200px;
+        width: 100%;
       }
     }
 

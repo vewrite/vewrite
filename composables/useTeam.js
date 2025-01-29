@@ -163,7 +163,6 @@ export default function useTeam() {
     }
   }
 
-
   function createTeamModal() {
     useModal().setType('large');
     useModal().setHeader('Create Team');

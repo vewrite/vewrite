@@ -20,11 +20,7 @@
       <Loading v-if="loading" type="small" />
       <section class="deliverables" v-if="!loading">
         <DocumentManager v-if="DeliverableData" :DeliverableData="DeliverableData" :StateData="StateData" />
-        <!-- <section class="state-bar">
-          <StateBar v-if="StateData" :StateData="StateData" />
-        </section> -->
       </section>
-      
     </template>
   </AppPanel>
 </template>

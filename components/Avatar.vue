@@ -1,20 +1,23 @@
 <template>
-  <span :class="['user-avatar', size]">
-    <Loading v-if="loading" type="small" />
-    <img :src="src" alt="" :class="size" v-else />
-  </span>
+  <section class="avatar-wrap">
+    <span :class="['user-avatar', size]">
+      <Loading v-if="loading" type="small" />
+      <img :src="src" alt="" :class="size" v-else />
+    </span>
+    <div v-if="hasName && ProfileData">{{ ProfileData.username }}</div>
+  </section>
 </template>
 
 <script setup>
 
-const props = defineProps(['uuid', 'size'])
+const props = defineProps(['uuid', 'size', 'hasName'])
 const supabase = useSupabaseClient()
 const loading = ref(true)
 const src = ref("")
 const path = ref("")
 
 import useProfile from '~/composables/useProfile'
-const { fetchProfileImage, ProfileData, ProfileError } = useProfile()
+const { fetchSingleProfile, ProfileData, ProfileError } = useProfile()
 
 const downloadImage = async (path) => {
     try {
@@ -31,7 +34,7 @@ const downloadImage = async (path) => {
 
 onMounted(async () => {
   try {
-    await fetchProfileImage(props.uuid)
+    await fetchSingleProfile(props.uuid)
     downloadImage(ProfileData.value.avatar_url)  
   } catch (error) {
     console.error("Error downloading image: ", error.message)
@@ -49,6 +52,13 @@ watch(path, () => {
 <style lang="scss" scoped>
 
 @use 'assets/variables' as *;
+
+.avatar-wrap {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-xs;
+  align-items: center;
+}
 
 .user-avatar {
   display: block;

@@ -47,10 +47,10 @@
 <script setup>
 
 const props = defineProps(['StateData', 'DeliverableData']);
+const loading = ref(false);
 
 import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState } = useDeliverables();
-const loading = ref(false);
 
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
@@ -118,12 +118,16 @@ Each state type has a different set of buttons that we should show at appropriat
 
 .state-buttons div {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
   padding: $spacing-sm 0;
   background: rgba($white, 0.1);
   backdrop-filter: blur(10px);
+
+  button {
+    align-self: flex-start;
+  }
 }
 
 </style>
