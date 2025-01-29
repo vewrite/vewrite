@@ -15,13 +15,13 @@
     
     <!-- Is in outline state (45) -->
     <div v-if="props.StateData[0].state_type === 3">
-      <button class="button" @click="handleState(DeliverableData.id, 44)">Back to research</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 44)">Back to research</button>
       <button class="button primary" @click="handleState(DeliverableData.id, 46)">Send for review</button>
     </div>
     
     <!-- Is in outline review state (46) -->
     <div v-if="props.StateData[0].state_type === 2">
-      <button class="button" @click="handleState(DeliverableData.id, 45)">Send back to writer</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 45)">Send back to writer</button>
       <button class="button primary" @click="handleState(DeliverableData.id, 47)">Approve outline</button>
     </div>
 
@@ -32,7 +32,7 @@
 
     <!-- Is in draft review state (48) -->
     <div v-if="props.StateData[0].state_type === 5">
-      <button class="button" @click="handleState(DeliverableData.id, 47)">Send back to writer</button>
+      <button class="button primary" @click="handleState(DeliverableData.id, 47)">Send back to writer</button>
       <button class="button primary" @click="handleState(DeliverableData.id, 49)">Approve draft</button>
     </div>
     
