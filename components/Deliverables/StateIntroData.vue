@@ -13,12 +13,16 @@
         </div>
       </div>
     </div>
+    <div class="intro-data-row" v-if="DeliverableData">
+      <p>Requirements</p>
+      <p v-html="DeliverableData.content.requirements"></p>
+    </div>
   </section>
 </template>
 
 <script setup>
 
-const props = defineProps(['project']);
+const props = defineProps(['project', 'DeliverableData']);
 const ProjectData = ref(null);
 const AssignedTeam = ref(null);
 
