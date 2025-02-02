@@ -482,6 +482,13 @@ textarea {
     }
 }
 
+.form-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: $spacing-sm;
+}
+
 .form-group {
     margin: 0 0 $spacing-sm 0;
     position: relative;

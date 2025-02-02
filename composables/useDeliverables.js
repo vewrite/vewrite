@@ -315,7 +315,7 @@ export default function useDeliverables() {
   }
 
   function createDeliverableModal(projectId) {
-    useModal().setType('medium');
+    useModal().setType('large');
     useModal().setHeader('Create Deliverable');
     useModal().setContent('CreateDeliverableModal');
     useModal().toggleVisibility();

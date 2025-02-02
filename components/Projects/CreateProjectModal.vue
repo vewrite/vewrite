@@ -98,7 +98,7 @@
     </div>
     
     <div class="buttons" v-if="clients.length > 0">
-      <button @click="createProject(project)" class="primary wide">Create</button>
+      <button @click="createProject(project)" class="primary large">Create</button>
     </div>
   </div>
 </template>
@@ -185,7 +185,7 @@ watch(project, (newVal, oldVal) => {
   .buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: $spacing-sm;
     border-top: 1px solid rgba($black, 0.1);

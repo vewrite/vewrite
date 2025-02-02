@@ -2,10 +2,55 @@
   <div id="CreateDeliverableModal">
     <div class="modal-body">
       <Loading v-if="loading" />
-      <form class="inner-container" v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
+      <form v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
+        <section class="form-row">
+          <div class="inner-container">
+            <div class="form-block">
+              <div class="form-content-full">
 
-        <div class="form-block">
-          <div class="form-content-full">
+                <div class="form-input">
+                  <label for="name">Name</label>
+                  <input v-model="deliverable.title" id="name" type="text" placeholder="Input your deliverables's title" />
+                </div>
+                <div class="form-input">
+                  <label for="description">Description</label>
+                  <input v-model="deliverable.description" id="description" type="text" placeholder="Quickly summarize your deliverable" />
+                </div>
+
+                <div class="form-input">
+                  <label for="type">Type</label>
+                  <select v-model="deliverable.content.type" id="type" @change="onChange(deliverable)">
+                    <option value="content">Internal Editor</option>
+                    <option value="link">External Link</option>
+                    <!-- <option value="file">External File</option> -->
+                  </select>
+                </div>
+
+                <span v-if="deliverable.type == 'content'" class="notification info">
+                  <p>The internal editor allows your team to work entirely within Vewrite, ensuring the most smooth process.</p>
+                </span>
+
+                <!-- If the deliverable is an internal document -->
+                <div class="form-input" v-if="deliverable.content.type == 'content'">
+                  <label for="content-requirements">Requirements for this deliverable</label>
+                  <textarea v-model="deliverable.content.requirements" id="content-requirements" type="text" placeholder="Input the stakeholder's requirements for this deliverable" />
+                </div>
+                
+                <!-- If the deliverable has an external link -->
+                <div class="form-input" v-if="deliverable.content.type == 'link'">
+                  <label for="link-requirements">Link to external requirements</label>
+                  <input v-model="deliverable.content.requirements" id="link-requirements" type="text" placeholder="Paste a link" />
+                </div>
+
+                <!-- If a file is being uploaded -->
+                <!-- <div class="form-input" v-if="deliverable.type == 'file'">
+                  <label for="file">External File</label>
+                  <input v-model="deliverable.file" id="file" type="text" placeholder="Input your deliverables's link" />
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="inner-container">
 
             <div class="form-block no-height">
               <div class="form-details">
@@ -20,70 +65,38 @@
                     <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.due_date" />
                   </template>
                 </Dropdown>
-                <!-- <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.due_date" /> -->
               </div>
             </div>
 
-            <div class="form-input">
-              <label for="name">Name</label>
-              <input v-model="deliverable.title" id="name" type="text" placeholder="Input your deliverables's title" />
-            </div>
-            <div class="form-input">
-              <label for="description">Description</label>
-              <input v-model="deliverable.description" id="description" type="text" placeholder="Quickly summarize your deliverable" />
-            </div>
-
-            <div class="form-input">
-              <label for="type">Type</label>
-              <select v-model="deliverable.content.type" id="type" @change="onChange(deliverable)">
-                <option value="content">Internal Editor</option>
-                <option value="link">External Link</option>
-                <!-- <option value="file">External File</option> -->
-              </select>
-            </div>
-
-            <span v-if="deliverable.type == 'content'" class="notification info">
-              <p>The internal editor allows your team to work entirely within Vewrite, ensuring the most smooth process.</p>
-            </span>
-
-            <!-- If the deliverable is an internal document -->
-            <div class="form-input" v-if="deliverable.content.type == 'content'">
-              <label for="content-requirements">Requirements for this deliverable</label>
-              <textarea v-model="deliverable.content.requirements" id="content-requirements" type="text" placeholder="Input the stakeholder's requirements for this deliverable" />
-            </div>
-            
-            <!-- If the deliverable has an external link -->
-            <div class="form-input" v-if="deliverable.content.type == 'link'">
-              <label for="link-requirements">External Link</label>
-              <input v-model="deliverable.content.requirements" id="link-requirements" type="text" placeholder="Input a link to the stakeholder's requirements for this deliverable" />
-            </div>
-
-            <!-- If a file is being uploaded -->
-            <!-- <div class="form-input" v-if="deliverable.type == 'file'">
-              <label for="file">External File</label>
-              <input v-model="deliverable.file" id="file" type="text" placeholder="Input your deliverables's link" />
-            </div> -->
+            <!-- Team assignment -->
+            <TeamAssignment :team="project.assigned_team" />
           </div>
-        </div>
 
+        </section>
         
       </form>
           
     </div>
     
     <div class="buttons">
-      <button @click="createDeliverable(deliverable, projectId,)" class="primary wide">Create</button>
+      <button @click="createDeliverable(deliverable, projectId,)" class="primary large">Create</button>
     </div>
   </div>
 </template>
 
 <script setup>
 
+import TeamAssignment from '~/components/Deliverables/TeamAssignment.vue';
+
 // TODO - Add validation to the form
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
 const { createDeliverable } = useDeliverables();
+
+// Project composable
+import useProject from '~/composables/useProject';
+const { getProjectDetails } = useProject();
 
 const project = ref({});
 
@@ -123,6 +136,12 @@ function onChange (value) {
   console.log(value)
 }
 
+onMounted(async () => {
+  loading.value = true;
+  project.value = await getProjectDetails(projectId);
+  loading.value = false;
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -146,7 +165,7 @@ function onChange (value) {
   .buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: $spacing-sm;
     border-top: 1px solid rgba($black, 0.1);
