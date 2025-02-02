@@ -6,6 +6,24 @@
 
         <div class="form-block">
           <div class="form-content-full">
+
+            <div class="form-block no-height">
+              <div class="form-details">
+                <p><Icon name="solar:calendar-linear" size="1.15rem" /> Select Due Date</p>
+              </div>
+              <div class="form-content">
+                <Dropdown>
+                  <template v-slot:trigger>
+                    {{ buttonDate }}
+                  </template>
+                  <template v-slot:menu>
+                    <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.due_date" />
+                  </template>
+                </Dropdown>
+                <!-- <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.due_date" /> -->
+              </div>
+            </div>
+
             <div class="form-input">
               <label for="name">Name</label>
               <input v-model="deliverable.title" id="name" type="text" placeholder="Input your deliverables's title" />
@@ -14,6 +32,7 @@
               <label for="description">Description</label>
               <input v-model="deliverable.description" id="description" type="text" placeholder="Quickly summarize your deliverable" />
             </div>
+
             <div class="form-input">
               <label for="type">Type</label>
               <select v-model="deliverable.content.type" id="type" @change="onChange(deliverable)">
@@ -29,7 +48,7 @@
 
             <!-- If the deliverable is an internal document -->
             <div class="form-input" v-if="deliverable.content.type == 'content'">
-              <label for="content-requirements">External Link</label>
+              <label for="content-requirements">Requirements for this deliverable</label>
               <textarea v-model="deliverable.content.requirements" id="content-requirements" type="text" placeholder="Input the stakeholder's requirements for this deliverable" />
             </div>
             
@@ -47,15 +66,7 @@
           </div>
         </div>
 
-        <div class="form-block">
-          <div class="form-details">
-            <h4>Due Date</h4>
-            <p class="details">Select a reasonable duraction for this deliverable.</p>
-          </div>
-          <div class="form-content">
-            <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.due_date" />
-          </div>
-        </div>
+        
       </form>
           
     </div>
@@ -104,6 +115,10 @@ const deliverable = reactive({
   }
 })
 
+const buttonDate = computed(() => {
+  return deliverable.due_date.toDateString();
+})
+
 function onChange (value) {
   console.log(value)
 }
@@ -118,7 +133,6 @@ function onChange (value) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 100%;
   width: 100%;
 
   .modal-body {

@@ -93,7 +93,6 @@ function removeMemberFromArray(email) {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  height: 100%;
   width: 100%;
 
   .modal-body {

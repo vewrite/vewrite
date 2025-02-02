@@ -541,6 +541,10 @@ textarea {
     gap: $spacing-lg;
     height: 100%;
 
+    .no-height {
+        height: auto;
+    }
+
     &:last-of-type {
         border-bottom: none;
     }
@@ -548,6 +552,13 @@ textarea {
     .form-details {
         width: 33%;
 
+        p {
+            display: flex;
+            flex-direction: row;
+            gap: $spacing-xs;
+            align-items: center;
+        }
+ 
         h4 {
             margin: 0 0 $spacing-xxs 0;
         }
@@ -561,6 +572,7 @@ textarea {
 
         .vc-container {
             align-self: flex-end;
+            border: none;
         }
     }
 
