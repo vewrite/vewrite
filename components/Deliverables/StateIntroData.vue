@@ -1,7 +1,6 @@
 <template>
   <section class="state-intro-data">
     <div class="intro-data-row" v-if="ProjectData">
-      {{ DeliverableData }}
       <p>Project</p>
       <p>{{ ProjectData.name }}</p>
     </div>

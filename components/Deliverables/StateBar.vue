@@ -1,9 +1,6 @@
 <template>
   <section class="state-buttons">
 
-    <!-- {{StateData}} -->
-    <!-- {{DeliverableData}} -->
-
     <!-- Project just started (43) -->
     <div v-if="props.StateData[0].state_type === 1">
       <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Get started</button>
@@ -56,20 +53,6 @@ const { updateDeliverableWorkflowState, assignToRole } = useDeliverables();
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
-/*
-
-[
-  43, // Getting started (new), assigned to writer
-  44, // Gathering information (research), assigned to writer
-  45, // Outline (outline), assigned to writer
-  46, // Outline Review (outline review), assigned to reviewer
-  47, // Writing (writing), assigned to writer
-  48, // Draft Review (writing review), assigned to reviewer
-  49  // Approved (approved), assigned to reviewer
-]
-
-*/
-
 async function handleState(stateId, deliverableId, stateType) {
   loading.value = true;
 
@@ -105,13 +88,13 @@ async function handleState(stateId, deliverableId, stateType) {
 Standard workflow is:
 
 [
-  43, // Getting started (new)
-  44, // Gathering information (research)
-  45, // Outline (outline)
-  46, // Outline Review (outline review)
-  47, // Writing (writing)
-  48, // Draft Review (writing review)
-  49  // Approved (approved)
+  43, // Getting started (new), assigned to writer
+  44, // Gathering information (research), assigned to writer
+  45, // Outline (outline), assigned to writer
+  46, // Outline Review (outline review), assigned to reviewer
+  47, // Writing (writing), assigned to writer
+  48, // Draft Review (writing review), assigned to reviewer
+  49  // Approved (approved), assigned to reviewer
 ]
 
 StateTypes reference:
