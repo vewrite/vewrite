@@ -52,7 +52,7 @@
           </div>
           <div class="inner-container">
 
-            <div class="form-block no-height">
+            <div class="form-block due-date">
               <div class="form-details">
                 <p><Icon name="solar:calendar-linear" size="1.15rem" /> Select Due Date</p>
               </div>
@@ -160,6 +160,25 @@ onMounted(async () => {
     p {
       margin: 0;
     }
+
+    #content-requirements {
+      height: 147px;
+      margin-bottom: 0;
+    }
+  }
+
+  .due-date {
+    border: $border;
+    margin-bottom: $spacing-sm;
+    padding: $spacing-sm;
+    border-radius: $br-lg;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-xs;
+    color: rgba($black, 0.65);
+    background: rgba($gray-light, 0.25);
   }
 
   .buttons {

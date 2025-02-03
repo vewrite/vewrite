@@ -486,16 +486,15 @@ textarea {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: $spacing-md;
 
     .inner-container {
 
         &:nth-child(1) {
-            padding-right: 0;
+            padding-right: $spacing-sm;
         }
 
         &:nth-child(2) {
-            padding-left: 0;
+            padding-left: $spacing-sm;
         }
     }
 }
@@ -517,7 +516,7 @@ textarea {
     width: 100%;
     overflow: hidden;
     height: fit-content;
-    outline: 1px solid rgba($black, 0);
+    outline: 1px solid rgba($brand, 0);
     position: relative;
 
     .button {
@@ -573,7 +572,7 @@ textarea {
         p {
             display: flex;
             flex-direction: row;
-            gap: $spacing-xs;
+            gap: $spacing-xxs;
             align-items: center;
         }
  
