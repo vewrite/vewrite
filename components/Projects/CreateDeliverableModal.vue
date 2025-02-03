@@ -70,7 +70,7 @@
                 <div class="member" v-if="TeamMembersData" v-for="member in TeamMembersData" :key="member.id">
                   <Avatar :uuid="member.user_id" :hasName="true" size="large" />
                   <div class="role-selector">
-                    <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: deliverableRoles[role.name] == member.user_id }">
+                    <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
                       {{ role.name }}
                     </div>
                   </div>
@@ -99,21 +99,21 @@ import { defineProps, defineEmits } from 'vue';
 const props = defineProps(['team']);
 const emit = defineEmits(['update']);
 
-const deliverableRoles = ref({
+const role_assignments = ref({
   Writer: null,
   Reviewer: null
 });
 
 const setDeliverableRole = (member, role) => {
   // Remove the previous role assignment for the user
-  for (const [roleName, userId] of Object.entries(deliverableRoles.value)) {
+  for (const [roleName, userId] of Object.entries(role_assignments.value)) {
     if (userId === member.user_id) {
-      deliverableRoles.value[roleName] = null;
+      role_assignments.value[roleName] = null;
     }
   }
 
   // Assign the new role to the member
-  deliverableRoles.value[role.name] = member.user_id;
+  role_assignments.value[role.name] = member.user_id;
 }
 
 import useDeliverables from '~/composables/useDeliverables';
@@ -156,7 +156,8 @@ const deliverable = reactive({
     research: '',
     draft: ''
   },
-  assigned: deliverableRoles
+  role_assignments: role_assignments,
+  assigned_to: '',
 })
 
 const buttonDate = computed(() => {

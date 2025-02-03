@@ -1,6 +1,7 @@
 <template>
   <section class="state-intro-data">
     <div class="intro-data-row" v-if="ProjectData">
+      {{ DeliverableData }}
       <p>Project</p>
       <p>{{ ProjectData.name }}</p>
     </div>
@@ -10,6 +11,7 @@
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
           <Avatar :uuid="uuid" :hasName="true" size="small" />
           <div class="members-role">{{ role }}</div>
+          {{ ProjectData.assigned_to }}
         </div>
       </div>
     </div>
@@ -29,12 +31,10 @@ const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
 
 const assignedTeam = ref(null);
 
-
-
 onMounted(async () => {
   try {
     ProjectData.value = await getProjectDetails(props.project);
-    assignedTeam.value = props.DeliverableData.assigned;
+    assignedTeam.value = props.DeliverableData.role_assignments;
     await fetchTeamMembers(ProjectData.value.assigned_team);
   } catch (error) {
     console.error(error);

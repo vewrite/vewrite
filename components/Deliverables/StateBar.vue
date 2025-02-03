@@ -55,12 +55,29 @@ const { updateDeliverableWorkflowState } = useDeliverables();
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
+/*
+
+[
+  43, // Getting started (new), assigned to writer
+  44, // Gathering information (research), assigned to writer
+  45, // Outline (outline), assigned to writer
+  46, // Outline Review (outline review), assigned to reviewer
+  47, // Writing (writing), assigned to writer
+  48, // Draft Review (writing review), assigned to reviewer
+  49  // Approved (approved), assigned to reviewer
+]
+
+*/
+
 async function handleState(stateId, stateType) {
   loading.value = true;
   try {
     console.log(stateId, stateType);
     
     await updateDeliverableWorkflowState(stateId, stateType);
+
+    // Here we will handle assignments to the writer and reviewer
+
     
     // Set the deliverable state in the store
     console.log('Setting deliverable state:', stateType);
