@@ -8,8 +8,9 @@
       <p>Assigned Team</p>
       <!-- <p>{{ TeamMembersData }}</p> -->
       <div class="members">
-        <div class="members-image" v-for="member in TeamMembersData" :key="member.id">
-          <Avatar :uuid="member.user_id" :hasName="true" size="small" />
+        <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
+          <Avatar :uuid="uuid" :hasName="true" size="small" />
+          <div class="members-role">{{ role }}</div>
         </div>
       </div>
     </div>
@@ -35,9 +36,14 @@ const { fetchSingleTeam } = useTeams();
 import useTeamMembers from '~/composables/useTeamMembers';
 const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
 
+const assignedTeam = ref(null);
+
+
+
 onMounted(async () => {
   try {
     ProjectData.value = await getProjectDetails(props.project);
+    assignedTeam.value = props.DeliverableData.assigned;
     // AssignedTeam.value = await fetchSingleTeam(ProjectData.value.assigned_team);
     await fetchTeamMembers(ProjectData.value.assigned_team);
   } catch (error) {
@@ -87,6 +93,21 @@ onMounted(async () => {
       display: flex;
       flex-direction: column;
       gap: $spacing-xs;
+      width: 100%;
+      max-width: 400px;
+
+      .single-member {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-sm;
+        width: 100%;
+
+        .members-role {
+          font-size: $font-size-xs;
+        }
+      }
     }
   }
 }
