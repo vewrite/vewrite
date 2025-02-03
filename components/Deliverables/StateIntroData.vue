@@ -9,8 +9,10 @@
       <div class="members">
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
           <Avatar :uuid="uuid" :hasName="true" size="small" />
-          <div class="members-role">{{ role }}</div>
-          {{ ProjectData.assigned_to }}
+          <div class="members-role">
+            <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Currently assigned</div>
+            {{ role }}
+          </div>
         </div>
       </div>
     </div>
@@ -95,6 +97,18 @@ onMounted(async () => {
 
         .members-role {
           font-size: $font-size-xs;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: $spacing-xs;
+
+          .assigned-to {
+            font-size: $font-size-xxs;
+            color: $brand;
+            background: rgba($brand, 0.1);
+            padding: 2px $spacing-xs;
+            border-radius: $br-lg;
+          }
         }
       }
     }
