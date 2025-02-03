@@ -24,9 +24,9 @@
           <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         </div>
       </section>
-      <!-- <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')">
+      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
-      </div> -->
+      </div>
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
       </div>

@@ -14,10 +14,10 @@
         </div>
       </div>
     </div>
-    <div class="intro-data-row" v-if="DeliverableData">
+    <!-- <div class="intro-data-row" v-if="DeliverableData">
       <p>Requirements</p>
       <p v-html="DeliverableData.content.requirements"></p>
-    </div>
+    </div> -->
   </section>
 </template>
 
