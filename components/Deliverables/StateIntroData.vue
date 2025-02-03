@@ -6,7 +6,6 @@
     </div>
     <div class="intro-data-row" v-if="TeamMembersData">
       <p>Assigned Team</p>
-      <!-- <p>{{ TeamMembersData }}</p> -->
       <div class="members">
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
           <Avatar :uuid="uuid" :hasName="true" size="small" />
@@ -14,10 +13,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="intro-data-row" v-if="DeliverableData">
-      <p>Requirements</p>
-      <p v-html="DeliverableData.content.requirements"></p>
-    </div> -->
   </section>
 </template>
 
@@ -25,13 +20,9 @@
 
 const props = defineProps(['project', 'DeliverableData']);
 const ProjectData = ref(null);
-const AssignedTeam = ref(null);
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
-
-import useTeams from '~/composables/useTeam';
-const { fetchSingleTeam } = useTeams();
 
 import useTeamMembers from '~/composables/useTeamMembers';
 const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
@@ -44,7 +35,6 @@ onMounted(async () => {
   try {
     ProjectData.value = await getProjectDetails(props.project);
     assignedTeam.value = props.DeliverableData.assigned;
-    // AssignedTeam.value = await fetchSingleTeam(ProjectData.value.assigned_team);
     await fetchTeamMembers(ProjectData.value.assigned_team);
   } catch (error) {
     console.error(error);
