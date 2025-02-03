@@ -8,7 +8,7 @@
       <p v-if="ProfileError">{{ ProfileError }}</p>
     </div>
     <div class="profile-actions">
-      <Role v-if="RoleData" :role="RoleData.role" :user="uuid" :team="team" />
+      <Role v-if="useRole && RoleData" :role="RoleData.role" :user="uuid" :team="team" />
       <slot name="actions"></slot>
     </div>
   </div>
@@ -16,18 +16,26 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
+
 import useProfile from '~/composables/useProfile';
 import Role from '~/components/Roles/Role.vue';
 
 import useRoles from '~/composables/useRoles';
-const { fetchUserTeamRole, RoleData, RoleError } = useRoles();
-const supabase = useSupabaseClient();
-const props = defineProps(['uuid', 'type', 'team']);
+const { fetchUserTeamRole, RoleData } = useRoles();
+
+/*
+  uuid    - The user's UUID
+  type    - The type of profile card to display
+  team    - The team the user is a part of, MUST USE team_id
+  useRole - Whether to display the user's role. This is used in the TeamAssignment component since we 
+            don't want the user to set the role at the team level, but at the deliverable level.
+*/
+const props = defineProps(['uuid', 'type', 'team', 'useRole']);
+
 const { fetchSingleProfile, ProfileData, ProfileError } = useProfile();
 
 onMounted(async () => {
-
   try {
     await fetchSingleProfile(props.uuid);
     await fetchUserTeamRole(props.uuid, props.team);
@@ -52,6 +60,7 @@ onMounted(async () => {
   border: 1px solid rgba($brand, 0.15);
   transition: all 0.2s ease;
   box-shadow: $soft-shadow;
+  width: 100%;
 
   &.list {
     border-color: transparent;

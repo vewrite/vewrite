@@ -25,6 +25,9 @@ export default function useRoles() {
   }
 
   async function fetchUserTeamRole(userId, teamId) {
+
+    console.log('Fetching user team role', userId, teamId)
+
     try {
       const { data, error } = await supabase
         .from('team_members')
@@ -33,6 +36,8 @@ export default function useRoles() {
         .eq('team_id', teamId)
 
       if (error) throw error
+
+      console.log('User team role data:', data)
 
       RoleData.value = data[0]
       return data

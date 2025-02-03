@@ -17,9 +17,10 @@
 <script setup>
 
 const props = defineProps(['user', 'team', 'role']);
-const supabase = useSupabaseClient();
+
 import useRoles from '~/composables/useRoles';
 const { fetchRoles, fetchSingleRole, setRole, RolesData, RoleData, RolesError, RoleError } = useRoles();
+
 const loading = ref(false);
 
 onMounted(async () => {

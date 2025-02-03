@@ -42,11 +42,6 @@
                   <input v-model="deliverable.content.requirements" id="link-requirements" type="text" placeholder="Paste a link" />
                 </div>
 
-                <!-- If a file is being uploaded -->
-                <!-- <div class="form-input" v-if="deliverable.type == 'file'">
-                  <label for="file">External File</label>
-                  <input v-model="deliverable.file" id="file" type="text" placeholder="Input your deliverables's link" />
-                </div> -->
               </div>
             </div>
           </div>
@@ -69,7 +64,19 @@
             </div>
 
             <!-- Team assignment -->
-            <TeamAssignment :team="project.assigned_team" />
+            <section class="team-assignment">
+              <div class="members">
+                <div class="members-title">Team member role assignment</div>
+                <div class="member" v-if="TeamMembersData" v-for="member in TeamMembersData" :key="member.id">
+                  <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                  <div class="role-selector">
+                    <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: deliverableRoles[role.name] == member.user_id }">
+                      {{ role.name }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
 
         </section>
@@ -86,17 +93,40 @@
 
 <script setup>
 
-import TeamAssignment from '~/components/Deliverables/TeamAssignment.vue';
+import { ref, onMounted } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
-// TODO - Add validation to the form
+const props = defineProps(['team']);
+const emit = defineEmits(['update']);
 
-// Deliverables composable
+const deliverableRoles = ref({
+  Writer: null,
+  Reviewer: null
+});
+
+const setDeliverableRole = (member, role) => {
+  // Remove the previous role assignment for the user
+  for (const [roleName, userId] of Object.entries(deliverableRoles.value)) {
+    if (userId === member.user_id) {
+      deliverableRoles.value[roleName] = null;
+    }
+  }
+
+  // Assign the new role to the member
+  deliverableRoles.value[role.name] = member.user_id;
+}
+
 import useDeliverables from '~/composables/useDeliverables';
 const { createDeliverable } = useDeliverables();
 
-// Project composable
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
+
+import useTeamMembers from '~/composables/useTeamMembers';
+const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
+
+import useRoles from '~/composables/useRoles';
+const { fetchRoles, RolesData } = useRoles();
 
 const project = ref({});
 
@@ -125,7 +155,8 @@ const deliverable = reactive({
     outline: '',
     research: '',
     draft: ''
-  }
+  },
+  assigned: deliverableRoles
 })
 
 const buttonDate = computed(() => {
@@ -136,9 +167,25 @@ function onChange (value) {
   console.log(value)
 }
 
+async function init() {
+  try {
+    await fetchTeamMembers(project.value.assigned_team);
+    await fetchRoles();
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+  }
+}
+
 onMounted(async () => {
   loading.value = true;
-  project.value = await getProjectDetails(projectId);
+  try {
+    project.value = await getProjectDetails(projectId);
+    await init();
+    loading.value = false;
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    loading.value = false;
+  }
   loading.value = false;
 })
 
@@ -180,6 +227,70 @@ onMounted(async () => {
     color: rgba($black, 0.65);
     background: rgba($gray-light, 0.25);
   }
+
+  .team-assignment {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border: $border;
+      border-radius: $br-lg;
+      min-height: 300px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba($gray-light, .25);
+
+      .members {
+        display: flex;
+        flex-direction: column;
+        border-radius: $br-lg;
+        position: relative;
+
+        .members-title {
+          font-size: $font-size-xs;
+          color: rgba($black, 0.65);
+          padding: $spacing-sm;
+          background: linear-gradient(to bottom, rgba($white, 1), rgba($white, 0.85));
+          backdrop-filter: blur(5px);
+          position: sticky;
+          top: 0;
+          z-index: 1;
+        }
+
+        .member {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: $spacing-xs;
+          border-bottom: $border;
+          padding: $spacing-sm;
+
+          .role-selector {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            overflow: hidden;
+            gap: $spacing-xs;
+            cursor: pointer;
+
+            .single-role {
+              background: rgba($black, 0.05);
+              padding: $spacing-xxs $spacing-sm;
+              border-radius: $br-lg;
+
+              &.selected {
+                background: rgba($brand, 0.15);
+                color: $brand;
+              }
+            }
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
 
   .buttons {
     display: flex;
