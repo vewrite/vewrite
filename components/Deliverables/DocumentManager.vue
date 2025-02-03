@@ -11,11 +11,13 @@
     <section class="documents max-width xl" ref="stateDetails">
       <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-intro">
-          <p class="state-summary">You're expected to</p>
-          <h2>{{ StateData[0].instance_name }}</h2>
-          <br>
-          <p class="state-summary">When you're ready, you can</p>
-          <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
+          <section class="state-intro-top">
+            <p class="state-summary">You're expected to</p>
+            <h2>{{ StateData[0].instance_name }}</h2>
+          </section>
+          <section class="state-intro-bottom">
+            <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
+          </section>
         </div>
         <div class="state-data">
           <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
@@ -224,7 +226,9 @@ onMounted(() => {
         width: 100%;
         min-width: 240px;
         max-width: 400px;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         padding: $spacing-md;
         background: rgba($brand, 0.025);
         

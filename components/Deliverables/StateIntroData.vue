@@ -51,7 +51,6 @@ onMounted(async () => {
 .state-intro-data {
   display: flex;
   flex-direction: column;
-  width: 100%;
 
   .intro-data-row {
     display: flex;
