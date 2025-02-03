@@ -87,7 +87,7 @@ export default function useTeamMembers() {
 
   async function fetchTeamMembers(teamId) {
 
-    console.log('Fetching team members', teamId);
+    // console.log('Fetching team members', teamId);
 
     try {
       const { data, error } = await supabase

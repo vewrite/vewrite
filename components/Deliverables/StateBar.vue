@@ -2,38 +2,39 @@
   <section class="state-buttons">
 
     <!-- {{StateData}} -->
+    <!-- {{DeliverableData}} -->
 
     <!-- Project just started (43) -->
     <div v-if="props.StateData[0].state_type === 1">
-      <button class="button primary" @click="handleState(DeliverableData.id, 44)">Get started</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Get started</button>
     </div>
     
     <!-- Is in research state (44) -->
     <div v-if="props.StateData[0].state_type === 7">
-      <button class="button primary" @click="handleState(DeliverableData.id, 45)">Start outline</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Start outline</button>
     </div>
     
     <!-- Is in outline state (45) -->
     <div v-if="props.StateData[0].state_type === 3">
-      <button class="button primary" @click="handleState(DeliverableData.id, 44)">Back to research</button>
-      <button class="button primary" @click="handleState(DeliverableData.id, 46)">Send for review</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Back to research</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 46)">Send for review</button>
     </div>
     
     <!-- Is in outline review state (46) -->
     <div v-if="props.StateData[0].state_type === 2">
-      <button class="button primary" @click="handleState(DeliverableData.id, 45)">Send back to writer</button>
-      <button class="button primary" @click="handleState(DeliverableData.id, 47)">Approve outline</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button>
     </div>
 
     <!-- Is in Writing state (47) -->
     <div v-if="props.StateData[0].state_type === 4"> 
-      <button class="button primary" @click="handleState(DeliverableData.id, 48)">Send for review</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 48)">Send for review</button>
     </div>
 
     <!-- Is in draft review state (48) -->
     <div v-if="props.StateData[0].state_type === 5">
-      <button class="button primary" @click="handleState(DeliverableData.id, 47)">Send back to writer</button>
-      <button class="button primary" @click="handleState(DeliverableData.id, 49)">Approve draft</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
+      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button>
     </div>
     
     <!-- Is approved (49) -->
@@ -50,7 +51,7 @@ const props = defineProps(['StateData', 'DeliverableData']);
 const loading = ref(false);
 
 import useDeliverables from '~/composables/useDeliverables';
-const { updateDeliverableWorkflowState } = useDeliverables();
+const { updateDeliverableWorkflowState, assignToRole } = useDeliverables();
 
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
@@ -69,19 +70,28 @@ const deliverableStore = useDeliverableStore();
 
 */
 
-async function handleState(stateId, stateType) {
+async function handleState(stateId, deliverableId, stateType) {
   loading.value = true;
-  try {
-    console.log(stateId, stateType);
-    
-    await updateDeliverableWorkflowState(stateId, stateType);
+
+  try {    
+    await updateDeliverableWorkflowState(deliverableId, stateType);
+
+    console.log('stateId:', stateId);
 
     // Here we will handle assignments to the writer and reviewer
-
+    if(stateId == 43 || stateId == 44 || stateId == 45 || stateId == 47) {
+      // Get the assigned writer
+      let userId = props.DeliverableData.role_assignments.Writer;
+      await assignToRole(deliverableId, userId);
+    } else if(stateId == 46 || stateId == 48 || stateId == 49) {
+      // Get the assigned reviewer
+      let userId = props.DeliverableData.role_assignments.Reviewer;
+      await assignToRole(deliverableId, userId);
+    }
     
     // Set the deliverable state in the store
     console.log('Setting deliverable state:', stateType);
-    deliverableStore.setDeliverableState(props.DeliverableData.id, stateType);
+    deliverableStore.setDeliverableState(deliverableId, stateType);
     
     loading.value = false;
   } catch (error) {

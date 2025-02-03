@@ -79,7 +79,7 @@ onMounted(() => {
 // Now, I need to watch the store and see if the workflow state changes
 // If it does, I need to update DeliverableData.workflow_state so that the child components can react to it
 watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
-  console.log('Deliverable state changed:', newValue);
+  // console.log('Deliverable state changed:', newValue);
   // DeliverableData.value.workflow_state = newValue;
   init();
 });

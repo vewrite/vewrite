@@ -415,6 +415,27 @@ export default function useDeliverables() {
     }
   }
 
+  async function assignToRole(deliverableId, userId) {
+
+    console.log('Assigning deliverable to user:', deliverableId, userId);
+
+    try {
+      const { data, error } = await supabase
+        .from('deliverables')
+        .update({ assigned_to: userId })
+        .eq('id', deliverableId);
+
+      if (error) throw error;
+
+      console.log('Deliverable assigned to user:', data);
+
+      return data;
+
+    } catch (error) {
+      console.error('Error assigning deliverable to user:', error.message);
+    }
+  }
+
   async function createDeliverable(deliverable) {
 
     useModal().toggleLoading();
@@ -483,7 +504,8 @@ export default function useDeliverables() {
     updateDeliverableWorkflowState,
     renderStateName,
     deleteProjectDeliverables,
-    duplicateContentToNextState
+    duplicateContentToNextState,
+    assignToRole
   }
 
 }
