@@ -12,7 +12,7 @@
       <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-intro">
           <section class="state-intro-top">
-            <p class="state-summary">You're expected to</p>
+            <p class="state-summary">Current state</p>
             <h2>{{ StateData[0].instance_name }}</h2>
           </section>
           <section class="state-intro-bottom">
@@ -188,6 +188,7 @@ onMounted(() => {
     max-width: 240px;
     border: $border;
     border-radius: $br-xl;
+    background: $white;
 
     @media (max-width: 1000px) {
       display: none;
@@ -208,7 +209,7 @@ onMounted(() => {
   .documents {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $spacing-md;
     padding: $spacing-sm;
     height: 100%;
     margin: 0 auto;
@@ -217,8 +218,8 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       gap: $spacing-xxs;
-      border-radius: $br-xl;
-      border: 1px solid rgba($brand, .25);
+      border-radius: $br-lg;
+      border: $border;
       overflow: hidden;
 
       .state-intro {
@@ -261,6 +262,9 @@ onMounted(() => {
 
     div.tiptap-wrap {
       min-height: 100px;
+      background: $white;
+      border-radius: $br-lg;
+      border: $border;
 
       &:last-child {
         margin-bottom: $spacing-xxl;

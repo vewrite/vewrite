@@ -97,6 +97,7 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
   height: 100%;
   padding: $spacing-sm;
   position: relative;
+  background: rgba($black, 0.0);
 
   .state-bar {
     position: sticky;

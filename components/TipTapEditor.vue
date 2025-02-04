@@ -485,37 +485,32 @@ onBeforeUnmount(() => {
     position: relative;
     white-space: nowrap;
     position: relative;
-    margin: 0 0 $spacing-sm $spacing-sm;
     align-self: flex-start;
-    font-size: $font-size-lg;
+    font-size: $font-size-md;
+    width: 100%;
+    padding: $spacing-sm;
     border-bottom: $border;
-    width: calc(100% - 2 * $spacing-sm);
-    padding-bottom: $spacing-xs;
   }
 }
 
 .requirements {
   display: flex;
   flex-direction: column;
-  padding: $spacing-sm;
 }
 
 .outline {
   display: flex;
   flex-direction: column;
-  padding: $spacing-sm;
 }
 
 .research {
   display: flex;
   flex-direction: column;
-  padding: $spacing-sm;
 }
 
 .draft {
   display: flex;
   flex-direction: column;
-  padding: $spacing-sm;
   align-content: flex-start;
   justify-content: flex-start;
 }
@@ -532,7 +527,7 @@ onBeforeUnmount(() => {
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
   top: $spacing-sm;
-  margin: 0 $spacing-sm $spacing-md;
+  margin: $spacing-sm;
   width: calc(100% - 2 * #{$spacing-sm});
   z-index: 10;
   overflow-x: auto;

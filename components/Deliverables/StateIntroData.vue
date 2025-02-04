@@ -1,11 +1,10 @@
 <template>
   <section class="state-intro-data">
-    <div class="intro-data-row" v-if="ProjectData">
+    <!-- <div class="intro-data-row" v-if="ProjectData">
       <p>Project</p>
       <p>{{ ProjectData.name }}</p>
-    </div>
+    </div> -->
     <div class="intro-data-row" v-if="TeamMembersData">
-      <p>Assigned Team</p>
       <div class="members">
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
           <Avatar :uuid="uuid" :hasName="true" size="small" />
@@ -84,7 +83,6 @@ onMounted(async () => {
       flex-direction: column;
       gap: $spacing-xs;
       width: 100%;
-      max-width: 400px;
 
       .single-member {
         display: flex;
@@ -93,9 +91,16 @@ onMounted(async () => {
         align-items: center;
         gap: $spacing-sm;
         width: 100%;
+        border-bottom: $border;
+        padding-bottom: $spacing-xs;
+
+        &:last-child {
+          border-bottom: none;
+        }
 
         .members-role {
           font-size: $font-size-xs;
+          font-weight: bold;
           display: flex;
           flex-direction: row;
           align-items: center;
