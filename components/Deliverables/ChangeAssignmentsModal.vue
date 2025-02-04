@@ -1,9 +1,12 @@
 <template>
   <div id="ChangeAssignmentModal">
     <div class="modal-body">
-      <Loading v-if="loading" />
+      <Loading class="loading" v-if="loading" type="small" />
       <form v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
           <div class="inner-container">
+
+            <!-- <pre v-if="project">{{ project }}</pre>
+            <pre v-if="TeamMembersData">{{ TeamMembersData }}</pre> -->
 
             <!-- Team assignment -->
             <section class="team-assignment">
@@ -24,7 +27,7 @@
       </form>
     </div>
     <div class="buttons">
-      <button @click="createDeliverable(deliverable, projectId,)" class="primary large">Create</button>
+      <button @click="updateRoleAssignments(deliverableId, role_assignments)" class="primary large">Assign roles</button>
     </div>
   </div>
 </template>
@@ -34,7 +37,7 @@
 /*
 
 For this modal, I'll need a few things:
-- The project that this deliverable is assigned to
+- Project object that this deliverable is assigned to
 - The deliverable id
 - The team members assigned to the project
 
@@ -44,7 +47,52 @@ import { ref, onMounted } from 'vue';
 
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const projectId = route.params.id;
+const deliverableId = route.params.id;
+const loading = ref(false);
+
+import useDeliverables from '~/composables/useDeliverables';
+const { fetchDeliverable, updateRoleAssignments, DeliverableData } = useDeliverables();
+
+import useProject from '~/composables/useProject';
+const { getProjectDetails } = useProject();
+
+import useTeamMembers from '~/composables/useTeamMembers';
+const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
+
+import useRoles from '~/composables/useRoles';
+const { fetchRoles, RolesData } = useRoles();
+
+const project = ref(null);
+
+const role_assignments = ref({
+  Writer: null,
+  Reviewer: null
+});
+
+const setDeliverableRole = (member, role) => {
+  // Remove the previous role assignment for the user
+  for (const [roleName, userId] of Object.entries(role_assignments.value)) {
+    if (userId === member.user_id) {
+      role_assignments.value[roleName] = null;
+    }
+  }
+
+  // Assign the new role to the member
+  role_assignments.value[role.name] = member.user_id;
+}
+
+async function init() {
+  loading.value = true;
+  await fetchDeliverable(deliverableId);
+  project.value = await getProjectDetails(DeliverableData.value.project);
+  await fetchTeamMembers(project.value.assigned_team);
+  await fetchRoles();
+  loading.value = false;
+}
+
+onMounted(async() => {
+  init();
+});
 
 </script>
 
@@ -60,6 +108,10 @@ const projectId = route.params.id;
 
   .modal-body {
     width: 100%;
+
+    .loading {
+      margin: $spacing-lg auto;
+    }
 
     p {
       margin: 0;

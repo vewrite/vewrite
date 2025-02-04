@@ -250,6 +250,30 @@ export default function useDeliverables() {
     }
   }
 
+  async function updateRoleAssignments(deliverableId, roleAssignments) {
+    
+    try {
+
+      useModal().toggleLoading();
+
+      const { data, error } = await supabase
+        .from('deliverables')
+        .update({ role_assignments: roleAssignments })
+        .eq('id', deliverableId);
+
+      if (error) throw error;
+
+      useModal().toggleVisibility();
+      useModal().reset();
+
+      return data;
+
+    } catch (error) {
+      console.error('Error updating role assignments:', error.message);
+      DeliverableError.value = error.message;
+    }
+  }
+
   function renderStateName(stateId) {
     const state = states.value.find(s => s.id === stateId);
     return state ? state.name : '';
@@ -498,6 +522,8 @@ export default function useDeliverables() {
     fetchDeliverableState,
     updateDeliverableTitle,
     updateDeliverableDescription,
+    updateRoleAssignments,
+    updateDeliverableContent,
     createDeliverableModal,
     deleteDeliverableModal,
     changeAssignmentsModal,
@@ -506,7 +532,6 @@ export default function useDeliverables() {
     fetchSingleProjectDeliverableByState,
     fetchDeliverableStateStatus,
     setDeliverableContentStatus,
-    updateDeliverableContent,
     fetchProjectDeliverables,
     fetchDeliverableStates,
     updateDeliverableWorkflowState,

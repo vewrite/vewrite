@@ -1,7 +1,7 @@
 <template>
   <div id="CreateDeliverableModal">
     <div class="modal-body">
-      <Loading v-if="loading" />
+      <Loading class="loading" v-if="loading" type="small" />
       <form v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
         <section class="form-row">
           <div class="inner-container">
@@ -86,7 +86,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createDeliverable(deliverable, projectId,)" class="primary large">Create</button>
+      <button @click="createDeliverable(deliverable, projectId)" class="primary large">Create</button>
     </div>
   </div>
 </template>
@@ -204,6 +204,10 @@ onMounted(async () => {
 
   .modal-body {
     width: 100%;
+
+    .loading {
+      margin: $spacing-lg auto;
+    }
 
     p {
       margin: 0;
