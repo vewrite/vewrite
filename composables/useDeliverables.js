@@ -469,7 +469,7 @@ export default function useDeliverables() {
 
   async function createDeliverable(deliverable) {
 
-    useModal().toggleLoading();
+    console.log('Creating deliverable:', deliverable);
 
     // const deliverableContent = ref({});
     const deliverableId = ref(null);
@@ -477,7 +477,7 @@ export default function useDeliverables() {
 
     try {
 
-      delete deliverable.type;
+      useModal().toggleLoading();
 
       let { data } = await supabase.from('deliverables').insert(deliverable, {
         returning: 'representation', 
@@ -488,24 +488,13 @@ export default function useDeliverables() {
       // We also need to set the deliverable state to the first state in the list / TODO this isn't working yet
       await updateDeliverableWorkflowState(data[0].id, startState);
 
+      useModal().toggleVisibility();
+      useModal().reset();
+
     } catch (error) {
       DeliverableError.value = error.message;
     }
 
-    try {
-      const { data, error } = await supabase
-        .from('deliverable')
-        .insert(deliverable);
-
-      if (error) throw error;
-
-      console.log('Deliverable created:', data[0]);
-    } catch (error) {
-      console.error('Error creating deliverable:', error);
-    }
-
-    useModal().toggleVisibility();
-    useModal().reset();
   }
 
   return {

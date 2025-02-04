@@ -65,6 +65,9 @@
 
             <!-- Team assignment -->
             <section class="team-assignment">
+
+              <section class="notification small error" v-if="missingRoles">Please assign a writer and a reviewer to the deliverable.</section>
+
               <div class="members">
                 <div class="members-title">Team member role assignment</div>
                 <div class="member" v-if="TeamMembersData" v-for="member in TeamMembersData" :key="member.id">
@@ -86,7 +89,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createDeliverable(deliverable, projectId)" class="primary large">Create</button>
+      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large">Create</button>
     </div>
   </div>
 </template>
@@ -129,6 +132,7 @@ import useRoles from '~/composables/useRoles';
 const { fetchRoles, RolesData } = useRoles();
 
 const project = ref({});
+const missingRoles = ref(false);
 
 // Get the project id from the route
 import { useRoute } from 'vue-router';
@@ -145,6 +149,7 @@ const deliverable = reactive({
   updated_at: new Date(),
   project: projectId,
   due_date: new Date(),
+  workflow_state: '43',
   content: {
     type: 'content',
     hasRequirements: true,
@@ -157,7 +162,7 @@ const deliverable = reactive({
     draft: ''
   },
   role_assignments: role_assignments,
-  assigned_to: '',
+  assigned_to: role_assignments.value.Writer,
 })
 
 const buttonDate = computed(() => {
@@ -166,6 +171,18 @@ const buttonDate = computed(() => {
 
 function onChange (value) {
   console.log(value)
+}
+
+const handleCreateDeliverable = (deliverable, projectId) => {
+  console.log('Role Assignments:', role_assignments.value);
+  if (!role_assignments.value.Writer || !role_assignments.value.Reviewer) {
+    console.log('Missing roles');
+    missingRoles.value = true;
+    return;
+  } else {
+    console.log('Creating deliverable');
+    createDeliverable(deliverable, projectId);
+  }
 }
 
 async function init() {

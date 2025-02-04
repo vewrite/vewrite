@@ -8,6 +8,8 @@
             <!-- <pre v-if="project">{{ project }}</pre>
             <pre v-if="TeamMembersData">{{ TeamMembersData }}</pre> -->
 
+            <section class="notification small error" v-if="missingRoles">Please assign a writer and a reviewer to the deliverable.</section>
+
             <!-- Team assignment -->
             <section class="team-assignment">
               <div class="members">
@@ -27,7 +29,7 @@
       </form>
     </div>
     <div class="buttons">
-      <button @click="updateRoleAssignments(deliverableId, role_assignments)" class="primary large">Assign roles</button>
+      <button @click="handleUpdateRoleAssignments(deliverableId, role_assignments)" class="primary large">Assign roles</button>
     </div>
   </div>
 </template>
@@ -63,6 +65,7 @@ import useRoles from '~/composables/useRoles';
 const { fetchRoles, RolesData } = useRoles();
 
 const project = ref(null);
+const missingRoles = ref(false);
 
 const role_assignments = ref({
   Writer: null,
@@ -79,6 +82,15 @@ const setDeliverableRole = (member, role) => {
 
   // Assign the new role to the member
   role_assignments.value[role.name] = member.user_id;
+}
+
+function handleUpdateRoleAssignments(deliverableId, role_assignments) {
+  if (!role_assignments.Writer || !role_assignments.Reviewer) {
+    missingRoles.value = true;
+    return;
+  } else {
+    updateRoleAssignments(deliverableId, role_assignments);
+  }
 }
 
 async function init() {

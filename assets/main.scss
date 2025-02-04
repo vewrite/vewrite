@@ -46,6 +46,7 @@ body,
     padding: $spacing-md;
     display: flex;
     flex-direction: column;
+    gap: $spacing-sm;
     color: $black;
 
     @media (max-width: 1000px) {
