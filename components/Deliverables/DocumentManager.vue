@@ -11,13 +11,9 @@
     <section class="documents max-width xl" ref="stateDetails">
       <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-intro">
-          <section class="state-intro-top">
-            <p class="state-summary">Current state</p>
-            <h2>{{ StateData[0].instance_name }}</h2>
-          </section>
-          <section class="state-intro-bottom">
-            <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
-          </section>
+          <p class="due-date">Due <span>{{ dueDate }}</span></p>
+          <h2>{{ StateData[0].instance_name }}</h2>
+          <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         </div>
         <div class="state-data">
           <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
@@ -157,6 +153,12 @@ const setSelectedSection = (section) => {
   selectedSection.value = section;
 };
 
+const dueDate = computed(() => {
+  if (props.DeliverableData) {
+    return new Date(props.DeliverableData.due_date).toDateString();
+  }
+});
+
 // Set the initial selected section when the component mounts. We'll always want to default to the state details
 onMounted(() => {
   if (props.DeliverableData) {
@@ -224,6 +226,18 @@ onMounted(() => {
         max-width: 400px;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
+        gap: $spacing-xs;
+
+        .due-date {
+          font-size: $font-size-xxs;
+          color: $brand;
+          background: rgba($brand, 0.1);
+          padding: 2px $spacing-xs;
+          border-radius: $br-lg;
+          font-weight: bold;
+          align-self: flex-start;
+        }
         
         .state-summary {
           color: $black;
