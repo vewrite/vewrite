@@ -217,8 +217,6 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       gap: $spacing-xxs;
-      border-radius: $br-lg;
-      overflow: hidden;
 
       .state-intro {
         width: 100%;

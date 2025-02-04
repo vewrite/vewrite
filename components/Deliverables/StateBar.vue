@@ -3,35 +3,35 @@
 
     <!-- Project just started (43) -->
     <div v-if="props.StateData[0].state_type === 1">
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Get started</button>
+      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Get started</button>
     </div>
     
     <!-- Is in research state (44) -->
     <div v-if="props.StateData[0].state_type === 7">
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Start outline</button>
+      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Start outline</button>
     </div>
     
     <!-- Is in outline state (45) -->
     <div v-if="props.StateData[0].state_type === 3">
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Back to research</button>
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 46)">Send for review</button>
+      <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Back to research</button>
+      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 46)">Send for review</button>
     </div>
     
     <!-- Is in outline review state (46) -->
     <div v-if="props.StateData[0].state_type === 2">
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button>
+      <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
+      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button>
     </div>
 
     <!-- Is in Writing state (47) -->
     <div v-if="props.StateData[0].state_type === 4"> 
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 48)">Send for review</button>
+      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 48)">Send for review</button>
     </div>
 
     <!-- Is in draft review state (48) -->
     <div v-if="props.StateData[0].state_type === 5">
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
-      <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button>
+      <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
+      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button>
     </div>
     
     <!-- Is approved (49) -->
