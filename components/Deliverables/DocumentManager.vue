@@ -216,19 +216,14 @@ onMounted(() => {
       flex-direction: row;
       gap: $spacing-xxs;
       border-radius: $br-lg;
-      border: $border;
       overflow: hidden;
 
       .state-intro {
-        min-height: 200px;
         width: 100%;
         min-width: 240px;
         max-width: 400px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        padding: $spacing-md;
-        background: rgba($gray-light, .25);
         
         .state-summary {
           color: $black;
@@ -251,8 +246,7 @@ onMounted(() => {
 
       .state-data {
         height: 100%;
-        padding: $spacing-md;
-        min-height: 200px;
+        padding-top: $spacing-sm;
         width: 100%;
       }
     }
