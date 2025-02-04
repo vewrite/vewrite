@@ -654,6 +654,7 @@ button,
     text-transform: capitalize;
     min-height: 24px;
     border: none;
+    text-wrap: nowrap;
 
     @media (max-width: 960px) {
         font-size: $font-size-xxs;

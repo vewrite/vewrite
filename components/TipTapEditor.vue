@@ -475,6 +475,7 @@ onBeforeUnmount(() => {
   height: 100%;
   margin: 0 auto;
   position: relative;
+  background: rgba($gray-light, .25);
 
   &:hover #TipTapTools {
     background: rgba($black, 0.025);
@@ -486,10 +487,13 @@ onBeforeUnmount(() => {
     white-space: nowrap;
     position: relative;
     align-self: flex-start;
-    font-size: $font-size-md;
     width: 100%;
     padding: $spacing-sm;
     border-bottom: $border;
+    background: $white;
+    border-radius: $br-lg $br-lg 0 0;
+    font-size: $font-size-xs;
+    color: rgba($black, 0.65);
   }
 }
 

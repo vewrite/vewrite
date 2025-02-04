@@ -179,15 +179,12 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     position: sticky;
-    padding: $spacing-xs;
     margin: $spacing-sm;
     top: $spacing-md;
     height: fit-content;
     width: 100%;
     min-width: 180px;
     max-width: 240px;
-    border: $border;
-    border-radius: $br-xl;
     background: $white;
 
     @media (max-width: 1000px) {
@@ -231,10 +228,10 @@ onMounted(() => {
         flex-direction: column;
         justify-content: space-between;
         padding: $spacing-md;
-        background: rgba($brand, 0.025);
+        background: rgba($gray-light, .25);
         
         .state-summary {
-          color: $brand;
+          color: $black;
           opacity: 0.5;
           display: flex;
           flex-direction: column;

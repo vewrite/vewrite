@@ -328,6 +328,13 @@ export default function useDeliverables() {
     useModal().toggleVisibility();
   }
 
+  function changeAssignmentsModal() {
+    useModal().setType('medium');
+    useModal().setHeader('Change Assignments');
+    useModal().setContent('ChangeAssignmentsModal');
+    useModal().toggleVisibility();
+  }
+
   async function deleteDeliverable(deliverableId, projectId) {
 
     useModal().toggleLoading();
@@ -493,6 +500,7 @@ export default function useDeliverables() {
     updateDeliverableDescription,
     createDeliverableModal,
     deleteDeliverableModal,
+    changeAssignmentsModal,
     createDeliverable,
     fetchSingleProjectDeliverable,
     fetchSingleProjectDeliverableByState,

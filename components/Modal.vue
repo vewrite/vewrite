@@ -24,9 +24,10 @@ import { useModal } from '~/stores/modal'
 import CreateProjectModal from '~/components/Projects/CreateProjectModal.vue'
 import DeleteProjectModal from '~/components/Projects/DeleteProjectModal.vue'
 
-// Delivery modals
+// Deliverable modals
 import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
 import DeleteDeliverableModal from '~/components/Projects/DeleteDeliverableModal.vue'
+import ChangeAssignmentsModal from '~/components/Deliverables/ChangeAssignmentsModal.vue'
 
 // Workflow modals
 import CreateWorkflowModal from '~/components/Workflows/CreateWorkflowModal.vue'
@@ -73,7 +74,8 @@ const contentComponent = computed(() => {
     'DeleteClientModal': DeleteClientModal,
     'CreateTeamModal': CreateTeamModal,
     'DeleteTeamModal': DeleteTeamModal,
-    'AddTeamMemberModal': AddTeamMemberModal
+    'AddTeamMemberModal': AddTeamMemberModal,
+    'ChangeAssignmentsModal': ChangeAssignmentsModal
   }
   return components[modal.content]
 })

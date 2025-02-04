@@ -6,6 +6,7 @@
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
+        <button class="button" @click="changeAssignmentsModal()">Change assignments</button>
         <Dropdown>
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -47,7 +48,7 @@ import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchDeliverable, deleteDeliverableModal, DeliverableData, DeliverableError } = useDeliverables();
+const { fetchDeliverable, deleteDeliverableModal, changeAssignmentsModal, DeliverableData } = useDeliverables();
 
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
