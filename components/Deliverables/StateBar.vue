@@ -62,11 +62,11 @@ async function handleState(stateId, deliverableId, stateType) {
     console.log('stateId:', stateId);
 
     // Here we will handle assignments to the writer and reviewer
-    if(stateId == 43 || stateId == 44 || stateId == 45 || stateId == 47) {
+    if(stateType == 43 || stateType == 44 || stateType == 45 || stateType == 47) {
       // Get the assigned writer
       let userId = props.DeliverableData.role_assignments.Writer;
       await assignToRole(deliverableId, userId);
-    } else if(stateId == 46 || stateId == 48 || stateId == 49) {
+    } else if(stateType == 46 || stateType == 48 || stateType == 49) {
       // Get the assigned reviewer
       let userId = props.DeliverableData.role_assignments.Reviewer;
       await assignToRole(deliverableId, userId);
