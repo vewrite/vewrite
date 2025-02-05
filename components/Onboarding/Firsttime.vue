@@ -2,6 +2,8 @@
   <div id="FirstTime">
     <div class="onboarding-form">
 
+      {{defaultUser}}
+
       <!-- Initial check for if this user is in the database in invited_profiles -->
       <div class="onboarding-step" v-if="TeamsData && TeamsData.length > 0">        
         <h1>Hello!</h1>
@@ -29,11 +31,11 @@
         </div>
 
         <div class="select-persona">
-          <div class="selector" @click="setPersona('writer')" :class="{ 'selected': profile.persona === 'writer' }">
+          <div class="selector" @click="setPersona('writer')" :class="{ 'selected': defaultUser.persona === 'writer' }">
             <h2>Writer</h2>
             <p class="define">Work on projects and get your writing done fast</p>
           </div>
-          <div class="selector" @click="setPersona('manager')" :class="{ 'selected': profile.persona === 'manager' }">
+          <div class="selector" @click="setPersona('manager')" :class="{ 'selected': defaultUser.persona === 'manager' }">
             <h2>Manager</h2>
             <p class="define">Create projects, deliverables, and track your team's success</p>
           </div>
@@ -46,11 +48,11 @@
             <div class="form-group">
                 <div class="form-input">
                     <label for="username">Name</label>
-                    <input v-model="profile.username" id="username" type="text" placeholder="What's your name?" />
+                    <input v-model="defaultUser.username" id="username" type="text" placeholder="What's your name?" />
                 </div>
                 <div class="form-input">
                     <label for="name">Your website</label>
-                    <input v-model="profile.website" id="website" type="text" placeholder="Do you have a website?" />
+                    <input v-model="defaultUser.website" id="website" type="text" placeholder="Do you have a website?" />
                 </div>
                 <button type="submit" class="button block large wide primary" :disabled="loading">
                   <span v-if="loading">Updating...</span>
@@ -85,11 +87,28 @@ const user = useSupabaseUser()
 const loading = ref(false)
 const onboardingStep = ref(1)
 
-const profile = ref({
+// const profile = ref({
+//   email: user.value.email,
+//   username: '',
+//   website: '',
+//   persona: ''
+// })
+
+const defaultUser = ref({
+  id: user.value.id,
   email: user.value.email,
   username: '',
+  firstTime: true,
+  avatar_url: '',
+  updated_at: Date.now(),
   website: '',
-  persona: ''
+  persona: '',
+  subscription: {
+    "status": "free",
+    "order_id": "",
+    "plan": "free",
+    "current_period_start": ""
+  }
 })
 
 /* 
@@ -139,25 +158,9 @@ onMounted(async () => {
   }
 })
 
-const defaultUser = ref({
-  id: user.value.id,
-  email: profile.value.email,
-  username: profile.value.username,
-  firstTime: true,
-  avatar_url: '',
-  website: profile.value.website,
-  persona: profile.value.persona,
-  subscription: {
-    "status": "free",
-    "order_id": "",
-    "plan": "free",
-    "current_period_start": ""
-  }
-})
-
-function setPersona(persona) {
-  profile.value.persona = persona
-}
+const setPersona = (persona) => {
+  defaultUser.value.persona = persona;
+};
 
 // STEP 1 - set the user's persona
 // const setPersona = async (persona) => {
@@ -178,41 +181,33 @@ function setPersona(persona) {
 
 async function onboardUserDetails() {
   // If there user is not in the database, create them
+  if (!ProfileData.value) {
+    await createProfile(defaultUser.value)
+  } else {
+    // Update the user's profile
+    await updateProfile(defaultUser.value)
+  }
 
-  console.log("ProfileData", ProfileData.value)
-  // if (!ProfileData.value) {
-  //   await createProfile(defaultUser.value)
-  // } else {
-  //   // Update the user's profile
-  //   await updateProfile(defaultUser.value)
-  // }
-  // await updateProfile(defaultUser.value)
-  console.log(defaultUser.value)
-
-  // setFirstTime(false)
-  // emit('closeOnboarding')
+  setFirstTime(false)
+  emit('closeOnboarding')
 
 }
 
-    const setFirstTime = async (set) => {
-      // Set the user's firstTime to false
-      userStore.setFirstTime(set)
-      
-      // Update the user in the database
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({ firstTime: set })
-        .eq('id', user.value.id)
+async function setFirstTime(set) {
+  // Set the user's firstTime to false
+  userStore.setFirstTime(set)
+  
+  // Update the user in the database
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ firstTime: set })
+    .eq('id', user.value.id)
 
-      if (error) throw error
+  if (error) throw error
 
-      return data
-    }
-
-// Just in case they want to go back
-const prevStep = () => {
-  onboardingStep.value = onboardingStep.value - 1
+  return data
 }
+
 
 </script>
 
