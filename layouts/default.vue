@@ -1,5 +1,6 @@
 <template>
-  <main id="Vewrite">
+  <Firsttime v-if="isFirstTime == null || isFirstTime == true" @closeOnboarding="close" />
+  <main id="Vewrite" v-else>
     <TopBar />
     <section class="go">
       <Sidebar />
@@ -15,6 +16,47 @@
 
 import TopBar from '~/components/TopBar/TopBar.vue'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
+import Firsttime from '~/components/Onboarding/Firsttime.vue'
+
+import { useUser } from '@/stores/user'
+const userStore = useUser()
+
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+
+// Check if is first time in the database, if so, show the onboarding. If not, set in the userStore.
+const isFirstTime = ref(null)
+
+async function checkFirstTime() {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('firstTime')
+      .eq('id', user.value.id)
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    console.log(data)
+
+    if (data) {
+      isFirstTime.value = data.firstTime
+      userStore.setFirstTime(data.firstTime)
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+function close () {
+  isFirstTime.value = false
+}
+
+onMounted(() => {
+  checkFirstTime()
+})
 
 </script>
 

@@ -34,6 +34,7 @@ export const useUser = defineStore('userStore', {
     setPersona(persona) {
       // expects a string
       this.persona = persona;
+      console.log('setting persona to', persona)
     },
     setUsername(username) {
       // expects a string

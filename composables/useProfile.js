@@ -171,6 +171,8 @@ export default function useProfile() {
 
   async function fetchSingleProfile(profileId) {
 
+    console.log('Fetching profile:', profileId);
+
     try {
       const { data, error } = await supabase
         .from('profiles')
