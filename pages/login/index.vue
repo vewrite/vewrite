@@ -36,11 +36,6 @@
           </div>
         </section>
 
-      </section>
-
-
-      <section class="login-center">
-
         <!-- Login -->
         <section id="LoginForm" class="form-group" v-if="form == 'login'">
           <div class="login-buttons">
@@ -54,7 +49,7 @@
             </button> -->
           </div>
           <p class="or-select">Or</p>
-          <form class="magic-link-form" @submit.prevent="signInWithMagicLink">
+          <form class="magic-link-form" @submit.prevent="signInWithPassword">
             <div v-if="errorbox">
                 <p class="notification error">{{ errorbox }}</p>
             </div>
@@ -62,7 +57,7 @@
                 <p class="notification success">{{ notification }}</p>
             </div>
             <div v-if="notification == ''">
-                <p class="description">Access the app via magic link with your email address and password.</p>
+                <p class="description">Access Vewrite with your email address and password.</p>
                 <div class="form-group">
                     <div class="form-input">
                         <label for="email">Your email address</label>
@@ -76,13 +71,6 @@
                     </div>
                 </div>
                 <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Logging in' : 'Log in'" :disabled="loading" />
-                <!-- <div class="form-group">
-                    <div class="form-input">
-                        <label for="email">Your email address</label>
-                        <input class="inputField" type="email" placeholder="you@home.com" v-model="email" />
-                    </div>
-                </div>
-                <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Sending magic link' : 'Send magic link'" :disabled="loading" /> -->
             </div>
           </form>
         </section>
@@ -137,7 +125,7 @@
                 <p class="notification success">{{ notification }}</p>
             </div>
             <div v-if="notification == ''">
-                <p class="description">Access the app via magic link with just your email.</p>
+                <p class="description">Access Vewrite via magic link with just your email.</p>
                 <div class="form-group">
                     <div class="form-input">
                         <label for="email">Your email address</label>
@@ -148,6 +136,7 @@
             </div>
           </form>
         </section>
+
       </section>
 
       <section class="login-bottom">
@@ -171,6 +160,8 @@ const errorbox = ref('');
 const email = ref('');
 const password = ref('');
 const form = ref('login');
+
+const router = useRouter();
 
 const formToggle = (type) => {
     form.value = type
@@ -200,6 +191,27 @@ const signInWithMagicLink = async () => {
           } })
         if (error) throw error
         notification.value = "Check your email for the magic link"
+    } catch (error) {
+        errorbox.value = error.error_description || error.message
+        console.log('Error:', error)
+    } finally {
+        loading.value = false
+    }
+}
+
+const signInWithPassword = async () => {
+    try {
+        loading.value = true
+        const { error } = await supabase.auth.signIn({ 
+          email: email.value,
+          password: password.value,
+          options: {
+            redirectTo: '/confirm',
+          } })
+        if (error) throw error
+        
+        router.push('/')
+        
     } catch (error) {
         errorbox.value = error.error_description || error.message
         console.log('Error:', error)
@@ -267,34 +279,6 @@ const signUp = async () => {
     width: 100%;
   }
 
-  .login-center {
-    #SignUpForm, 
-    #LoginForm {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-md;
-      width: 100%;
-
-      .sign-up-form {
-        width: 100%;
-
-        .signup-buttons {
-          display: flex;
-          gap: $spacing-xs;
-          align-self: center;
-
-          button {
-            margin: 0 auto;
-          }
-        }
-
-        .description {
-          text-align: center;
-        }
-      }
-    }
-  }
-
   .toggle-form {
     display: flex;
     flex-direction: row;
@@ -338,7 +322,6 @@ const signUp = async () => {
 #LoginForm {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
   margin: $spacing-md 0;
   width: 100%;
   
@@ -363,6 +346,24 @@ const signUp = async () => {
   gap: $spacing-sm;
   margin: $spacing-md 0;
   width: 100%;
+
+  .sign-up-form {
+    width: 100%;
+
+    .signup-buttons {
+      display: flex;
+      gap: $spacing-xs;
+      align-self: center;
+
+      button {
+        margin: 0 auto;
+      }
+    }
+
+    .description {
+      text-align: center;
+    }
+  }
 
   .signup-buttons {
     display: flex;
