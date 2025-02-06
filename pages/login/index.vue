@@ -143,7 +143,6 @@
         <p class="copyright-and-terms">© 2021 All rights reserved. <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
       </section>
     </section>
-    <section id="LoginImage"></section>
   </main>
 </template>
 
@@ -267,7 +266,7 @@ const signUp = async () => {
   justify-content: space-between;
   padding: $spacing-lg;
   height: 100%;
-  width: 65vw;
+  width: 100%;
 
   .login-top,
   .login-center,
@@ -395,12 +394,5 @@ const signUp = async () => {
   }
 }
 
-#LoginImage {
-  background-color: $black;
-  // background-image: url('/assets/login-image.jpg');
-  background-size: cover;
-  background-position: center;
-  width: 35vw;
-}
 
 </style>

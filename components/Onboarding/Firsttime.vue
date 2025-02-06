@@ -100,7 +100,7 @@ const defaultUser = ref({
   username: '',
   firstTime: true,
   avatar_url: '',
-  updated_at: Date.now(),
+  updated_at: new Date(),
   website: '',
   persona: '',
   subscription: {
