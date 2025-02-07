@@ -183,6 +183,7 @@ export default function useProfile() {
 
       ProfileData.value = data[0];
       return data;
+      
     } catch (error) {
       ProfileError.value = error.message;
     }

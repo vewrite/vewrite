@@ -24,9 +24,13 @@ const downloadImage = async (path) => {
         const { data, error } = await supabase.storage
             .from("avatars")
             .download(path)
+        
         if (error) throw error
+
         src.value = URL.createObjectURL(data)
+        
         loading.value = false
+        
     } catch (error) {
         console.error("Error downloading image: ", error.message)
     }
@@ -35,7 +39,13 @@ const downloadImage = async (path) => {
 onMounted(async () => {
   try {
     await fetchSingleProfile(props.uuid)
-    downloadImage(ProfileData.value.avatar_url)  
+    if (ProfileData.value.avatar_url !== '') {
+      downloadImage(ProfileData.value.avatar_url)  
+    } else {
+      src.value = '/images/avatar-placeholder.png'
+      loading.value = false
+    }
+    
   } catch (error) {
     console.error("Error downloading image: ", error.message)
   }

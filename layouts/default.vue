@@ -1,6 +1,8 @@
 <template>
-  <Firsttime v-if="isFirstTime == null || isFirstTime == true" @closeOnboarding="close" />
-  <main id="Vewrite" v-else>
+  <!-- <Firsttime v-if="isFirstTime == null || isFirstTime == true" @closeOnboarding="close" /> -->
+  <Loading v-if="loading" />
+  <Firsttime v-if="!loading && isNewUser == true" @closeOnboarding="close" />
+  <main id="Vewrite" v-if="!loading && isNewUser == false">
     <TopBar />
     <section class="go">
       <Sidebar />
@@ -18,44 +20,60 @@ import TopBar from '~/components/TopBar/TopBar.vue'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
 import Firsttime from '~/components/Onboarding/Firsttime.vue'
 
+import useProfile from '~/composables/useProfile'
+const { createProfile } = useProfile()
+
 import { useUser } from '@/stores/user'
 const userStore = useUser()
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
-// Check if is first time in the database, if so, show the onboarding. If not, set in the userStore.
-const isFirstTime = ref(null)
 
-async function checkFirstTime() {
+/*
+
+If the user is new, show the onboarding screen
+- Check if the user has a profile
+- If not, create one
+
+If the user is not new, show the main app
+
+*/
+const isNewUser = ref(false)
+const loading = ref(true)
+
+async function checkUser() {
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('firstTime')
+      .select('*')
       .eq('id', user.value.id)
       .single()
 
-    if (error) {
-      throw error
-    }
+    if (error) { throw error }
 
     console.log(data)
 
-    if (data) {
-      isFirstTime.value = data.firstTime
-      userStore.setFirstTime(data.firstTime)
-    }
+    if (!data || data.firstTime === true) {
+      isNewUser.value = true
+      userStore.setFirstTime(data)
+    } 
+    loading.value = false
+
   } catch (error) {
-    console.error(error)
+    isNewUser.value = true
+    console.log("There is no profile for this user. Creating now.")
+    await createProfile(user.value)
+    loading.value = false
   }
 }
 
 function close () {
-  isFirstTime.value = false
+  isNewUser.value = false
 }
 
 onMounted(() => {
-  checkFirstTime()
+  checkUser()
 })
 
 </script>

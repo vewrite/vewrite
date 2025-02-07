@@ -2,47 +2,41 @@
   <div id="FirstTime">
     <div class="onboarding-form">
 
-      {{defaultUser}}
+      <!-- Next, we will be creating a profile for this user in the database by first setting what type of user they are. -->
+      <div class="onboarding-step" v-if="TeamsData && onboardingStep === 1">
 
-      <!-- Initial check for if this user is in the database in invited_profiles -->
-      <div class="onboarding-step" v-if="TeamsData && TeamsData.length > 0">        
-        <h1>Hello!</h1>
-        {{ user }}
-        <h3>You've been invited to join a Vewrite team</h3>
-        <!-- {{ TeamIds }} -->
-        <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
-          <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
-            <p>{{ team.name }}</p>
-            <div class="teams-approval-buttons">
-              <button class="button primary" @click="approveTeamMember(team.id, user.id, user.email)">Approve</button>
-              <button class="button red" @click="rejectTeamMember(team.id, user.id, user.email)">Reject</button>
+        <!-- Initial check for if this user is in the database in invited_profiles -->
+        <div class="onboarding-header" v-if="TeamsData.length > 0">        
+          <h2>You've been invited to join a Vewrite team</h2>
+          <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
+            <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
+              <p>{{ team.name }}</p>
+              <!-- <div class="teams-approval-buttons">
+                <button class="button primary" @click="approveTeamMember(team.id, user.id, user.email)">Approve</button>
+                <button class="button red" @click="rejectTeamMember(team.id, user.id, user.email)">Reject</button>
+              </div> -->
+            </div>
+          </section>
+        </div>
+        
+        
+        <div class="onboarding-header" v-if="TeamsData.length == 0">
+          <h2>How will you be using Vewrite?</h2>
+          <p>First, we'd like to know what kind of user you are.</p>
+          <div class="select-persona">
+            <div class="selector" @click="setPersona('writer')" :class="{ 'selected': defaultUser.persona === 'writer' }">
+              <h2>Writer</h2>
+              <p class="define">Work on projects and get your writing done fast</p>
+            </div>
+            <div class="selector" @click="setPersona('manager')" :class="{ 'selected': defaultUser.persona === 'manager' }">
+              <h2>Manager</h2>
+              <p class="define">Create projects, deliverables, and track your team's success</p>
             </div>
           </div>
-        </section>
-        <!-- <Loading v-else /> -->
-        {{ TeamsError }}
-      </div>
-
-      <!-- Next, we will be creating a profile for this user in the database by first setting what type of user they are. -->
-      <div class="onboarding-step" v-if="onboardingStep === 1">
-        <h2>How will you be using Vewrite?</h2>
-          <div class="onboarding-header">
-          <p>First, we'd like to know what kind of user you are.</p>
         </div>
 
-        <div class="select-persona">
-          <div class="selector" @click="setPersona('writer')" :class="{ 'selected': defaultUser.persona === 'writer' }">
-            <h2>Writer</h2>
-            <p class="define">Work on projects and get your writing done fast</p>
-          </div>
-          <div class="selector" @click="setPersona('manager')" :class="{ 'selected': defaultUser.persona === 'manager' }">
-            <h2>Manager</h2>
-            <p class="define">Create projects, deliverables, and track your team's success</p>
-          </div>
-        </div>
-
-        <h2>A few details about you</h2>
         <div class="onboarding-header">
+          <h2>A few details about you</h2>
           <p>Next, we'd like to get to know you a little better.</p>
           <form @submit.prevent="onboardUserDetails">
             <div class="form-group">
@@ -87,13 +81,6 @@ const user = useSupabaseUser()
 const loading = ref(false)
 const onboardingStep = ref(1)
 
-// const profile = ref({
-//   email: user.value.email,
-//   username: '',
-//   website: '',
-//   persona: ''
-// })
-
 const defaultUser = ref({
   id: user.value.id,
   email: user.value.email,
@@ -122,39 +109,17 @@ const defaultUser = ref({
 
 */
 
-// First, let's check if the user is in the database
-const checkUser = async () => {
-  try {
-    await fetchSingleProfile(user.value.id)
-    console.log("Checking ProfileData", ProfileData.value)
-  } catch (error) {
-    console.error(error)
-    console.error(ProfileError)
-  }
-}
-
-async function init() {
-  try {
-    await checkUser()
-  } catch (error) {
-    console.error(error)
-    console.error(ProfileError)
-  }
-}
-
 onMounted(async () => {
   try {
-    init();
-    // await fetchSingleProfile(user.value.id)
-    // await fetchInvitedTeamsForThisProfile(user.value.email)
-    // await fetchInvitedTeams([TeamIds.value])
-    // await createGroup(user.value.id)
-    // if (checkUser()) {
-    //   await fetchSingleGroup(user.value.id)
-    //   await fetchTeams(GroupData.value.id)
-    // } 
+    await fetchInvitedTeamsForThisProfile(user.value.email)
+    await fetchInvitedTeams([TeamIds.value])
+
   } catch (error) {
     console.error(error)
+  }
+
+  if (TeamsData.value.length > 0) {
+    defaultUser.value.persona = 'writer'
   }
 })
 
@@ -162,35 +127,17 @@ const setPersona = (persona) => {
   defaultUser.value.persona = persona;
 };
 
-// STEP 1 - set the user's persona
-// const setPersona = async (persona) => {
-//   // Set the user's persona
-//   userStore.setPersona(persona)
-  
-//   // Update the user in the database
-//   const { data, error } = await supabase
-//     .from('profiles')
-//     .update({ persona: persona })
-//     .eq('id', userStore.uuid)
-
-//   // go to next step
-//   onboardingStep.value = 2
-
-//   if (error) throw error
-// }
-
 async function onboardUserDetails() {
-  // If there user is not in the database, create them
-  if (!ProfileData.value) {
-    await createProfile(defaultUser.value)
-  } else {
-    // Update the user's profile
+  try {
     await updateProfile(defaultUser.value)
+    await createGroup(user.value.id)
+    await setFirstTime(false)
+    await approveTeamMember(TeamsData.value.id, user.value.id, user.value.email)
+  } catch (error) {
+    console.error(error)
   }
-
-  setFirstTime(false)
+    
   emit('closeOnboarding')
-
 }
 
 async function setFirstTime(set) {
@@ -257,6 +204,7 @@ async function setFirstTime(set) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: $spacing-lg;
     width: 100%;
     height: 100%;
 
@@ -274,6 +222,9 @@ async function setFirstTime(set) {
       max-width: 600px;
       width: 100%;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
 
       .prevStep {
         position: fixed;
