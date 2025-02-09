@@ -35,7 +35,7 @@
           </div>
         </div>
 
-        <div class="onboarding-header">
+        <div class="onboarding-header" v-if="TeamsData">
           <h2>A few details about you</h2>
           <p>Next, we'd like to get to know you a little better.</p>
           <form @submit.prevent="onboardUserDetails">
@@ -127,17 +127,16 @@ const setPersona = (persona) => {
   defaultUser.value.persona = persona;
 };
 
-async function onboardUserDetails() {
+async function onboardUserDetails(TeamId) {
   try {
     await updateProfile(defaultUser.value)
     await createGroup(user.value.id)
     await setFirstTime(false)
-    await approveTeamMember(TeamsData.value.id, user.value.id, user.value.email)
+    await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
+    emit('closeOnboarding')
   } catch (error) {
     console.error(error)
   }
-    
-  emit('closeOnboarding')
 }
 
 async function setFirstTime(set) {

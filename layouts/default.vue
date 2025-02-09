@@ -52,8 +52,6 @@ async function checkUser() {
 
     if (error) { throw error }
 
-    console.log(data)
-
     if (!data || data.firstTime === true) {
       isNewUser.value = true
       userStore.setFirstTime(data)

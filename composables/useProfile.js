@@ -171,8 +171,6 @@ export default function useProfile() {
 
   async function fetchSingleProfile(profileId) {
 
-    console.log('Fetching profile:', profileId);
-
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -183,7 +181,7 @@ export default function useProfile() {
 
       ProfileData.value = data[0];
       return data;
-      
+
     } catch (error) {
       ProfileError.value = error.message;
     }
