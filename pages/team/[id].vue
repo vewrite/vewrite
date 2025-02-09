@@ -126,8 +126,6 @@ const route = useRoute();
 const team = ref(null);
 const teamId = route.params.id;
 
-// console.log('Team ID is: ', teamId);
-
 import useProfile from '~/composables/useProfile';
 const { fetchProfileViaEmail, createInvitedProfile, ProfileData, ProfileError } = useProfile();
 

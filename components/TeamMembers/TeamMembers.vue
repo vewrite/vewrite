@@ -1,6 +1,8 @@
 <template>
   <section class="team-members">
     <Loading v-if="loading" type="small" />
+    <div class="notification error" v-if="TeamError">{{ TeamError }}</div>
+    <div class="notification error" v-if="TeamMembersError">{{ TeamMembersError }}</div>
     <nuxt-link class="team-wrapper" v-if="TeamData" :to="'/team/' + TeamData.id">
       <div class="members">
         <div class="members-image" v-for="member in TeamMembersData" :key="member.id">
