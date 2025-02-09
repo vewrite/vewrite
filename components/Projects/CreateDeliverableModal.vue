@@ -145,8 +145,8 @@ const loading = ref(false);
 
 // Set some sane defaults for the deliverable
 const deliverable = reactive({
-  title: 'Deliverable title',
-  description: 'Quickly summarize your deliverable',
+  title: '',
+  description: '',
   created_at: new Date(),
   updated_at: new Date(),
   project: projectId,
@@ -219,19 +219,14 @@ $v.value.$touch()
 
 const handleCreateDeliverable = (deliverable, projectId) => {
   
+  clearErrors();
+
   if (!role_assignments.value.Writer || !role_assignments.value.Reviewer) {
     console.log('Missing roles');
     missingRoles.value = true;
   }
 
   if ($v.value.$invalid) {
-    console.log('Form is invalid');
-
-    clearErrors();
-
-    console.log(formErrors.value);
-
-    // Process validation errors
     $v.value.$errors.forEach(error => {
       processError(error);
     });
@@ -249,12 +244,10 @@ function processError (error) {
 }
 
 function clearErrors () {
+  missingRoles.value = false;
   formErrors.value = {
     title: '',
-    due_date: '',
-    content: {
-      requirements: '',
-    }
+    due_date: ''
   };
 }
 
