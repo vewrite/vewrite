@@ -213,7 +213,7 @@ const formErrors = ref({
   due_date: ''
 })
 
-const $v = useVuelidate(rules, { project })
+const $v = useVuelidate(rules, { deliverable })
 
 $v.value.$touch()
 

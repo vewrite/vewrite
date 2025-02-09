@@ -7,13 +7,14 @@
 
         <div class="form-block">
             <div class="form-details">
-                <h3>Team Details</h3>
-                <p class="details">Your team's basic details.</p>
+              <h3>Team Details</h3>
+              <p class="details">Your team's basic details.</p>
             </div>
             <div class="form-content">
               <div class="form-input">
-                  <label for="name">Name</label>
-                  <input v-model="team.name" id="name" type="text" placeholder="Input your team's name" />
+                <label for="name">Name</label>
+                <input v-model="team.name" id="name" type="text" placeholder="Input your team's name" />
+                <span class="form-required" v-if="formErrors.name != ''">{{ formErrors.name }}</span>
               </div>
             </div>
         </div>
@@ -22,7 +23,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="createTeam(team)" class="primary wide">Create</button>
+      <button @click="handleCreateTeam(team)" class="primary wide">Create</button>
     </div>
   </div>
 </template>
@@ -67,6 +68,54 @@ onMounted(async () => {
 function logoUrlUpdate(filePath) {
   team.logo_url = filePath;
   console.log('Logo URL updated:', filePath);
+}
+
+// Form validation
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+
+const rules = {
+  team: {
+    name: { required },
+  }
+}
+
+const formErrors = ref({
+  name: '',
+})
+
+const $v = useVuelidate(rules, { team })
+
+$v.value.$touch()
+
+function handleCreateTeam (team) {
+
+  if ($v.value.$invalid) {
+    console.log('Form is invalid');
+
+    clearErrors();
+
+    console.log(formErrors.value);
+
+    // Process validation errors
+    $v.value.$errors.forEach(error => {
+      processError(error);
+    });
+    return
+  } else {
+    createTeam(team);
+  }
+
+}
+
+function processError (error) {
+  formErrors.value[error.$property] = error.$property + ' is required';
+}
+
+function clearErrors () {
+  formErrors.value = {
+    name: '',
+  };
 }
 
 </script>
