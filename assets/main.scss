@@ -262,6 +262,10 @@ p {
     line-height: 1.5;
 }
 
+p.center {
+    text-align: center;
+}
+
 p.details {
     color: rgba($black, 0.5) !important;
     font-size: $font-size-xs;

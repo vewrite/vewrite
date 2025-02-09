@@ -2,27 +2,28 @@
   <div id="FirstTime">
     <div class="onboarding-form">
 
+      <Logo class="logo" />
+
       <!-- Next, we will be creating a profile for this user in the database by first setting what type of user they are. -->
       <div class="onboarding-step" v-if="TeamsData && onboardingStep === 1">
 
         <!-- Initial check for if this user is in the database in invited_profiles -->
         <div class="onboarding-header" v-if="TeamsData.length > 0">        
-          <h2>You've been invited to join a Vewrite team</h2>
           <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
             <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
-              <p>{{ team.name }}</p>
+              <p class="center">You've been invited to join {{ team.name }}</p>
               <!-- <div class="teams-approval-buttons">
                 <button class="button primary" @click="approveTeamMember(team.id, user.id, user.email)">Approve</button>
                 <button class="button red" @click="rejectTeamMember(team.id, user.id, user.email)">Reject</button>
               </div> -->
             </div>
           </section>
+          <hr />
         </div>
         
         
         <div class="onboarding-header" v-if="TeamsData.length == 0">
-          <h2>How will you be using Vewrite?</h2>
-          <p>First, we'd like to know what kind of user you are.</p>
+          <p class="center">First, we'd like to know what kind of user you are.</p>
           <div class="select-persona">
             <div class="selector" @click="setPersona('writer')" :class="{ 'selected': defaultUser.persona === 'writer' }">
               <h2>Writer</h2>
@@ -36,8 +37,7 @@
         </div>
 
         <div class="onboarding-header" v-if="TeamsData">
-          <h2>A few details about you</h2>
-          <p>Next, we'd like to get to know you a little better.</p>
+          <p class="center">Next, we'd like to get to know you a little better.</p>
           <form @submit.prevent="onboardUserDetails">
             <div class="form-group">
                 <div class="form-input">
@@ -132,7 +132,9 @@ async function onboardUserDetails(TeamId) {
     await updateProfile(defaultUser.value)
     await createGroup(user.value.id)
     await setFirstTime(false)
-    await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
+    if (TeamsData.value.length > 0) {
+      await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
+    }
     emit('closeOnboarding')
   } catch (error) {
     console.error(error)
