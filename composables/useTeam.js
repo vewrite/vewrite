@@ -14,18 +14,22 @@ export default function useTeam() {
   const router = useRouter();
   const { fetchTeamMembers, TeamMembersData, TeamMembersError } = useTeamMembers();
 
-  async function createTeam(team) {
+  async function createTeam(team, UserId, UserEmail) {
 
     useModal().toggleLoading();
 
-    console.log('Creating team', team);
+    console.log('Creating team', team, UserId, UserEmail);
 
     try {
-      const { data, error } = await supabase
-        .from('teams')
-        .insert(team);
+
+      let { data, error } = await supabase.from('teams').insert(team, {
+        returning: 'representation', 
+      });
 
       if (error) throw error;
+
+      // Now that we have the team_id, we can add the project manager as the first team member
+      await addTeamMember(data[0].id, UserId, UserEmail);
 
       useModal().toggleVisibility();
       useModal().reset();

@@ -103,7 +103,9 @@ function handleCreateTeam (team) {
     });
     return
   } else {
-    createTeam(team);
+    // First we need to create the team
+    createTeam(team, user.value.id, user.value.email);
+
   }
 
 }
