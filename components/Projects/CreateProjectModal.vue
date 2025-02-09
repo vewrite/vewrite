@@ -49,9 +49,9 @@
             <div class="form-input">
               <label for="team">Assigned team</label>
               <select v-model="project.assigned_team" id="team">
-                <option v-for="team in TeamsData" :key="team.team_id" :value="team.id">{{ team.name }}</option>
+                <option v-for="team in TeamsData" :key="team.assigned_team" :value="team.id">{{ team.name }}</option>
               </select>
-              <span class="form-required" v-if="formErrors.team != ''">{{ formErrors.team }}</span>
+              <span class="form-required" v-if="formErrors.assigned_team != ''">{{ formErrors.assigned_team }}</span>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
           </div>
           <div class="form-content">
             <div class="form-group">
-              <span class="form-required" v-if="formErrors.client != ''">{{ formErrors.client }}</span>
+              <span class="form-required" v-if="formErrors.client_id != ''">{{ formErrors.client_id }}</span>
               <section id="ClientSelect">
                 <div class="client-select" v-for="client in clients">
                   <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client_id" />

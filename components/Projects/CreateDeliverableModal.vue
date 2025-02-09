@@ -11,6 +11,7 @@
                 <div class="form-input">
                   <label for="name">Name</label>
                   <input v-model="deliverable.title" id="name" type="text" placeholder="Input your deliverables's title" />
+                  <span class="form-required" v-if="formErrors.title != ''">{{ formErrors.title }}</span>
                 </div>
                 <div class="form-input">
                   <label for="description">Description</label>
@@ -61,12 +62,13 @@
                   </template>
                 </Dropdown>
               </div>
+              <span class="form-required" v-if="formErrors.due_date != ''">{{ formErrors.due_date }}</span>
             </div>
 
             <!-- Team assignment -->
             <section class="team-assignment">
 
-              <section class="notification small error" v-if="missingRoles">Please assign a writer and a reviewer to the deliverable.</section>
+              <section class="form-required" v-if="missingRoles">All roles required</section>
 
               <div class="members">
                 <div class="members-title">Team member role assignment</div>
@@ -173,18 +175,6 @@ function onChange (value) {
   console.log(value)
 }
 
-const handleCreateDeliverable = (deliverable, projectId) => {
-  console.log('Role Assignments:', role_assignments.value);
-  if (!role_assignments.value.Writer || !role_assignments.value.Reviewer) {
-    console.log('Missing roles');
-    missingRoles.value = true;
-    return;
-  } else {
-    console.log('Creating deliverable');
-    createDeliverable(deliverable, projectId);
-  }
-}
-
 async function init() {
   try {
     await fetchTeamMembers(project.value.assigned_team);
@@ -206,6 +196,64 @@ onMounted(async () => {
   }
   loading.value = false;
 })
+
+// Form validation
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+
+const rules = {
+  deliverable: {
+    title: { required },
+    due_date: { required }
+  }
+}
+
+const formErrors = ref({
+  title: '',
+  due_date: ''
+})
+
+const $v = useVuelidate(rules, { project })
+
+$v.value.$touch()
+
+const handleCreateDeliverable = (deliverable, projectId) => {
+  
+  if (!role_assignments.value.Writer || !role_assignments.value.Reviewer) {
+    console.log('Missing roles');
+    missingRoles.value = true;
+  }
+
+  if ($v.value.$invalid) {
+    console.log('Form is invalid');
+
+    clearErrors();
+
+    console.log(formErrors.value);
+
+    // Process validation errors
+    $v.value.$errors.forEach(error => {
+      processError(error);
+    });
+  } else {
+    createDeliverable(deliverable, projectId);
+  }
+
+}
+
+function processError (error) {
+  formErrors.value[error.$property] = error.$property + ' is required';
+}
+
+function clearErrors () {
+  formErrors.value = {
+    title: '',
+    due_date: '',
+    content: {
+      requirements: '',
+    }
+  };
+}
 
 </script>
 
@@ -231,7 +279,7 @@ onMounted(async () => {
     }
 
     #content-requirements {
-      height: 147px;
+      height: 180px;
       margin-bottom: 0;
     }
   }
@@ -248,6 +296,7 @@ onMounted(async () => {
     font-size: $font-size-xs;
     color: rgba($black, 0.65);
     background: rgba($gray-light, 0.25);
+    min-height: 72px;
   }
 
   .team-assignment {
@@ -260,6 +309,12 @@ onMounted(async () => {
       max-height: 300px;
       overflow-y: auto;
       background: rgba($gray-light, .25);
+      position: relative;
+
+      .form-required {
+        top: .9rem;
+        z-index: 10;
+      }
 
       .members {
         display: flex;

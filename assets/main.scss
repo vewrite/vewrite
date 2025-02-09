@@ -514,11 +514,13 @@ textarea {
     font-size: $font-size-xxxs;
     padding: $spacing-xxxs $spacing-xxs;
     background-color: rgba($red, 0.05);
+    backdrop-filter: blur(10px);
     border-radius: $br-md;
     position: absolute;
-    top: $spacing-xxs;
-    right: $spacing-xxs;
+    top: -10px;
+    right: $spacing-sm;
     text-transform: uppercase;
+    border: $border;
 }
 
 .form-input {
@@ -527,7 +529,6 @@ textarea {
     margin-bottom: $spacing-sm;
     transition: all 0.2s ease;
     width: 100%;
-    overflow: hidden;
     height: fit-content;
     outline: 1px solid rgba($brand, 0);
     position: relative;
@@ -570,6 +571,7 @@ textarea {
     align-items: flex-start;
     gap: $spacing-lg;
     height: 100%;
+    position: relative;
 
     .no-height {
         height: auto;
