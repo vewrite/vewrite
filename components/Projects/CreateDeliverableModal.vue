@@ -68,7 +68,7 @@
             <!-- Team assignment -->
             <section class="team-assignment">
 
-              <section class="form-required" v-if="missingRoles">All roles required</section>
+              <section class="form-required" v-if="missingRoles">Role selection required</section>
 
               <div class="members">
                 <div class="members-title">Team member role assignment</div>
@@ -235,9 +235,12 @@ const handleCreateDeliverable = (deliverable, projectId) => {
     $v.value.$errors.forEach(error => {
       processError(error);
     });
-  } else {
+  }
+
+  if(!missingRoles.value && !$v.value.$invalid) {
     createDeliverable(deliverable, projectId);
   }
+
 
 }
 
