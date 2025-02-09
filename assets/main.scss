@@ -509,6 +509,18 @@ textarea {
     }
 }
 
+.form-required {
+    color: $red;
+    font-size: $font-size-xxxs;
+    padding: $spacing-xxxs $spacing-xxs;
+    background-color: rgba($red, 0.05);
+    border-radius: $br-md;
+    position: absolute;
+    top: $spacing-xxs;
+    right: $spacing-xxs;
+    text-transform: uppercase;
+}
+
 .form-input {
     border: $border;
     border-radius: $br-md;

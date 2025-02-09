@@ -31,6 +31,7 @@
             <div class="form-input">
               <label for="name">Name</label>
               <input v-model="project.name" id="name" type="text" placeholder="Your project's name" />
+              <span class="form-required" v-if="formErrors.name != ''">{{ formErrors.name }}</span>
             </div>
             <div class="form-input">
               <label for="description">Description</label>
@@ -50,7 +51,7 @@
               <select v-model="project.assigned_team" id="team">
                 <option v-for="team in TeamsData" :key="team.team_id" :value="team.id">{{ team.name }}</option>
               </select>
-              <!-- TODO: Add validation -->
+              <span class="form-required" v-if="formErrors.team != ''">{{ formErrors.team }}</span>
             </div>
           </div>
         </div>
@@ -62,6 +63,7 @@
           </div>
           <div class="form-content">
             <div class="form-group">
+              <span class="form-required" v-if="formErrors.client != ''">{{ formErrors.client }}</span>
               <section id="ClientSelect">
                 <div class="client-select" v-for="client in clients">
                   <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client_id" />
@@ -88,8 +90,7 @@
                 <select v-model="project.workflow" id="client">
                   <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
                 </select>
-                <!-- TODO: Add validation -->
-                <!-- <span v-if="!$v.project.workflow.required">Workflow is required</span> -->
+                <span class="form-required" v-if="formErrors.workflow != ''">{{ formErrors.workflow }}</span>
             </div>
           </div>
         </div>
@@ -98,7 +99,7 @@
     </div>
     
     <div class="buttons" v-if="clients.length > 0">
-      <button @click="createProject(project)" class="primary large">Create</button>
+      <button @click="handleCreateProject(project)" class="primary large">Create</button>
     </div>
   </div>
 </template>
@@ -160,6 +161,63 @@ onMounted(async () => {
 watch(project, (newVal, oldVal) => {
   console.log('Project:', project);
 })
+
+// Form validation
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+
+const rules = {
+  project: {
+    name: { required },
+    assigned_team: { required },
+    client_id: { required },
+    workflow: { required },
+  }
+}
+
+const formErrors = ref({
+  name: '',
+  assigned_team: '',
+  client_id: '',
+  workflow: '',
+})
+
+const $v = useVuelidate(rules, { project })
+
+$v.value.$touch()
+
+function handleCreateProject (project) {
+
+  if ($v.value.$invalid) {
+    console.log('Form is invalid');
+
+    clearErrors();
+
+    console.log(formErrors.value);
+
+    // Process validation errors
+    $v.value.$errors.forEach(error => {
+      processError(error);
+    });
+    return
+  } else {
+    createProject(project);
+  }
+
+}
+
+function processError (error) {
+  formErrors.value[error.$property] = error.$property + ' is required';
+}
+
+function clearErrors () {
+  formErrors.value = {
+    name: '',
+    assigned_team: '',
+    client_id: '',
+    workflow: '',
+  };
+}
 
 </script>
 

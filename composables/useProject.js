@@ -28,17 +28,6 @@ export default function useProject() {
 
   async function createProject(project) {
 
-    // const $v = useVuelidate(rules, { project })
-
-    // $v.value.$touch()
-
-    // if ($v.value.$invalid) {
-    //   console.log(project)
-    //   console.log($v.value)
-    //   console.log('Form is invalid')
-    //   return
-    // }
-
     console.log('Creating project', project);
     
     try {
