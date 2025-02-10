@@ -34,7 +34,7 @@ const loading = ref(false)
 async function resetPassword() {
   loading.value = true
   try {
-    const { data, error } = await supabase.auth.api.resetPasswordForEmail(email.value)
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email.value)
 
     if (error) { error.value = error.message; return }
 
