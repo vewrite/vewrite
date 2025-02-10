@@ -92,7 +92,8 @@ body,
 /* Notifications */
 
 .notification {
-    padding: $spacing-md;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
     border-radius: $br-md;
     gap: $spacing-xs;
     color: $brand;
@@ -101,11 +102,6 @@ body,
     justify-content: center;
     align-items: center;
     text-align: left;
-
-    &.small {
-        padding: $spacing-xs $spacing-sm;
-        font-size: $font-size-xs;
-    }
 
     .iconify {
         margin: 0;

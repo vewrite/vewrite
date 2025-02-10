@@ -27,16 +27,15 @@ const props = defineProps(['type', 'hasLogo', 'zeroHeight', 'saving'])
 
   &.saving {
     padding: $spacing-xxxs;
-    height: 52px;
-    width: 52px;
+    height: 32px;
+    width: 32px;
     position: absolute;
-    top: $spacing-sm;
-    right: $spacing-sm;
+    top: $spacing-xxs;
+    right: $spacing-xxs;
     z-index: 9999;
     background: rgba($white, 0.95);
     backdrop-filter: blur(20px);
     border-radius: 50%;
-    box-shadow: $big-shadow;
   }
 
   &.zero-height {

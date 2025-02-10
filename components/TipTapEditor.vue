@@ -1,5 +1,5 @@
 <template>
-  <Loading class="saving" v-if="saving" saving="saving" type="small" />
+  <Loading class="saving" v-if="saving" saving="saving" type="tiny" />
   
   <!-- Requirements -->
   <div id="TipTapEditor" v-if="props.type == 'requirements'" class="requirements">

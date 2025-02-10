@@ -20,6 +20,7 @@
         </div>
       </section>
       <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')">
+        <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
         <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
       </div>
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
@@ -159,6 +160,14 @@ const dueDate = computed(() => {
   }
 });
 
+const noRequirements = computed(() => {
+  if (props.DeliverableData.content.requirements === '' || props.DeliverableData.content.requirements === '<p></p>') {
+    return true;
+  } else {
+    return false;
+  }
+});
+
 // Set the initial selected section when the component mounts. We'll always want to default to the state details
 onMounted(() => {
   if (props.DeliverableData) {
@@ -268,6 +277,15 @@ onMounted(() => {
       background: $white;
       border-radius: $br-lg;
       border: $border;
+      position: relative;
+
+      .notification {
+        position: absolute;
+        z-index: 1;
+        bottom: $spacing-sm;
+        right: $spacing-sm;
+        left: $spacing-sm;
+      }
 
       &:last-child {
         margin-bottom: $spacing-xxl;
