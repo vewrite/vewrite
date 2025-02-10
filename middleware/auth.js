@@ -1,24 +1,22 @@
-import { useRoute } from 'vue-router';
+import { useAuthStore } from '~/stores/auth'
+import { navigateTo } from '#app'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const user = useSupabaseUser()
-  const route = useRoute();
-  const magiclink = route.query.magiclink;
-  const hasAccessToken = route.hash.includes('access_token');
+  const authStore = useAuthStore()
+
+  // Define public routes
+  const publicRoutes = ['/login', '/login/new-password', '/login/reset', '/auth/callback']
   
-  if (magiclink === 'true' || hasAccessToken) {
-    return navigateTo("/confirm");
+  // Check if route is public
+  if (publicRoutes.includes(to.path)) {
+    // If user is already authenticated and tries to access public route
+    if (authStore.user) {
+      return navigateTo('/')
+    }
+    return // Allow access to public route
   }
 
-  if (to.path === '/login' || to.path === '/login/reset' || to.path === '/login/new-password' || to.path === '/confirm') {
-    return
-  }
-
-  if (to.path === '/verify') {
-    return navigateTo("/confirm");
-  }
-
-  if (!user.value) {
+  if (!authStore) {
     return navigateTo('/login')
   }
 })

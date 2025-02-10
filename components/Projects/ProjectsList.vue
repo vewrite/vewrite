@@ -183,7 +183,7 @@ onMounted(async () => {
 
   // subscription
   const subscription = supabase
-    .from('projects')
+    .channel('projects')
     .on('INSERT', payload => {
       console.log('New project:', payload.new);
       projects.value.push(payload.new);
@@ -193,7 +193,7 @@ onMounted(async () => {
     .subscribe();
 
   onUnmounted(() => {
-    supabase.removeSubscription(subscription);
+    supabase.removeChannel(subscription);
   });
 
   await fetchProjects();

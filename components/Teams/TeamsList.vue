@@ -102,7 +102,7 @@ onMounted(async () => {
     await fetchGroupId(user.value.id)
 
     const subscription = supabase
-      .from('teams')
+      .channel('teams')
       .on('INSERT', payload => {
         console.log('New team:', payload.new);
         teams.value.push(payload.new);
@@ -111,7 +111,7 @@ onMounted(async () => {
       .subscribe();
 
     onUnmounted(() => {
-      supabase.removeSubscription(subscription);
+      supabase.removeChannel(subscription);
     });
 
     await fetchTeams(GroupData.value.id)

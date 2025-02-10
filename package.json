@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@nuxt/icon": "^1.6.1",
-    "@nuxtjs/supabase": "^0.1.23",
+    "@nuxtjs/supabase": "1.4.6",
     "@samk-dev/nuxt-vcalendar": "^1.0.4",
     "@types/simplemde": "^1.11.11",
     "nuxt": "^3.13.2",

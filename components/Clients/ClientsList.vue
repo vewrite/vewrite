@@ -57,7 +57,7 @@ const { fetchClients, clientsData, createClientModal } = useClient();
 onMounted(async () => {
   try {
     const subscription = supabase
-      .from('clients')
+      .channel('clients')
       .on('INSERT', payload => {
         console.log('New client:', payload.new);
         const newClient = { ...payload.new, projects: [] }; // Add empty projects array
@@ -67,7 +67,7 @@ onMounted(async () => {
       .subscribe();
 
     onUnmounted(() => {
-      supabase.removeSubscription(subscription);
+      supabase.removeChannel(subscription);
     });
 
     await fetchClients(user.value.id)
