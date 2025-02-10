@@ -49,29 +49,30 @@
             </button> -->
           </div>
           <p class="or-select">Or</p>
-          <form class="magic-link-form" @submit.prevent="signInWithPassword">
+          <form class="login-form" @submit.prevent="signInWithPassword">
             <div v-if="errorbox">
-                <p class="notification error">{{ errorbox }}</p>
+              <p class="notification error">{{ errorbox }}</p>
             </div>
             <div v-if="!notification == ''">
-                <p class="notification success">{{ notification }}</p>
+              <p class="notification success">{{ notification }}</p>
             </div>
             <div v-if="notification == ''">
-                <p class="description">Access Vewrite with your email address and password.</p>
-                <div class="form-group">
-                    <div class="form-input">
-                        <label for="email">Your email address</label>
-                        <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="form-input password">
-                        <label for="password">Your password</label>
-                        <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
-                    </div>
-                </div>
-                <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Logging in' : 'Log in'" :disabled="loading" />
+              <p class="description">Access Vewrite with your email address and password.</p>
+              <div class="form-group">
+                  <div class="form-input">
+                      <label for="email">Your email address</label>
+                      <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="form-input password">
+                      <label for="password">Your password</label>
+                      <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
+                  </div>
+              </div>
+              <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Logging in' : 'Log in'" :disabled="loading" />
             </div>
+            <nuxt-link class="button large reset-password" to="/login/reset">Reset Password</nuxt-link>
           </form>
         </section>
 
@@ -323,6 +324,16 @@ const signUp = async () => {
   flex-direction: column;
   margin: $spacing-md 0;
   width: 100%;
+
+  .login-form {
+
+    .reset-password {
+      text-align: center;
+      margin-top: $spacing-sm;
+      width: 100%;
+      display: block;
+    }
+  }
   
   .login-buttons {
     display: flex;

@@ -10,8 +10,12 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo("/confirm");
   }
 
-  if (to.path === '/login' || to.path === '/confirm') {
+  if (to.path === '/login' || to.path === '/login/reset' || to.path === '/login/new-password' || to.path === '/confirm') {
     return
+  }
+
+  if (to.path === '/verify') {
+    return navigateTo("/confirm");
   }
 
   if (!user.value) {
