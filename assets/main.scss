@@ -533,6 +533,7 @@ textarea {
     height: fit-content;
     outline: 1px solid rgba($brand, 0);
     position: relative;
+    overflow: hidden;
 
     .button {
         position: absolute;

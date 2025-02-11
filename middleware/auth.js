@@ -3,6 +3,8 @@ import { navigateTo } from '#app'
 
 export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore()
+  const supabase = useSupabaseClient()
+  const user = useSupabaseUser()
 
   // Define public routes
   const publicRoutes = ['/login', '/login/new-password', '/login/reset', '/auth/callback']
@@ -16,7 +18,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return // Allow access to public route
   }
 
-  if (!authStore) {
+  if (!authStore || user.value == null) {
     return navigateTo('/login')
   }
 })
