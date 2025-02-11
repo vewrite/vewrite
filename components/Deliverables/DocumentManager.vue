@@ -278,6 +278,13 @@ onMounted(() => {
       border-radius: $br-lg;
       border: $border;
       position: relative;
+      transition: all 0.2s ease;
+
+      &:active, 
+      &:focus, 
+      &:hover {
+        border: 1px solid rgba($black, 0.25);
+      }
 
       .notification {
         position: absolute;

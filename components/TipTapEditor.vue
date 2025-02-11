@@ -476,7 +476,6 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   position: relative;
   background: $white;
-  outline: 4px solid rgba($gray-light, .25);
   border-radius: $br-lg;
 
   &:hover #TipTapTools {
@@ -542,6 +541,7 @@ onBeforeUnmount(() => {
   opacity: 0.75;
   transition: opacity 0.3s ease;
   height: 44px;
+  transition: all 0.2s ease;
 
   .character-count {
     font-size: $font-size-xxs;
