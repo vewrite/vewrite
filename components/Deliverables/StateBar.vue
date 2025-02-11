@@ -20,7 +20,8 @@
     <!-- Is in outline review state (46) -->
     <div v-if="props.StateData[0].state_type === 2">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
-      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button>
+      <!-- <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button> -->
+      <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button>
     </div>
 
     <!-- Is in Writing state (47) -->
@@ -31,7 +32,8 @@
     <!-- Is in draft review state (48) -->
     <div v-if="props.StateData[0].state_type === 5">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
-      <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button>
+      <!-- <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button> -->
+      <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button>
     </div>
     
     <!-- Is approved (49) -->
@@ -48,12 +50,13 @@ const props = defineProps(['StateData', 'DeliverableData']);
 const loading = ref(false);
 
 import useDeliverables from '~/composables/useDeliverables';
-const { updateDeliverableWorkflowState, assignToRole } = useDeliverables();
+const { updateDeliverableWorkflowState, assignToRole, approvalModal } = useDeliverables();
 
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
 async function handleState(stateId, deliverableId, stateType) {
+
   loading.value = true;
 
   try {    
@@ -66,8 +69,12 @@ async function handleState(stateId, deliverableId, stateType) {
       // Get the assigned writer
       let userId = props.DeliverableData.role_assignments.Writer;
       await assignToRole(deliverableId, userId);
+    
+    // Here we will handle assignments to the reviewer
     } else if(stateType == 46 || stateType == 48 || stateType == 49) {
       // Get the assigned reviewer
+
+      // Need to migrate this to an approval system
       let userId = props.DeliverableData.role_assignments.Reviewer;
       await assignToRole(deliverableId, userId);
     }

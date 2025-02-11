@@ -7,7 +7,8 @@ export const useModal = defineStore('modal', {
     type: '',
     header: '',
     workflowId: '',
-    loading: 0
+    loading: 0,
+    props: [],
   }),
   actions: {
     toggleVisibility() {
@@ -19,6 +20,9 @@ export const useModal = defineStore('modal', {
     },
     setType(type) {
       this.type = type
+    },
+    setProps(props) {
+      this.props = props
     },
     setHeader(content) {
       this.header = content

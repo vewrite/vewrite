@@ -359,6 +359,14 @@ export default function useDeliverables() {
     useModal().toggleVisibility();
   }
 
+  function approvalModal(workflowState, deliverableId, stateInstanceId) {
+    useModal().setProps([workflowState, deliverableId, stateInstanceId]);
+    useModal().setType('medium');
+    useModal().setHeader('Approval');
+    useModal().setContent('ApprovalModal');
+    useModal().toggleVisibility();
+  }
+
   async function deleteDeliverable(deliverableId, projectId) {
 
     useModal().toggleLoading();
@@ -517,6 +525,7 @@ export default function useDeliverables() {
     createDeliverableModal,
     deleteDeliverableModal,
     changeAssignmentsModal,
+    approvalModal,
     createDeliverable,
     fetchSingleProjectDeliverable,
     fetchSingleProjectDeliverableByState,
