@@ -54,16 +54,18 @@ const searchQuery = ref('')
 import useClient from '~/composables/useClient';
 const { fetchClients, clientsData, createClientModal } = useClient();
 
+const handleClientInserts = (payload) => {
+  console.log('New client:', payload.new);
+  const newClient = { ...payload.new, projects: [] }; // Add empty projects array
+  clients.value.push(newClient);
+  fetchClients(user.value.id);
+}
+
 onMounted(async () => {
   try {
     const subscription = supabase
       .channel('clients')
-      .on('INSERT', payload => {
-        console.log('New client:', payload.new);
-        const newClient = { ...payload.new, projects: [] }; // Add empty projects array
-        clients.value.push(newClient);
-        fetchClients(user.value.id);
-      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'clients' }, handleClientInserts)
       .subscribe();
 
     onUnmounted(() => {
