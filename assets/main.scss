@@ -103,6 +103,13 @@ body,
     align-items: center;
     text-align: left;
 
+    &.vertical {
+      flex-direction: column;
+      font-weight: bold;
+      gap: $spacing-xxxs;
+      text-align: center;
+    }
+
     .iconify {
         margin: 0;
     }

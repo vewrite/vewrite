@@ -2,11 +2,15 @@
   <div id="ApprovalModal">
     <div class="modal-body">
       <Loading class="loading" v-if="loading" type="small" />
-      <pre v-if="modalProps">{{ modalProps }}</pre>
+      <div class="notification warning vertical" v-if="!loading">
+        <Icon name="fluent:chat-warning-24-regular" size="3rem" />
+        This action is irreversible
+      </div>
+      <p v-if="!loading && deliverable">You're moving <strong>{{ deliverable.title }}</strong> to workflow state <strong>{{ modalProps[2] }}</strong>. Are you sure you want to proceed?</p>
     </div>
     
     <div class="buttons">
-      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large">Create</button>
+      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large">Approve</button>
     </div>
   </div>
 </template>
@@ -14,14 +18,41 @@
 <script setup>
 
 import { ref, onMounted } from 'vue';
-import { defineProps } from 'vue';
 import { useModal } from '~/stores/modal'
 
 // Access the useModal store
 const modalStore = useModal();
 const modalProps = modalStore.props;
 
+import useDeliverables from '~/composables/useDeliverables';
+const { updateDeliverableWorkflowState, fetchDeliverable, DeliverableData } = useDeliverables();
+
 const loading = ref(false);
+const deliverable = ref(null);
+
+// For the approval, I need to load the deliverable data, which will give me the id, the name of the deliverable, and the workflow state
+// I will want to tell the user that what they are doing is not reversible and that they should be sure they want to approve the deliverable
+
+async function handleCreateDeliverable(deliverable, projectId) {
+  try {
+    loading.value = true;
+    await updateDeliverableWorkflowState(deliverable, projectId, workflowState, nextWorkflowState);
+    loading.value = false;
+    modalStore.close();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+onMounted(async() => {
+  try {
+    loading.value = true;
+    deliverable.value = await fetchDeliverable(modalProps[1]);
+    loading.value = false;
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 </script>
 
@@ -37,6 +68,12 @@ const loading = ref(false);
 
   .modal-body {
     width: 100%;
+    padding: 0 $spacing-md $spacing-md;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
 
     .loading {
       margin: $spacing-lg auto;
