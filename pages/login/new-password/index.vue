@@ -45,13 +45,6 @@ const loading = ref(false)
 
 const matchingPasswords = computed(() => newPassword.value === confirmPassword.value)
 
-/* 
-
-The steps that I need to go through:
-1. Have the user click a button that says "Reset Password"
-
-*/
-
 async function setPassword() {
   loading.value = true
   try {
@@ -73,8 +66,6 @@ async function setPassword() {
     error.value = error.message
     loading.value = false
   }
-  
-
 }
 
 </script>

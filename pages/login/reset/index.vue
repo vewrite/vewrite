@@ -96,25 +96,6 @@ async function resetPassword() {
   }
 }
 
-// async function resetPassword() {
-//   loading.value = true
-//   try {
-//     const { data, error } = await supabase.auth.resetPasswordForEmail(email.value)
-
-//     if (error) { error.value = error.message; return }
-
-//     console.log(data)
-//     success.value = 'Password recovery email sent'
-//     loading.value = false
-
-//   } catch (error) {
-//     console.error('Error:', error.message)
-//     error.value = error.message
-//     loading.value = false
-//   }
-  
-// }
-
 </script>
 
 <style scoped lang="scss">
