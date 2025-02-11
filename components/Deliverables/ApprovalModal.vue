@@ -6,11 +6,11 @@
         <Icon name="fluent:chat-warning-24-regular" size="3rem" />
         This action is irreversible
       </div>
-      <p v-if="!loading && deliverable">You're moving <strong>{{ deliverable.title }}</strong> to workflow state <strong>{{ modalProps[2] }}</strong>. Are you sure you want to proceed?</p>
+      <p v-if="!loading && deliverable">You're moving <strong>{{ deliverable.title }}</strong> to workflow state <strong>"{{ nextStateInstance[0].instance_name }}"</strong>. Are you sure you want to proceed?</p>
     </div>
     
     <div class="buttons">
-      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large">Approve</button>
+      <button @click="handleCreateDeliverable()" class="primary large">Approve</button>
     </div>
   </div>
 </template>
@@ -25,20 +25,26 @@ const modalStore = useModal();
 const modalProps = modalStore.props;
 
 import useDeliverables from '~/composables/useDeliverables';
-const { updateDeliverableWorkflowState, fetchDeliverable, DeliverableData } = useDeliverables();
+const { updateDeliverableWorkflowState, assignToRole, fetchDeliverable } = useDeliverables();
+
+import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
+const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 const loading = ref(false);
 const deliverable = ref(null);
+const nextStateInstance = ref(null);
 
 // For the approval, I need to load the deliverable data, which will give me the id, the name of the deliverable, and the workflow state
 // I will want to tell the user that what they are doing is not reversible and that they should be sure they want to approve the deliverable
 
-async function handleCreateDeliverable(deliverable, projectId) {
+async function handleCreateDeliverable() {
   try {
     loading.value = true;
-    await updateDeliverableWorkflowState(deliverable, projectId, workflowState, nextWorkflowState);
+    await updateDeliverableWorkflowState(deliverable.value.id, modalProps[2]);
+    await assignToRole(deliverable.value.id, modalProps[3]);
     loading.value = false;
-    modalStore.close();
+    useModal().toggleVisibility();
+    useModal().reset();
   } catch (error) {
     console.error(error);
   }
@@ -47,6 +53,7 @@ async function handleCreateDeliverable(deliverable, projectId) {
 onMounted(async() => {
   try {
     loading.value = true;
+    nextStateInstance.value = await fetchSingleStateInstance(modalProps[2]);
     deliverable.value = await fetchDeliverable(modalProps[1]);
     loading.value = false;
   } catch (error) {

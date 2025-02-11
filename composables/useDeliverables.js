@@ -359,8 +359,8 @@ export default function useDeliverables() {
     useModal().toggleVisibility();
   }
 
-  function approvalModal(workflowState, deliverableId, stateInstanceId) {
-    useModal().setProps([workflowState, deliverableId, stateInstanceId]);
+  function approvalModal(workflowState, deliverableId, stateInstanceId, userId) {
+    useModal().setProps([workflowState, deliverableId, stateInstanceId, userId]);
     useModal().setType('medium');
     useModal().setHeader('Approval');
     useModal().setContent('ApprovalModal');
@@ -465,8 +465,6 @@ export default function useDeliverables() {
         .eq('id', deliverableId);
 
       if (error) throw error;
-
-      console.log('Deliverable assigned to user:', data);
 
       return data;
 

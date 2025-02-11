@@ -21,7 +21,7 @@
     <div v-if="props.StateData[0].state_type === 2">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
       <!-- <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button> -->
-      <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button>
+      <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 47, DeliverableData.role_assignments.Writer)">Approve outline</button>
     </div>
 
     <!-- Is in Writing state (47) -->
@@ -33,7 +33,7 @@
     <div v-if="props.StateData[0].state_type === 5">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
       <!-- <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button> -->
-      <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button>
+      <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 49, DeliverableData.role_assignments.Writer)">Approve draft</button>
     </div>
     
     <!-- Is approved (49) -->
