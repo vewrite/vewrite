@@ -164,7 +164,6 @@ async function getProject(id) {
   }
 }
 
-// TODO - migrate to composable
 async function renderStateName(stateId) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -173,7 +172,6 @@ async function renderStateName(stateId) {
   });
 }
 
-// TODO - migrate to composable
 async function fetchWorkflowStates(workflowId) {
   try {
     const { data, error } = await supabase
@@ -291,10 +289,6 @@ const updateDeliverableDate = async (deliverableId, newDate) => {
   }
 };
 
-/**
- * WORKFLOW STATE
- */
-
 const onWorkflowStateSelect = async (deliverableId, newWorkflowState, newStateName) => {
   await updateDeliverableWorkflowState(deliverableId, newWorkflowState);
   
@@ -321,7 +315,6 @@ const onWorkflowStateSelect = async (deliverableId, newWorkflowState, newStateNa
   
 };
 
-// TODO - migrate this to the useWorkflow composable
 const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) => {
   try {
     const { data, error } = await supabase
@@ -337,20 +330,22 @@ const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) =
   }
 };
 
+
+const handleInserts = (payload) => {
+  console.log('New deliverable:', payload.record);
+  deliverables.value.push(payload.record);
+  // This is to update the dates after a new deliverable is added
+  fetchDeliverables(projectId);
+};
+
 onMounted(async () => {
-  // Register onUnmounted before any await statements
   const subscription = supabase
-    .from('deliverables')
-    .on('INSERT', payload => {
-      console.log('New deliverable:', payload.new);
-      deliverables.value.push(payload.new);
-      // This is to update the dates after a new deliverable is added
-      fetchDeliverables(projectId);
-    })
+    .channel('deliverables')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'deliverables' }, handleInserts)
     .subscribe();
 
   onUnmounted(() => {
-    supabase.removeSubscription(subscription);
+    supabase.removeChannel(subscription);
   });
 
   await getProject(projectId);

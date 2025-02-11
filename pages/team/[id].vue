@@ -156,9 +156,7 @@ const inviteToVewrite = async (email) => {
   invited_profile.email = email;
 
   try {
-    const { error } = await supabase.auth.signIn({ 
-      email: email 
-    })
+    const { error } = await supabase.auth.admin.inviteUserByEmail(email)
 
     await createInvitedProfile(invited_profile);
 
@@ -192,51 +190,61 @@ function clearProfileData() {
   ProfileError.value = null;
 }
 
+const handleTeamMemberUpdates = (payload) => {
+  console.log('Team member updated:', payload.new);
+  teamMembers.value = teamMembers.value.map(member => {
+    if (member.user_id === payload.new.user_id) {
+      return payload.new;
+    }
+    return member;
+  });
+}
+
+const handleTeamMemberInserts = (payload) => {
+  console.log('New team member:', payload.new);
+  console.log('Team members:', teamMembers.value);
+  teamMembers.value.push(payload.new);
+  // Reset the search input ProfileData
+  ProfileData.value = null;
+}
+
+const handleTeamMemberDeletes = (payload) => {
+  console.log('Deleted team member:', payload.old);
+  teamMembers.value = teamMembers.value.filter(member => member.id !== payload.old.id);
+}
+
+const handleInvitedProfilesInserts = (payload) => {
+  console.log('New invited member:', payload.new);
+  console.log('Invited members:', invitedMembers.value);
+  invitedMembers.value.push(payload.new);
+  // Reset the search input ProfileData
+  ProfileData.value = null;
+}
+
+const handleInvitedProfilesDeletes = (payload) => {
+  console.log('Deleted invited member:', payload.old);
+  invitedMembers.value = invitedMembers.value.filter(member => member.id !== payload.old.id);
+}
+
 // Fetch the team data when the component is mounted
 onMounted(async () => {
   try {
     const members_subscription = supabase
-      .from('team_members')
-      .on('UPDATE', payload => {
-        console.log('Team member updated:', payload.new);
-        teamMembers.value = teamMembers.value.map(member => {
-          if (member.user_id === payload.new.user_id) {
-            return payload.new;
-          }
-          return member;
-        });
-      })
-      .on('INSERT', payload => {
-        console.log('New team member:', payload.new);
-        console.log('Team members:', teamMembers.value);
-        teamMembers.value.push(payload.new);
-        // Reset the search input ProfileData
-        ProfileData.value = null;
-      })
-      .on('DELETE', payload => {
-        console.log('Deleted team member:', payload.old);
-        teamMembers.value = teamMembers.value.filter(member => member.id !== payload.old.id);
-      })
+      .channel('team_members')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'team_members' }, handleTeamMemberUpdates)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'team_members' }, handleTeamMemberInserts)
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'team_members' }, handleTeamMemberDeletes)
       .subscribe();
 
     const invited_subscription = supabase
-      .from('invited_profiles')
-      .on('INSERT', payload => {
-        console.log('New invited member:', payload.new);
-        console.log('Invited members:', invitedMembers.value);
-        invitedMembers.value.push(payload.new);
-        // Reset the search input ProfileData
-        ProfileData.value = null;
-      })
-      .on('DELETE', payload => {
-        console.log('Deleted invited member:', payload.old);
-        invitedMembers.value = invitedMembers.value.filter(member => member.id !== payload.old.id);
-      })
+      .channel('invited_profiles')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'invited_profiles' }, handleInvitedProfilesInserts)
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'invited_profiles' }, handleInvitedProfilesDeletes)
       .subscribe();
 
     onUnmounted(() => {
-      supabase.removeSubscription(members_subscription);
-      supabase.removeSubscription(invited_subscription);
+      supabase.removeChannel(members_subscription);
+      supabase.removeChannel(invited_subscription);
     });
     
     await fetchSingleTeam(teamId);
