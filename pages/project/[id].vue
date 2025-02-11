@@ -330,7 +330,6 @@ const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) =
   }
 };
 
-
 const handleInserts = (payload) => {
   console.log('New deliverable:', payload.record);
   deliverables.value.push(payload.record);
@@ -341,7 +340,12 @@ const handleInserts = (payload) => {
 onMounted(async () => {
   const subscription = supabase
     .channel('deliverables')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'deliverables' }, handleInserts)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'deliverables' }, payload => {
+      console.log('New deliverable:', payload.new);
+      deliverables.value.push(payload.new);
+      // This is to update the dates after a new deliverable is added
+      fetchDeliverables(projectId);
+    })
     .subscribe();
 
   onUnmounted(() => {

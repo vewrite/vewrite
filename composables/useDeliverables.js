@@ -472,24 +472,25 @@ export default function useDeliverables() {
     console.log('Creating deliverable:', deliverable);
 
     // const deliverableContent = ref({});
-    const deliverableId = ref(null);
-    const startState = 43; // Workflow 1, first state
+    // const deliverableId = ref(null);
+    // const startState = 43; // Workflow 1, first state
 
     try {
 
       useModal().toggleLoading();
+      useModal().toggleVisibility();
+      useModal().reset();
 
       let { data } = await supabase.from('deliverables').insert(deliverable, {
         returning: 'representation', 
       })
 
-      deliverableId.value = data[0].id;
+      // deliverableId.value = data[0].id;
 
       // We also need to set the deliverable state to the first state in the list / TODO this isn't working yet
-      await updateDeliverableWorkflowState(data[0].id, startState);
+      // await updateDeliverableWorkflowState(data[0].id, startState);
 
-      useModal().toggleVisibility();
-      useModal().reset();
+
 
     } catch (error) {
       DeliverableError.value = error.message;
