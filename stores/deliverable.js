@@ -7,7 +7,6 @@ export const useDeliverableStore = defineStore('deliverableStore', {
   }),
   actions: {
     setDeliverableState(deliverableId, stateInstanceId) {
-      // console.log('setDeliverableState', deliverableId, stateInstanceId);
       this.deliverableId = deliverableId;
       this.stateInstanceId = stateInstanceId;
     },

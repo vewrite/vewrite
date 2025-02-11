@@ -53,7 +53,8 @@ const { fetchDeliverable, deleteDeliverableModal, changeAssignmentsModal, Delive
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
-// In the parent (this), I need to get the deliverable state and pass it to the children (DocumentManager -> StateBar)
+// In the parent (this), I need to get the deliverable state 
+// and pass it to the children (DocumentManager -> StateBar)
 // I also need to set it in the store
 async function init() {
   loading.value = true;
@@ -78,10 +79,9 @@ onMounted(() => {
 });
 
 // Now, I need to watch the store and see if the workflow state changes
-// If it does, I need to update DeliverableData.workflow_state so that the child components can react to it
+// If it does, I need to update DeliverableData.workflow_state so that 
+// the children components can react to it
 watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
-  // console.log('Deliverable state changed:', newValue);
-  // DeliverableData.value.workflow_state = newValue;
   init();
 });
 

@@ -18,11 +18,15 @@
 <script setup>
 
 import { ref, onMounted } from 'vue';
-import { useModal } from '~/stores/modal'
 
 // Access the useModal store
+import { useModal } from '~/stores/modal'
 const modalStore = useModal();
 const modalProps = modalStore.props;
+
+// Access the deliverable store
+import { useDeliverableStore } from '~/stores/deliverable';
+const deliverableStore = useDeliverableStore();
 
 import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState, assignToRole, fetchDeliverable } = useDeliverables();
@@ -42,6 +46,7 @@ async function handleCreateDeliverable() {
     loading.value = true;
     await updateDeliverableWorkflowState(deliverable.value.id, modalProps[2]);
     await assignToRole(deliverable.value.id, modalProps[3]);
+    deliverableStore.setDeliverableState(deliverable.value.id, modalProps[2]);
     loading.value = false;
     useModal().toggleVisibility();
     useModal().reset();
