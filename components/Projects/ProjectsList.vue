@@ -174,6 +174,12 @@ async function fetchProjects() {
   loading.value = false
 }
 
+const handleProjectInserts = (payload) => {
+  console.log('New project:', payload.new);
+  projects.value.push(payload.new);
+  fetchProjects();
+}
+
 onMounted(async () => {
   // grid/list state
   const savedState = localStorage.getItem('viewMode');
@@ -184,12 +190,7 @@ onMounted(async () => {
   // subscription
   const subscription = supabase
     .channel('projects')
-    .on('INSERT', payload => {
-      console.log('New project:', payload.new);
-      projects.value.push(payload.new);
-      // This is to update the dates after a new deliverable is added
-      fetchProjects();
-    })
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'projects' }, handleProjectInserts)
     .subscribe();
 
   onUnmounted(() => {
