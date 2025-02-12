@@ -65,6 +65,10 @@ export default defineNuxtConfig({
       clientSecret: process.env.PAYPAL_CLIENT_SECRET,
       currency: 'USD',
     },
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseKey: process.env.SUPABASE_KEY,
+    },
   },
 
   supabase: {
