@@ -23,12 +23,18 @@
         <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
         <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
       </div>
+
+      <!-- 
+          For the review states, I'll have to add the ":review='true'" prop here. 
+          This means that I need to know which state I'm, and add it dynamically to the component.
+        -->
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" :review="true" />
       </div>
       <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
       </div>
+      
       <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
       </div>

@@ -156,7 +156,7 @@
   </div>
 
   <!-- Review -->
-  <!-- <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
+  <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
     <div id="TipTapTools"  v-if="editor">
       <section class="button-group">
         <button @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }">
@@ -184,7 +184,7 @@
       <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
       <button @click="handleAddComment()">Add Comment</button>
     </div>
-  </div> -->
+  </div>
 
   <!-- Not editable -->
   <!-- <div class="max-width xl not-editable" v-if="!editable">
@@ -221,7 +221,15 @@ const props = defineProps({
   type: {
     type: String,
     default: 'draft',
-  }
+  },
+  review: {
+    type: Boolean,
+    default: false,
+  },
+  editable: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const deliverable = ref(props.deliverable);
