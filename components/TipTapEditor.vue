@@ -294,14 +294,14 @@ const draftEditor = useEditor({
 });
 
 const handleTextSelection = () => {
+  const currentMouseX = event.clientX;
+  const currentMouseY = event.clientY;
   const selection = window.getSelection();
   if (selection && selection.toString().length > 0) {
     selectedText.value = selection.toString();
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
     commentPosition.value = {
-      top: rect.top + 6,
-      left: rect.right,
+      top: currentMouseY,
+      left: currentMouseX + 20,
     };
     showCommentInput.value = true;
     comment.quote = selectedText.value;
