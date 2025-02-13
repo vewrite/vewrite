@@ -155,22 +155,22 @@
     <TiptapEditorContent :editor="draftEditor"  ref="textareaRef" />
   </div>
 
-  <!-- Review -->
-  <div id="TipTapReview" class="max-width xl review" v-if="editable && review">
-    <div id="TipTapTools"  v-if="editor">
+  <!-- Outline Review -->
+  <div id="TipTapReview" class="max-width xl review" v-if="editable && type == 'outlinereview'">
+    <div id="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
-        <button @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }">
+        <button @click="outlineEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': outlineEditor.isActive('highlight') }">
           <Icon name="fluent:highlight-16-regular" size="1.5rem" />
         </button>
-        <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+        <button @click="outlineEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': outlineEditor.isActive('strike') }">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
         </button>
       </section>
       <section class="button-group undo-redo">
-        <button @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()" class="toolbar">
+        <button @click="outlineEditor.chain().focus().undo().run()" :disabled="!outlineEditor.can().chain().focus().undo().run()" class="toolbar">
           <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
         </button>
-        <button @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" class="toolbar">
+        <button @click="outlineEditor.chain().focus().redo().run()" :disabled="!outlineEditor.can().chain().focus().redo().run()" class="toolbar">
           <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
         </button>
         <div class="character-count">
@@ -178,11 +178,42 @@
         </div>
       </section>
     </div>
-    <TiptapEditorContent :editor="editor"  ref="textareaRef"  @mouseup="handleTextSelection" />
+    <TiptapEditorContent :editor="outlineEditor"  ref="textareaRef"  @mouseup="handleTextSelection" />
     <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
       <span class="quote" v-html="selectedText"></span>
       <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
-      <button @click="handleAddComment()">Add Comment</button>
+      <button @click="handleAddComment('outlinereview')">Add Comment</button>
+    </div>
+  </div>
+
+  <!-- Draft Review -->
+  <div id="TipTapReview" class="max-width xl review" v-if="editable && type == 'draftreview'">
+    <div id="TipTapTools" v-if="draftEditor">
+      <section class="button-group">
+        <button @click="draftEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': draftEditor.isActive('highlight') }">
+          <Icon name="fluent:highlight-16-regular" size="1.5rem" />
+        </button>
+        <button @click="draftEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': draftEditor.isActive('strike') }">
+          <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
+        </button>
+      </section>
+      <section class="button-group undo-redo">
+        <button @click="draftEditor.chain().focus().undo().run()" :disabled="!draftEditor.can().chain().focus().undo().run()" class="toolbar">
+          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+        </button>
+        <button @click="draftEditor.chain().focus().redo().run()" :disabled="!draftEditor.can().chain().focus().redo().run()" class="toolbar">
+          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+        </button>
+        <div class="character-count">
+          {{ characterCount }} chars
+        </div>
+      </section>
+    </div>
+    <TiptapEditorContent :editor="draftEditor"  ref="textareaRef"  @mouseup="handleTextSelection" />
+    <div v-if="showCommentInput" class="floating-comment" :style="{ top: `${commentPosition.top}px`, left: `${commentPosition.left}px` }">
+      <span class="quote" v-html="selectedText"></span>
+      <textarea v-model="commentText" placeholder="Add a comment" @keyup="handleCommentText"></textarea>
+      <button @click="handleAddComment('draftreview')">Add Comment</button>
     </div>
   </div>
 
@@ -295,15 +326,23 @@ const handleCommentText = (event) => {
   comment.text = event.target.value;
 };
 
-const handleAddComment = () => {
+const handleAddComment = (contentType) => { // TODO - functions above must pass through contentType
   if (selectedText.value && commentText.value) {
     // Generate a unique ID for the comment
     const commentId = `comment-${Date.now()}`;
 
-    // Append the comment to the highlighted text with a unique ID
-    const content = deliverable.value.content.content;
-    const newContent = content.replace(selectedText.value, `<span class="highlighted" data-comment-id="${commentId}">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
-    deliverable.value.content.content = newContent;
+    if(contentType == 'draftreview') {
+       let content = deliverable.value.content.draft;
+       let newContent = content.replace(selectedText.value, `<span class="highlighted" data-comment-id="${commentId}">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
+       deliverable.value.content.draft = newContent;
+    }
+
+    if(contentType == 'outlinereview') {
+       let content = deliverable.value.content.outline;
+       let newContent = content.replace(selectedText.value, `<span class="highlighted" data-comment-id="${commentId}">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
+       deliverable.value.content.outline = newContent;
+    }
+    
     commentText.value = '';
     showCommentInput.value = false;
 
@@ -479,12 +518,6 @@ onBeforeUnmount(() => {
 
 #TipTapEditor,
 #TipTapReview {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  position: relative;
-  background: $white;
-  border-radius: $br-lg;
 
   &:hover #TipTapTools {
     background: rgba($black, 0.025);

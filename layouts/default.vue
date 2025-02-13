@@ -16,6 +16,10 @@
 
 <script setup>
 
+import TopBar from '../components/TopBar/TopBar.vue'
+import Sidebar from '../components/Sidebar/Sidebar.vue'
+import Firsttime from '../components/Onboarding/Firsttime.vue'
+
 import useProfile from '~/composables/useProfile'
 const { createProfile } = useProfile()
 

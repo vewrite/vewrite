@@ -7,6 +7,9 @@ export default function useComments() {
   const supabase = useSupabaseClient();
 
   async function addComment(comment) {
+
+    console.log(comment)
+
     try {
       const { data, error } = await supabase
         .from('comments')

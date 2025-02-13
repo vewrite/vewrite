@@ -52,22 +52,24 @@ async function handleDeleteComment(id) {
   }
 }
 
+async function handleCommentInserts(payload) {
+  console.log('New comment:', payload.new);
+  const newComment = { ...payload.new };
+  Comments.value.push(newComment);
+  for (let i = 0; i < Comments.value.length; i++) {
+    Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
+  }
+}
+
 onMounted(async () => {
   try {
     const subscription = supabase
-      .from('comments')
-      .on('INSERT', payload => {
-        console.log('New comment:', payload.new);
-        const newComment = { ...payload.new };
-        Comments.value.push(newComment);
-        for (let i = 0; i < Comments.value.length; i++) {
-          Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
-        }
-      })
+      .channel('comments')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, handleCommentInserts)
       .subscribe();
 
     onUnmounted(() => {
-      supabase.removeSubscription(subscription);
+      supabase.removeChannel(subscription);
     });
 
     Comments.value = await fetchComments(props.deliverable.id);
@@ -96,6 +98,7 @@ onMounted(async () => {
   max-width: 300px;
   width: 100%;
   height: fit-content;
+  padding: $spacing-sm $spacing-sm $spacing-sm 0;
 
   .empty-state {
     display: flex;

@@ -29,10 +29,20 @@
           This means that I need to know which state I'm, and add it dynamically to the component.
         -->
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" :review="true" />
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
       </div>
+
+      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')">
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'" :review="true" />
+        <Comments :deliverable="props.DeliverableData" /> 
+      </div>
+
       <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
+      </div>
+
+      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')">
+        <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'" :review="true" />
       </div>
       
       <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')">
@@ -61,6 +71,7 @@ import { ref, onMounted } from 'vue';
 import Assigned from '~/components/Deliverables/Assigned.vue';
 import StateBar from '~/components/Deliverables/StateBar.vue';
 import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
+import Comments from '~/components/Deliverables/Comments.vue';
 
 const props = defineProps(['DeliverableData', 'StateData']);
 
@@ -102,11 +113,21 @@ const selectedSection = ref(null);
 const stateShowsOutline = computed(() => {
   if (
         props.StateData && 
-        props.StateData[0].state_type === 2 ||
         props.StateData[0].state_type === 3 ||
         props.StateData[0].state_type === 4 ||
         props.StateData[0].state_type === 6 ||
         props.StateData[0].state_type === 8
+      ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const stateShowsOutlineReview = computed(() => {
+  if (
+        props.StateData && 
+        props.StateData[0].state_type === 2
       ) {
     return true;
   } else {
@@ -132,8 +153,18 @@ const stateShowsResearch = computed(() => {
 const stateShowsWriting = computed(() => {
   if (
         props.StateData && 
-        props.StateData[0].state_type === 4 ||
-        props.StateData[0].state_type === 5 
+        props.StateData[0].state_type === 4
+      ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const stateShowsWritingReview = computed(() => {
+  if (
+        props.StateData && 
+        props.StateData[0].state_type === 5
       ) {
     return true;
   } else {
@@ -302,6 +333,7 @@ onMounted(() => {
 
       &:last-child {
         margin-bottom: $spacing-xxl;
+        display: flex;
       }
     }
 
