@@ -97,8 +97,9 @@ onMounted(async () => {
   gap: $spacing-sm;
   max-width: 300px;
   width: 100%;
-  height: fit-content;
-  padding: $spacing-sm $spacing-sm $spacing-sm 0;
+  height: 100%;
+  padding: $spacing-sm;
+  background: rgba($black, 0.025);
 
   .empty-state {
     display: flex;
@@ -116,27 +117,26 @@ onMounted(async () => {
   }
 
   .single-comment {
-    background: rgba($brand, 0);
+    background: rgba($white, .8);
     border: $border;
-    border-radius: $br-lg;
+    border-radius: $br-xl;
     margin: 0;
     position: relative;
     overflow: hidden;
     height: fit-content;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
 
     &:hover {
       border: 1px solid rgba($brand, 0.35);
     }
 
     .quote {
-      padding: $spacing-sm;
+      margin: $spacing-sm $spacing-sm 0;
+      padding: $spacing-xs;
       background: rgba($brand, 0.05);
-      border-bottom: $border;
-      border-radius: $br-lg $br-lg 0 0;
-      font-size: $font-size-xxs;
-      transition: background 0.5s ease;
-      color: $brand;
+      border-radius: $br-lg;
+      transition: background 0.2s ease;
+      color: darken($brand, 25%);
     }
 
     .content {
@@ -149,11 +149,6 @@ onMounted(async () => {
       .text-wrapper {
         display: flex;
         flex-direction: column;
-        gap: $spacing-xs;
-
-        .text {
-          font-size: $font-size-xxs;
-        }
 
         .small {
           margin-top: $spacing-xxs;
@@ -170,7 +165,7 @@ onMounted(async () => {
       padding: 0 $spacing-sm;
       opacity: 0;
       overflow: hidden;
-      transition: all 0.5s ease;
+      transition: all 0.2s ease;
       position: absolute;
       bottom: $spacing-sm;
       right: $spacing-xxs;
