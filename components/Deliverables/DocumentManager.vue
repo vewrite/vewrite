@@ -30,19 +30,22 @@
         -->
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
+        <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
       </div>
 
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'" :review="true" />
-        <Comments :deliverable="props.DeliverableData" /> 
+        <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
       </div>
 
       <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
+        <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
       </div>
 
       <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')">
         <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'" :review="true" />
+        <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
       </div>
       
       <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')">
@@ -316,6 +319,7 @@ onMounted(() => {
       border: $border;
       position: relative;
       transition: all 0.2s ease;
+      display: flex;
 
       &:active, 
       &:focus, 
@@ -333,7 +337,6 @@ onMounted(() => {
 
       &:last-child {
         margin-bottom: $spacing-xxl;
-        display: flex;
       }
     }
 

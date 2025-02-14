@@ -1,7 +1,7 @@
 <template>
   <section class="deliverable-comments"> 
     <Loading v-if="loading" type="small" />
-    <div class="single-comment" v-if="Comments && Comments.length > 0 && !loading" v-for="comment in Comments" key="comment.id">
+    <div class="single-comment" v-if="Comments && filteredComments.length > 0 && !loading" v-for="comment in filteredComments" key="comment.id">
       <section class="quote">"{{ comment.quote }}"</section>
       <section class="content">
         <Avatar :uuid="comment.profile_id" size="small" />
@@ -29,7 +29,7 @@
 
 import { parseISO, format } from 'date-fns';
 
-const props = defineProps(['deliverable']);
+const props = defineProps(['deliverable', 'type']);
 const loading = ref(true);
 const supabase = useSupabaseClient();
 
@@ -37,6 +37,7 @@ import useComments from '~/composables/useComments';
 const { fetchComments, deleteComment } = useComments();
 
 const Comments = ref(null);
+const filteredComments = ref(null);
 
 function formatCommentDate(date){
   let newDate = format(parseISO(date), 'MMM do, yyyy, hh:mm');
@@ -56,9 +57,14 @@ async function handleCommentInserts(payload) {
   console.log('New comment:', payload.new);
   const newComment = { ...payload.new };
   Comments.value.push(newComment);
+  filteredComments.value = filteredCommentsByType(Comments.value, props.type);
   for (let i = 0; i < Comments.value.length; i++) {
-    Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
+    filteredComments.value[i].created_at = formatCommentDate(filteredComments.value[i].created_at);
   }
+}
+
+const filteredCommentsByType = (Comments, type) => {
+  return Comments.filter(comment => comment.details.type === type);
 }
 
 onMounted(async () => {
@@ -73,8 +79,9 @@ onMounted(async () => {
     });
 
     Comments.value = await fetchComments(props.deliverable.id);
-    for (let i = 0; i < Comments.value.length; i++) {
-      Comments.value[i].created_at = formatCommentDate(Comments.value[i].created_at);
+    filteredComments.value = filteredCommentsByType(Comments.value, props.type);
+    for (let i = 0; i < filteredComments.value.length; i++) {
+      filteredComments.value[i].created_at = formatCommentDate(filteredComments.value[i].created_at);
     }
 
   } catch (error) {

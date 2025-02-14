@@ -157,6 +157,7 @@
 
   <!-- Outline Review -->
   <div id="TipTapReview" class="max-width xl review" v-if="editable && type == 'outlinereview'">
+    <div class="type-label">Outline Review</div>
     <div id="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': outlineEditor.isActive('highlight') }">
@@ -271,6 +272,10 @@ const comment = {
   profile_id: user.value.id,
   deliverable_content_id: deliverable.value.id,
   created_at: new Date().toISOString(),
+  details: {
+    'type': '',
+    'status': 'active'
+  }
 };
 
 const requirementsEditor = useEditor({
@@ -335,12 +340,14 @@ const handleAddComment = (contentType) => { // TODO - functions above must pass 
        let content = deliverable.value.content.draft;
        let newContent = content.replace(selectedText.value, `<span class="highlighted" data-comment-id="${commentId}">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
        deliverable.value.content.draft = newContent;
+       comment.details.type = 'draft-review';
     }
 
     if(contentType == 'outlinereview') {
        let content = deliverable.value.content.outline;
        let newContent = content.replace(selectedText.value, `<span class="highlighted" data-comment-id="${commentId}">${selectedText.value}<span class="comment">${commentText.value}</span></span>`);
        deliverable.value.content.outline = newContent;
+       comment.details.type = 'outline-review';
     }
     
     commentText.value = '';
@@ -518,6 +525,7 @@ onBeforeUnmount(() => {
 
 #TipTapEditor,
 #TipTapReview {
+  width: 100%;
 
   &:hover #TipTapTools {
     background: rgba($black, 0.025);

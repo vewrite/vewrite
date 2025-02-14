@@ -1,9 +1,5 @@
 <template>
   <section class="state-intro-data">
-    <!-- <div class="intro-data-row" v-if="ProjectData">
-      <p>Project</p>
-      <p>{{ ProjectData.name }}</p>
-    </div> -->
     <div class="intro-data-row" v-if="TeamMembersData">
       <div class="members">
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
