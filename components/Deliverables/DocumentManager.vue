@@ -285,7 +285,7 @@ onMounted(() => {
   .documents {
     display: flex;
     flex-direction: column;
-    gap: $spacing-md;
+    gap: $spacing-sm;
     padding: $spacing-sm;
     height: 100%;
     margin: 0 auto;
@@ -373,17 +373,16 @@ onMounted(() => {
         border-radius: $br-lg $br-lg 0 0;
         font-size: $font-size-xs;
         color: rgba($black, 0.65);
+        cursor: pointer;
+
+        &:hover {
+          background: rgba($black, 0.025);
+        }
       }
 
       .tiptap-content {
         display: flex;
         flex-direction: row;
-      }
-
-      &:active, 
-      &:focus, 
-      &:hover {
-        border: 1px solid rgba($black, 0.25);
       }
 
       .notification {

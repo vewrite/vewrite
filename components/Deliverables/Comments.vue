@@ -143,7 +143,7 @@ onMounted(async () => {
       background: rgba($brand, 0.05);
       border-radius: $br-lg;
       transition: background 0.2s ease;
-      color: darken($brand, 25%);
+      color: rgba($black, .85);
     }
 
     .content {
