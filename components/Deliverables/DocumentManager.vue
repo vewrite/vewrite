@@ -9,6 +9,7 @@
       <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
     </section>
     <section class="documents max-width xl" ref="stateDetails">
+
       <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-intro">
           <p class="due-date">Due <span>{{ dueDate }}</span></p>
@@ -19,45 +20,58 @@
           <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         </div>
       </section>
-      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')">
-        <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
+
+      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
+        <div class="type-label" @click="toggleSection('requirements')">Requirements</div>
+        <div class="tiptap-content">
+          <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
+        </div>
       </div>
 
-      <!-- 
-          For the review states, I'll have to add the ":review='true'" prop here. 
-          This means that I need to know which state I'm, and add it dynamically to the component.
-        -->
-      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
-        <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
+      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outline }">
+        <div class="type-label" @click="toggleSection('outline')">Outline</div>
+        <div class="tiptap-content">
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
+          <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
+        </div>
       </div>
 
-      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'" :review="true" />
-        <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
+      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outlinereview }">
+        <div class="type-label" @click="toggleSection('outlinereview')">Outline Review</div>
+        <div class="tiptap-content">
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'" :review="true" />
+          <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
+        </div>
       </div>
 
-      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
-        <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
+      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draft }">
+        <div class="type-label" @click="toggleSection('draft')">Draft</div>
+        <div class="tiptap-content">
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
+          <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
+        </div>
       </div>
 
-      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'" :review="true" />
-        <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
+      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draftreview }">
+        <div class="type-label" @click="toggleSection('draftreview')">Draft Review</div>
+        <div class="tiptap-content">
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'" :review="true" />
+          <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
+        </div>
       </div>
       
-      <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')">
-        <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
+      <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')" :class="{ 'collapsed': !sections.research }">
+        <div class="type-label" @click="toggleSection('research')">Research</div>
+        <div class="tiptap-content">
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
+        </div>
       </div>
 
       <!-- 
       
         I still need:
 
-        - outline review template
-        - writing review template
         - approved template 
       
       -->
@@ -77,6 +91,20 @@ import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 import Comments from '~/components/Deliverables/Comments.vue';
 
 const props = defineProps(['DeliverableData', 'StateData']);
+
+// Collapsible sections state
+const sections = ref({
+  requirements: true,
+  outline: true,
+  research: true,
+  draft: true,
+  outlinereview: true,
+  draftreview: true
+});
+
+const toggleSection = (section) => {
+  sections.value[section] = !sections.value[section];
+};
 
 /*
 
@@ -312,14 +340,45 @@ onMounted(() => {
       }
     }
 
-    div.tiptap-wrap {
+    .tiptap-wrap {
       min-height: 100px;
       background: $white;
       border-radius: $br-lg;
       border: $border;
       position: relative;
-      transition: all 0.2s ease;
+      transition: border 0.2s ease;
       display: flex;
+      flex-direction: column;
+
+      &.collapsed {
+        height: 42px;
+        max-height: 42px;
+        min-height: 42px;
+        overflow: hidden;
+
+        .tiptap-content {
+          display: none;
+        }
+      }
+
+      .type-label {
+        position: relative;
+        white-space: nowrap;
+        position: relative;
+        align-self: flex-start;
+        width: 100%;
+        padding: $spacing-sm;
+        border-bottom: $border;
+        background: $white;
+        border-radius: $br-lg $br-lg 0 0;
+        font-size: $font-size-xs;
+        color: rgba($black, 0.65);
+      }
+
+      .tiptap-content {
+        display: flex;
+        flex-direction: row;
+      }
 
       &:active, 
       &:focus, 

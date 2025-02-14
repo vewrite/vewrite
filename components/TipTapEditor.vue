@@ -2,15 +2,13 @@
   <Loading class="saving" v-if="saving" saving="saving" type="tiny" />
   
   <!-- Requirements -->
-  <div id="TipTapEditor" v-if="props.type == 'requirements'" class="requirements">
-    <div class="type-label">Requirements</div>
+  <div v-if="props.type == 'requirements'" class="TipTapEditor requirements">
     <TiptapEditorContent :editor="requirementsEditor"  ref="textareaRef" />
   </div>
 
   <!-- Outline -->
-  <div id="TipTapEditor" v-if="props.type == 'outline'" class="outline">
-    <div class="type-label">Outline</div>
-    <div id="TipTapTools" v-if="outlineEditor">
+  <div v-if="props.type == 'outline'" class="TipTapEditor outline">
+    <div class="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleBold().run()" :disabled="!outlineEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': outlineEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -44,9 +42,8 @@
   </div>
 
   <!-- Research -->
-  <div id="TipTapEditor" v-if="props.type == 'research'" class="research">
-    <div class="type-label">Research, notes, and citations</div>
-    <div id="TipTapTools"  v-if="researchEditor">
+  <div v-if="props.type == 'research'" class="TipTapEditor research">
+    <div class="TipTapTools"  v-if="researchEditor">
       <section class="button-group">
         <button @click="researchEditor.chain().focus().toggleBold().run()" :disabled="!researchEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': researchEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -80,9 +77,8 @@
   </div>
 
   <!-- Draft -->
-  <div id="TipTapEditor" v-if="props.type == 'draft'" class="draft">
-    <div class="type-label">Writing Draft</div>
-    <div id="TipTapTools"  v-if="draftEditor">
+  <div v-if="props.type == 'draft'" class="TipTapEditor draft">
+    <div class="TipTapTools"  v-if="draftEditor">
       <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!draftEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': draftEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent-mdl2:bold" size="1rem" /> 
@@ -156,9 +152,8 @@
   </div>
 
   <!-- Outline Review -->
-  <div id="TipTapReview" class="max-width xl review" v-if="editable && type == 'outlinereview'">
-    <div class="type-label">Outline Review</div>
-    <div id="TipTapTools" v-if="outlineEditor">
+  <div class="TipTapReview max-width xl review" v-if="editable && type == 'outlinereview'">
+    <div class="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': outlineEditor.isActive('highlight') }">
           <Icon name="fluent:highlight-16-regular" size="1.5rem" />
@@ -188,8 +183,8 @@
   </div>
 
   <!-- Draft Review -->
-  <div id="TipTapReview" class="max-width xl review" v-if="editable && type == 'draftreview'">
-    <div id="TipTapTools" v-if="draftEditor">
+  <div class="TipTapReview max-width xl review" v-if="editable && type == 'draftreview'">
+    <div class="TipTapTools" v-if="draftEditor">
       <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': draftEditor.isActive('highlight') }">
           <Icon name="fluent:highlight-16-regular" size="1.5rem" />
@@ -523,28 +518,15 @@ onBeforeUnmount(() => {
     display: block;
   }
 
-#TipTapEditor,
-#TipTapReview {
+.TipTapEditor,
+.TipTapReview {
   width: 100%;
 
-  &:hover #TipTapTools {
+  &:hover .TipTapTools {
     background: rgba($black, 0.025);
     opacity: 1;
   }
-
-  .type-label {
-    position: relative;
-    white-space: nowrap;
-    position: relative;
-    align-self: flex-start;
-    width: 100%;
-    padding: $spacing-sm;
-    border-bottom: $border;
-    background: $white;
-    border-radius: $br-lg $br-lg 0 0;
-    font-size: $font-size-xs;
-    color: rgba($black, 0.65);
-  }
+  
 }
 
 .requirements {
@@ -569,7 +551,7 @@ onBeforeUnmount(() => {
   justify-content: flex-start;
 }
 
-#TipTapTools {
+.TipTapTools {
   display: flex;
   flex-wrap: nowrap;
   gap: $spacing-xxs;
