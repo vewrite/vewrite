@@ -63,6 +63,12 @@ async function handleCommentInserts(payload) {
   }
 }
 
+async function handleCommentDeletes(payload) {
+  console.log('Deleted comment:', payload.old);
+  const deletedComment = { ...payload.old };
+  filteredComments.value = filteredComments.value.filter(comment => comment.id !== deletedComment.id);
+}
+
 const filteredCommentsByType = (Comments, type) => {
   return Comments.filter(comment => comment.details.type === type);
 }
@@ -72,6 +78,7 @@ onMounted(async () => {
     const subscription = supabase
       .channel('comments')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, handleCommentInserts)
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'comments' }, handleCommentDeletes)
       .subscribe();
 
     onUnmounted(() => {
