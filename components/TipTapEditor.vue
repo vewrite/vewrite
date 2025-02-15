@@ -152,7 +152,7 @@
   </div>
 
   <!-- Outline Review -->
-  <div class="TipTapReview max-width xl review" v-if="editable && type == 'outlinereview'">
+  <div class="TipTapReview max-width xl review" v-if="type == 'outlinereview'">
     <div class="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': outlineEditor.isActive('highlight') }">
@@ -183,7 +183,7 @@
   </div>
 
   <!-- Draft Review -->
-  <div class="TipTapReview max-width xl review" v-if="editable && type == 'draftreview'">
+  <div class="TipTapReview max-width xl review" v-if="type == 'draftreview'">
     <div class="TipTapTools" v-if="draftEditor">
       <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': draftEditor.isActive('highlight') }">
@@ -213,10 +213,6 @@
     </div>
   </div>
 
-  <!-- Not editable -->
-  <!-- <div class="max-width xl not-editable" v-if="!editable">
-    <section :class="['content']" v-html="deliverable.content.content"></section>
-  </div> -->
 </template>
 
 <script setup>
@@ -255,7 +251,7 @@ const props = defineProps({
   },
   editable: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 
