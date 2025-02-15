@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const { data, error } = await supabase
-    .from('deliverable_content')
+    .from('deliverables')
     .select('*')
     .eq('id', id)
     .single();
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Ensure fileContent is a string
-  let fileContent = typeof data.content.content === 'string' ? data.content.content : JSON.stringify(data.content.content);
+  let fileContent = typeof data.content.draft === 'string' ? data.content.content : JSON.stringify(data.content.draft);
 
   // Remove double quotes from the beginning and end of the content string
   fileContent = fileContent.replace(/^"|"$/g, '');

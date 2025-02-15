@@ -7,8 +7,6 @@ export default defineEventHandler(async (event) => {
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
-  
-  console.log(supabase);
 
   const query = getQuery(event);
   const { id } = query;

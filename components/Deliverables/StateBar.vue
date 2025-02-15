@@ -38,7 +38,8 @@
     
     <!-- Is approved (49) -->
     <div v-if="props.StateData[0].state_type === 6">
-      <button class="button primary">Download deliverable</button>
+      <button class="button primary" @click="downloadFile('markdown')">Download markdown</button>
+      <button class="button primary" @click="downloadFile('html')">Download html</button>
     </div>
 
   </section>
@@ -126,6 +127,45 @@ Each state type has a different set of buttons that we should show at appropriat
 7. "Approved" should show "Download"
 
 */
+
+async function downloadFile(type) {
+  console.log('Downloading file in format:', type);
+  try {
+    const response = await $fetch(`/api/deliverables/export?id=${props.DeliverableData.id}&type=${type}`, {
+      responseType: 'blob',
+    });
+
+    if (!response) {
+      console.error('No response from server');
+      return;
+    }
+
+    if(type == 'html') {
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vewrite-html-export-${props.DeliverableData.id}.html`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    if(type == 'markdown'){
+      const markdown = await response.text();
+      const html = turndownService.turndown(markdown);
+      const url = window.URL.createObjectURL(new Blob([html], {type: 'text/html'}));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vewrite-markdown-export-${props.DeliverableData.id}.md`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+  } catch (err) {
+    console.error('Error downloading file:', err);
+  }
+};
 
 </script>
 
