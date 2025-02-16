@@ -42,11 +42,14 @@
                 </div>
                 <p>{{ ProfileData.username }}</p>
               </div>
-              <div class="button primary" @click="addTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
-                </svg>
-                Add to team
+              <div class="button primary" @click="handleAddTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
+                <Loading v-if="loadingbutton" type="button" />
+                <div v-else>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
+                  </svg>
+                  Add to team
+                </div>
               </div>
               <div class="profile-deny" v-else>Already added to this team</div>
             </div>
@@ -58,10 +61,13 @@
                 <div class="profile-deny">Unknown user email</div>
               </div>
               <div class="button primary" @click="inviteToVewrite(member.email)">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
-                </svg>
-                Invite to team
+                <Loading v-if="loadingbutton" type="button" />
+                <div v-else>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
+                  </svg>
+                  Invite to team
+                </div>
               </div>
             </div>
 
@@ -125,6 +131,7 @@ import AppPanel from '~/components/AppPanel.vue';
 
 const supabase = useSupabaseClient();
 const loading = ref(true);
+const loadingbutton = ref(false);
 const route = useRoute();
 const team = ref(null);
 const teamId = route.params.id;
@@ -164,6 +171,7 @@ const invited_profile = reactive({
 
 const inviteToVewrite = async (email) => {
   console.log('Inviting user by email:', member.email);
+  loadingbutton.value = true;
   
   invited_profile.email = email;
 
@@ -173,8 +181,21 @@ const inviteToVewrite = async (email) => {
     await createInvitedProfile(invited_profile);
 
     if (error) throw error
+    loadingbutton.value = false;
   } catch (error) {
     console.error('Error inviting user:', error.message);
+    loadingbutton.value = false;
+  }
+}
+
+async function handleAddTeamMember(member) {
+  loadingbutton.value = true;
+  try {
+    await addTeamMember(member);
+    loadingbutton.value = false;
+  } catch (error) {
+    console.error('Error adding team member:', error.message);
+    loadingbutton.value = false;
   }
 }
 

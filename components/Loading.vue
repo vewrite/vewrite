@@ -61,6 +61,13 @@ const props = defineProps(['type', 'hasLogo', 'zeroHeight', 'saving'])
     display: block;
     padding: 0;
 
+    &.button {
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba($white, .1);
+      border-top-color: $white;
+    }
+
     &.tiny {
       width: 16px;
       height: 16px;
