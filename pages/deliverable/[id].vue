@@ -84,9 +84,9 @@ async function init() {
   loading.value = true;
   
   try {
-    project.value = await getProjectDetails(projectId.value);
     await fetchDeliverable(deliverableId);
     projectId.value = DeliverableData.value.project;
+    project.value = await getProjectDetails(projectId.value);
     StateData.value = await fetchSingleStateInstance(DeliverableData.value.workflow_state);
 
     // Set the deliverable state in the store
