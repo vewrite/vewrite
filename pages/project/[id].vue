@@ -7,7 +7,7 @@
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading.global" />
       </div>
-      <div class="app-panel-header-buttons">
+      <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
         <button class="button primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
         <Dropdown>
           <template v-slot:trigger>
@@ -23,7 +23,7 @@
       <!-- <pre v-if="loading.global == false && project">{{ project.assigned_team }}</pre>
       <pre v-if="loading.global == false && user">{{ user.id }}</pre>
       <pre v-if="loading.global == false && teamMembers">{{ teamMembers }}</pre> -->
-      <section class="project-gate" v-if="loading.global == false && hasAccess">
+      <section v-if="loading.global == false && hasAccess">
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
@@ -95,7 +95,7 @@ const { createDeliverableModal, fetchDeliverable, DeliverableError } = useDelive
 
 // Client composable
 import useClient from '~/composables/useClient';
-const { fetchClient, ClientData } = useClient();
+const { fetchClient } = useClient();
 
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
@@ -142,7 +142,7 @@ const user = useSupabaseUser();
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {
   if (project.value && teamMembers.value) {
-    if(teamMembers.value.includes(user.value.id) || user.value.id === project.value.created_by) {
+    if(teamMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
       return true;
     }
   }
@@ -306,6 +306,7 @@ onMounted(async () => {
 
   await getProject(projectId);
   await fetchDeliverables(projectId);
+  // For the gated access, we need the team members
   teamMembers.value = await fetchTeamMembers(project.value.assigned_team);
 
   loading.value.global = false;
