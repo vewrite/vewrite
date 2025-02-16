@@ -30,7 +30,7 @@
     </div>
 
     <div :class="['projects-list', viewMode]" v-if="!loading && projects.length > 0">
-      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == project.deliverables.length ? 'completed' : ''">
+      <router-link :to="'/project/' + project.id" class="project-card" v-for="project in filteredProjects" :key="project.id" :class="project.completedDeliverables == project.deliverables.length && project.deliverables.length > 0 ? 'completed' : ''">
         <div class="project-card-header">
           <div class="project-card-owner">
             {{ project.tag }}
