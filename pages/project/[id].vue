@@ -20,60 +20,53 @@
       </div>
     </template>
     <template v-slot:body>
-      {{ DeliverableError }}
-      <div class="project-details">
-        <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
-        <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
-      </div>
-      <div class="deliverables-list">
-        <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
-          <p>No deliverables found for this project</p>
+      <!-- <pre v-if="loading.global == false && project">{{ project.assigned_team }}</pre>
+      <pre v-if="loading.global == false && user">{{ user.id }}</pre>
+      <pre v-if="loading.global == false && teamMembers">{{ teamMembers }}</pre> -->
+      <section class="project-gate" v-if="loading.global == false && hasAccess">
+        <div class="project-details">
+          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
+          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
+          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
-        <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
-          <div class="single-deliverable" v-for="deliverable in deliverables">
-            <div class="deliverable-details">
-              <div class="deliverable-type">
-                <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-                <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+        <div class="deliverables-list">
+          <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
+            <p>No deliverables found for this project</p>
+          </div>
+          <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
+            <div class="single-deliverable" v-for="deliverable in deliverables">
+              <div class="deliverable-details">
+                <div class="deliverable-type">
+                  <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
+                  <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+                </div>
+                <span class="deliverable-id">{{ deliverable.id }}</span>
+                <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
               </div>
-              <span class="deliverable-id">{{ deliverable.id }}</span>
-              <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
-            </div>
-            <div class="deliverable-actions">
-              <div class="deliverable-updated-at">
-                {{ deliverable.formattedUpdatedAt }}
+              <div class="deliverable-actions">
+                <div class="deliverable-updated-at">
+                  {{ deliverable.formattedUpdatedAt }}
+                </div>
+                <span class="deliverable-state">{{ deliverable.state_name }}</span>
+                <Dropdown>
+                  <template v-slot:trigger>
+                    Due {{ deliverable.formattedDueDate }}
+                  </template>
+                  <template v-slot:menu>
+                    <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
+                  </template>
+                </Dropdown>
               </div>
-              <span class="deliverable-state">{{ deliverable.state_name }}</span>
-              <!-- <Dropdown>
-                <template v-slot:trigger>
-                  <span class="deliverable-workflow-state-bubble no-uppercase" v-if="deliverable.workflow_state">
-                    <Loading v-if="!deliverable" />
-                    {{ deliverable.state_name }}
-                  </span>
-                  <span class="deliverable-workflow-state-bubble red no-uppercase" v-else>
-                    Set state
-                  </span>
-                </template>
-                <template v-slot:menu>
-                  <div v-for="state in states" :key="state[0]?.id" :class="deliverable.workflow_state == state[0]?.id ? 'dropdown-item active' : 'dropdown-item'" @click="state[0] && onWorkflowStateSelect(deliverable.id, state[0].id, state[0].instance_name)">
-                    {{ state[0]?.instance_name }}
-                  </div>
-                </template>
-              </Dropdown> -->
-              <Dropdown>
-                <template v-slot:trigger>
-                  Due {{ deliverable.formattedDueDate }}
-                </template>
-                <template v-slot:menu>
-                  <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
-                </template>
-              </Dropdown>
             </div>
           </div>
         </div>
+      </section>
 
-      </div>
+      <section v-else-if="loading.global == false && !hasAccess" class="project-gate">
+        <div class="project-details">
+          <p>You do not have access to this project</p>
+        </div>
+      </section>
     </template>
   </AppPanel>
 </template>
@@ -111,6 +104,9 @@ const { fetchSingleStateInstance, fetchStateInstanceName, StateInstanceData } = 
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchStates, WorkflowStates } = useWorkflow();
 
+import useTeamMembers from '~/composables/useTeamMembers';
+const { fetchTeamMembers } = useTeamMembers();
+
 const supabase = useSupabaseClient();
 const loading = ref({
   global: true,
@@ -138,9 +134,20 @@ const projectId = route.params.id;
 const project = ref(null);
 const creator = ref(null);
 const deliverables = ref([]);
-const workflow = ref([]);
 const states = ref([]);
 const completedDeliverables = ref(0);
+const teamMembers = ref([]);
+const user = useSupabaseUser();
+
+// Gated access, only for the project creator or team members
+const hasAccess = computed(() => {
+  if (project.value && teamMembers.value) {
+    if(teamMembers.value.includes(user.value.id) || user.value.id === project.value.created_by) {
+      return true;
+    }
+  }
+  return false;
+});
 
 async function getProject(id) {
   try {
@@ -162,14 +169,6 @@ async function getProject(id) {
   } catch (error) {
     console.error(error);
   }
-}
-
-async function renderStateName(stateId) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ name: `State ${stateId}` });
-    }, 1000);
-  });
 }
 
 async function fetchWorkflowStates(workflowId) {
@@ -289,55 +288,8 @@ const updateDeliverableDate = async (deliverableId, newDate) => {
   }
 };
 
-const onWorkflowStateSelect = async (deliverableId, newWorkflowState, newStateName) => {
-  await updateDeliverableWorkflowState(deliverableId, newWorkflowState);
-  
-  try {
-    deliverables.value = deliverables.value.map(d => {
-      if (d.id === deliverableId) {
-        d.workflow_state = newWorkflowState;
-        d.state_name = newStateName;
-      }
-      return d;
-    });
-  } catch (error) {
-    console.error('Error fetching state:', error.message);
-  }
-
-  const popup = document.getElementById(`deliverable-workflow-state-${deliverableId}`);
-  popup.style.display = 'none';
-
-  // Get the date and update the deliverable
-  const deliverable = deliverables.value.find(d => d.id === deliverableId);
-  if (deliverable) {
-    deliverable.workflow_state = newWorkflowState;
-  }
-  
-};
-
-const updateDeliverableWorkflowState = async (deliverableId, newWorkflowState) => {
-  try {
-    const { data, error } = await supabase
-      .from('deliverables')
-      .update({ workflow_state: newWorkflowState })
-      .eq('id', deliverableId);
-
-    if (error) throw error;
-
-    console.log('Deliverable updated:', data);
-  } catch (error) {
-    console.error('Error updating deliverable:', error.message);
-  }
-};
-
-const handleInserts = (payload) => {
-  console.log('New deliverable:', payload.record);
-  deliverables.value.push(payload.record);
-  // This is to update the dates after a new deliverable is added
-  fetchDeliverables(projectId);
-};
-
 onMounted(async () => {
+
   const subscription = supabase
     .channel('deliverables')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'deliverables' }, payload => {
@@ -354,6 +306,7 @@ onMounted(async () => {
 
   await getProject(projectId);
   await fetchDeliverables(projectId);
+  teamMembers.value = await fetchTeamMembers(project.value.assigned_team);
 
   loading.value.global = false;
 });
