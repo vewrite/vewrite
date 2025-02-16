@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Ensure fileContent is a string
-  let fileContent = typeof data.content.draft === 'string' ? data.content.content : JSON.stringify(data.content.draft);
+  let fileContent = typeof data.content.draft === 'string' ? data.content.draft : JSON.stringify(data.content.draft);
 
   // Remove double quotes from the beginning and end of the content string
   fileContent = fileContent.replace(/^"|"$/g, '');

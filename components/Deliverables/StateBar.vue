@@ -56,6 +56,9 @@ const { updateDeliverableWorkflowState, assignToRole, approvalModal } = useDeliv
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
+import TurnDownService from 'turndown';
+const turndownService = new TurnDownService();
+
 async function handleState(stateId, deliverableId, stateType) {
 
   loading.value = true;
