@@ -4,11 +4,11 @@
 
       <Loading v-if="loading" class="loader" />
 
-      <section class="inner-container" v-if="!loading && TeamsData.length < 1">
+      <section class="inner-container" v-if="!loading && readyTeamsData.length < 1">
         <div class="empty">
-          <h3>No Teams Found</h3>
-          <p>You do not have a team to assign a project to. You must first add a team to Vewrite.</p>
-          <nuxt-link class="button primary" to="/teams" @click="useModal().reset()">Add a team</nuxt-link>
+          <h3>No Ready Teams Found</h3>
+          <p>You do not have a team to assign a project to. You must first add a team to Vewrite, and add at least two team members.</p>
+          <nuxt-link class="button primary" to="/teams" @click="useModal().reset()">Manage your teams</nuxt-link>
         </div>
       </section>
 
@@ -20,7 +20,7 @@
         </div>
       </section>
 
-      <form class="inner-container" v-if="!loading && clients.length > 0 && TeamsData.length > 0" @submit.prevent="createProject(project)">
+      <form class="inner-container" v-if="!loading && clients.length > 0 && readyTeamsData.length > 0" @submit.prevent="createProject(project)">
 
         <div class="form-block">
           <div class="form-details">
@@ -49,7 +49,7 @@
             <div class="form-input">
               <label for="team">Assigned team</label>
               <select v-model="project.assigned_team" id="team">
-                <option v-for="team in TeamsData" :key="team.assigned_team" :value="team.id">{{ team.name }}</option>
+                <option v-for="team in readyTeamsData" :key="team.assigned_team" :value="team.id">{{ team.name }}</option>
               </select>
               <span class="form-required" v-if="formErrors.assigned_team != ''">{{ formErrors.assigned_team }}</span>
             </div>
@@ -124,6 +124,10 @@ const { fetchSingleGroup, GroupData, GroupError } = useGroup();
 import { useModal } from '~/stores/modal'
 
 const user = useSupabaseUser();
+
+const readyTeamsData = computed(() => {
+  return TeamsData.value.filter(team => team.details.ready === true);
+})
 
 // Loading state
 const loading = ref(true);

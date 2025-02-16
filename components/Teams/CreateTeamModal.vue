@@ -46,7 +46,7 @@ const team = reactive({
   name: '',
   group_id: '',
   details: {
-    "ready": "false"
+    "ready": false
   }
 })
 
