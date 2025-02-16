@@ -454,10 +454,11 @@ textarea {
             border-color: transparent;
             border-radius: 0;
             background-color: transparent;
-            padding: 0;
             height: 100%;
-            width: 36px;
+            min-width: 36px;
             outline: 0;
+            font-size: $font-size-xxs;
+            text-transform: uppercase;
         }
 
         svg {
@@ -477,6 +478,7 @@ textarea {
 
         .active {
             background: rgba($brand, 0.1);
+            color: $brand;
 
             svg {
 

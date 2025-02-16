@@ -5,6 +5,17 @@
     <div class="search-bar" v-if="projects.length > 0 && !loading">
       <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" />
       <div class="list-buttons">
+        <button :class="['list-icon', projectFilter == 'all' ? 'active' : '']" @click="handleProjectFilter('all')">
+          All
+        </button>
+        <button :class="['list-icon', projectFilter == 'owner' ? 'active' : '']" @click="handleProjectFilter('owner')">
+          Owner
+        </button>
+        <button :class="['list-icon', projectFilter == 'member' ? 'active' : '']" @click="handleProjectFilter('member')">
+          Member
+        </button>
+      </div>
+      <div class="list-buttons">
         <button :class="['list-icon', viewMode == 'grid' ? 'active' : '']" @click="listToggle">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.5 18L10.5 15C10.5 14.1716 9.82843 13.5 9 13.5L5 13.5C4.17157 13.5 3.5 14.1716 3.5 15L3.5 18C3.5 18.8284 4.17157 19.5 5 19.5L9 19.5C9.82843 19.5 10.5 18.8284 10.5 18Z" stroke="black" stroke-opacity="0.3" stroke-linecap="round"/>
@@ -77,10 +88,15 @@ import useWorkflow from '~/composables/useWorkflow';
 const { fetchStates } = useWorkflow();
 
 const viewMode = ref('grid');
+const projectFilter = ref('all');
 
 const listToggle = () => {
   viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid';
   localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
+};
+
+const handleProjectFilter = (filter) => {
+  projectFilter.value = filter;
 };
 
 function assignProjectTag(project) {
@@ -203,12 +219,30 @@ onMounted(async () => {
 });
 
 const filteredProjects = computed(() => {
+  if (projectFilter.value === 'all') {
+    return projects.value.filter(
+      project => 
+        project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+  }
+  if (projectFilter.value === 'owner') {
+    return projects.value.filter(
+      project => 
+        project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+        && project.tag === 'Owner'
+    )
+  }
+
+  if (projectFilter.value === 'member') {
+    return projects.value.filter(
+      project => 
+        project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+        && project.tag === 'Member'
+    )
+  }
   if (!searchQuery.value) {
     return projects.value
   }
-  return projects.value.filter(project =>
-    project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
 })
 
 </script>
