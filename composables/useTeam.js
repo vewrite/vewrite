@@ -52,11 +52,12 @@ export default function useTeam() {
       const { data, error } = await supabase
         .from('teams')
         .update(team)
-        .eq('id', team[0].id);
+        .eq('id', team.id);
 
       if (error) throw error;
 
       return data;
+      
     } catch (error) {
       TeamError.value = error.message;
       console.error('Error updating team:', error.message);

@@ -45,6 +45,9 @@ const user = useSupabaseUser();
 const team = reactive({
   name: '',
   group_id: '',
+  details: {
+    "ready": "false"
+  }
 })
 
 const GroupId = ref('')

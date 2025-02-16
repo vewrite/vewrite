@@ -4,14 +4,17 @@
       <router-link to="/teams/" class="button">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
-      <Dropdown>
-        <template v-slot:trigger>
-          <Icon name="uis:ellipsis-v" size="1.15rem" />
-        </template>
-        <template v-slot:menu>
-          <div class="dropdown-item" @click="deleteTeamModal(team.id)">Delete team</div>
-        </template>
-      </Dropdown>
+      <section class="app-panel-header-buttons">
+        <button class="button primary" @click="setTeamAsReady" v-if="teamIsReady && !teamMarkedAsReadyInDb">Mark team as ready</button>
+        <Dropdown>
+          <template v-slot:trigger>
+            <Icon name="uis:ellipsis-v" size="1.15rem" />
+          </template>
+          <template v-slot:menu>
+            <div class="dropdown-item" @click="deleteTeamModal(team.id)">Delete team</div>
+          </template>
+        </Dropdown>
+      </section>
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
@@ -70,7 +73,7 @@
                   <div class="member" v-for="member in teamMembers" :key="member.user_id">
                     <ProfileCard :uuid="member.user_id" type="list" :team="TeamData.id" :useRole="true">
                       <template v-slot:actions>
-                        <div class="button red" @click="deleteTeamMember(member.user_id)">
+                        <div class="button red" @click="deleteTeamMember(member.user_id)" v-if="!teamMarkedAsReadyInDb">
                           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 6C11.5 6.27614 11.2761 6.5 11 6.5L1 6.5C0.723858 6.5 0.5 6.27614 0.5 6C0.5 5.72386 0.723858 5.5 1 5.5L11 5.5C11.2761 5.5 11.5 5.72386 11.5 6Z" fill="#FF0000"/>
                           </svg>
@@ -138,6 +141,15 @@ const { fetchTeamMembers, fetchInvitedTeamMembers, addTeamMember, deleteTeamMemb
 const teamMembers = ref([]);
 const invitedMembers = ref([]);
 
+const teamIsReady = computed(() => {
+  // A ready team needs at least two members
+  return teamMembers.value.length >= 2;
+});
+
+const teamMarkedAsReadyInDb = computed(() => {
+  return TeamData.value.details.ready;
+});
+
 const member = reactive({
   email: '',
   team_id: teamId,
@@ -188,6 +200,14 @@ function handleInput(event) {
 function clearProfileData() {
   ProfileData.value = null;
   ProfileError.value = null;
+}
+
+// Update the team status to ready when there are at least two members
+async function setTeamAsReady(team) {
+  loading.value = true;
+  TeamData.value.details.ready = true;
+  await updateTeam(TeamData.value);
+  loading.value = false;
 }
 
 const handleTeamMemberUpdates = (payload) => {
@@ -276,7 +296,6 @@ const debouncedSaveTeam = debounce(() => updateTeam(TeamData.value), 1000);
 function updateTeamWithDebounce() {
   debouncedSaveTeam();
 }
-
 
 
 </script>
