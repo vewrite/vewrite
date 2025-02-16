@@ -55,11 +55,8 @@ console.log('User is:', user.value.id);
 onMounted(async () => {
   try {
     await fetchGroupId(user.value.id);
-    console.log('Group ID:', GroupData.value.id); // Access GroupData.value.id
     GroupId.value = GroupData.value.id; // Access GroupData.value.id
-    console.log('Group ID:', GroupId.value);
     team.group_id = GroupData.value.id; // Set team.group_id
-    console.log('Group ID:', GroupData.value.id);
   } catch (error) {
     console.error('Error fetching group ID:', error);
   }

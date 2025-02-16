@@ -18,13 +18,16 @@ export default function useTeam() {
 
     useModal().toggleLoading();
 
-    console.log('Creating team', team, UserId, UserEmail);
+    console.log('Creating team', team);
 
     try {
 
-      let { data, error } = await supabase.from('teams').insert(team, {
-        returning: 'representation', 
-      });
+      const { data, error } = await supabase
+        .from('teams')
+        .insert(team)
+        .select();
+
+      console.log('Team created:', data);
 
       if (error) throw error;
 
