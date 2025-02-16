@@ -79,9 +79,7 @@
       <div class="tiptap-wrap" ref="approvedSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsApproved" @mouseover="setSelectedSection('approved')" :class="{ 'collapsed': !sections.approved }">
         <div class="type-label" @click="toggleSection('approved')">Approved Draft</div>
         <div class="tiptap-content">
-          <!-- <TipTapEditor :deliverable="props.DeliverableData" :type="'approved'" editable="false" /> -->
           <section class="approved-draft" v-html="DeliverableData.content.draft"></section>
-           <!-- {{DeliverableData.content.draft}} -->
         </div>
       </div>
       
@@ -425,7 +423,6 @@ onMounted(() => {
 
         .approved-draft {
           padding: $spacing-lg;
-          background: rgba($brand, 0.025);
         }
       }
 
