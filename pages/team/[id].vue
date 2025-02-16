@@ -6,14 +6,14 @@
       </router-link>
       <section class="app-panel-header-buttons">
         <button class="button primary" @click="setTeamAsReady" v-if="teamIsReady && !teamMarkedAsReadyInDb">Mark team as ready</button>
-        <Dropdown>
+        <!-- <Dropdown>
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
           </template>
           <template v-slot:menu>
             <div class="dropdown-item" @click="deleteTeamModal(team.id)">Delete team</div>
           </template>
-        </Dropdown>
+        </Dropdown> -->
       </section>
     </template>
     <template v-slot:body>
