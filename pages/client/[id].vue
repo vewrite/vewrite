@@ -3,7 +3,6 @@
     <template v-slot:header>
       <router-link to="/clients/" class="button">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
-        Back
       </router-link>
       <div class="app-panel-header-buttons">
         <Dropdown>
@@ -18,7 +17,7 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <section class="single-client">
+      <section class="single-client" v-if="personaState == 'manager'">
         <div class="client-image" v-if="ClientData && !loading">
           <ClientImage :client="ClientData.client_id" size="large" table="logos" />
         </div>
@@ -41,6 +40,7 @@
           </div>  
         </section>
       </section>
+      <AccessDenied v-else />
     </template>
   </AppPanel>
 </template>
@@ -51,6 +51,9 @@ definePageMeta({
   layout: 'default',
   middleware: ['auth'],
 });
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
 
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
