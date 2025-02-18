@@ -7,7 +7,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   const supabase = useSupabaseClient()
   const user = useSupabaseUser()
-  const { getProfileDetails } = useProfile()
 
   // I'm going to want to get the user's subscription status here via the object in the column 'subscription' in the 'profiles' table
   const subscriptionStatus = useState('subscriptionStatus', () => ({}));
@@ -24,8 +23,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     } else {
       subscriptionStatus.value = data
     }
-
-    console.log(data)
   }
 
   // Define public routes
