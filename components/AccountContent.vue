@@ -3,7 +3,7 @@
 
         <Loading v-if="loading" />
 
-        <form class="inner-container" @submit.prevent="updateProfile" v-else>
+        <form @submit.prevent="updateProfile" v-else>
 
             <div class="form-block">
                 <div class="form-details">
@@ -34,6 +34,23 @@
 
             <div class="form-block">
                 <div class="form-details">
+                    <h3>Persona</h3>
+                    <p class="details">Set your persona.</p>
+                </div>
+                <div class="form-content">
+                    <div class="form-toggle">
+                        <div class="form-toggle-item" @click="handleClickSelectPersona('manager')" :class="{ active: persona === 'manager' }">
+                            Manager
+                        </div>
+                        <div class="form-toggle-item" @click="handleClickSelectPersona('writer')" :class="{ active: persona === 'writer' }">
+                            Writer
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-block">
+                <div class="form-details">
                     <h3>Avatar</h3>
                     <p class="details">Manage your profile picture.</p>
                 </div>
@@ -48,7 +65,7 @@
                     <p class="details">Update your account details.</p>
                 </div>
                 <div class="form-content">
-                    <button type="submit" class="button block primary" :disabled="loading">
+                    <button type="submit" class="button primary large" :disabled="loading">
                         <span v-if="loading">Updating...</span>
                         <span v-else>Update</span>
                     </button>
@@ -67,10 +84,36 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser();
 
 const loading = ref(true)
+const pendingpersona = ref(false)
 const username = ref('')
 const website = ref('')
 const avatar_path = ref('')
 const router = useRouter()
+const persona = useState('personaState')
+
+console.log('persona', persona.value)
+
+async function clickSelectPersona(type) {
+
+    // Update the user's persona in the db
+    try {
+        pendingpersona.value = true
+        const { data, error } = await supabase
+            .from('profiles')
+            .update({ persona: type })
+            .eq('id', user.value.id)
+        if (error) throw error
+    } catch (error) {
+        console.error(error)
+    } finally {
+        pendingpersona.value = false
+    }
+}
+
+function handleClickSelectPersona(type) {
+    persona.value = type
+    clickSelectPersona(type)
+}
 
 let { data } = await supabase
     .from('profiles')

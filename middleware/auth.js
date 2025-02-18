@@ -8,18 +8,20 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // I'm going to want to get the user's subscription status here via the object in the column 'subscription' in the 'profiles' table
   const subscriptionStatus = useState('subscriptionStatus', () => ({}));
+  const personaState = useState('personaState', () => ({}));
 
   if (user.value) {
     const { data, error } = await supabase
       .from('profiles')
-      .select('subscription')
+      .select('*')
       .eq('id', user.value.id)
       .single()
 
     if (error) {
       console.error('Error fetching user profile:', error.message)
     } else {
-      subscriptionStatus.value = data
+      subscriptionStatus.value = data.subscription
+      personaState.value = data.persona
     }
   }
 

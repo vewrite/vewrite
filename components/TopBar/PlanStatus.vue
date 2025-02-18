@@ -6,6 +6,7 @@
     </span>
     <span v-else-if="PlanStatus == 'pro'" class="pro">Pro</span>
   </section>
+  <section class="persona">{{ personaState }}</section>
 </template>
 
 <script setup>
@@ -14,7 +15,11 @@ const PlanStatus = ref('')
 
 // Pull subscription status from the middleware auth.js
 const subscriptionStatus = useState('subscriptionStatus');
-PlanStatus.value = subscriptionStatus.value.subscription.status
+PlanStatus.value = subscriptionStatus.value.status
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
+
 
 </script>
 
@@ -55,6 +60,11 @@ PlanStatus.value = subscriptionStatus.value.subscription.status
     padding: $spacing-xxxs $spacing-xs;
   }
   
+}
+
+.persona {
+  color: rgba($black, 0.5);
+  text-transform: capitalize;
 }
 
 </style>

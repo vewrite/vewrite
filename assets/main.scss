@@ -512,6 +512,7 @@ textarea {
 .form-group {
     margin: 0 0 $spacing-sm 0;
     position: relative;
+    width: 100%;
 
     div {
         position: relative;
@@ -543,6 +544,7 @@ textarea {
     outline: 1px solid rgba($brand, 0);
     position: relative;
     overflow: hidden;
+    width: 100%;
 
     .button {
         position: absolute;
@@ -572,6 +574,25 @@ textarea {
     grid-template-columns: 1fr 1fr;
     gap: $spacing-md;
     width: 100%;
+}
+
+.form-toggle {
+    border: $border;
+    display: flex;
+    flex-direction: row;
+    padding: $spacing-xxs;
+    border-radius: $br-lg;
+    
+    .form-toggle-item {
+        padding: $spacing-xs;
+        border-radius: $br-md;
+        cursor: pointer;
+
+        &.active {
+            background: rgba($brand, 0.1);
+            color: $brand;
+        }
+    }
 }
 
 .form-block {
@@ -611,7 +632,8 @@ textarea {
         width: 66%;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: flex-start;
+        align-items: flex-start;
 
         .vc-container {
             align-self: flex-end;
