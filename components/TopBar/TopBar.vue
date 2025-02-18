@@ -25,7 +25,7 @@
         </linearGradient>
         </defs>
       </svg>
-      <PlanStatus class="topbar-plan" />
+      <PlanStatus />
     </section>
     <User />
   </header>
