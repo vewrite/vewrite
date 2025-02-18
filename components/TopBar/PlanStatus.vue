@@ -12,8 +12,9 @@
 
 const PlanStatus = ref('')
 
-// PlanStatus.value = 'free'
-PlanStatus.value = 'pro'
+// Pull subscription status from the middleware auth.js
+const subscriptionStatus = useState('subscriptionStatus');
+PlanStatus.value = subscriptionStatus.value.subscription.status
 
 </script>
 
