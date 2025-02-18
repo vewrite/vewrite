@@ -93,7 +93,7 @@ const defaultUser = ref({
   subscription: {
     "status": "free",
     "order_id": "",
-    "plan": "free",
+    "next_billing_time": "",
     "current_period_start": ""
   }
 })
