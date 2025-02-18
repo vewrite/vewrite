@@ -21,6 +21,7 @@
     </template>
     <template v-slot:body>
       <section v-if="loading.global == false && hasAccess">
+        {{ route.meta.roles }}
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
@@ -124,7 +125,7 @@ const attrs = ref([
   }
 ])
 
-// Get the route object
+// Get the route object and the meta from /middleware/role.js
 const route = useRoute();
 
 // Extract the project ID from the route parameters

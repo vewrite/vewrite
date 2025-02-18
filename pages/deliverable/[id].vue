@@ -35,13 +35,15 @@
 
 definePageMeta({
   layout: 'default',
-  middleware: ['auth'],
+  middleware: ['auth', 'deliverable'],
 });
 
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import DocumentManager from '~/components/Deliverables/DocumentManager.vue';
+
+const user = useSupabaseUser();
 
 const loading = ref(true);
 const project = ref(null);
@@ -50,7 +52,10 @@ const route = useRoute();
 const deliverableId = route.params.id;
 const teamMembers = ref([]);
 const StateData = ref(null);
-const user = useSupabaseUser();
+const currentlyAssigned = ref({
+  user_id: null,
+  role: null,
+});
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
