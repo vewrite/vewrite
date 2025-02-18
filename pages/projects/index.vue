@@ -2,7 +2,7 @@
   <AppPanel>
     <template v-slot:header>
       <div></div>
-      <div class="button primary" @click="createProjectModal()">Create project</div>
+      <div class="button primary" @click="createProjectModal()" v-if="personaState == 'manager'">Create project</div>
     </template>
     <template v-slot:body>
       <ProjectsList />
@@ -19,5 +19,8 @@ definePageMeta({
   layout: 'default',
   middleware: ['auth'],
 });
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
 
 </script>
