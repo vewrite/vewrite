@@ -1,11 +1,11 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/teams/" class="button">
+      <router-link to="/teams/" class="button" v-if="personaState == 'manager'">
         <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
       </router-link>
       <section class="app-panel-header-buttons">
-        <button class="button primary" @click="setTeamAsReady" v-if="teamIsReady && !teamMarkedAsReadyInDb">Mark team as ready</button>
+        <button class="button primary" @click="setTeamAsReady" v-if="personaState == 'manager' && teamIsReady && !teamMarkedAsReadyInDb">Mark team as ready</button>
         <!-- <Dropdown>
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -18,7 +18,7 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <section class="single-team">
+      <section class="single-team" v-if="personaState == 'manager'">
         <div class="object-overview max-width md" v-if="TeamData && !loading">
           <div class="object-summary">
             <input class="object-title-input" v-model="team.name" @input="updateTeamWithDebounce(team.id, $event.target.value)" />
@@ -113,8 +113,8 @@
 
             </section>
           </div>
-        </section>
-
+      </section>
+      <AccessDenied v-else />
     </template>
   </AppPanel>
 </template>
@@ -125,6 +125,9 @@ definePageMeta({
   layout: 'default',
   middleware: ['auth'],
 });
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
 
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';

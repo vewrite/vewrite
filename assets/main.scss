@@ -954,13 +954,15 @@ button.vertical,
   }
 
   // Gated access
-  .project-gate {
+  .gate {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
+    color: rgba($black, 0.35);
+    font-size: 4rem;
 
     p {
       margin: 0;
