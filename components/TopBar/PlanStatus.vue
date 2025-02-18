@@ -2,7 +2,7 @@
   <section class="plan-status">
     <span v-if="PlanStatus == 'free'" class="free">
       <section v-if="PlanStatus == 'free'">Using the free plan</section>
-      <button v-if="PlanStatus == 'free'" class="button green small">Upgrade</button>
+      <nuxt-link to="/subscriptions" v-if="PlanStatus == 'free'" class="button green small">Upgrade</nuxt-link>
     </span>
     <span v-else-if="PlanStatus == 'pro'" class="pro">Pro</span>
   </section>
