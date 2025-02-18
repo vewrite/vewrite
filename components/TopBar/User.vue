@@ -53,7 +53,6 @@ const logout = async () => {
 @use 'assets/variables' as *;
 
 .top-bar-user {
-  display: flex;
   align-items: flex-start;
 
   .user-name {

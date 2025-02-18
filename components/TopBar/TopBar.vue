@@ -27,7 +27,20 @@
       </svg>
       <PlanStatus />
     </section>
-    <User />
+    <section class="right">
+      <Dropdown class="help-dropdown">
+        <template v-slot:trigger>
+          <Icon name="solar:help-linear" size="1.5rem" />
+        </template>
+        <template v-slot:menu>
+          <a href="https://vewrite.com/support" class="dropdown-item"><Icon name="fluent:chat-help-20-regular" size="1.5rem" /> Support</a>
+          <a href="https://docs.vewrite.com/" class="dropdown-item"><Icon name="fluent:document-20-regular" size="1.5rem" /> Documentation</a>
+          <a href="https://vewrite.com/company/mission" class="dropdown-item"><Icon name="fluent:star-20-regular" size="1.5rem" /> Our Mission</a>
+          <a href="https://github.com/vewrite/vewrite/discussions/categories/ideas" class="dropdown-item"><Icon name="fluent:lightbulb-20-regular" size="1.5rem" /> Suggest a Feature</a>
+        </template>
+      </Dropdown>
+      <User />
+    </section>
   </header>
 
   <section id="MobileNav">
@@ -132,6 +145,13 @@ header {
         cursor: pointer;
       }
     }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-xs;
   }
 }
 
