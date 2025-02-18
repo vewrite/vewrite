@@ -8,8 +8,8 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
-        <button class="button primary" @click="createDeliverableModal(project.id)">Create new deliverable</button>
-        <Dropdown>
+        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager'">Create new deliverable</button>
+        <Dropdown v-if="personaState == 'manager'">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
           </template>
@@ -20,9 +20,6 @@
       </div>
     </template>
     <template v-slot:body>
-      <!-- <pre v-if="loading.global == false && project">{{ project.assigned_team }}</pre>
-      <pre v-if="loading.global == false && user">{{ user.id }}</pre>
-      <pre v-if="loading.global == false && teamMembers">{{ teamMembers }}</pre> -->
       <section v-if="loading.global == false && hasAccess">
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
@@ -77,6 +74,9 @@ definePageMeta({
   layout: 'default',
   middleware: ['auth'],
 });
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
 
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
