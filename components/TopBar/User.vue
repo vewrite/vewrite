@@ -12,7 +12,7 @@
       </section>
       <hr class="dropdown-divider" />
       <router-link to="/account" class="dropdown-item"><Icon name="solar:user-linear" size="1.5rem" /> Account</router-link>
-      <router-link to="/subscriptions" class="dropdown-item"><Icon name="solar:lock-linear" size="1.5rem" /> Subscriptions</router-link>
+      <router-link v-if="personaState == 'manager'" to="/subscriptions" class="dropdown-item"><Icon name="solar:lock-linear" size="1.5rem" /> Subscriptions</router-link>
       <div class="dropdown-item" @click="logout"><Icon name="fluent:arrow-exit-20-regular" size="1.5rem" /> Logout</div>
     </template>
   </Dropdown>
@@ -21,6 +21,9 @@
 <script setup>
 
 import PlanStatus from '~/components/TopBar/PlanStatus.vue' 
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
 
 const user = useSupabaseUser()
 const loading = ref(true)
