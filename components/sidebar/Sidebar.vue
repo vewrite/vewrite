@@ -73,7 +73,7 @@ onMounted(() => {
 
 #Sidebar {
   height: 100%;
-  min-width: 240px;
+  min-width: 160px;
   transition: all 0.2s ease;
   position: relative;
   background: rgba($black, 0.05);

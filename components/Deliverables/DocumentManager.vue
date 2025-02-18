@@ -299,8 +299,8 @@ onMounted(() => {
     top: $spacing-md;
     height: fit-content;
     width: 100%;
-    min-width: 180px;
-    max-width: 240px;
+    min-width: 120px;
+    max-width: 160px;
     background: $white;
 
     @media (max-width: 1000px) {
