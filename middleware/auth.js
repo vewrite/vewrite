@@ -1,8 +1,6 @@
 import { useAuthStore } from '~/stores/auth'
 import { navigateTo } from '#app'
 
-import useProfile from '~/composables/useProfile'
-
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   const supabase = useSupabaseClient()
