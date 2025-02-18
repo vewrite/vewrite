@@ -1,6 +1,6 @@
 <template>
   <section class="plan-status">
-    <span v-if="PlanStatus == 'free'" class="free">
+    <span v-if="PlanStatus == 'free' && personaState == 'manager'" class="free">
       <section v-if="PlanStatus == 'free'">Using the free plan</section>
       <nuxt-link to="/subscriptions" v-if="PlanStatus == 'free'" class="button green small">Upgrade</nuxt-link>
     </span>
