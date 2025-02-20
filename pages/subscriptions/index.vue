@@ -51,7 +51,7 @@
           </div>
           <div class="subscribe-option pro">
             <h2>Pro Plan</h2>
-            <p><span class="cost">$29/m</span> for the Project Manager</p>
+            <p><span class="cost">$39/m</span> for the Manager, Writers are free.</p>
             <div class="subscribe-details">
               <ul>
                 <li>
@@ -205,7 +205,7 @@ onMounted(() => {
       }
 
       &.pro {
-        color: $brand;
+        color: $black;
 
         h2 {
           background: linear-gradient(150deg, rgba($mint, 0.35), rgba($mint, 1));
@@ -222,7 +222,7 @@ onMounted(() => {
 
         .subscribe-details {
           ul li {
-            color: $brand;
+            color: $black;
 
             span {
               &:last-child {
@@ -234,7 +234,7 @@ onMounted(() => {
       }
 
       h2 {
-        font-size: $font-size-lg;
+        font-size: $font-size-xl;
         margin: 0 auto $spacing-xs;
         background: linear-gradient(150deg, rgba($brand, 0.35), rgba($brand, 1));
         border-radius: $br-xxl;
