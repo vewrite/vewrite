@@ -1,14 +1,14 @@
 <template>
 
   <section class="document-content">
-    <section class="navigation">
+    <!-- <section class="navigation">
       <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Manager</div>
       <div class="nav-item" @click="scrollToSection('requirements')" v-if="stateShowsRequirements" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</div>
       <div class="nav-item" @click="scrollToSection('outline')" v-if="stateShowsOutline" :class="{ 'primary': selectedSection === 'outline' }">Outline</div>
       <div class="nav-item" @click="scrollToSection('draft')" v-if="stateShowsWriting" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</div>
       <div class="nav-item" @click="scrollToSection('approved')" v-if="stateShowsApproved" :class="{ 'primary': selectedSection === 'approved' }">Approved draft</div>
       <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
-    </section>
+    </section> -->
     <section class="documents max-width xl" ref="stateDetails">
 
       <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
@@ -340,7 +340,7 @@ onMounted(() => {
   .documents {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $spacing-md;
     padding: $spacing-sm;
     height: 100%;
     margin: 0 auto;
@@ -384,7 +384,7 @@ onMounted(() => {
 
         h2 {
           margin: 0;
-          color: $brand;
+          color: $black;
         }
       }
 
@@ -399,6 +399,7 @@ onMounted(() => {
       min-height: 100px;
       background: $white;
       border-radius: $br-lg;
+      box-shadow: $soft-shadow;
       border: $border;
       position: relative;
       transition: border 0.2s ease;
