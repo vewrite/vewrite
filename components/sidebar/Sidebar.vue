@@ -18,11 +18,10 @@
 <script setup>
 
 import { useRoute } from 'vue-router';
+const route = useRoute();
 
 // Pull personaState from the middleware auth.js
 const personaState = useState('personaState');
-
-const route = useRoute();
 
 const collapsed = ref(false)
 

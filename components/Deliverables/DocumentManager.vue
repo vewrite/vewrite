@@ -1,5 +1,8 @@
 <template>
 
+  <!-- <pre>{{ route.meta.roles }}</pre>
+  <pre>{{ user.id }}</pre> -->
+
   <section class="document-content">
     <section class="navigation">
       <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Manager</div>
@@ -23,28 +26,36 @@
       </section>
 
       <!-- Requirements -->
+      <!-- Always editable by the PM -->
       <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
         <div class="type-label" @click="toggleSection('requirements')">Requirements</div>
         <div class="tiptap-content">
           <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" />
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" v-if="route.meta.roles.projectManager == user.id" />
+          <div class="tiptap-content-readonly" v-html="DeliverableData.content.requirements" v-else></div>
         </div>
       </div>
 
       <!-- Outline -->
+      <!-- Always editable by the PM -->
+      <!-- Editable by the writer when they are assigned to the deliverable -->
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outline }">
         <div class="type-label" @click="toggleSection('outline')">Outline</div>
         <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" />
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" v-if="route.meta.roles.writer == user.id" />
+          <div class="tiptap-content-readonly" v-html="DeliverableData.content.outline" v-else></div>
           <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
         </div>
       </div>
 
       <!-- Outline Review -->
+      <!-- Always editable by the PM -->
+      <!-- Editable by the reviewer when they are assigned to the deliverable -->
       <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outlinereview }">
         <div class="type-label" @click="toggleSection('outlinereview')">Outline Review</div>
         <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'" :review="true" />
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'"  v-if="route.meta.roles.reviewer == user.id" :review="true" />
+          <div class="tiptap-content-readonly" v-html="DeliverableData.content.outline" v-else></div>
           <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
         </div>
       </div>
@@ -53,7 +64,8 @@
       <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draft }">
         <div class="type-label" @click="toggleSection('draft')">Draft</div>
         <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'" />
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'"  v-if="route.meta.roles.writer == user.id" />
+          <div class="tiptap-content-readonly" v-html="DeliverableData.content.draft" v-else></div>
           <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
         </div>
       </div>
@@ -62,16 +74,20 @@
       <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draftreview }">
         <div class="type-label" @click="toggleSection('draftreview')">Draft Review</div>
         <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'" :review="true" />
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'"  v-if="route.meta.roles.reviewer == user.id" :review="true" />
+          <div class="tiptap-content-readonly" v-html="DeliverableData.content.draft" v-else></div>
           <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
         </div>
       </div>
       
       <!-- Research -->
+      <!-- Always editable by the PM -->
+      <!-- Editable by the writer when they are assigned to the deliverable -->
       <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')" :class="{ 'collapsed': !sections.research }">
         <div class="type-label" @click="toggleSection('research')">Research</div>
         <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'research'" />
+          <TipTapEditor :deliverable="props.DeliverableData" :type="'research'"  v-if="route.meta.roles.writer == user.id"  />
+          <div class="tiptap-content-readonly" v-html="DeliverableData.content.research" v-else></div>
         </div>
       </div>
 
@@ -93,10 +109,15 @@
 <script setup>
 
 import { ref, onMounted } from 'vue';
-import Assigned from '~/components/Deliverables/Assigned.vue';
+// import Assigned from '~/components/Deliverables/Assigned.vue';
 import StateBar from '~/components/Deliverables/StateBar.vue';
 import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 import Comments from '~/components/Deliverables/Comments.vue';
+
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
+const user = useSupabaseUser();
 
 const props = defineProps(['DeliverableData', 'StateData']);
 
@@ -421,8 +442,12 @@ onMounted(() => {
         display: flex;
         flex-direction: row;
 
-        .approved-draft {
-          padding: $spacing-lg;
+        .approved-draft,
+        .tiptap-content-readonly {
+          padding: $spacing-sm;
+          background: rgba($black, 0.025);
+          width: 100%;
+          min-height: 100px;
         }
       }
 

@@ -83,6 +83,22 @@ watch(path, () => {
   &.small {
     width: 32px;
     height: 32px;
+
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &.tiny {
+    width: 24px;
+    height: 24px;
+    border-radius: $br-md;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   img {

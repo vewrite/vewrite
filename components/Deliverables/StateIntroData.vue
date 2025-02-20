@@ -2,8 +2,12 @@
   <section class="state-intro-data">
     <div class="intro-data-row" v-if="TeamMembersData">
       <div class="members">
+        <div class="single-member" v-if="projectManager">
+          <Avatar :uuid="projectManager" :hasName="true" size="tiny" />
+          <div class="members-role">Project Manager</div>
+        </div>
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
-          <Avatar :uuid="uuid" :hasName="true" size="small" />
+          <Avatar :uuid="uuid" :hasName="true" size="tiny" />
           <div class="members-role">
             <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Currently assigned</div>
             {{ role }}
@@ -21,6 +25,11 @@ const ProjectData = ref(null);
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
+
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
+const projectManager = route.meta.roles.projectManager;
 
 import useTeamMembers from '~/composables/useTeamMembers';
 const { fetchTeamMembers, TeamMembersData } = useTeamMembers();

@@ -4,7 +4,7 @@
     <div class="single-comment" v-if="Comments && filteredComments.length > 0 && !loading" v-for="comment in filteredComments" key="comment.id">
       <section class="quote">"{{ comment.quote }}"</section>
       <section class="content">
-        <Avatar :uuid="comment.profile_id" size="small" />
+        <Avatar :uuid="comment.profile_id" size="tiny" />
         <div class="text-wrapper">
           <span class="text">{{ comment.text }}</span>
           <span class="small">{{ comment.created_at }}</span>
@@ -156,7 +156,8 @@ onMounted(async () => {
     .content {
       padding: $spacing-sm;
       display: grid;
-      grid-template-columns: 40px 1fr;
+      grid-template-columns: 30px 1fr;
+      align-items: start;
       gap: $spacing-xxxs;
       background: rgba($white, 0);
 

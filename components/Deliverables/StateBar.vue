@@ -7,33 +7,45 @@
     </div>
     
     <!-- Is in research state (44) -->
-    <div v-if="props.StateData[0].state_type === 7">
+    <div v-if="props.StateData[0].state_type === 7 && route.meta.roles.writer == user.id">
       <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Start outline</button>
     </div>
     
     <!-- Is in outline state (45) -->
-    <div v-if="props.StateData[0].state_type === 3">
+    <div v-if="props.StateData[0].state_type === 3 && route.meta.roles.writer == user.id">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Back to research</button>
       <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 46)">Send for review</button>
     </div>
-    
+    <div class="notification warning" v-if="props.StateData[0].state_type === 3 && route.meta.roles.reviewer == user.id"> 
+      Waiting for writer to finish.
+    </div>
+
     <!-- Is in outline review state (46) -->
-    <div v-if="props.StateData[0].state_type === 2">
+    <div v-if="props.StateData[0].state_type === 2 && route.meta.roles.reviewer == user.id">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
       <!-- <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Approve outline</button> -->
       <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 47, DeliverableData.role_assignments.Writer)">Approve outline</button>
     </div>
+    <div class="notification warning" v-if="props.StateData[0].state_type === 2 && route.meta.roles.writer == user.id"> 
+      Waiting for reviewer to finish.
+    </div>
 
     <!-- Is in Writing state (47) -->
-    <div v-if="props.StateData[0].state_type === 4"> 
+    <div v-if="props.StateData[0].state_type === 4 && route.meta.roles.writer == user.id"> 
       <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 48)">Send for review</button>
+    </div>
+    <div class="notification warning" v-if="props.StateData[0].state_type === 4 && route.meta.roles.reviewer == user.id"> 
+      Waiting for writer to finish.
     </div>
 
     <!-- Is in draft review state (48) -->
-    <div v-if="props.StateData[0].state_type === 5">
+    <div v-if="props.StateData[0].state_type === 5 && route.meta.roles.reviewer == user.id">
       <button class="button large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
       <!-- <button class="button primary large" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 49)">Approve draft</button> -->
       <button class="button primary large" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 49, DeliverableData.role_assignments.Writer)">Approve draft</button>
+    </div>
+    <div class="notification warning" v-if="props.StateData[0].state_type === 5 && route.meta.roles.writer == user.id"> 
+      Waiting for reviewer to finish.
     </div>
     
     <!-- Is approved (49) -->
@@ -49,6 +61,11 @@
 
 const props = defineProps(['StateData', 'DeliverableData']);
 const loading = ref(false);
+
+const user = useSupabaseUser();
+
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 import useDeliverables from '~/composables/useDeliverables';
 const { updateDeliverableWorkflowState, assignToRole, approvalModal } = useDeliverables();
@@ -181,8 +198,6 @@ async function downloadFile(type) {
   flex-direction: row;
   justify-content: flex-start;
   gap: $spacing-xs;
-  background: rgba($white, 0.1);
-  backdrop-filter: blur(10px);
 
   button {
     align-self: flex-start;
