@@ -1,4 +1,5 @@
 <template>
+  <section class="persona">{{ personaState }}</section>
   <section class="plan-status topbar-plan">
     <span v-if="PlanStatus == 'free' && personaState == 'manager'" class="free">
       <!-- <section v-if="PlanStatus == 'free'">Using the free plan</section> -->
@@ -6,7 +7,6 @@
     </span>
     <span v-else-if="PlanStatus == 'pro'" class="pro">Pro</span>
   </section>
-  <section class="persona">{{ personaState }}</section>
 </template>
 
 <script setup>

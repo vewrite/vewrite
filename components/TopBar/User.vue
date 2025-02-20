@@ -8,7 +8,9 @@
     <template v-slot:menu>
       <section class="dropdown-header">
         <span class="user-name">{{ loading ? 'Loading' : ProfileData.username }}</span>
-        <PlanStatus />
+        <section class="dropdown-plan">
+          <PlanStatus />
+        </section>
       </section>
       <hr class="dropdown-divider" />
       <router-link to="/account" class="dropdown-item"><Icon name="solar:user-linear" size="1.5rem" /> Account</router-link>
@@ -76,10 +78,14 @@ const logout = async () => {
     display: flex;
     flex-direction: column;
     gap: $spacing-xxs;
+    width: 100%;
 
     .dropdown-plan {
       display: flex;
       align-items: center;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
       gap: $spacing-xs;
       color: rgba($black, 0.5);
       font-size: $font-size-xs;
