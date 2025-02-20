@@ -1,5 +1,5 @@
 <template>
-  <Loading />
+  <Loading type="small" />
 </template>
 
 <script setup>

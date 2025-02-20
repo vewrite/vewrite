@@ -1,5 +1,5 @@
 <template>
-  <div>Waiting for login...</div>
+  <Loading type="small" />
 </template>
 
 <script setup lang="ts">
