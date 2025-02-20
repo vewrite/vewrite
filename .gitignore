@@ -9,3 +9,6 @@ dist
 
 # vscode
 .history
+
+# Local Netlify folder
+.netlify
