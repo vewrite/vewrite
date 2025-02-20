@@ -43,6 +43,7 @@ import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import DocumentManager from '~/components/Deliverables/DocumentManager.vue';
 
+const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 const loading = ref(true);
@@ -107,8 +108,19 @@ async function init() {
   }
 }
 
-onMounted(() => {
- init();
+onMounted(async () => {
+
+ // subscription
+ const subscription = supabase
+    .channel('projects')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'deliverables' }, init)
+    .subscribe();
+
+  onUnmounted(() => {
+    supabase.removeChannel(subscription);
+  });
+
+  init();
 });
 
 // Now, I need to watch the store and see if the workflow state changes

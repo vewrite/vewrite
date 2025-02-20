@@ -90,6 +90,7 @@ async function handleState(stateId, deliverableId, stateType) {
       // Get the assigned writer
       let userId = props.DeliverableData.role_assignments.Writer;
       await assignToRole(deliverableId, userId);
+      deliverableStore.setDeliverableState(props.DeliverableData.id, stateType);
     
     // Here we will handle assignments to the reviewer
     } else if(stateType == 46 || stateType == 48 || stateType == 49) {
@@ -98,6 +99,7 @@ async function handleState(stateId, deliverableId, stateType) {
       // Need to migrate this to an approval system
       let userId = props.DeliverableData.role_assignments.Reviewer;
       await assignToRole(deliverableId, userId);
+      deliverableStore.setDeliverableState(props.DeliverableData.id, stateType);
     }
     
     // Set the deliverable state in the store

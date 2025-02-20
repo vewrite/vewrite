@@ -1,8 +1,5 @@
 <template>
 
-  <!-- <pre>{{ route.meta.roles }}</pre>
-  <pre>{{ user.id }}</pre> -->
-
   <section class="document-content">
     <section class="navigation">
       <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Manager</div>
