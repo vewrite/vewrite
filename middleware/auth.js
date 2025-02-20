@@ -10,6 +10,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const subscriptionStatus = useState('subscriptionStatus', () => ({}));
   const personaState = useState('personaState', () => ({}));
 
+  // Set subscription status and persona state for use in the app
   if (user.value) {
     const { data, error } = await supabase
       .from('profiles')
@@ -26,7 +27,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // Define public routes
-  const publicRoutes = ['/login', '/login/new-password', '/login/reset', '/auth/callback']
+  const publicRoutes = ['/login', '/login/new-password', '/login/reset', '/auth/callback', '/auth/confirm']
   
   // Check if route is public
   if (publicRoutes.includes(to.path)) {
@@ -37,7 +38,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return // Allow access to public route
   }
 
-  if (!authStore || user.value == null) {
-    return navigateTo('/login')
-  }
+  // This blocks github and magic link users from accessing the app
+  // if (!authStore || user.value == null) {
+  //   return navigateTo('/login')
+  // }
+
 })

@@ -25,6 +25,13 @@ const userStore = useUser()
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+// This covers users who aren't logged in and solves all of the issues in https://github.com/vewrite/vewrite/issues/97
+if(user.value == null) {
+  router.push('/login')
+}
 
 /*
 

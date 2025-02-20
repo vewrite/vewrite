@@ -26,8 +26,8 @@ onMounted(async () => {
     if (error) throw error
     
     if (session) {
+      console.log('User is logged in, setting user:', session.user)
       authStore.setUser(session.user)
-      console.log("check authstore", authStore.user)
       await router.push('/')
     }
   } catch (error) {

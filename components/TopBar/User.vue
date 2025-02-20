@@ -1,7 +1,7 @@
 <template>
-  <Dropdown class="top-bar-user">
+  <Dropdown class="top-bar-user" v-if="user">
     <template v-slot:trigger>
-      <Avatar v-if="user" :uuid="user.id" />
+      <Avatar :uuid="user.id" />
       {{ loading ? 'Loading' : ProfileData.username }}
       <Icon name="fluent:chevron-down-16-regular" size="1.5rem" />
     </template>
@@ -42,12 +42,7 @@ onMounted(async () => {
   }
 })
 
-const supabase = useSupabaseClient()
-
 const logout = async () => {
-  // const { error } = await supabase.auth.signOut()
-  // if (error) console.log(error)
-  // route.push('/login')
   try {
     await authStore.logout();
     authStore.clearUser()

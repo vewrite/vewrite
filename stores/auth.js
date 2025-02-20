@@ -4,10 +4,12 @@ import { defineStore } from 'pinia'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
+    githubUser: null
   }),
   actions: {
     setUser(user) {
       this.user = user
+      console.log('User set:', user)
     },
     async logout() {
       const { error } = await useSupabaseClient().auth.signOut()
@@ -16,10 +18,10 @@ export const useAuthStore = defineStore('auth', {
       }
       this.user = null
       navigateTo('/login')
+      console.log('Logged out.')
     },
     clearUser() {
       this.user = null
-      console.log('Logged out.')
     }
   },
   persist: true,

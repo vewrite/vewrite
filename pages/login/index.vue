@@ -83,8 +83,13 @@
               <div>
                   <div class="signup-buttons">
                     <button class="button large" @click="signInWithGithub">
-                      <Icon name="grommet-icons:github" size="2rem" />
-                      Sign up with GitHub
+                      <section v-if="buttonloading">
+                        <Loading type="button" />
+                      </section>
+                      <section v-else>
+                        <Icon name="grommet-icons:github" size="2rem" />
+                        Sign up with GitHub
+                      </section>
                     </button>
                     <!-- <button class="button large">
                       <Icon name="grommet-icons:google" size="2rem" />
@@ -160,6 +165,7 @@ import { useAuthStore } from '~/stores/auth'
 const authStore = useAuthStore()
 
 const loading = ref(false);
+const buttonloading = ref(false);
 const notification = ref('');
 const errorbox = ref('');
 const email = ref('');
@@ -181,16 +187,37 @@ const reset = () => {
 }
 
 async function signInWithGithub() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-        redirectTo: '/auth/callback',
+  console.log('Signing in with Github');
+  try {
+    buttonloading.value = true;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+          redirectTo: '/auth/confirm',
+      }
+    });
+    if (error) throw error;
+    // console.log('Github response', data);
+    if (data.provider == 'github') {
+      console.log('Github response', data);
+      router.push('/auth/confirm');
     }
-  });
-  if (error) {
-    errorbox.value = error.message;
+  } catch (error) {
+    errorbox.value = error.error_description || error.message;
+    console.log('Error:', error);
+  } finally {
+    buttonloading.value = false;
   }
-  console.log(data);
+  // const { data, error } = await supabase.auth.signInWithOAuth({
+  //   provider: 'github',
+  //   options: {
+  //       redirectTo: '/auth/confirm',
+  //   }
+  // });
+  // if (error) {
+  //   errorbox.value = error.message;
+  // }
+  // console.log(data);
 }
 
 const signInWithMagicLink = async () => {
