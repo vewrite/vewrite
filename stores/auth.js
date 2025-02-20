@@ -16,6 +16,10 @@ export const useAuthStore = defineStore('auth', {
       }
       this.user = null
       navigateTo('/login')
+    },
+    clearUser() {
+      this.user = null
+      console.log('Logged out.')
     }
   },
   persist: true,

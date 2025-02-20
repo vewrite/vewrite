@@ -1,7 +1,7 @@
 <template>
   <Dropdown class="top-bar-user">
     <template v-slot:trigger>
-      <Avatar :uuid="user.id" />
+      <Avatar v-if="user" :uuid="user.id" />
       {{ loading ? 'Loading' : ProfileData.username }}
       <Icon name="fluent:chevron-down-16-regular" size="1.5rem" />
     </template>
@@ -20,12 +20,16 @@
 
 <script setup>
 
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '~/stores/auth'
 import PlanStatus from '~/components/TopBar/PlanStatus.vue' 
 
 // Pull personaState from the middleware auth.js
 const personaState = useState('personaState');
 
 const user = useSupabaseUser()
+const router = useRouter();
+const authStore = useAuthStore()
 const loading = ref(true)
 
 import useProfile from '~/composables/useProfile'
@@ -41,9 +45,17 @@ onMounted(async () => {
 const supabase = useSupabaseClient()
 
 const logout = async () => {
-  const { error } = await supabase.auth.signOut()
-  if (error) console.log(error)
-  navigateTo('/login')
+  // const { error } = await supabase.auth.signOut()
+  // if (error) console.log(error)
+  // route.push('/login')
+  try {
+    await authStore.logout();
+    authStore.clearUser()
+  } catch (error) {
+    console.error('Error:', error.message)
+  } finally {
+    router.push('/login')
+  }
 }
 
 </script>
