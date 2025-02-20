@@ -110,10 +110,11 @@ onMounted(async () => {
   flex-direction: column;
   gap: $spacing-sm;
   max-width: 300px;
+  min-width: 300px;
   width: 100%;
   height: 100%;
   padding: $spacing-sm;
-  background: rgba($black, 0.025);
+  border-left: $border;
 
   .empty-state {
     display: flex;

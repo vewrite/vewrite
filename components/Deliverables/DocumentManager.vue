@@ -399,7 +399,6 @@ onMounted(() => {
       min-height: 100px;
       background: $white;
       border-radius: $br-lg;
-      box-shadow: $soft-shadow;
       border: $border;
       position: relative;
       transition: border 0.2s ease;
@@ -407,9 +406,9 @@ onMounted(() => {
       flex-direction: column;
 
       &.collapsed {
-        height: 42px;
-        max-height: 42px;
-        min-height: 42px;
+        height: 48px;
+        max-height: 48px;
+        min-height: 48px;
         overflow: hidden;
 
         .tiptap-content {
@@ -424,15 +423,14 @@ onMounted(() => {
         align-self: flex-start;
         width: 100%;
         padding: $spacing-sm;
-        border-bottom: $border;
-        background: $white;
+        background: rgba($black, 0.025);
         border-radius: $br-lg $br-lg 0 0;
-        font-size: $font-size-xs;
+        font-size: $font-size-md;
         color: rgba($black, 0.65);
         cursor: pointer;
 
         &:hover {
-          background: rgba($black, 0.025);
+          background: rgba($black, 0.05);
         }
       }
 
