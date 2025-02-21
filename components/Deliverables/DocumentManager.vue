@@ -446,7 +446,6 @@ onMounted(() => {
       transition: border 0.2s ease;
       display: flex;
       flex-direction: column;
-      // background: rgba($black, 0.025);
       border: $border;
       border-radius: $br-lg;
 
@@ -493,6 +492,7 @@ onMounted(() => {
           border-radius: $br-lg;
           width: 100%;
           min-height: 100px;
+          cursor: not-allowed;
         }
       }
 

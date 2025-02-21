@@ -61,15 +61,13 @@ export default {
 
   .body {
     height: calc(100% - 60px);
-    overflow-y: auto;
+    overflow-y: scroll;
     position: relative;
     background: $white;
     margin: 0 $spacing-sm;
     border-bottom: $border;
     border-left: $border;
     border-right: $border;
-    // border-bottom-left-radius: $br-xl;
-    // border-bottom-right-radius: $br-xl;
     box-shadow: $main-shadow;
 
     @media (max-width: 960px) {

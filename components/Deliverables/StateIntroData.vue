@@ -100,7 +100,7 @@ onMounted(async () => {
         border: 1px solid rgba($brand, 0.05);
 
         &.assigned {
-          background: linear-gradient(to bottom, rgba($brand, 0), rgba($brand, 0.075));
+          background: $white;
           border: 1px solid rgba($brand, 0.2);
         }
 
