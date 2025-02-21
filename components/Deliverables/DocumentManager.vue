@@ -9,9 +9,9 @@
       <div class="nav-item" @click="scrollToSection('approved')" v-if="stateShowsApproved" :class="{ 'primary': selectedSection === 'approved' }">Approved draft</div>
       <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
     </section> -->
-    <section class="documents max-width xl" ref="stateDetails">
+    <section class="documents" ref="stateDetails">
 
-      <section class="state-details"  @mouseover="setSelectedSection('stateDetails')">
+      <section class="state-details max-width xl"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-intro">
           <p class="due-date">Due <span>{{ dueDate }}</span></p>
           <h2>{{ StateData[0].instance_name }}</h2>
@@ -24,8 +24,12 @@
 
       <!-- Requirements -->
       <!-- Always editable by the PM -->
-      <div class="tiptap-wrap" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
-        <div class="type-label" @click="toggleSection('requirements')">Requirements</div>
+      <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
+        <div class="type-label" @click="toggleSection('requirements')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.requirements" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.requirements" />
+          Requirements
+        </div>
         <div class="tiptap-content">
           <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
           <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" v-if="route.meta.roles.projectManager == user.id" />
@@ -36,8 +40,12 @@
       <!-- Outline -->
       <!-- Always editable by the PM -->
       <!-- Editable by the writer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outline }">
-        <div class="type-label" @click="toggleSection('outline')">Outline</div>
+      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outline }">
+        <div class="type-label" @click="toggleSection('outline')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outline" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outline" />
+          Outline
+        </div>
         <div class="tiptap-content">
           <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" v-if="route.meta.roles.writer == user.id" />
           <div class="tiptap-content-readonly" v-html="DeliverableData.content.outline" v-else></div>
@@ -48,8 +56,12 @@
       <!-- Outline Review -->
       <!-- Always editable by the PM -->
       <!-- Editable by the reviewer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outlinereview }">
-        <div class="type-label" @click="toggleSection('outlinereview')">Outline Review</div>
+      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outlinereview }">
+        <div class="type-label" @click="toggleSection('outlinereview')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outlinereview" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outlinereview" />
+          Outline Review
+        </div>
         <div class="tiptap-content">
           <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'"  v-if="route.meta.roles.reviewer == user.id" :review="true" />
           <div class="tiptap-content-readonly" v-html="DeliverableData.content.outline" v-else></div>
@@ -58,8 +70,12 @@
       </div>
 
       <!-- Writing Draft -->
-      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draft }">
-        <div class="type-label" @click="toggleSection('draft')">Draft</div>
+      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draft }">
+        <div class="type-label" @click="toggleSection('draft')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draft" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draft" />
+          Draft
+        </div>
         <div class="tiptap-content">
           <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'"  v-if="route.meta.roles.writer == user.id" />
           <div class="tiptap-content-readonly" v-html="DeliverableData.content.draft" v-else></div>
@@ -68,8 +84,12 @@
       </div>
 
       <!-- Draft Review -->
-      <div class="tiptap-wrap" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draftreview }">
-        <div class="type-label" @click="toggleSection('draftreview')">Draft Review</div>
+      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draftreview }">
+        <div class="type-label" @click="toggleSection('draftreview')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draftreview" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draftreview" />
+          Draft Review
+        </div>
         <div class="tiptap-content">
           <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'"  v-if="route.meta.roles.reviewer == user.id" :review="true" />
           <div class="tiptap-content-readonly" v-html="DeliverableData.content.draft" v-else></div>
@@ -80,17 +100,25 @@
       <!-- Research -->
       <!-- Always editable by the PM -->
       <!-- Editable by the writer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')" :class="{ 'collapsed': !sections.research }">
-        <div class="type-label" @click="toggleSection('research')">Research</div>
+      <div class="tiptap-wrap max-width xl" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')" :class="{ 'collapsed': !sections.research }">
+        <div class="type-label" @click="toggleSection('research')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.research" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.research" />
+          Research
+        </div>
         <div class="tiptap-content">
           <TipTapEditor :deliverable="props.DeliverableData" :type="'research'"  v-if="route.meta.roles.writer == user.id"  />
           <div class="tiptap-content-readonly" v-html="DeliverableData.content.research" v-else></div>
         </div>
       </div>
 
-      <!-- Aprooved Draft -->
-      <div class="tiptap-wrap" ref="approvedSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsApproved" @mouseover="setSelectedSection('approved')" :class="{ 'collapsed': !sections.approved }">
-        <div class="type-label" @click="toggleSection('approved')">Approved Draft</div>
+      <!-- Approved Draft -->
+      <div class="tiptap-wrap max-width xl" ref="approvedSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsApproved" @mouseover="setSelectedSection('approved')" :class="{ 'collapsed': !sections.approved }">
+        <div class="type-label" @click="toggleSection('approved')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.approved" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.approved" />
+          Approved Draft
+        </div>
         <div class="tiptap-content">
           <section class="approved-draft" v-html="DeliverableData.content.draft"></section>
         </div>
@@ -341,14 +369,18 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: $spacing-md;
-    padding: $spacing-sm;
+    padding: $spacing-md;
     height: 100%;
     margin: 0 auto;
+    width: 100%;
 
     .state-details {
       display: flex;
       flex-direction: row;
       gap: $spacing-xxs;
+      background: rgba($brand, 0.05);
+      padding: $spacing-md;
+      border-radius: $br-xl;
 
       .state-intro {
         width: 100%;
@@ -398,8 +430,8 @@ onMounted(() => {
     .tiptap-wrap {
       min-height: 100px;
       background: $white;
-      border-radius: $br-lg;
-      border: $border;
+      // border-radius: $br-lg;
+      // border: $border;
       position: relative;
       transition: border 0.2s ease;
       display: flex;
@@ -420,17 +452,20 @@ onMounted(() => {
         position: relative;
         white-space: nowrap;
         position: relative;
-        align-self: flex-start;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: $spacing-xxs;
         width: 100%;
-        padding: $spacing-sm;
-        background: rgba($black, 0.025);
-        border-radius: $br-lg $br-lg 0 0;
+        padding: $spacing-sm 0;
+        border-bottom: $border;
         font-size: $font-size-md;
-        color: rgba($black, 0.65);
+        color: rgba($black, 1);
         cursor: pointer;
 
         &:hover {
-          background: rgba($black, 0.05);
+          color: $brand;
         }
       }
 
@@ -440,8 +475,10 @@ onMounted(() => {
 
         .approved-draft,
         .tiptap-content-readonly {
+          margin: $spacing-sm 0;
           padding: $spacing-sm;
           background: rgba($black, 0.025);
+          border-radius: $br-lg;
           width: 100%;
           min-height: 100px;
         }

@@ -153,7 +153,6 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
   flex-direction: column;
   gap: $spacing-sm;
   height: 100%;
-  padding: $spacing-sm;
   position: relative;
   background: rgba($black, 0.0);
 
