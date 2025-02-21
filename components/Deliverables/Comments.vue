@@ -114,7 +114,6 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   padding: $spacing-sm;
-  border-left: $border;
 
   .empty-state {
     display: flex;

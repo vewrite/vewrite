@@ -53,10 +53,6 @@ const route = useRoute();
 const deliverableId = route.params.id;
 const teamMembers = ref([]);
 const StateData = ref(null);
-const currentlyAssigned = ref({
-  user_id: null,
-  role: null,
-});
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
@@ -112,8 +108,23 @@ onMounted(async () => {
 
  // subscription
  const subscription = supabase
-    .channel('projects')
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'deliverables' }, init)
+    .channel('public:deliverables')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'deliverables' }, (payload) => {
+        
+        // This is checking if the workflow state in the payload is different than current one, and if so, it refreshes the data
+        // This is for the case that a user has a window open and the state changes from another user
+        if (payload.new) {
+          const newWorkflowState = payload.new.workflow_state;
+          const oldWorkflowState = DeliverableData.value.workflow_state;
+
+          if (newWorkflowState !== oldWorkflowState) {
+            init();
+          }
+        } else {
+          console.error("Payload missing 'new' or 'old' data:", payload); // Use console.error
+        }
+      }
+    )
     .subscribe();
 
   onUnmounted(() => {
@@ -127,6 +138,7 @@ onMounted(async () => {
 // If it does, I need to update DeliverableData.workflow_state so that 
 // the children components can react to it
 watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
+  console.log('State instance ID changed:', newValue);
   init();
 });
 
