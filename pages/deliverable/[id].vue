@@ -6,6 +6,7 @@
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
+        <button class="button" @click="toggleFullscreen()">Fullscreen</button>
         <button class="button" @click="changeAssignmentsModal()">Change assignments</button>
         <Dropdown>
           <template v-slot:trigger>
@@ -19,7 +20,19 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" type="small" />
-      <section class="deliverables" v-if="!loading && hasAccess">
+      <section class="deliverables" v-if="!loading && hasAccess" :class="{ 'fullscreen': fullscreen }">
+        <section class="fullscreen-bar" v-if="fullscreen">
+          <button class="button" @click="toggleFullscreen()">Collapse</button>
+          <button class="button" @click="changeAssignmentsModal()">Change assignments</button>
+          <Dropdown>
+            <template v-slot:trigger>
+              <Icon name="uis:ellipsis-v" size="1.15rem" />
+            </template>
+            <template v-slot:menu>
+              <div class="dropdown-item" @click="deleteDeliverableModal()">Delete deliverable</div>
+            </template>
+          </Dropdown>
+        </section>  
         <DocumentManager v-if="DeliverableData" :DeliverableData="DeliverableData" :StateData="StateData" />
       </section>
       <section v-else-if="loading.global == false && !hasAccess" class="project-gate">
@@ -53,6 +66,7 @@ const route = useRoute();
 const deliverableId = route.params.id;
 const teamMembers = ref([]);
 const StateData = ref(null);
+const fullscreen = ref(true);
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
@@ -78,6 +92,10 @@ const hasAccess = computed(() => {
   }
   return false;
 });
+
+const toggleFullscreen = () => {
+  fullscreen.value = !fullscreen.value;
+}
 
 // In the parent (this), I need to get the deliverable state 
 // and pass it to the children (DocumentManager -> StateBar)
@@ -155,6 +173,27 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
   height: 100%;
   position: relative;
   background: rgba($black, 0.0);
+
+  .fullscreen-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: $spacing-sm;
+    background: rgba($black, 0.05);
+    border-bottom: $border;
+  }
+
+  &.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba($white, 1);
+    overflow-y: scroll;
+    z-index: 1000;
+  }
 
   .state-bar {
     position: sticky;
