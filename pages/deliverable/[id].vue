@@ -66,7 +66,7 @@ const route = useRoute();
 const deliverableId = route.params.id;
 const teamMembers = ref([]);
 const StateData = ref(null);
-const fullscreen = ref(true);
+const fullscreen = ref(false);
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
