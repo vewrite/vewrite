@@ -1,8 +1,8 @@
 <template>
   <Dropdown class="top-bar-user" v-if="user">
     <template v-slot:trigger>
+      <!-- {{ loading ? 'Loading' : ProfileData.username }} -->
       <Avatar :uuid="user.id" />
-      {{ loading ? 'Loading' : ProfileData.username }}
       <Icon name="fluent:chevron-down-16-regular" size="1.5rem" />
     </template>
     <template v-slot:menu>
