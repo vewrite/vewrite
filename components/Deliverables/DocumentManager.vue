@@ -12,9 +12,11 @@
     <section class="documents" ref="stateDetails">
 
       <section class="state-details max-width xl"  @mouseover="setSelectedSection('stateDetails')">
-        <div class="state-intro">
-          <p class="due-date">Due <span>{{ dueDate }}</span></p>
-          <h2>{{ StateData[0].instance_name }}</h2>
+        <div class="state-buttons-wrap">
+          <section class="state-intro">
+            <p class="state-name">{{ StateData[0].instance_name }}</p>
+            <p class="due-date">Due <span>{{ dueDate }}</span></p>
+          </section>
           <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         </div>
         <div class="state-data">
@@ -368,7 +370,7 @@ onMounted(() => {
   .documents {
     display: flex;
     flex-direction: column;
-    gap: $spacing-md;
+    gap: $spacing-sm;
     padding: $spacing-md;
     height: 100%;
     margin: 0 auto;
@@ -376,29 +378,43 @@ onMounted(() => {
 
     .state-details {
       display: flex;
-      flex-direction: row;
-      gap: $spacing-xxs;
+      flex-direction: column;
       background: rgba($brand, 0.05);
-      padding: $spacing-md;
       border-radius: $br-xl;
+
+      .state-buttons-wrap {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-sm;
+        padding: $spacing-sm $spacing-sm 0 $spacing-sm;
+        border-radius: $br-lg;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: $br-xl $br-xl 0 0;
+
+        .due-date {
+          font-size: $font-size-xxs;
+          color: $brand;
+          background: rgba($white, 0.5);
+          border: $border;
+          padding: 2px $spacing-xs;
+          border-radius: $br-lg;
+          margin: 0;
+        }
+      }
 
       .state-intro {
         width: 100%;
         min-width: 240px;
         max-width: 400px;
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         gap: $spacing-xs;
 
-        .due-date {
-          font-size: $font-size-xxs;
-          color: $brand;
-          background: rgba($brand, 0.1);
-          padding: 2px $spacing-xs;
-          border-radius: $br-lg;
-          font-weight: bold;
-          align-self: flex-start;
+        .state-name {
+          font-size: $font-size-md;
         }
         
         .state-summary {
@@ -413,11 +429,6 @@ onMounted(() => {
         p {
           margin: 0;
         }
-
-        h2 {
-          margin: 0;
-          color: $black;
-        }
       }
 
       .state-data {
@@ -430,12 +441,14 @@ onMounted(() => {
     .tiptap-wrap {
       min-height: 100px;
       background: $white;
-      // border-radius: $br-lg;
-      // border: $border;
+      padding: 0 $spacing-sm;
       position: relative;
       transition: border 0.2s ease;
       display: flex;
       flex-direction: column;
+      // background: rgba($black, 0.025);
+      border: $border;
+      border-radius: $br-lg;
 
       &.collapsed {
         height: 48px;
@@ -459,7 +472,6 @@ onMounted(() => {
         gap: $spacing-xxs;
         width: 100%;
         padding: $spacing-sm 0;
-        border-bottom: $border;
         font-size: $font-size-md;
         color: rgba($black, 1);
         cursor: pointer;
@@ -475,9 +487,9 @@ onMounted(() => {
 
         .approved-draft,
         .tiptap-content-readonly {
-          margin: $spacing-sm 0;
+          margin: 0 0 $spacing-sm 0;
           padding: $spacing-sm;
-          background: rgba($black, 0.025);
+          background: rgba($white, 1);
           border-radius: $br-lg;
           width: 100%;
           min-height: 100px;

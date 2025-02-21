@@ -3,14 +3,14 @@
     <div class="intro-data-row" v-if="TeamMembersData">
       <div class="members">
         <div class="single-member" v-if="projectManager">
-          <Avatar :uuid="projectManager" :hasName="true" size="tiny" />
-          <div class="members-role">Project Manager</div>
+          <Avatar :uuid="projectManager" :hasName="true" size="tiny" :secondarytext="'Project Manager'" />
+          <!-- <div class="members-role">Project Manager</div> -->
         </div>
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
-          <Avatar :uuid="uuid" :hasName="true" size="tiny" />
+          <Avatar :uuid="uuid" :hasName="true" size="tiny" :secondarytext="role" />
           <div class="members-role">
             <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Currently assigned</div>
-            {{ role }}
+            <!-- {{ role }} -->
           </div>
         </div>
       </div>
@@ -64,7 +64,6 @@ onMounted(async () => {
     gap: $spacing-md;
     width: 100%;
     padding: $spacing-sm 0;
-    border-bottom: $border;
 
     &:first-child {
       padding-top: 0;
@@ -85,9 +84,10 @@ onMounted(async () => {
 
     .members {
       display: flex;
-      flex-direction: column;
-      gap: $spacing-xs;
+      flex-direction: row;
+      gap: $spacing-sm;
       width: 100%;
+      padding: 0 $spacing-sm;
 
       .single-member {
         display: flex;
@@ -95,17 +95,12 @@ onMounted(async () => {
         justify-content: space-between;
         align-items: center;
         gap: $spacing-sm;
-        width: 100%;
-        border-bottom: $border;
-        padding-bottom: $spacing-xs;
-
-        &:last-child {
-          border-bottom: none;
-        }
+        padding: $spacing-xs;
+        border-radius: $br-lg;
+        background: rgba($brand, 0.05);
 
         .members-role {
-          font-size: $font-size-xs;
-          font-weight: bold;
+          font-size: $font-size-xxs;
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -114,7 +109,8 @@ onMounted(async () => {
           .assigned-to {
             font-size: $font-size-xxs;
             color: $brand;
-            background: rgba($brand, 0.1);
+            background: rgba($white, 0.5);
+            border: $border;
             padding: 2px $spacing-xs;
             border-radius: $br-lg;
           }

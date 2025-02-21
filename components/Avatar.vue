@@ -4,13 +4,16 @@
       <Loading v-if="loading" type="small" />
       <img :src="src" alt="" :class="size" v-else />
     </span>
-    <div v-if="hasName && ProfileData">{{ ProfileData.username }}</div>
+    <div class="user-details" v-if="hasName && ProfileData">
+      <div class="username">{{ ProfileData.username }}</div>
+      <div class="secondarytext" v-if="secondarytext">{{ secondarytext }}</div>
+    </div>
   </section>
 </template>
 
 <script setup>
 
-const props = defineProps(['uuid', 'size', 'hasName'])
+const props = defineProps(['uuid', 'size', 'hasName', 'secondarytext'])
 const supabase = useSupabaseClient()
 const loading = ref(true)
 const src = ref("")
@@ -68,6 +71,20 @@ watch(path, () => {
   flex-direction: row;
   gap: $spacing-xs;
   align-items: center;
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+
+    .username {
+      font-weight: bold;
+    }
+
+    .secondarytext {
+      font-size: $font-size-xs;
+      color: rgba($black, 0.5);
+    }
+  }
 }
 
 .user-avatar {

@@ -517,6 +517,9 @@ onBeforeUnmount(() => {
 .TipTapEditor,
 .TipTapReview {
   width: 100%;
+  background: $white;
+  height: calc(100% - $spacing-sm);
+  border-radius: $br-lg;
 
   &:hover .TipTapTools {
     background: rgba($black, 0.035);
