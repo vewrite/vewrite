@@ -6,11 +6,10 @@
           <Avatar :uuid="projectManager" :hasName="true" size="tiny" :secondarytext="'Project Manager'" />
           <!-- <div class="members-role">Project Manager</div> -->
         </div>
-        <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role">
+        <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role" :class="DeliverableData.assigned_to == uuid ? 'assigned' : ''">
           <Avatar :uuid="uuid" :hasName="true" size="tiny" :secondarytext="role" />
           <div class="members-role">
-            <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Currently assigned</div>
-            <!-- {{ role }} -->
+            <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Assigned</div>
           </div>
         </div>
       </div>
@@ -97,7 +96,13 @@ onMounted(async () => {
         gap: $spacing-sm;
         padding: $spacing-xs;
         border-radius: $br-lg;
-        background: rgba($brand, 0.05);
+        background: rgba($brand, 0.025);
+        border: 1px solid rgba($brand, 0.05);
+
+        &.assigned {
+          background: linear-gradient(to bottom, rgba($brand, 0), rgba($brand, 0.075));
+          border: 1px solid rgba($brand, 0.2);
+        }
 
         .members-role {
           font-size: $font-size-xxs;
@@ -110,7 +115,7 @@ onMounted(async () => {
             font-size: $font-size-xxs;
             color: $brand;
             background: rgba($white, 0.5);
-            border: $border;
+            border: 1px solid rgba($brand, 0.5);
             padding: 2px $spacing-xs;
             border-radius: $br-lg;
           }

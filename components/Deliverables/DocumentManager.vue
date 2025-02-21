@@ -397,7 +397,7 @@ onMounted(() => {
           font-size: $font-size-xxs;
           color: $brand;
           background: rgba($white, 0.5);
-          border: $border;
+          border: 1px solid rgba($brand, 0.5);
           padding: 2px $spacing-xs;
           border-radius: $br-lg;
           margin: 0;
