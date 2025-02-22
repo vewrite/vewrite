@@ -22,16 +22,9 @@
       <Loading v-if="loading" type="small" />
       <section class="deliverables" v-if="!loading && hasAccess" :class="{ 'fullscreen': fullscreen }">
         <section class="fullscreen-bar" v-if="fullscreen">
-          <button class="button" @click="toggleFullscreen()">Collapse</button>
-          <button class="button" @click="changeAssignmentsModal()">Change assignments</button>
-          <Dropdown>
-            <template v-slot:trigger>
-              <Icon name="uis:ellipsis-v" size="1.15rem" />
-            </template>
-            <template v-slot:menu>
-              <div class="dropdown-item" @click="deleteDeliverableModal()">Delete deliverable</div>
-            </template>
-          </Dropdown>
+          <button class="button" @click="toggleFullscreen()">
+            <Icon name="fluent-mdl2:chrome-close" size="1rem" />
+          </button>
         </section>  
         <DocumentManager v-if="DeliverableData" :DeliverableData="DeliverableData" :StateData="StateData" />
       </section>
@@ -162,7 +155,7 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 @use 'assets/variables' as *;
 
@@ -178,9 +171,12 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    padding: $spacing-sm;
-    background: rgba($black, 0.05);
-    border-bottom: $border;
+    padding: $spacing-sm $spacing-sm 0;
+    background: transparent;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1001;
   }
 
   &.fullscreen {
@@ -193,6 +189,10 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
     background: rgba($white, 1);
     overflow-y: scroll;
     z-index: 1000;
+
+    .documents {
+      padding: 0 $spacing-md $spacing-md;
+    }
   }
 
   .state-bar {
