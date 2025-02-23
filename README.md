@@ -20,6 +20,8 @@ The problem with this approach is that each deliverable has many "things to do" 
 
 I think that there is a better way to work. The launch article goes into more detail, and you can [read it here](https://vewrite.com/articles/introducing-vewrite).
 
+![Vewrite](https://github.com/ramijames/vewrite/blob/main/public/images/github-readme-projects.png?raw=true)
+
 ## 🚀 Roadmap
 
 Vewrite today is still only a small slice of its wider vision. As we run up to a first public launch to beta testers, I should talk a little bit about what the future holds.
