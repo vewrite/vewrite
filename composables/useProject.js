@@ -174,6 +174,22 @@ export default function useProject() {
     }
   }
 
+  async function fetchProjectsCreatedBy(user) {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('created_by', user);
+
+      if (error) throw error;
+
+      return data.length;
+
+    } catch (error) {
+      projectError.value = error.message;
+    }
+  }
+
   async function fetchProjectWorkflow(projectId) {
     try {
       const { data, error } = await supabase
@@ -218,6 +234,7 @@ export default function useProject() {
     getProjectDetails,
     fetchProjectWorkflow,
     fetchClientProjects,
+    fetchProjectsCreatedBy,
     projectData,
     ProjectsData,
     projectError,

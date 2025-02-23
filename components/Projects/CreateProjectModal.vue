@@ -3,7 +3,7 @@
     <div class="modal-body">
 
       <Loading v-if="loading" class="loader" />
-
+      
       <section class="inner-container" v-if="!loading && readyTeamsData.length < 1">
         <div class="empty">
           <h3>No Ready Teams Found</h3>
@@ -22,7 +22,15 @@
 
       <form class="inner-container" v-if="!loading && clients.length > 0 && readyTeamsData.length > 0" @submit.prevent="createProject(project)">
 
-        <div class="form-block">
+        <section class="inner-container" v-if="!loading && PlanStatus == 'free' && ownedProjects > 1">
+          <div class="empty">
+            <h3>Free projects are limited</h3>
+            <p>You're a manager and already have one free project. If you need more, you must upgrade.</p>
+            <nuxt-link class="button green large" to="/subscriptions" @click="useModal().reset()">Upgrade</nuxt-link>
+          </div>
+        </section>
+
+        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
           <div class="form-details">
             <h4>Project Details</h4>
             <p class="details">These help you quickly identify and differentiate your projects. Make sure to be as descriptive and details as possible so that you don't confuse your projects.</p>
@@ -40,7 +48,7 @@
           </div>
         </div>
 
-        <div class="form-block">
+        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
           <div class="form-details">
             <h4>Team</h4>
             <p class="details">Assign a team who will work on this project.</p>
@@ -56,7 +64,7 @@
           </div>
         </div>
 
-        <div class="form-block">
+        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
           <div class="form-details">
             <h4>Client</h4>
             <p class="details">Select which client this is for.</p>
@@ -79,7 +87,7 @@
           </div>
         </div>
 
-        <div class="form-block">
+        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
           <div class="form-details">
             <h4>Workflow</h4>
             <p class="details">Your team relies on this workflow to set the correct order of work.</p>
@@ -98,7 +106,7 @@
           
     </div>
     
-    <div class="buttons" v-if="clients.length > 0">
+    <div class="buttons" v-if="PlanStatus == 'free' && ownedProjects < 1">
       <button @click="handleCreateProject(project)" class="primary large">Create</button>
     </div>
   </div>
@@ -107,7 +115,7 @@
 <script setup>
 
 import useProject from '~/composables/useProject';
-const { createProject } = useProject();
+const { createProject, fetchProjectsCreatedBy } = useProject();
 
 import useClient from '~/composables/useClient';
 const { fetchClients } = useClient();
@@ -124,6 +132,13 @@ const { fetchSingleGroup, GroupData, GroupError } = useGroup();
 import { useModal } from '~/stores/modal'
 
 const user = useSupabaseUser();
+
+const PlanStatus = ref('')
+const ownedProjects = ref(0);
+
+// Pull subscription status from the middleware auth.js
+const subscriptionStatus = useState('subscriptionStatus');
+PlanStatus.value = subscriptionStatus.value.status
 
 const readyTeamsData = computed(() => {
   return TeamsData.value.filter(team => team.details.ready === true);
@@ -153,6 +168,8 @@ onMounted(async () => {
   try {
     await fetchSingleGroup(user.value.id);
     await fetchTeams(GroupData.value.id);
+    ownedProjects.value = await fetchProjectsCreatedBy(user.value.id);
+    console.log('Owned projects:', ownedProjects.value);
     clients.value = await fetchClients(user.value.id);
     workflows.value = await fetchWorkflows(user.value.id);
     loading.value = false;
