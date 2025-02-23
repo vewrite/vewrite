@@ -38,9 +38,4 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return // Allow access to public route
   }
 
-  // This blocks github and magic link users from accessing the app
-  // if (!authStore || user.value == null) {
-  //   return navigateTo('/login')
-  // }
-
 })
