@@ -6,8 +6,14 @@
       </router-link>
       <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
-        <button class="button" @click="toggleFullscreen()">Fullscreen</button>
-        <button class="button" @click="changeAssignmentsModal()">Change assignments</button>
+        <button class="button" @click="toggleFullscreen()">
+          <Icon name="fluent:full-screen-maximize-20-regular" size="1.5rem" />
+        </button>
+        <button class="button" @click="changeAssignmentsModal()">
+          <Icon name="fluent-mdl2:user-sync" size="1.5rem" />
+        </button>
+        <div class="vertical-divider"></div>
+        <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         <Dropdown>
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -38,6 +44,8 @@
 </template>
 
 <script setup>
+
+import StateBar from '~/components/Deliverables/StateBar.vue';
 
 definePageMeta({
   layout: 'default',

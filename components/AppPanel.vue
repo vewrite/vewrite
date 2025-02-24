@@ -56,6 +56,12 @@ export default {
       align-items: center;
       justify-content: flex-end;
       gap: $spacing-xs;
+
+      .vertical-divider {
+        height: 20px;
+        width: 1px;
+        background: rgba($black, 0.15);
+      }
     }
   }
 

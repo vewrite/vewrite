@@ -62,11 +62,6 @@ onMounted(async () => {
     align-items: flex-start;
     gap: $spacing-md;
     width: 100%;
-    padding: $spacing-sm 0;
-
-    &:first-child {
-      padding-top: 0;
-    }
 
     &:last-child {
       border-bottom: none;
@@ -84,9 +79,9 @@ onMounted(async () => {
     .members {
       display: flex;
       flex-direction: row;
+      align-content: flex-end;
       gap: $spacing-sm;
       width: 100%;
-      padding: 0 $spacing-sm;
 
       .single-member {
         display: flex;

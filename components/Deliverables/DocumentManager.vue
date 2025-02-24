@@ -15,9 +15,9 @@
         <div class="state-buttons-wrap">
           <section class="state-intro">
             <p class="state-name">{{ StateData[0].instance_name }}</p>
-            <p class="due-date">Due <span>{{ dueDate }}</span></p>
+            <p class="due-date">Deliverable due <span>{{ dueDate }}</span></p>
           </section>
-          <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
+          <!-- <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" /> -->
         </div>
         <div class="state-data">
           <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
@@ -378,17 +378,18 @@ onMounted(() => {
 
     .state-details {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
+      align-content: center;
       background: rgba($brand, 0.05);
       border-radius: $br-xl;
+      padding: $spacing-sm $spacing-md;
 
       .state-buttons-wrap {
         display: flex;
         flex-direction: row;
         gap: $spacing-sm;
-        padding: $spacing-sm $spacing-sm 0 $spacing-sm;
         border-radius: $br-lg;
-        width: 100%;
         justify-content: space-between;
         align-items: center;
         border-radius: $br-xl $br-xl 0 0;
@@ -433,8 +434,6 @@ onMounted(() => {
 
       .state-data {
         height: 100%;
-        padding-top: $spacing-sm;
-        width: 100%;
       }
     }
 
