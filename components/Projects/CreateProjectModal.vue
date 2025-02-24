@@ -2,9 +2,10 @@
   <div id="CreateProjectModal">
     <div class="modal-body">
 
-      <Loading v-if="loading" class="loader" />
+      <Loading v-if="loading" class="loader" type="small" />
       
-      <section class="inner-container" v-if="!loading && readyTeamsData.length < 1">
+      <!-- No teams -->
+      <section class="inner-container" v-if="!loading && !hasReadyTeams">
         <div class="empty">
           <h3>No Ready Teams Found</h3>
           <p>You do not have a team to assign a project to. You must first add a team to Vewrite, and add at least two team members.</p>
@@ -12,7 +13,8 @@
         </div>
       </section>
 
-      <section class="inner-container" v-if="!loading && clients.length < 1">
+      <!-- No clients -->
+      <section class="inner-container" v-if="!loading && !hasClients">
         <div class="empty">
           <h3>No Clients Found</h3>
           <p>You do not have a client to assign a project to. You must first add a client to Vewrite.</p>
@@ -20,17 +22,20 @@
         </div>
       </section>
 
-      <form class="inner-container" v-if="!loading && clients.length > 0 && readyTeamsData.length > 0" @submit.prevent="createProject(project)">
+      <!-- Free user, maxxed out projects -->
+      <section class="inner-container" v-if="!loading && !isPro && !isAllowed">
+        <div class="empty">
+          <h3>Free projects are limited</h3>
+          <p>You're a manager and already have one free project. If you need more, you must upgrade.</p>
+          <nuxt-link class="button green large" to="/subscriptions" @click="useModal().reset()">Upgrade</nuxt-link>
+        </div>
+      </section>
 
-        <section class="inner-container" v-if="!loading && PlanStatus == 'free' && ownedProjects > 1">
-          <div class="empty">
-            <h3>Free projects are limited</h3>
-            <p>You're a manager and already have one free project. If you need more, you must upgrade.</p>
-            <nuxt-link class="button green large" to="/subscriptions" @click="useModal().reset()">Upgrade</nuxt-link>
-          </div>
-        </section>
+      <!-- Has clients and teams -->
+      <form class="inner-container" v-if="!loading && hasReadyTeams && hasClients && isAllowed" @submit.prevent="createProject(project)">
 
-        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
+        <!-- isPro or freeLimitedProject -->
+        <div class="form-block" v-if="isAllowed">
           <div class="form-details">
             <h4>Project Details</h4>
             <p class="details">These help you quickly identify and differentiate your projects. Make sure to be as descriptive and details as possible so that you don't confuse your projects.</p>
@@ -48,7 +53,7 @@
           </div>
         </div>
 
-        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
+        <div class="form-block">
           <div class="form-details">
             <h4>Team</h4>
             <p class="details">Assign a team who will work on this project.</p>
@@ -64,7 +69,7 @@
           </div>
         </div>
 
-        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
+        <div class="form-block">
           <div class="form-details">
             <h4>Client</h4>
             <p class="details">Select which client this is for.</p>
@@ -87,7 +92,7 @@
           </div>
         </div>
 
-        <div class="form-block" v-if="!loading && PlanStatus == 'free' && ownedProjects < 1">
+        <div class="form-block">
           <div class="form-details">
             <h4>Workflow</h4>
             <p class="details">Your team relies on this workflow to set the correct order of work.</p>
@@ -106,7 +111,7 @@
           
     </div>
     
-    <div class="buttons" v-if="PlanStatus == 'free' && ownedProjects < 1">
+    <div class="buttons" v-if="!loading && hasReadyTeams && hasClients && isAllowed">
       <button @click="handleCreateProject(project)" class="primary large">Create</button>
     </div>
   </div>
@@ -179,8 +184,44 @@ onMounted(async () => {
   }
 })
 
-watch(project, (newVal, oldVal) => {
-  console.log('Project:', project);
+const hasReadyTeams = computed(() => {
+  return readyTeamsData.value.length > 0;
+})
+
+const hasClients = computed(() => {
+  return clients.value.length > 0;
+})
+
+const isPro = computed(() => {
+  console.log('Plan status:', PlanStatus.value);
+  return PlanStatus.value == 'pro';
+})
+
+const isFree = computed(() => {
+  return PlanStatus.value == 'free';
+})
+
+const limitedProject = computed(() => {
+  return ownedProjects.value > 1;
+})
+
+const isAllowed = computed(() => {
+  // Pro user always allowed
+  if (isPro.value) {
+    console.log('Pro user, allowed');
+    return true;
+  }
+
+  // Free user, no projects, allowed
+  if (ownedProjects.value < 2) {
+    console.log(ownedProjects.value);
+    return true;
+  }
+
+  // Free user, already has one project, not allowed
+  if (ownedProjects.value > 1) {
+    return false;
+  }
 })
 
 // Form validation

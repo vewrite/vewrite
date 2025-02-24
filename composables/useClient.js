@@ -138,38 +138,47 @@ export default function useClient() {
     
 
   async function fetchClients(userId) {
-    const { data, error } = await supabase
-      .from('clients')
-      .select('*')
-      .eq('created_by', userId)
-  
-    if (error) {
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('*')
+        .eq('created_by', userId)
+
+      if (error) {
+        console.error('Error fetching clients:', error.message)
+        ClientError.value = error.message
+        return
+      }
+
+      // clientsData.value = data
+      if (!data) {
+        return
+      } else {
+        clientsData.value = await Promise.all(data.map(async client => {
+          clientsData.projects = [];
+          clientsData.projects = await fetchClientProjects(client.client_id);
+          
+          // Download the image
+          const logoBlob = await downloadImage(client.logo_url);
+          
+          return {
+            ...client,
+            logo_url: URL.createObjectURL(logoBlob)
+          };
+        }));
+    
+        return clientsData.value
+      }
+    
+    } catch (error) {
       console.error('Error fetching clients:', error.message)
       ClientError.value = error.message
-      return
     }
-  
-    clientsData.value = data
-  
-    clientsData.value = await Promise.all(data.map(async client => {
-      
-      clientsData.projects = [];
-      clientsData.projects = await fetchClientProjects(client.id);
-      
-      // Download the image
-      const logoBlob = await downloadImage(client.logo_url);
-      
-      return {
-        ...client,
-        logo_url: URL.createObjectURL(logoBlob)
-      };
-    }));
-
-    return clientsData.value
   
   }
 
   async function fetchClientProjects(clientId) {
+
     const { data, error } = await supabase
       .from('projects')
       .select('*')
