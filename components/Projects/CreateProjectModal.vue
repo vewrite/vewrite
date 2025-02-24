@@ -174,7 +174,6 @@ onMounted(async () => {
     await fetchSingleGroup(user.value.id);
     await fetchTeams(GroupData.value.id);
     ownedProjects.value = await fetchProjectsCreatedBy(user.value.id);
-    console.log('Owned projects:', ownedProjects.value);
     clients.value = await fetchClients(user.value.id);
     workflows.value = await fetchWorkflows(user.value.id);
     loading.value = false;
@@ -193,16 +192,11 @@ const hasClients = computed(() => {
 })
 
 const isPro = computed(() => {
-  console.log('Plan status:', PlanStatus.value);
-  return PlanStatus.value == 'pro';
-})
-
-const isFree = computed(() => {
-  return PlanStatus.value == 'free';
-})
-
-const limitedProject = computed(() => {
-  return ownedProjects.value > 1;
+  if (PlanStatus.value == 'pro') {
+    return true;
+  } else {
+    return false;
+  }
 })
 
 const isAllowed = computed(() => {
@@ -213,13 +207,13 @@ const isAllowed = computed(() => {
   }
 
   // Free user, no projects, allowed
-  if (ownedProjects.value < 2) {
+  if (isPro.value && ownedProjects.value < 2) {
     console.log(ownedProjects.value);
     return true;
   }
 
   // Free user, already has one project, not allowed
-  if (ownedProjects.value > 1) {
+  if (isPro.value && ownedProjects.value > 1) {
     return false;
   }
 })

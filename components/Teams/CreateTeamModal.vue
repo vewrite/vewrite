@@ -2,8 +2,18 @@
   <div id="CreateTeamModal">
     <div class="modal-body">
       <Loading v-if="loading" />
-      {{ GroupError }}
-      <form class="inner-container" @submit.prevent="createTeam">
+
+      <!-- Free user, maxxed out teams -->
+      <section class="inner-container" v-if="!loading && !isPro && !isAllowed">
+        <div class="empty">
+          <h3>Free teams are limited</h3>
+          <p>You're a manager and already have one free team. If you need more, you must upgrade.</p>
+          <nuxt-link class="button green large" to="/subscriptions" @click="useModal().reset()">Upgrade</nuxt-link>
+        </div>
+      </section>
+
+      
+      <form class="inner-container" @submit.prevent="createTeam" v-if="isAllowed">
 
         <div class="form-block">
             <div class="form-details">
@@ -22,7 +32,7 @@
       </form>
     </div>
     
-    <div class="buttons">
+    <div class="buttons" v-if="isAllowed">
       <button @click="handleCreateTeam(team)" class="primary wide">Create</button>
     </div>
   </div>
@@ -32,7 +42,7 @@
 
 // Deliverables composable
 import useTeam from '~/composables/useTeam';
-const { createTeam } = useTeam();
+const { createTeam, fetchOwnedTeams } = useTeam();
 
 // Group composable
 import useGroup from '~/composables/useGroup';
@@ -40,6 +50,13 @@ const { fetchGroupId, GroupData, GroupError } = useGroup();
 
 const loading = ref(false);
 const user = useSupabaseUser();
+
+const PlanStatus = ref('')
+const ownedTeams = ref(0);
+
+// Pull subscription status from the middleware auth.js
+const subscriptionStatus = useState('subscriptionStatus');
+PlanStatus.value = subscriptionStatus.value.status
 
 // Set some sane defaults for the team object
 const team = reactive({
@@ -50,25 +67,45 @@ const team = reactive({
   }
 })
 
-const GroupId = ref('')
+const isPro = computed(() => {
+  if (PlanStatus.value == 'pro') {
+    return true;
+  } else {
+    return false;
+  }
+})
 
-console.log('User is:', user.value.id);
+const isAllowed = computed(() => {
+  // Pro user always allowed
+  if (isPro.value) {
+    console.log('Pro user, allowed');
+    return true;
+  }
+
+  // Free user, no teams, allowed
+  if (isPro.value && ownedTeams.value < 2) {
+    return true;
+  }
+
+  // Free user, already has one team, not allowed
+  if (isPro.value == 'free' && ownedTeams.value > 1) {
+    return false;
+  }
+})
+
+const GroupId = ref('')
 
 // Get the current user's group ID
 onMounted(async () => {
   try {
     await fetchGroupId(user.value.id);
-    GroupId.value = GroupData.value.id; // Access GroupData.value.id
-    team.group_id = GroupData.value.id; // Set team.group_id
+    GroupId.value = GroupData.value.id;
+    team.group_id = GroupData.value.id;
+    ownedTeams.value = await fetchOwnedTeams(GroupData.value.id);
   } catch (error) {
     console.error('Error fetching group ID:', error);
   }
 });
-
-function logoUrlUpdate(filePath) {
-  team.logo_url = filePath;
-  console.log('Logo URL updated:', filePath);
-}
 
 // Form validation
 import { useVuelidate } from '@vuelidate/core'

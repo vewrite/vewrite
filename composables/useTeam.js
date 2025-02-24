@@ -171,6 +171,25 @@ export default function useTeam() {
     }
   }
 
+  async function fetchOwnedTeams(group_id) {
+
+    console.log('Fetching owned teams for group:', group_id);
+    
+    try {
+      const { data, error } = await supabase
+        .from('teams')
+        .select('*')
+        .eq('group_id', group_id);
+
+      if (error) throw error;
+
+      return data.length;
+
+    } catch (error) {
+      projectError.value = error.message;
+    }
+  }
+
   function createTeamModal() {
     useModal().setType('large');
     useModal().setHeader('Create Team');
@@ -250,6 +269,7 @@ export default function useTeam() {
     fetchTeams,
     fetchSingleTeam,
     fetchInvitedTeams,
+    fetchOwnedTeams,
     createTeamModal,
     deleteTeamModal,
     approveTeamMember,
