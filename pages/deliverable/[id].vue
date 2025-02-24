@@ -9,12 +9,12 @@
         <button class="button" @click="toggleFullscreen()">
           <Icon name="fluent:full-screen-maximize-20-regular" size="1.5rem" />
         </button>
-        <button class="button" @click="changeAssignmentsModal()">
+        <button class="button" @click="changeAssignmentsModal()" v-if="isOwner">
           <Icon name="fluent-mdl2:user-sync" size="1.5rem" />
         </button>
         <div class="vertical-divider"></div>
         <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
-        <Dropdown>
+        <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
           </template>
@@ -49,7 +49,7 @@ import StateBar from '~/components/Deliverables/StateBar.vue';
 
 definePageMeta({
   layout: 'default',
-  middleware: ['auth', 'deliverable'],
+  middleware: ['auth', 'deliverable', 'project'],
 });
 
 import { ref, onMounted } from 'vue';
@@ -93,6 +93,11 @@ const hasAccess = computed(() => {
   }
   return false;
 });
+
+// Roles
+const isOwner = computed(() => 
+  route.meta.role === 'owner'
+);
 
 const toggleFullscreen = () => {
   fullscreen.value = !fullscreen.value;

@@ -8,8 +8,8 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
-        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager'">Create new deliverable</button>
-        <Dropdown v-if="personaState == 'manager'">
+        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner">Create new deliverable</button>
+        <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
           </template>
@@ -21,7 +21,6 @@
     </template>
     <template v-slot:body>
       <section v-if="loading.global == false && hasAccess">
-        {{ route.meta.roles }}
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
@@ -73,7 +72,7 @@
 
 definePageMeta({
   layout: 'default',
-  middleware: ['auth'],
+  middleware: ['auth', 'project'],
 });
 
 // Pull personaState from the middleware auth.js
@@ -139,6 +138,11 @@ const states = ref([]);
 const completedDeliverables = ref(0);
 const teamMembers = ref([]);
 const user = useSupabaseUser();
+
+// Roles
+const isOwner = computed(() => 
+  route.meta.role === 'owner'
+);
 
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {

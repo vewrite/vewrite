@@ -57,6 +57,10 @@ export default {
       justify-content: flex-end;
       gap: $spacing-xs;
 
+      .notification {
+        white-space: nowrap;
+      }
+
       .vertical-divider {
         height: 20px;
         width: 1px;
