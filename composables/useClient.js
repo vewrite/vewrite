@@ -177,6 +177,27 @@ export default function useClient() {
   
   }
 
+  async function fetchClientsOwnedBy(userId) {
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('*')
+        .eq('created_by', userId)
+
+      if (error) {
+        console.error('Error fetching clients:', error.message)
+        ClientError.value = error.message
+        return
+      }
+
+      return data.length
+    
+    } catch (error) {
+      console.error('Error fetching clients:', error.message)
+      ClientError.value = error.message
+    }
+  }
+
   async function fetchClientProjects(clientId) {
 
     const { data, error } = await supabase
@@ -233,6 +254,7 @@ export default function useClient() {
     updateClient,
     fetchClient,
     fetchClients,
+    fetchClientsOwnedBy,
     fetchClientProjects,
     fetchProjectsFromSpecificClient
   }

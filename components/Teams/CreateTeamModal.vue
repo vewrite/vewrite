@@ -12,9 +12,8 @@
         </div>
       </section>
 
-      
+      <!-- Pro user or free user with no teams -->
       <form class="inner-container" @submit.prevent="createTeam" v-if="isAllowed">
-
         <div class="form-block">
             <div class="form-details">
               <h3>Team Details</h3>
@@ -28,7 +27,6 @@
               </div>
             </div>
         </div>
-
       </form>
     </div>
     

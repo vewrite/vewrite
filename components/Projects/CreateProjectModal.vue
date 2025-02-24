@@ -207,13 +207,13 @@ const isAllowed = computed(() => {
   }
 
   // Free user, no projects, allowed
-  if (isPro.value && ownedProjects.value < 2) {
+  if (isPro.value &&ownedProjects.value < 2) {
     console.log(ownedProjects.value);
     return true;
   }
 
   // Free user, already has one project, not allowed
-  if (isPro.value && ownedProjects.value > 1) {
+  if (isPro.value &&ownedProjects.value > 1) {
     return false;
   }
 })

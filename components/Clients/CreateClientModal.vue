@@ -4,7 +4,17 @@
       <Loading v-if="loading" />
       <form class="inner-container" @submit.prevent="createClient">
 
-        <div class="form-block">
+        <!-- Free user, maxxed out teams -->
+        <section class="inner-container" v-if="!loading && !isPro && !isAllowed">
+          <div class="empty">
+            <h3>Free clients are limited</h3>
+            <p>You're a manager and already have one free client. If you need more, you must upgrade.</p>
+            <nuxt-link class="button green large" to="/subscriptions" @click="useModal().reset()">Upgrade</nuxt-link>
+          </div>
+        </section>
+
+        <!-- Pro user or free user with no teams -->
+        <div class="form-block" v-if=" !loading && isAllowed">
             <div class="form-details">
               <h3>Client Details</h3>
               <p class="details">Your client's basic details.</p>
@@ -18,7 +28,7 @@
             </div>
         </div>
 
-        <div class="form-block">
+        <div class="form-block" v-if=" !loading && isAllowed">
             <div class="form-details">
               <h3>Client Logo</h3>
               <p class="details">Make your client identifiable. If this is a company, use their logo!</p>
@@ -33,7 +43,7 @@
           
     </div>
     
-    <div class="buttons">
+    <div class="buttons" v-if=" !loading && isAllowed">
       <button @click="handleCreateClient(client)" class="primary wide">Create</button>
     </div>
   </div>
@@ -43,13 +53,20 @@
 
 // Deliverables composable
 import useClient from '~/composables/useClient';
-const { createClient } = useClient();
+const { createClient, fetchClientsOwnedBy } = useClient();
 
 const loading = ref(false);
 const logo_url = ref('')
 
 // Get the current user
 const user = useSupabaseUser();
+
+const PlanStatus = ref('')
+const ownedClients = ref(0);
+
+// Pull subscription status from the middleware auth.js
+const subscriptionStatus = useState('subscriptionStatus');
+PlanStatus.value = subscriptionStatus.value.status
 
 // Set some sane defaults for the client object
 const client = reactive({
@@ -60,10 +77,47 @@ const client = reactive({
   logo_url: logo_url.value,
 })
 
+const isPro = computed(() => {
+  if (PlanStatus.value == 'pro') {
+    return true;
+  } else {
+    return false;
+  }
+})
+
+const isAllowed = computed(() => {
+  // Pro user always allowed
+  if (isPro.value) {
+    console.log('Pro user, allowed');
+    return true;
+  }
+
+  // Free user, no projects, allowed
+  if (isPro.value && ownedClients.value < 2) {
+    console.log(ownedClients.value);
+    return true;
+  }
+
+  // Free user, already has one project, not allowed
+  if (isPro.value && ownedClients.value > 1) {
+    return false;
+  }
+})
+
 function logoUrlUpdate(filePath) {
   client.logo_url = filePath;
   console.log('Logo URL updated:', filePath);
 }
+
+onMounted(async () => {
+  try {
+    ownedClients.value = await fetchClientsOwnedBy(user.value.id);
+    loading.value = false;
+  } catch (error) {
+    console.error('Error fetching clients:', error.message);
+    loading.value = false;
+  }
+})
 
 // Form validation
 import { useVuelidate } from '@vuelidate/core'
