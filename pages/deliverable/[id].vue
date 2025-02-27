@@ -14,7 +14,8 @@
         </button>
         <div class="vertical-divider"></div>
         <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
-        <Dropdown v-if="personaState == 'manager' && isOwner">
+        <div class="vertical-divider"></div>
+        <Dropdown v-if="personaState == 'manager' || isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
           </template>
@@ -51,6 +52,9 @@ definePageMeta({
   layout: 'default',
   middleware: ['auth', 'deliverable', 'project'],
 });
+
+// Pull personaState from the middleware auth.js
+const personaState = useState('personaState');
 
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
@@ -98,6 +102,8 @@ const hasAccess = computed(() => {
 const isOwner = computed(() => 
   route.meta.role === 'owner'
 );
+
+console.log('isOwner:', isOwner.value);
 
 const toggleFullscreen = () => {
   fullscreen.value = !fullscreen.value;

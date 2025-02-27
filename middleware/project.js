@@ -34,7 +34,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   // Now we make the information available as meta properties on the route
-  to.meta.project = projectId.value;
+  to.meta.project = projectId;
   to.meta.role = role;
 
 });

@@ -552,11 +552,10 @@ onBeforeUnmount(() => {
 .TipTapTools {
   display: flex;
   flex-wrap: nowrap;
-  gap: $spacing-xxs;
+  gap: $spacing-xxxs;
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
-  
   box-shadow: $soft-shadow;
   backdrop-filter: blur(6px);
   border: $border;
@@ -564,13 +563,10 @@ onBeforeUnmount(() => {
   position: sticky;
   top: $spacing-sm;
   margin: $spacing-sm;
-  width: calc(100% - 2 * #{$spacing-sm});
   z-index: 10;
-  overflow-x: auto;
-  overflow-y: hidden;
+  flex-wrap: wrap;
   border-radius: $br-lg;
   transition: opacity 0.3s ease;
-  height: 54px;
   transition: all 0.2s ease;
   background: rgba($white, .25);
 
@@ -593,24 +589,10 @@ onBeforeUnmount(() => {
     }
   }
 
-  @media (max-width: 960px) {
-    gap: $spacing-xxs;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: $spacing-xxs;
-    align-items: center;
-    justify-content: flex-start;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-radius: 0;
-    top: 0;
-    box-shadow: none;
-  }
-
   .button-group {
     display: flex;
-    gap: $spacing-xs;
+    flex-wrap: wrap;
+    gap: $spacing-xxxs;
   }
 
   button {
