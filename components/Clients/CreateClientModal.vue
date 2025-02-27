@@ -79,29 +79,24 @@ const client = reactive({
 
 const isPro = computed(() => {
   if (PlanStatus.value == 'pro') {
+    console.log('Pro user');
     return true;
   } else {
+    console.log('Free user');
     return false;
   }
 })
 
 const isAllowed = computed(() => {
-  // Pro user always allowed
-  if (isPro.value) {
-    console.log('Pro user, allowed');
-    return true;
-  }
-
-  // Free user, no projects, allowed
-  if (isPro.value && ownedClients.value < 2) {
+  // Free user, no clients, allowed
+  if (ownedClients.value == 0) {
     console.log(ownedClients.value);
     return true;
-  }
-
-  // Free user, already has one project, not allowed
-  if (isPro.value && ownedClients.value > 1) {
+  } else { // Free user, already has one project, not allowed
     return false;
   }
+
+  
 })
 
 function logoUrlUpdate(filePath) {
