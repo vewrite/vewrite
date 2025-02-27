@@ -147,7 +147,7 @@
         </section>
 
         <section class="login-bottom">
-          <p class="copyright-and-terms">© 2021 All rights reserved. <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+          <p class="copyright-and-terms">© 2024 All rights reserved. <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
         </section>
       </section>
     </main>

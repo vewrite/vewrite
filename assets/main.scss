@@ -14,9 +14,10 @@ body {
 
 #__nuxt {
     height: 100%;
+
     // For screenshots
-    // height: calc(100% - 20px);
-    // margin: 10px;
+    height: calc(100% - 20px);
+    margin: 10px;
 }
 
 * {
@@ -723,6 +724,14 @@ button,
         background: rgba($gray, 0.1);
         color: rgba($black, 0.25);
         outline: none;
+    }
+
+    section {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: $spacing-xxs;
     }
 }
 
