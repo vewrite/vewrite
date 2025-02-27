@@ -113,18 +113,18 @@ onMounted(async () => {
   min-width: 300px;
   width: 100%;
   height: 100%;
-  padding: $spacing-sm;
+  padding: 0 0 $spacing-sm $spacing-sm;
 
   .empty-state {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: $spacing-sm;
-    background: rgba($brand, 0.05);
+    background: rgba($black, 0.025);
     border-radius: $br-lg;
 
     p {
-      color: rgba($black, 0.25);
+      color: rgba($black, 0.5);
       font-size: $font-size-xs;
       margin: 0;
     }

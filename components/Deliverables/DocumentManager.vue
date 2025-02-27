@@ -492,6 +492,7 @@ onMounted(() => {
           width: 100%;
           min-height: 100px;
           cursor: not-allowed;
+          background: rgba($black, 0.025);
         }
       }
 
