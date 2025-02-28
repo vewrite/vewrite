@@ -21,10 +21,7 @@ export default function useProfile() {
         website: '',
         persona: '',
         subscription: {
-          "status": "free",
-          "order_id": "",
-          "next_billing_time": "",
-          "current_period_start": ""
+          "status": "free"
         },
       }
 
@@ -84,57 +81,77 @@ export default function useProfile() {
     return response;
   }
 
-  async function setSubscriptionStatus(id, status, subscriptionId) {
+  async function setSubscriptionStatus(id, status) {
     console.log('Setting subscription status:', id, status);
     
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', id);
-      
-      if (error) throw error;
-
-      const profile = data[0];
-      const subscription = profile.subscription;
-    
-      // Check with PayPal that the orderId exists
-      const config = useRuntimeConfig();
-      const clientId = config.public.paypal.clientId;
-      const clientSecret = config.private.paypal.clientSecret;
-      const accessToken = await getPaypalAccessToken(clientId, clientSecret);
-      // const orderDetails = await verifyPaypalOrder(orderId, accessToken);
-      console.log('Subscription:', subscriptionId);
-      const subcriptionDetails = await verifyPaypalSubscription(subscriptionId, accessToken);
-
-      console.log('Subscription details:', subcriptionDetails);
-
-      let status = {
-        "status": subcriptionDetails.status,
-        "order_id": subcriptionDetails.id,
-        "current_period_start": subcriptionDetails.start_time,
-        "next_billing_time": subcriptionDetails.billing_info.next_billing_time,
-      }
-
-      if (subcriptionDetails.status === 'ACTIVE') {
-        // If the order exists and is completed, update the subscription status
-        const { data, error } = await supabase
           .from('profiles')
           .update({ subscription: status })
           .eq('id', id);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        ProfileData.value = data[0];
-      } else {
-        throw new Error('Order is not completed');
-      }
+      return data;
+
     } catch (error) {
       console.error('Error setting subscription status:', error);
       ProfileError.value = error.message;
     }
 
   }
+
+  // async function setSubscriptionStatus(id, status, subscriptionId) {
+  //   console.log('Setting subscription status:', id, status);
+    
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('profiles')
+  //       .select('*')
+  //       .eq('id', id);
+      
+  //     if (error) throw error;
+
+  //     const profile = data[0];
+  //     const subscription = profile.subscription;
+    
+  //     // Check with PayPal that the orderId exists
+  //     const config = useRuntimeConfig();
+  //     const clientId = config.public.paypal.clientId;
+  //     const clientSecret = config.private.paypal.clientSecret;
+  //     const accessToken = await getPaypalAccessToken(clientId, clientSecret);
+  //     // const orderDetails = await verifyPaypalOrder(orderId, accessToken);
+  //     console.log('Subscription:', subscriptionId);
+  //     const subcriptionDetails = await verifyPaypalSubscription(subscriptionId, accessToken);
+
+  //     console.log('Subscription details:', subcriptionDetails);
+
+  //     let status = {
+  //       "status": subcriptionDetails.status,
+  //       "order_id": subcriptionDetails.id,
+  //       "current_period_start": subcriptionDetails.start_time,
+  //       "next_billing_time": subcriptionDetails.billing_info.next_billing_time,
+  //     }
+
+  //     if (subcriptionDetails.status === 'ACTIVE') {
+  //       // If the order exists and is completed, update the subscription status
+  //       const { data, error } = await supabase
+  //         .from('profiles')
+  //         .update({ subscription: status })
+  //         .eq('id', id);
+
+  //       if (error) throw error;
+
+  //       ProfileData.value = data[0];
+  //     } else {
+  //       throw new Error('Order is not completed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error setting subscription status:', error);
+  //     ProfileError.value = error.message;
+  //   }
+
+  // }
 
 
   async function updateProfile(profile) {

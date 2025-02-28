@@ -4,14 +4,8 @@
       <div class="thanks">Thanks for using Vewrite!</div>
     </template>
     <template v-slot:body>
-      {{ subscription }}
-      <main class="subscriptions">
-          {{ plan.name }}
-          {{ plan.price }}
-          {{ plan.interval }}
-          <button @click="subscribe">Subscribe</button>
-      </main>
-      <!-- <main class="subscriptions">
+      <Loading v-if="loading" />
+      <main class="subscriptions" v-else>
         <section class="subscribe-intro">
           <svg width="61" height="58" viewBox="0 0 61 58" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M54.1735 3.94478C57.6037 5.92519 58.779 10.3114 56.7985 13.7415L35.2834 51.0069C33.303 54.4371 28.9168 55.6123 25.4866 53.6319V53.6319C22.0564 51.6515 20.8812 47.2654 22.8616 43.8352L44.3767 6.56981C46.3572 3.13963 50.7433 1.96436 54.1735 3.94478V3.94478Z" fill="url(#paint0_linear_1_4)"/>
@@ -58,7 +52,7 @@
           </div>
           <div class="subscribe-option pro">
             <h2>Pro Plan</h2>
-            <p><span class="cost">$39/m</span> for the Manager, Writers are free.</p>
+            <p><span class="cost">$29/m</span> for the Manager, Writers are free.</p>
             <div class="subscribe-details">
               <ul>
                 <li>
@@ -99,9 +93,9 @@
         </section>
         <section class="subscribe-buttons max-width md">
           <div class="placeholder"></div>
-          <div id="paypal-checkout" v-if="!status"></div>
+          <button @click="subscribe" class="wide large green">Subscribe</button>
         </section>
-      </main> -->
+      </main>
     </template>
   </AppPanel>
 </template>
@@ -426,7 +420,6 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 1fr 1fr;
     background: rgba($white, 1);
-    mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0));
 
     @media (max-width: 600px) {
       grid-template-columns: 1fr;
