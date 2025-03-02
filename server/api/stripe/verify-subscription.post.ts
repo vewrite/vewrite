@@ -40,8 +40,64 @@ export default defineEventHandler(async (event) => {
     } else {
       console.log('Subscription found for user:', userId);
       subscriptionExists = true;
+
+      await setSubscriptionStatus();
+      
+      return { success: true };
     }
     
+  }
+
+  async function setSubscriptionStatus() {
+    try {
+      // Check if the subscription already exists before upserting
+      const { data: existingSubscription } = await supabase
+        .from('subscriptions')
+        .select('id')
+        .eq('user_id', userId)
+        .single();
+
+      if (existingSubscription) {
+        await supabase
+          .from('subscriptions')
+          .update({
+            user_id: userId,
+            stripe_customer_id: session.customer.toString(),
+            stripe_subscription_id: subscription.id,
+            status: subscription.status,
+            price_id: subscription.items.data[0].price.id,
+            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+          })
+          .eq('user_id', userId);
+
+      } else {
+        await supabase
+          .from('subscriptions')
+          .insert({
+            user_id: userId,
+            stripe_customer_id: session.customer.toString(),
+            stripe_subscription_id: subscription.id,
+            status: subscription.status,
+            price_id: subscription.items.data[0].price.id,
+            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+          })
+          .eq('user_id', userId);
+      }
+
+      // Update user profile to pro
+      console.log('Updating user profile to pro:', userId);
+      await supabase
+        .from('profiles')
+        .update({ subscription: { status: 'pro' } })
+        .eq('id', userId);
+
+
+    } catch (error) {
+      console.error('Error setting subscription status:', error);
+      return createError({ statusCode: 500, message: 'Error setting subscription status' });
+    }
   }
 
   async function updateSubscription() {
@@ -56,27 +112,27 @@ export default defineEventHandler(async (event) => {
       if(subscriptionExists === false) {
         console.log('No subscription, so creating subscription for user:', userId);
         // Save subscription details in database if there is not already a record for this user
-        await supabase
-          .from('subscriptions')
-          .upsert({
-            user_id: userId,
-            stripe_customer_id: session.customer.toString(),
-            stripe_subscription_id: subscription.id,
-            status: subscription.status,
-            price_id: subscription.items.data[0].price.id,
-            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
-          })
-          .eq('user_id', userId);
+        // await supabase
+        //   .from('subscriptions')
+        //   .upsert({
+        //     user_id: userId,
+        //     stripe_customer_id: session.customer.toString(),
+        //     stripe_subscription_id: subscription.id,
+        //     status: subscription.status,
+        //     price_id: subscription.items.data[0].price.id,
+        //     current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+        //     current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+        //   })
+        //   .eq('user_id', userId);
 
-        // Update user profile to pro
-        console.log('Updating user profile to pro:', userId);
-        await supabase
-          .from('profiles')
-          .update({ subscription: { status: 'pro' } })
-          .eq('id', userId);
+        // // Update user profile to pro
+        // console.log('Updating user profile to pro:', userId);
+        // await supabase
+        //   .from('profiles')
+        //   .update({ subscription: { status: 'pro' } })
+        //   .eq('id', userId);
         
-        return { success: true };
+        // return { success: true };
       } else {
         return createError({ statusCode: 400, message: 'Subscription already exists' });
       }

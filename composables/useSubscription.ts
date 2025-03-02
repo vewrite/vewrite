@@ -78,11 +78,6 @@ export default function useSubscription() {
 
       console.log('Subscription status:', data);
       
-      // Update local subscription state
-      if (subscription.value) {
-        subscription.value = data;
-      }
-      
       return data.active;
     } catch (err) {
       console.error('Error verifying subscription with Stripe:', err);

@@ -1,7 +1,9 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <div class="thanks">Thanks for using Vewrite!</div>
+      <div class="thanks" v-if="!loading && !verifiedSubscriptionStatus">Thanks for using Vewrite!</div>
+      <div v-if="!loading && verifiedSubscriptionStatus"></div>
+      <button @click="cancelSubscription" class="button" v-if="!loading && verifiedSubscriptionStatus">Cancel Subscription</button>
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
@@ -31,10 +33,10 @@
             <p>No cost to you or your team.</p>
             <div class="subscribe-details">
               <ul>
-                <li>
+                <!-- <li>
                   <span>Custom Workflows</span>
                   <span>1</span>
-                </li>
+                </li> -->
                 <li>
                   <span>Clients</span>
                   <span>1</span>
@@ -55,7 +57,23 @@
             <p><span class="cost">$29/m</span> for the Manager, Writers are free.</p>
             <div class="subscribe-details">
               <ul>
+                <!-- <li>
+                  <span>Custom Workflows</span>
+                  <span>Unlimited</span>
+                </li> -->
                 <li>
+                  <span>Clients</span>
+                  <span>Unlimited</span>
+                </li>
+                <li>
+                  <span>Projects</span>
+                  <span>Unlimited</span>
+                </li>
+                <li>
+                  <span>Teams</span>
+                  <span>Unlimited</span>
+                </li>
+                <!-- <li>
                   <span>Custom Workflows</span>
                   <span>Unlimited</span>
                 </li>
@@ -70,23 +88,7 @@
                 <li>
                   <span>Teams</span>
                   <span>Unlimited</span>
-                </li>
-                <li>
-                  <span>Custom Workflows</span>
-                  <span>Unlimited</span>
-                </li>
-                <li>
-                  <span>Clients</span>
-                  <span>Unlimited</span>
-                </li>
-                <li>
-                  <span>Active Projects</span>
-                  <span>Unlimited</span>
-                </li>
-                <li>
-                  <span>Teams</span>
-                  <span>Unlimited</span>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
@@ -97,7 +99,27 @@
         </section>
       </main>
       <main class="subscribed" v-if="!loading && verifiedSubscriptionStatus">
-        {{ currentSubscription }}
+        <div class="subscribed-intro">
+          <h1>Subscribed to Vewrite Pro</h1>
+          <p>Your subscription is active and you can access all pro features.</p>
+          <p>For each period, you will be charged $29.00.</p>
+        </div>
+        <div class="subscription-details">
+          <ul>
+            <li>
+              <span>Status</span>
+              <span>{{ currentSubscription.status }}</span>
+            </li>
+            <li>
+              <span>Subscribed on</span>
+              <span>{{ currentSubscription.created_at }}</span>
+            </li>
+            <li>
+              <span>Next billing date</span>
+              <span>{{ currentSubscription.current_period_end }}</span>
+            </li>
+          </ul>
+        </div>
       </main>
     </template>
   </AppPanel>
@@ -186,6 +208,52 @@ async function getAuthToken() {
   return data.session?.access_token || '';
 }
 
+async function cancelSubscription() {
+  loading.value = true;
+  error.value = null;
+  
+  try {
+    // Get the current session auth token
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    
+    console.log('Making request to /api/stripe/cancel-subscription');
+    
+    const response = await fetch('/api/stripe/cancel-subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        userId: user.value.id
+      })
+    });
+    
+    console.log('Response status:', response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`API error: ${response.status} - ${errorText}`);
+    }
+    
+    const data = await response.json();
+    console.log('Response data:', data);
+    
+    if (data.success) {
+      status.value = 'Subscription successfully cancelled';
+    } else {
+      throw new Error('Failed to cancel subscription');
+    }
+  } catch (err) {
+    console.error('Error cancelling subscription:', err);
+    error.value = err.message || 'An error occurred while processing your request';
+  } finally {
+    loading.value = false;
+  }
+}
+
 onMounted(async () => {
   loading.value = true;
   verifiedSubscriptionStatus.value = await verifySubscriptionStatus();
@@ -208,6 +276,62 @@ onMounted(async () => {
   text-align: center;
   width: 100%;
   opacity: 0.15;
+}
+
+.subscribed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+
+  .subscribed-intro {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-md $spacing-sm 0;
+    gap: $spacing-xxs;
+    border-radius: $br-lg;
+
+    h1 {
+      font-size: $font-size-xxl;
+      margin-bottom: $spacing-xxs;
+    }
+
+    p {
+      color: rgba($black, 0.85);
+    }
+  }
+
+  .subscription-details {
+    margin-bottom: $spacing-md;
+    width: 400px;
+
+    p {
+      font-weight: bold;
+      margin-bottom: $spacing-xs;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        padding: $spacing-xs 0;
+        color: $black;
+        border-bottom: $border;
+
+        &:last-child {
+          border: none;
+        }
+      }
+    }
+  }
 }
 
 .subscriptions {
