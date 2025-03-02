@@ -22,7 +22,6 @@ export default defineNuxtConfig({
     "@samk-dev/nuxt-vcalendar",
     '@nuxt/icon',
     'nuxt-tiptap-editor',
-    'nuxt-paypal',
   ],
 
   css: [
@@ -52,22 +51,11 @@ export default defineNuxtConfig({
       }
     }
   },
-  
-  // paypal: {
-  //   clientId: process.env.PAYPAL_CLIENT_ID,
-  //   clientSecret: process.env.PAYPAL_CLIENT_SECRET,
-  //   currency: 'USD',
-  // },
 
   runtimeConfig: {
     // Server-side environment variables
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     
-    paypal: {
-      clientId: process.env.PAYPAL_CLIENT_ID,
-      clientSecret: process.env.PAYPAL_CLIENT_SECRET,
-      currency: 'USD',
-    },
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,

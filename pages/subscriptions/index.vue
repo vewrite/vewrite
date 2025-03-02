@@ -471,11 +471,6 @@ onMounted(async () => {
       }
     }
 
-    #paypal-checkout {
-      background: rgba($white, 0.2);
-      backdrop-filter: blur(10px);
-      padding: $spacing-md;
-    }
   }
 }
 
