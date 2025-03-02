@@ -225,6 +225,17 @@ async function cancelSubscription() {
     if (response.status === 200 || response.status === 204) {
       status.value = 'Subscription successfully cancelled.';
       verifiedSubscriptionStatus.value = await verifySubscriptionStatus();
+
+      // We also have to set the subscription column in the profile to 'free'
+      const { error } = await supabase.from('profiles').update({
+        subscription: {
+          "status": "free"
+        }
+      }).eq('id', user.value.id);
+
+      if (error) {
+        throw new Error('Failed to update profile subscription.');
+      }
     } else {
       throw new Error('Failed to cancel subscription.');
     }

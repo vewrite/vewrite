@@ -1,27 +1,48 @@
 <template>
   <section class="persona">{{ personaState }}</section>
   <section class="plan-status topbar-plan">
-    <span v-if="PlanStatus == 'free' && personaState == 'manager'" class="free">
+    <span v-if="checkPlanStatus == 'free' && personaState == 'manager'" class="free">
       <!-- <section v-if="PlanStatus == 'free'">Using the free plan</section> -->
-      <nuxt-link to="/subscriptions" v-if="PlanStatus == 'free'" class="button green small">Upgrade</nuxt-link>
+      <nuxt-link to="/subscriptions" v-if="checkPlanStatus == 'free'" class="button green small">Upgrade</nuxt-link>
     </span>
-    <span v-else-if="PlanStatus == 'pro'" class="pro">Pro</span>
+    <span v-else-if="checkPlanStatus == 'pro'" class="pro">Pro</span>
   </section>
 </template>
 
 <script setup>
-
 import { computed } from 'vue';
 
-// Pull subscription status from the middleware auth.js
+// Access shared state
 const subscriptionStatus = useState('subscriptionStatus');
 const personaState = useState('personaState');
 
-// Create a computed property that will update automatically when subscriptionStatus changes
-const PlanStatus = computed(() => {
-  console.log('Subscription has updated, updating PlanStatus to:', subscriptionStatus.value);
-  return subscriptionStatus.value.status;
+// Computed property that depends on the state
+const checkPlanStatus = computed(() => {
+  console.log('Current subscription status:', subscriptionStatus.value);
+  if (subscriptionStatus.value && typeof subscriptionStatus.value === 'object') {
+    return subscriptionStatus.value.status;
+  }
+  return 'free'; // Default value
 });
+
+// Function to update the state
+function updateSubscriptionStatus(newStatus) {
+  // This directly updates the shared state
+  subscriptionStatus.value = { status: newStatus };
+  console.log('Updated subscription status to:', subscriptionStatus.value);
+}
+
+// You could also update the state based on an API call
+async function fetchAndUpdateStatus() {
+  try {
+    const response = await fetch('/api/subscription/status');
+    const data = await response.json();
+    // Update the shared state with the fetched data
+    subscriptionStatus.value = data;
+  } catch (error) {
+    console.error('Failed to fetch subscription status:', error);
+  }
+}
 
 </script>
 
