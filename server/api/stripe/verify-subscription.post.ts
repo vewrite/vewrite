@@ -111,28 +111,6 @@ export default defineEventHandler(async (event) => {
     try {
       if(subscriptionExists === false) {
         console.log('No subscription, so creating subscription for user:', userId);
-        // Save subscription details in database if there is not already a record for this user
-        // await supabase
-        //   .from('subscriptions')
-        //   .upsert({
-        //     user_id: userId,
-        //     stripe_customer_id: session.customer.toString(),
-        //     stripe_subscription_id: subscription.id,
-        //     status: subscription.status,
-        //     price_id: subscription.items.data[0].price.id,
-        //     current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-        //     current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
-        //   })
-        //   .eq('user_id', userId);
-
-        // // Update user profile to pro
-        // console.log('Updating user profile to pro:', userId);
-        // await supabase
-        //   .from('profiles')
-        //   .update({ subscription: { status: 'pro' } })
-        //   .eq('id', userId);
-        
-        // return { success: true };
       } else {
         return createError({ statusCode: 400, message: 'Subscription already exists' });
       }

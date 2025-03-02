@@ -21,7 +21,6 @@ export default defineEventHandler(async (event) => {
   // For cancellations, I need to go get the subscription ID from the database for this user from the subscriptions table
   // Then I can cancel the subscription in Stripe using the subscription ID
   // Then I can update the subscription record in the database to reflect the new status
-  console.log('Cancelling subscription for user:', userId);
 
   let subscriptionId = '';
 
@@ -39,7 +38,6 @@ export default defineEventHandler(async (event) => {
   }
 
   async function cancelSubscription(subscription: string): Promise<void> {
-    console.log('Cancelling subscription:', subscription, 'with Stripe', stripe);
     await stripe.subscriptions.cancel(subscription);
   }
 
