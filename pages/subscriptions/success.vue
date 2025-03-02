@@ -1,5 +1,12 @@
 <template>
-  yay
+  <main class="verify-subscription">
+    <Loading v-if="loading" />
+    <div class="verified" v-else>
+      <h1>Subscription Verified</h1>
+      <p>Your subscription has been verified. You can now access all pro features.</p>
+      <nuxt-link to="/subscriptions" class="button large primary">Manage Subscription</nuxt-link>
+    </div>
+  </main>
 </template>
 
 <script setup>
@@ -50,3 +57,38 @@ async function getAuthToken() {
   return data.session?.access_token || '';
 }
 </script>
+
+<style scoped lang="scss">
+
+@use 'assets/variables' as *;
+
+.verify-subscription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  text-align: center;
+  width: 100%;
+
+  h1 {
+    font-size: $font-size-xl;
+    margin:0;
+  }
+
+  p {
+    font-size: $font-size-md;
+    margin:0;
+    opacity: 0.5;
+  }
+
+  .verified {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+  }
+}
+
+</style>

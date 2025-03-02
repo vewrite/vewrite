@@ -3,9 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
-  
-  // console.log(config.stripeSecretKey)
-  console.log('==========================new==========================')
 
   // Initialize Stripe with proper error handling
   let stripe;
@@ -20,8 +17,6 @@ export default defineEventHandler(async (event) => {
       message: 'Error initializing payment provider'
     });
   }
-  
-  // console.log('Stripe initialized:', stripe);
 
   const supabase = createClient(
     config.public.supabaseUrl,
