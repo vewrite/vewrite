@@ -20,7 +20,7 @@ const personaState = useState('personaState');
 // Create a computed property that will update automatically when subscriptionStatus changes
 const PlanStatus = computed(() => {
   console.log('Subscription has updated, updating PlanStatus to:', subscriptionStatus.value);
-  return subscriptionStatus.value;
+  return subscriptionStatus.value.status;
 });
 
 </script>

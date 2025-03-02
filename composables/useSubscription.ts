@@ -44,7 +44,6 @@ export default function useSubscription() {
       return data;
     } catch (err) {
       console.error('Error fetching subscription from Supabase:', err);
-      error.value = err;
       return null;
     } finally {
       loading.value = false;
@@ -81,8 +80,7 @@ export default function useSubscription() {
       
       // Update local subscription state
       if (subscription.value) {
-        subscription.value.status = data.status;
-        subscription.value.current_period_end = data.currentPeriodEnd;
+        subscription.value = data;
       }
       
       return data.active;

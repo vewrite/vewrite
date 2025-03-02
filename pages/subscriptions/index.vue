@@ -5,7 +5,7 @@
     </template>
     <template v-slot:body>
       <Loading v-if="loading" />
-      <main class="subscriptions" v-else>
+      <main class="subscriptions" v-if="!loading && !verifiedSubscriptionStatus">
         <section class="subscribe-intro">
           <svg width="61" height="58" viewBox="0 0 61 58" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M54.1735 3.94478C57.6037 5.92519 58.779 10.3114 56.7985 13.7415L35.2834 51.0069C33.303 54.4371 28.9168 55.6123 25.4866 53.6319V53.6319C22.0564 51.6515 20.8812 47.2654 22.8616 43.8352L44.3767 6.56981C46.3572 3.13963 50.7433 1.96436 54.1735 3.94478V3.94478Z" fill="url(#paint0_linear_1_4)"/>
@@ -96,6 +96,9 @@
           <button @click="subscribe" class="wide large green">Subscribe</button>
         </section>
       </main>
+      <main class="subscribed" v-if="!loading && verifiedSubscriptionStatus">
+        {{ currentSubscription }}
+      </main>
     </template>
   </AppPanel>
 </template>
@@ -111,22 +114,11 @@ import AppPanel from '~/components/AppPanel.vue';
 
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
-const config = useRuntimeConfig();
 const status = ref(null);
 const loading = ref(false);
 const error = ref(null);
-const route = useRoute();
-
-const selectedPlan = ref(null);
-
-// const plan = ref(
-//   {
-//     id: 'prod_Rpz8UNS0xGBpBx', 
-//     name: 'Pro Plan',
-//     price: '29.99',
-//     interval: 'month',
-//   }
-// )
+const verifiedSubscriptionStatus = ref(null);
+const currentSubscription = ref(null);
 
 // For testing
 const plan = ref(
@@ -138,11 +130,8 @@ const plan = ref(
   }
 )
 
-import useProfile from '~/composables/useProfile';
-const { setSubscriptionStatus, ProfileData, ProfileError } = useProfile();
-
 import useSubscription from '~/composables/useSubscription';
-const { verifySubscriptionStatus, subscription } = useSubscription();
+const { verifySubscriptionStatus, fetchSubscription } = useSubscription();
 
 async function subscribe() {
   loading.value = true;
@@ -197,85 +186,16 @@ async function getAuthToken() {
   return data.session?.access_token || '';
 }
 
-onMounted(() => {
-  // verifySubscription();
-  verifySubscriptionStatus();
-});
+onMounted(async () => {
+  loading.value = true;
+  verifiedSubscriptionStatus.value = await verifySubscriptionStatus();
 
-// async function verifySubscription() {
-//   loading.value = true;
-//   error.value = null;
-  
-//   try {
-//     // Get the session ID from the URL
-//     const sessionId = route.query.session_id;
-//     console.log('sessionId', sessionId);
-//     const userId = user.value.id;
-//     console.log('userId', userId);
-    
-//     if (!sessionId || !userId) {
-//       throw new Error('Missing session ID or user ID');
-//     }
-    
-//     // Verify the subscription with the server
-//     const response = await fetch('/api/stripe/verify-subscription', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${await getAuthToken()}`
-//       },
-//       body: JSON.stringify({
-//         sessionId,
-//         userId
-//       })
-//     });
-    
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       throw new Error(errorData.message || 'Failed to verify subscription');
-//     }
-    
-//     // Subscription verified successfully
-//   } catch (err) {
-//     console.error('Error verifying subscription:', err);
-//     error.value = err.message;
-//   } finally {
-//     loading.value = false;
-//   }
-// }
-
-// // Get auth token for API requests
-// async function getAuthToken() {
-//   const { data } = await useSupabaseClient().auth.getSession();
-//   return data.session?.access_token || '';
-// }
-
-onMounted(() => {
-  // const script = document.createElement('script');
-  // script.src = 'https://www.paypal.com/sdk/js?client-id=' + config.public.paypal.clientId + '&vault=true' + '&intent=subscription';
-  // script.async = true;
-  // script.onload = () => {
-  //   window.paypal.Buttons({
-  //     style: {
-  //         shape: 'pill',
-  //         color: 'white',
-  //         layout: 'horizontal',
-  //         label: 'paypal',
-  //         size: 'responsive',
-  //         tagline: false
-  //     },
-  //     createSubscription: function(data, actions) {
-  //       return actions.subscription.create({
-  //         'plan_id': 'P-49U09457TT932483JM5Q5CSQ'
-  //       });
-  //     },
-  //     onApprove: function(data, actions) {
-  //       setSubscriptionStatus(user.value.id ,'active', data.subscriptionID);
-  //       status.value = 'You have successfully created subscription ' + data.subscriptionID;
-  //     }
-  //   }).render('#paypal-checkout');
-  // };
-  // document.body.appendChild(script);
+  if (verifiedSubscriptionStatus.value) {
+    currentSubscription.value = await fetchSubscription();
+    loading.value = false;
+  } else {
+    loading.value = false;
+  }
 });
 
 </script>
