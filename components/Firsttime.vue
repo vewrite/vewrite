@@ -91,10 +91,7 @@ const defaultUser = ref({
   website: '',
   persona: '',
   subscription: {
-    "status": "free",
-    "order_id": "",
-    "next_billing_time": "",
-    "current_period_start": ""
+    "status": "free"
   }
 })
 

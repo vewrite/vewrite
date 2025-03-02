@@ -60,6 +60,9 @@ export default defineNuxtConfig({
   // },
 
   runtimeConfig: {
+    // Server-side environment variables
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    
     paypal: {
       clientId: process.env.PAYPAL_CLIENT_ID,
       clientSecret: process.env.PAYPAL_CLIENT_SECRET,
@@ -68,6 +71,8 @@ export default defineNuxtConfig({
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      appUrl: process.env.APP_URL
     },
   },
 
