@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const stripe = new Stripe(config.stripeSecretKey, {
-    apiVersion: '2025-01-27.acacia'
+    apiVersion: '2025-02-24.acacia'
   });
   
   const supabase = createClient(
@@ -59,9 +59,17 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     console.error('Error checking subscription:', error);
+    console.error('Detailed Stripe error:', {
+      message: error.message,
+      stack: error.stack,
+      type: error.type,
+      code: error.code,
+      param: error.param,
+      detail: error?.raw?.message
+    });
     return createError({
       statusCode: 500,
-      message: 'Failed to check subscription status'
+      message: `Stripe error: ${error.message}`
     });
   }
 });

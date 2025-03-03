@@ -70,4 +70,10 @@ export default defineNuxtConfig({
     key: process.env.SUPABASE_KEY,
   },
 
+  nitro: {
+    externals: {
+      inline: ['stripe']
+    }
+  }
+
 })
