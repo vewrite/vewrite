@@ -124,6 +124,7 @@ definePageMeta({
 
 import AppPanel from '~/components/AppPanel.vue';
 
+const config = useRuntimeConfig();
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
 const status = ref(null);
@@ -135,7 +136,8 @@ const currentSubscription = ref(null);
 // For testing
 const plan = ref(
   {
-    id: 'price_1Qtn4bKf7vWAm6xvEKoGStjj',
+    // id: 'price_1Qtn4bKf7vWAm6xvEKoGStjj',
+    id: config.public.stripePriceId,
     name: 'Pro Plan',
     price: '23.00',
     interval: 'month',

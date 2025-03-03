@@ -60,6 +60,7 @@ export default defineNuxtConfig({
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      stripePriceId: process.env.STRIPE_PRICE_ID,
       appUrl: process.env.APP_URL
     },
   },
