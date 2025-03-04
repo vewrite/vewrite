@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   firstTime boolean DEFAULT true,
   avatar_url text,
   website text,
+  email text,
   persona text DEFAULT 'manager',
   subscription jsonb DEFAULT '{}'
 );

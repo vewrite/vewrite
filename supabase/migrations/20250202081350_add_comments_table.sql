@@ -2,9 +2,11 @@
 CREATE TABLE IF NOT EXISTS comments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   quote text NOT NULL,
+  text text NOT NULL,
   profile_id uuid NOT NULL,
   deliverable_content_id uuid NOT NULL,
-  created_at timestamptz DEFAULT now()
+  created_at timestamptz DEFAULT now(),
+  details jsonb NOT NULL
 );
 
 -- Enable Row Level Security

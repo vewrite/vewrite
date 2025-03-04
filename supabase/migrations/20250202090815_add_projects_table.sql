@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at timestamptz NOT NULL DEFAULT now(),
   created_by uuid NOT NULL,
   workflow numeric NOT NULL,
-  client_id uuid NOT NULL,
+  client_id int8 NOT NULL,
   assigned_team uuid NOT NULL
 );
 

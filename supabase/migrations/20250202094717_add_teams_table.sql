@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS teams (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at timestamptz NOT NULL DEFAULT now(),
   name text NOT NULL,
-  group_id uuid NOT NULL
+  group_id uuid NOT NULL,
+  details jsonb NOT NULL
 );
 
 -- Enable Row Level Security

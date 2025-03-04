@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS deliverables (
   workflow_state int8 NOT NULL,
   content jsonb NOT NULL,
   role_assignments jsonb NOT NULL,
-  assigned_to uuid,
+  assigned_to uuid
 );
 
 -- Enable Row Level Security
