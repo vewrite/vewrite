@@ -71,7 +71,7 @@
         </section>
         <section class="subscribe-buttons max-width md">
           <div class="placeholder"></div>
-          <button @click="subscribe" class="wide large green">Subscribe</button>
+          <button @click="subscribe" class="wide large primary">Subscribe</button>
         </section>
       </main>
       <main class="subscribed" v-if="!loading && verifiedSubscriptionStatus">
@@ -382,7 +382,8 @@ onMounted(async () => {
         color: $black;
 
         h2 {
-          background: linear-gradient(150deg, rgba($mint, 0.35), rgba($mint, 1));
+          outline: 1px solid $mint;
+          color: $mint;
         }
 
         .cost {
@@ -409,13 +410,12 @@ onMounted(async () => {
 
       h2 {
         font-size: $font-size-xl;
-        margin: 0 auto $spacing-xs;
-        background: linear-gradient(150deg, rgba($brand, 0.35), rgba($brand, 1));
+        margin: 2px auto $spacing-xs;
         border-radius: $br-xxl;
         padding: $spacing-xxxs $spacing-md;
         align-self: center;
-        color: $white;
-        text-shadow: 0px 1px 1px rgba($black, 0.25);
+        color: $brand;
+        outline: 1px solid $brand;
       }
 
       p {
