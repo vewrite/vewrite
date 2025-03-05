@@ -1,5 +1,4 @@
 <template>
-  <!-- <Firsttime v-if="isFirstTime == null || isFirstTime == true" @closeOnboarding="close" /> -->
   <Loading v-if="loading" />
   <Firsttime v-if="!loading && isNewUser == true" @closeOnboarding="close" />
   <main id="Vewrite" v-if="!loading && isNewUser == false">
@@ -55,7 +54,7 @@ async function checkUser() {
 
     if (error) { throw error }
 
-    if (!data || data.firstTime === true) {
+    if (!data || data.first_time === true) {
       isNewUser.value = true
       userStore.setFirstTime(data)
     } 

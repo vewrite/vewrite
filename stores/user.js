@@ -7,7 +7,7 @@ export const useUser = defineStore('userStore', {
     uuid: '',
     tier: '',
     persona: '',
-    firstTime: null,
+    first_time: null,
     website: ''
   }),
   actions: {
@@ -23,13 +23,13 @@ export const useUser = defineStore('userStore', {
       this.email = user.email;
       this.uuid = user.id;
       this.tier = 'free';
-      this.firstTime = user.firstTime;
+      this.first_time = user.first_time;
       this.website = user.website;
       this.person = user.persona;
     },
     setFirstTime(set) {
       // expects a boolean
-      this.firstTime = set;
+      this.first_time = set;
     },
     setPersona(persona) {
       // expects a string

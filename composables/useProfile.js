@@ -16,7 +16,7 @@ export default function useProfile() {
         id: profile.id,
         email: profile.email,
         username: '',
-        firstTime: true,
+        first_time: true,
         avatar_url: '',
         website: '',
         persona: '',

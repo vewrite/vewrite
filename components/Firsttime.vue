@@ -85,7 +85,7 @@ const defaultUser = ref({
   id: user.value.id,
   email: user.value.email,
   username: '',
-  firstTime: true,
+  first_time: true,
   avatar_url: '',
   updated_at: new Date(),
   website: '',
@@ -145,7 +145,7 @@ async function setFirstTime(set) {
   // Update the user in the database
   const { data, error } = await supabase
     .from('profiles')
-    .update({ firstTime: set })
+    .update({ first_time: set })
     .eq('id', user.value.id)
 
   if (error) throw error

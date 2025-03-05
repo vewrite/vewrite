@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   id uuid PRIMARY KEY, -- No default value, as it references auth.users
   updated_at timestamptz DEFAULT now(),
   username text NOT NULL,
-  firstTime boolean DEFAULT true,
+  first_time boolean DEFAULT true,
   avatar_url text,
   website text,
   email text,

@@ -140,7 +140,7 @@ async function updateProfile() {
             username: username.value,
             id: user.value.id,
             tier: user.value.tier,
-            firstTime: user.value.firstTime,
+            first_time: user.value.first_time,
             website: website.value,
             persona: user.value.persona,
             avatar_url: avatar_path.value,
