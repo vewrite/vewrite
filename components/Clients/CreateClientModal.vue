@@ -90,13 +90,10 @@ const isPro = computed(() => {
 const isAllowed = computed(() => {
   // Free user, no clients, allowed
   if (ownedClients.value == 0) {
-    console.log(ownedClients.value);
     return true;
   } else { // Free user, already has one project, not allowed
     return false;
-  }
-
-  
+  } 
 })
 
 function logoUrlUpdate(filePath) {

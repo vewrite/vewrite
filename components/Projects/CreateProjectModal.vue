@@ -200,22 +200,12 @@ const isPro = computed(() => {
 })
 
 const isAllowed = computed(() => {
-  // Pro user always allowed
-  if (isPro.value) {
-    console.log('Pro user, allowed');
-    return true;
-  }
-
-  // Free user, no projects, allowed
-  if (isPro.value &&ownedProjects.value < 2) {
-    console.log(ownedProjects.value);
-    return true;
-  }
-
   // Free user, already has one project, not allowed
-  if (isPro.value &&ownedProjects.value > 1) {
+  if (ownedProjects.value == 0) {
+    return true;
+  } else { // Free user, already has one team, not allowed
     return false;
-  }
+  } 
 })
 
 // Form validation

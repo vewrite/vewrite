@@ -74,21 +74,12 @@ const isPro = computed(() => {
 })
 
 const isAllowed = computed(() => {
-  // Pro user always allowed
-  if (isPro.value) {
-    console.log('Pro user, allowed');
-    return true;
-  }
-
-  // Free user, no teams, allowed
-  if (isPro.value && ownedTeams.value < 2) {
-    return true;
-  }
-
   // Free user, already has one team, not allowed
-  if (isPro.value == 'free' && ownedTeams.value > 1) {
+  if (ownedTeams.value == 0) {
+    return true;
+  } else { // Free user, already has one team, not allowed
     return false;
-  }
+  } 
 })
 
 const GroupId = ref('')
