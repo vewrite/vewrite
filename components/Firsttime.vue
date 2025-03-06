@@ -9,16 +9,16 @@
 
         <!-- Initial check for if this user is in the database in invited_profiles -->
         <div class="onboarding-header" v-if="TeamsData.length > 0">        
+          <p class="center">Welcome! You've been invited to join a team on Vewrite.</p>
           <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
             <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
-              <p class="center">You've been invited to join {{ team.name }}</p>
+              <p>{{ team.name }}</p>
               <!-- <div class="teams-approval-buttons">
                 <button class="button primary" @click="approveTeamMember(team.id, user.id, user.email)">Approve</button>
                 <button class="button red" @click="rejectTeamMember(team.id, user.id, user.email)">Reject</button>
               </div> -->
             </div>
           </section>
-          <hr />
         </div>
         
         
@@ -177,14 +177,17 @@ async function setFirstTime(set) {
     border-radius: $br-md;
     padding: $spacing-sm;
     margin-top: $spacing-md;
+    background: rgba($brand, 0.1);
 
     .teams-approval-row {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: center;
 
       p {
         margin: 0;
+        font-weight: bold;
+        font-size: 2rem;
       }
 
       .teams-approval-buttons {
