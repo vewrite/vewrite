@@ -5,8 +5,6 @@
 
       <Logo class="logo" />
 
-      <!-- {{ invitedProjects }} -->
-
       <!-- Next, we will be creating a profile for this user in the database by first setting what type of user they are. -->
       <div class="onboarding-step" v-if="invitedProjects">
 
