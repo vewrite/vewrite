@@ -270,6 +270,19 @@ const signUp = async () => {
   }
 };
 
+// Check on initial load
+onMounted(() => {
+  if (router.currentRoute.value.query.section === 'signup') {
+    form.value = 'signup'
+  }
+});
+
+// Watch for changes to the query parameter
+watch(() => router.currentRoute.value.query.section, (newSection) => {
+  if (newSection === 'signup') {
+    form.value = 'signup'
+  }
+});
 
 </script>
 
