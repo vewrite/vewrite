@@ -110,13 +110,20 @@
                           <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
                       </div>
                   </div>
+
                   <div class="form-group">
                       <div class="form-input password">
                           <label for="password">Your password</label>
                           <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
                       </div>
+                      <div class="form-input password">
+                        <label for="password">Confirm password</label>
+                        <input class="inputField" type="password" placeholder="••••••••" v-model="confirmPassword" />
+                    </div>
                   </div>
-                  <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading" />
+                  <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading || !matchingPasswords" />
+
+                  <div class="notification warning password-warning" v-if="!matchingPasswords">Passwords do not match</div>
               </div>
             </form>
           </section>
@@ -170,7 +177,10 @@ const notification = ref('');
 const errorbox = ref('');
 const email = ref('');
 const password = ref('');
+const confirmPassword = ref('');
 const form = ref('login');
+
+const matchingPasswords = computed(() => password.value === confirmPassword.value)
 
 const router = useRouter();
 
@@ -270,6 +280,19 @@ const signUp = async () => {
   }
 };
 
+// Check on initial load
+onMounted(() => {
+  if (router.currentRoute.value.query.section === 'signup') {
+    form.value = 'signup'
+  }
+});
+
+// Watch for changes to the query parameter
+watch(() => router.currentRoute.value.query.section, (newSection) => {
+  if (newSection === 'signup') {
+    form.value = 'signup'
+  }
+});
 
 </script>
 
@@ -393,6 +416,10 @@ const signUp = async () => {
 
   .sign-up-form {
     width: 100%;
+
+    .notification {
+      margin-top: $spacing-sm;
+    }
 
     .signup-buttons {
       display: flex;

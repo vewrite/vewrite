@@ -7,12 +7,12 @@
       <!-- Next, we will be creating a profile for this user in the database by first setting what type of user they are. -->
       <div class="onboarding-step" v-if="TeamsData && onboardingStep === 1">
 
-        <!-- Initial check for if this user is in the database in invited_profiles -->
+        <!-- Initial check for if this user is in the database in invited_profiles. If so, they need to create an account -->
         <div class="onboarding-header" v-if="TeamsData.length > 0">        
           <p class="center">Welcome! You've been invited to join a team on Vewrite.</p>
           <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
             <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
-              <p>{{ team.name }}</p>
+              <p class="center">You've been invited to join {{ team.name }}</p>
               <!-- <div class="teams-approval-buttons">
                 <button class="button primary" @click="approveTeamMember(team.id, user.id, user.email)">Approve</button>
                 <button class="button red" @click="rejectTeamMember(team.id, user.id, user.email)">Reject</button>
@@ -20,8 +20,7 @@
             </div>
           </section>
         </div>
-        
-        
+    
         <div class="onboarding-header" v-if="TeamsData.length == 0">
           <p class="center">First, we'd like to know what kind of user you are.</p>
           <div class="select-persona">
@@ -81,6 +80,11 @@ const user = useSupabaseUser()
 const loading = ref(false)
 const onboardingStep = ref(1)
 
+// const newPassword = ref('')
+// const confirmPassword = ref('')
+
+// const matchingPasswords = computed(() => newPassword.value === confirmPassword.value)
+
 const defaultUser = ref({
   id: user.value.id,
   email: user.value.email,
@@ -126,6 +130,7 @@ const setPersona = (persona) => {
 
 async function onboardUserDetails(TeamId) {
   try {
+    loading.value = true
     await updateProfile(defaultUser.value)
     await createGroup(user.value.id)
     await setFirstTime(false)
@@ -133,6 +138,7 @@ async function onboardUserDetails(TeamId) {
       await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
     }
     emit('closeOnboarding')
+    loading.value = false
   } catch (error) {
     console.error(error)
   }
@@ -227,10 +233,10 @@ async function setFirstTime(set) {
       flex-direction: column;
       gap: $spacing-lg;
 
-      .prevStep {
-        position: fixed;
-        top: $spacing-md;
-        left: $spacing-md;
+      .password-capture {
+        .notification {
+          margin-bottom: $spacing-sm;
+        }
       }
     }
 
