@@ -6,8 +6,9 @@
       <span class="workflow-state">Workflow State</span>
     </template>
     <template v-slot:menu>
-      <div class="dropdown-item" v-for="role in RolesData" :key="role.id" @click="setRole(user, team, role.id, role.name)" :class="role.id === RoleData.id ? 'active' : ''">
-        {{ role.name }}
+      <div class="state-instance" v-for="state in workflowStateInstances">
+        <span :class="['dot', CurrentState == state[0].instance_name ? 'current' : '']"></span>
+        <span>{{ state[0].instance_name }}</span>
       </div>
     </template>
   </Dropdown>
@@ -29,19 +30,21 @@ const props = defineProps(['DeliverableData', 'CurrentState']);
 */
 
 import { ref, onMounted } from 'vue';
+// import StateIcon from '~/components/States/StateIcon.vue';
 
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchProjectWorkflow, fetchStates } = useWorkflow();
 
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
-const { fetchStateInstances } = useWorkflowStateInstances();
+const { fetchSingleStateInstance } = useWorkflowStateInstances();
 
 const projectWorkflow = ref(null);
 const workflowStates = ref(null);
 const workflowStateInstances = ref({});
 
 async function getStateInstance(instanceId) {
-  
+  let stateInstance = await fetchSingleStateInstance(instanceId);
+  return stateInstance; 
 }
 
 onMounted(async () => {
@@ -49,7 +52,9 @@ onMounted(async () => {
     projectWorkflow.value = await fetchProjectWorkflow(props.DeliverableData.project);
     workflowStates.value = await fetchStates(projectWorkflow.value);
 
-    
+    for(const instanceId of workflowStates.value) {
+      workflowStateInstances.value[instanceId] = await getStateInstance(instanceId);
+    }
   } catch (error) {
     console.error(error);
   }
@@ -67,6 +72,36 @@ onMounted(async () => {
 
 .workflow-state {
   opacity: 0.5;
+}
+
+.state-instance {
+  padding: $spacing-xxs $spacing-sm;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing-sm;
+
+  &:first-child {
+    padding-top: $spacing-sm;
+  }
+
+  &:last-child {
+    padding-bottom: $spacing-sm;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba($brand, 0.1);
+
+
+    &.current {
+      background-color: $brand;
+      outline: 1px solid $brand;
+      outline-offset: 4px;
+    }
+  }
 }
 
 </style>

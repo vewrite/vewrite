@@ -382,8 +382,6 @@ onMounted(() => {
       justify-content: space-between;
       align-content: center;
       padding: 0 0 $spacing-md 0;
-      margin-bottom: $spacing-sm;
-      border-bottom: $border;
 
       .state-buttons-wrap {
         display: flex;

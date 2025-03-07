@@ -67,13 +67,14 @@ function toggleDropdown() {
     background-color: rgba($white, 0.65);
     backdrop-filter: blur(20px);
     min-width: 240px;
-    box-shadow: $big-shadow;
+    box-shadow: $soft-shadow;
     z-index: 100;
     right: 0;
     padding: $spacing-xxs;
     border-radius: $br-lg;
     animation: scaleBounce 0.4s ease;
     transform-origin: top right;
+    height: auto;
   }
 
   &.top {
@@ -87,7 +88,7 @@ function toggleDropdown() {
     .dropdown-content {
       left: 0;
       right: auto;
-      transform-origin: bottom right;
+      transform-origin: top left;
       top: 100%;
     }
   }
@@ -98,6 +99,7 @@ function toggleDropdown() {
       flex-direction: column;
       gap: $spacing-xxs;
       animation: scaleBounce 0.4s ease;
+      top: 100%;
     }
   }
 }
