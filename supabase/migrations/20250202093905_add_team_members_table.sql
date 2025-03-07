@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS team_members (
   created_at timestamptz NOT NULL DEFAULT now(),
   team_id uuid NOT NULL,
   user_id uuid NOT NULL,
-  role numeric NOT NULL
+  role numeric NOT NULL DEFAULT 1,
 );
 
 -- Enable Row Level Security
