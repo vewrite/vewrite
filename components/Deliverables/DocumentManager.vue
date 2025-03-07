@@ -14,12 +14,12 @@
       <section class="state-details max-width xl"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-buttons-wrap">
           <section class="state-intro">
-            <p class="state-name">{{ StateData[0].instance_name }}</p>
-            <p class="due-date">Deliverable due <span>{{ dueDate }}</span></p>
+            <!-- <p class="state-name">{{ StateData[0].instance_name }}</p> -->
+            <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
           </section>
-          <!-- <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" /> -->
         </div>
         <div class="state-data">
+          <p class="due-date">Deliverable due <span>{{ dueDate }}</span></p>
           <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         </div>
       </section>
@@ -136,8 +136,8 @@
 <script setup>
 
 import { ref, onMounted } from 'vue';
-// import Assigned from '~/components/Deliverables/Assigned.vue';
-import StateBar from '~/components/Deliverables/StateBar.vue';
+
+import ProjectWorkflow from '~/components/Deliverables/ProjectWorkflow.vue';
 import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 import Comments from '~/components/Deliverables/Comments.vue';
 
@@ -381,9 +381,9 @@ onMounted(() => {
       flex-direction: row;
       justify-content: space-between;
       align-content: center;
-      background: rgba($brand, 0.05);
-      border-radius: $br-xl;
-      padding: $spacing-sm $spacing-md;
+      padding: 0 0 $spacing-md 0;
+      margin-bottom: $spacing-sm;
+      border-bottom: $border;
 
       .state-buttons-wrap {
         display: flex;
@@ -393,16 +393,6 @@ onMounted(() => {
         justify-content: space-between;
         align-items: center;
         border-radius: $br-xl $br-xl 0 0;
-
-        .due-date {
-          font-size: $font-size-xxs;
-          color: $brand;
-          background: rgba($white, 0.5);
-          border: 1px solid rgba($brand, 0.5);
-          padding: 2px $spacing-xs;
-          border-radius: $br-lg;
-          margin: 0;
-        }
       }
 
       .state-intro {
@@ -434,6 +424,20 @@ onMounted(() => {
 
       .state-data {
         height: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-sm;
+        align-items: center;
+
+        .due-date {
+          font-size: $font-size-xxs;
+          color: $brand;
+          background: rgba($white, 1);
+          border: 1px solid rgba($brand, 0.2);
+          padding: 2px $spacing-xs;
+          border-radius: $br-lg;
+          margin: 0;
+        }
       }
     }
 
