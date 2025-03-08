@@ -1,15 +1,8 @@
 <template>
 
-  <section class="document-content">
-    <section class="navigation">
-      <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Manager</div>
-      <div class="nav-item" @click="scrollToSection('requirements')" v-if="stateShowsRequirements" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</div>
-      <div class="nav-item" @click="scrollToSection('outline')" v-if="stateShowsOutline" :class="{ 'primary': selectedSection === 'outline' }">Outline</div>
-      <div class="nav-item" @click="scrollToSection('draft')" v-if="stateShowsWriting" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</div>
-      <div class="nav-item" @click="scrollToSection('approved')" v-if="stateShowsApproved" :class="{ 'primary': selectedSection === 'approved' }">Approved draft</div>
-      <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
-    </section>
-    <section class="documents" ref="stateDetails">
+  <section class="link-content">
+    
+    <section class="links" ref="stateDetails">
 
       <section class="state-details max-width xl"  @mouseover="setSelectedSection('stateDetails')">
         <div class="state-buttons-wrap">
@@ -25,7 +18,7 @@
 
       <!-- Requirements -->
       <!-- Always editable by the PM -->
-      <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
+      <!-- <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
         <div class="type-label" @click="toggleSection('requirements')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.requirements" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.requirements" />
@@ -36,6 +29,9 @@
           <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" v-if="route.meta.roles.projectManager == user.id" />
           <div class="tiptap-content-readonly" v-html="DeliverableData.content.requirements" v-else></div>
         </div>
+      </div> -->
+      <div class="link-wrap">
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :link="DeliverableData.content.requirements" />
       </div>
 
       <!-- Outline -->
@@ -139,6 +135,7 @@ import { ref, onMounted } from 'vue';
 import ProjectWorkflow from '~/components/Deliverables/ProjectWorkflow.vue';
 import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 import Comments from '~/components/Deliverables/Comments.vue';
+import DeliverableLink from '~/components/Deliverables/DeliverableLink.vue';
 
 import { useRoute } from 'vue-router';
 const route = useRoute();
@@ -332,7 +329,7 @@ onMounted(() => {
 
 @use 'assets/variables' as *;
 
-.document-content {
+.link-content {
   display: flex;
   flex-direction: row;
   gap: $spacing-sm;
@@ -366,7 +363,7 @@ onMounted(() => {
     }
   }
 
-  .documents {
+  .links {
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
