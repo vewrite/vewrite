@@ -17,9 +17,57 @@
       </section>
 
       <!-- Requirements -->
-      <div class="link-wrap max-width xl">
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :class="{ 'collapsed': !sections.requirements }">
+        <div class="type-label" @click="toggleSection('requirements')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.requirements" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.requirements" />
+          Requirements
+        </div>
         <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :deliverable="DeliverableData" select="content.requirements" :link="DeliverableData.content.requirements" />
       </div>
+
+      <!-- Outline and outline review -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline || stateShowsOutlineReview" :class="{ 'collapsed': !sections.outline }">
+        <div class="type-label" @click="toggleSection('outline')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outline" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outline" />
+          <span v-if="stateShowsOutline">Outline</span>
+          <span v-if="stateShowsOutlineReview">Outline Review</span>
+        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline || stateShowsOutlineReview" :deliverable="DeliverableData" select="content.outline" :link="DeliverableData.content.outline" />
+      </div>
+
+      <!-- Draft and draft review -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting || stateShowsWritingReview" :class="{ 'collapsed': !sections.draft }">
+        <div class="type-label" @click="toggleSection('draft')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draft" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draft" />
+          <span v-if="stateShowsWriting">Draft</span>
+          <span v-if="stateShowsWritingReview">Draft Review</span>
+        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsWriting || stateShowsWritingReview" :deliverable="DeliverableData" select="content.draft" :link="DeliverableData.content.draft" />
+      </div>
+
+      <!-- Research -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsResearch" :class="{ 'collapsed': !sections.research }">
+        <div class="type-label" @click="toggleSection('research')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.research" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.research" />
+          Research
+        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsResearch" :deliverable="DeliverableData" select="content.research" :link="DeliverableData.content.research" />
+      </div>
+
+      <!-- Approved -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsApproved" :class="{ 'collapsed': !sections.approved }">
+        <div class="type-label" @click="toggleSection('approved')">
+          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.approved" />
+          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.approved" />
+          Approved Draft
+        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsApproved" :deliverable="DeliverableData" select="content.draft" :link="DeliverableData.content.draft" />
+      </div>
+
       
     </section>
 
@@ -335,21 +383,20 @@ onMounted(() => {
       }
     }
 
-    .tiptap-wrap {
+    .link-wrap {
       min-height: 100px;
-      background: $white;
+      background: rgba($black, 0.025);
       padding: 0 $spacing-sm;
       position: relative;
       transition: border 0.2s ease;
       display: flex;
       flex-direction: column;
-      border: $border;
       border-radius: $br-lg;
 
       &.collapsed {
-        height: 48px;
-        max-height: 48px;
-        min-height: 48px;
+        height: 46px;
+        max-height: 46px;
+        min-height: 46px;
         overflow: hidden;
 
         .tiptap-content {
