@@ -7,7 +7,7 @@
 <script setup>
 
 const props = defineProps({
-  stateType: {
+  state: {
     type: Number,
     required: true,
   },

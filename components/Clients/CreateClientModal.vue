@@ -89,7 +89,7 @@ const isPro = computed(() => {
 
 const isAllowed = computed(() => {
   // Free user, no clients, allowed
-  if (ownedClients.value == 0) {
+  if (isPro || ownedClients.value == 0) {
     return true;
   } else { // Free user, already has one project, not allowed
     return false;

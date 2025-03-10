@@ -1,8 +1,8 @@
 <template>
 
-  <section class="document-content">
-
-    <section class="documents" ref="stateDetails">
+  <section class="link-content">
+    
+    <section class="links" ref="stateDetails">
 
       <section class="state-details max-width xl">
         <div class="state-buttons-wrap">
@@ -17,106 +17,57 @@
       </section>
 
       <!-- Requirements -->
-      <!-- Always editable by the PM -->
-      <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :class="{ 'collapsed': !sections.requirements }">
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :class="{ 'collapsed': !sections.requirements }">
         <div class="type-label" @click="toggleSection('requirements')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.requirements" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.requirements" />
           Requirements
         </div>
-        <div class="tiptap-content">
-          <span class="notification warning" v-if="noRequirements">It looks like your requirements are empty. You should fill them out so that your writer knows what to do.</span>
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'requirements'" v-if="route.meta.roles.projectManager == user.id" />
-          <div class="tiptap-content-readonly" v-html="DeliverableData.content.requirements" v-else></div>
-        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :deliverable="DeliverableData" select="content.requirements" :link="DeliverableData.content.requirements" />
       </div>
 
-      <!-- Outline -->
-      <!-- Always editable by the PM -->
-      <!-- Editable by the writer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" :class="{ 'collapsed': !sections.outline }">
+      <!-- Outline and outline review -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline || stateShowsOutlineReview" :class="{ 'collapsed': !sections.outline }">
         <div class="type-label" @click="toggleSection('outline')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outline" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outline" />
-          Outline
+          <span v-if="stateShowsOutline">Outline</span>
+          <span v-if="stateShowsOutlineReview">Outline Review</span>
         </div>
-        <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'outline'" v-if="route.meta.roles.writer == user.id" />
-          <div class="tiptap-content-readonly" v-html="DeliverableData.content.outline" v-else></div>
-          <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
-        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline || stateShowsOutlineReview" :deliverable="DeliverableData" select="content.outline" :link="DeliverableData.content.outline" />
       </div>
 
-      <!-- Outline Review -->
-      <!-- Always editable by the PM -->
-      <!-- Editable by the reviewer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" :class="{ 'collapsed': !sections.outlinereview }">
-        <div class="type-label" @click="toggleSection('outlinereview')">
-          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outlinereview" />
-          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outlinereview" />
-          Outline Review
-        </div>
-        <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'outlinereview'"  v-if="route.meta.roles.reviewer == user.id" :review="true" />
-          <div class="tiptap-content-readonly" v-html="DeliverableData.content.outline" v-else></div>
-          <Comments :deliverable="props.DeliverableData" :type="'outline-review'" /> 
-        </div>
-      </div>
-
-      <!-- Writing Draft -->
-      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" :class="{ 'collapsed': !sections.draft }">
+      <!-- Draft and draft review -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting || stateShowsWritingReview" :class="{ 'collapsed': !sections.draft }">
         <div class="type-label" @click="toggleSection('draft')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draft" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draft" />
-          Draft
+          <span v-if="stateShowsWriting">Draft</span>
+          <span v-if="stateShowsWritingReview">Draft Review</span>
         </div>
-        <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'draft'"  v-if="route.meta.roles.writer == user.id" />
-          <div class="tiptap-content-readonly" v-html="DeliverableData.content.draft" v-else></div>
-          <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
-        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsWriting || stateShowsWritingReview" :deliverable="DeliverableData" select="content.draft" :link="DeliverableData.content.draft" />
       </div>
 
-      <!-- Draft Review -->
-      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" :class="{ 'collapsed': !sections.draftreview }">
-        <div class="type-label" @click="toggleSection('draftreview')">
-          <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draftreview" />
-          <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draftreview" />
-          Draft Review
-        </div>
-        <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'draftreview'"  v-if="route.meta.roles.reviewer == user.id" :review="true" />
-          <div class="tiptap-content-readonly" v-html="DeliverableData.content.draft" v-else></div>
-          <Comments :deliverable="props.DeliverableData" :type="'draft-review'" /> 
-        </div>
-      </div>
-      
       <!-- Research -->
-      <!-- Always editable by the PM -->
-      <!-- Editable by the writer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap max-width xl" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" :class="{ 'collapsed': !sections.research }">
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsResearch" :class="{ 'collapsed': !sections.research }">
         <div class="type-label" @click="toggleSection('research')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.research" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.research" />
           Research
         </div>
-        <div class="tiptap-content">
-          <TipTapEditor :deliverable="props.DeliverableData" :type="'research'"  v-if="route.meta.roles.writer == user.id"  />
-          <div class="tiptap-content-readonly" v-html="DeliverableData.content.research" v-else></div>
-        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsResearch" :deliverable="DeliverableData" select="content.research" :link="DeliverableData.content.research" />
       </div>
 
-      <!-- Approved Draft -->
-      <div class="tiptap-wrap max-width xl" ref="approvedSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsApproved" :class="{ 'collapsed': !sections.approved }">
+      <!-- Approved -->
+      <div class="link-wrap max-width xl" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsApproved" :class="{ 'collapsed': !sections.approved }">
         <div class="type-label" @click="toggleSection('approved')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.approved" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.approved" />
           Approved Draft
         </div>
-        <div class="tiptap-content">
-          <section class="approved-draft" v-html="DeliverableData.content.draft"></section>
-        </div>
+        <DeliverableLink v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsApproved" :deliverable="DeliverableData" select="content.draft" :link="DeliverableData.content.draft" />
       </div>
+
       
     </section>
 
@@ -132,6 +83,7 @@ import { ref, onMounted } from 'vue';
 import ProjectWorkflow from '~/components/Deliverables/ProjectWorkflow.vue';
 import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 import Comments from '~/components/Deliverables/Comments.vue';
+import DeliverableLink from '~/components/Deliverables/DeliverableLink.vue';
 
 import { useRoute } from 'vue-router';
 const route = useRoute();
@@ -298,7 +250,7 @@ const noRequirements = computed(() => {
 
 @use 'assets/variables' as *;
 
-.document-content {
+.link-content {
   display: flex;
   flex-direction: row;
   gap: $spacing-sm;
@@ -332,7 +284,7 @@ const noRequirements = computed(() => {
     }
   }
 
-  .documents {
+  .links {
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
@@ -404,21 +356,20 @@ const noRequirements = computed(() => {
       }
     }
 
-    .tiptap-wrap {
+    .link-wrap {
       min-height: 100px;
-      background: $white;
+      background: rgba($black, 0.025);
       padding: 0 $spacing-sm;
       position: relative;
       transition: border 0.2s ease;
       display: flex;
       flex-direction: column;
-      border: $border;
       border-radius: $br-lg;
 
       &.collapsed {
-        height: 48px;
-        max-height: 48px;
-        min-height: 48px;
+        height: 46px;
+        max-height: 46px;
+        min-height: 46px;
         overflow: hidden;
 
         .tiptap-content {

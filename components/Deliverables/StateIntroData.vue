@@ -80,11 +80,9 @@ onMounted(async () => {
       display: flex;
       flex-direction: row;
       align-content: flex-end;
-      gap: $spacing-sm;
       width: 100%;
 
       .single-member {
-        display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
@@ -93,10 +91,12 @@ onMounted(async () => {
         border-radius: $br-lg;
         background: rgba($brand, 0.025);
         border: 1px solid rgba($brand, 0.05);
+        display: none;
 
         &.assigned {
           background: $white;
           border: 1px solid rgba($brand, 0.2);
+          display: flex;
         }
 
         .members-role {

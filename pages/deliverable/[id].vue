@@ -33,7 +33,8 @@
             <Icon name="fluent-mdl2:chrome-close" size="1rem" />
           </button>
         </section>  
-        <DocumentManager v-if="DeliverableData" :DeliverableData="DeliverableData" :StateData="StateData" />
+        <LinkManager v-if="DeliverableData && DeliverableData.content.type == 'link'" :DeliverableData="DeliverableData" :StateData="StateData" />
+        <DocumentManager v-if="DeliverableData && DeliverableData.content.type == 'content'" :DeliverableData="DeliverableData" :StateData="StateData" />
       </section>
       <section v-else-if="loading.global == false && !hasAccess" class="project-gate">
         <div class="project-details">
@@ -60,6 +61,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import AppPanel from '~/components/AppPanel.vue';
 import DocumentManager from '~/components/Deliverables/DocumentManager.vue';
+import LinkManager from '~/components/Deliverables/LinkManager.vue';
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
@@ -174,7 +176,7 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 @use 'assets/variables' as *;
 

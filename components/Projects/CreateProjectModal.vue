@@ -201,7 +201,7 @@ const isPro = computed(() => {
 
 const isAllowed = computed(() => {
   // Free user, already has one project, not allowed
-  if (ownedProjects.value == 0) {
+  if (isPro || ownedProjects.value == 0) {
     return true;
   } else { // Free user, already has one team, not allowed
     return false;
