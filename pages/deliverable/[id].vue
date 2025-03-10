@@ -176,7 +176,7 @@ watch(() => deliverableStore.getStateInstanceId(), (newValue) => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 @use 'assets/variables' as *;
 

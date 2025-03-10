@@ -4,7 +4,7 @@
     
     <section class="links" ref="stateDetails">
 
-      <section class="state-details max-width xl"  @mouseover="setSelectedSection('stateDetails')">
+      <section class="state-details max-width xl">
         <div class="state-buttons-wrap">
           <section class="state-intro">
             <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
@@ -140,7 +140,6 @@ const requirementsSection = ref(null);
 const outlineSection = ref(null);
 const draftSection = ref(null);
 const researchSection = ref(null);
-const selectedSection = ref(null);
 const approvedSection = ref(null);
 
 const stateShowsOutline = computed(() => {
@@ -231,26 +230,6 @@ const stateShowsApproved = computed(() => {
   }
 });
 
-const scrollToSection = (section) => {
-  const sectionRef = {
-    stateDetails: stateDetails,
-    requirements: requirementsSection,
-    outline: outlineSection,
-    draft: draftSection,
-    research: researchSection,
-    approved: approvedSection,
-  }[section];
-
-  if (sectionRef && sectionRef.value) {
-    sectionRef.value.scrollIntoView({ behavior: 'smooth' });
-    selectedSection.value = section;
-  }
-};
-
-const setSelectedSection = (section) => {
-  selectedSection.value = section;
-};
-
 const dueDate = computed(() => {
   if (props.DeliverableData) {
     return new Date(props.DeliverableData.due_date).toDateString();
@@ -265,12 +244,6 @@ const noRequirements = computed(() => {
   }
 });
 
-// Set the initial selected section when the component mounts. We'll always want to default to the state details
-onMounted(() => {
-  if (props.DeliverableData) {
-    scrollToSection('stateDetails');
-  }
-});
 </script>
 
 <style lang="scss" scoped>

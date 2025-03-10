@@ -1,17 +1,10 @@
 <template>
 
   <section class="document-content">
-    <!-- <section class="navigation">
-      <div class="nav-item" @click="scrollToSection('stateDetails')" :class="{ 'primary': selectedSection === 'stateDetails' }">State Manager</div>
-      <div class="nav-item" @click="scrollToSection('requirements')" v-if="stateShowsRequirements" :class="{ 'primary': selectedSection === 'requirements' }">Requirements</div>
-      <div class="nav-item" @click="scrollToSection('outline')" v-if="stateShowsOutline" :class="{ 'primary': selectedSection === 'outline' }">Outline</div>
-      <div class="nav-item" @click="scrollToSection('draft')" v-if="stateShowsWriting" :class="{ 'primary': selectedSection === 'draft' }">Writing draft</div>
-      <div class="nav-item" @click="scrollToSection('approved')" v-if="stateShowsApproved" :class="{ 'primary': selectedSection === 'approved' }">Approved draft</div>
-      <div class="nav-item" @click="scrollToSection('research')" v-if="stateShowsResearch" :class="{ 'primary': selectedSection === 'research' }">Research</div>
-    </section> -->
+
     <section class="documents" ref="stateDetails">
 
-      <section class="state-details max-width xl"  @mouseover="setSelectedSection('stateDetails')">
+      <section class="state-details max-width xl">
         <div class="state-buttons-wrap">
           <section class="state-intro">
             <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
@@ -25,7 +18,7 @@
 
       <!-- Requirements -->
       <!-- Always editable by the PM -->
-      <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" @mouseover="setSelectedSection('requirements')" :class="{ 'collapsed': !sections.requirements }">
+      <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :class="{ 'collapsed': !sections.requirements }">
         <div class="type-label" @click="toggleSection('requirements')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.requirements" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.requirements" />
@@ -41,7 +34,7 @@
       <!-- Outline -->
       <!-- Always editable by the PM -->
       <!-- Editable by the writer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outline }">
+      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutline" :class="{ 'collapsed': !sections.outline }">
         <div class="type-label" @click="toggleSection('outline')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outline" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outline" />
@@ -57,7 +50,7 @@
       <!-- Outline Review -->
       <!-- Always editable by the PM -->
       <!-- Editable by the reviewer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" @mouseover="setSelectedSection('outline')" :class="{ 'collapsed': !sections.outlinereview }">
+      <div class="tiptap-wrap max-width xl" ref="outlineSection" v-if="props.DeliverableData && props.DeliverableData.content.hasOutline && stateShowsOutlineReview" :class="{ 'collapsed': !sections.outlinereview }">
         <div class="type-label" @click="toggleSection('outlinereview')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.outlinereview" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.outlinereview" />
@@ -71,7 +64,7 @@
       </div>
 
       <!-- Writing Draft -->
-      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draft }">
+      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWriting" :class="{ 'collapsed': !sections.draft }">
         <div class="type-label" @click="toggleSection('draft')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draft" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draft" />
@@ -85,7 +78,7 @@
       </div>
 
       <!-- Draft Review -->
-      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" @mouseover="setSelectedSection('draft')" :class="{ 'collapsed': !sections.draftreview }">
+      <div class="tiptap-wrap max-width xl" ref="draftSection" v-if="props.DeliverableData && props.DeliverableData.content.hasDraft && stateShowsWritingReview" :class="{ 'collapsed': !sections.draftreview }">
         <div class="type-label" @click="toggleSection('draftreview')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.draftreview" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.draftreview" />
@@ -101,7 +94,7 @@
       <!-- Research -->
       <!-- Always editable by the PM -->
       <!-- Editable by the writer when they are assigned to the deliverable -->
-      <div class="tiptap-wrap max-width xl" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" @mouseover="setSelectedSection('research')" :class="{ 'collapsed': !sections.research }">
+      <div class="tiptap-wrap max-width xl" ref="researchSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsResearch" :class="{ 'collapsed': !sections.research }">
         <div class="type-label" @click="toggleSection('research')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.research" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.research" />
@@ -114,7 +107,7 @@
       </div>
 
       <!-- Approved Draft -->
-      <div class="tiptap-wrap max-width xl" ref="approvedSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsApproved" @mouseover="setSelectedSection('approved')" :class="{ 'collapsed': !sections.approved }">
+      <div class="tiptap-wrap max-width xl" ref="approvedSection" v-if="props.DeliverableData && props.DeliverableData.content.hasResearch && stateShowsApproved" :class="{ 'collapsed': !sections.approved }">
         <div class="type-label" @click="toggleSection('approved')">
           <Icon name="fluent:chevron-up-16-regular" size="1.5rem" v-if="!sections.approved" />
           <Icon name="fluent:chevron-down-16-regular" size="1.5rem" v-if="sections.approved" />
@@ -195,7 +188,6 @@ const requirementsSection = ref(null);
 const outlineSection = ref(null);
 const draftSection = ref(null);
 const researchSection = ref(null);
-const selectedSection = ref(null);
 const approvedSection = ref(null);
 
 const stateShowsOutline = computed(() => {
@@ -286,26 +278,6 @@ const stateShowsApproved = computed(() => {
   }
 });
 
-const scrollToSection = (section) => {
-  const sectionRef = {
-    stateDetails: stateDetails,
-    requirements: requirementsSection,
-    outline: outlineSection,
-    draft: draftSection,
-    research: researchSection,
-    approved: approvedSection,
-  }[section];
-
-  if (sectionRef && sectionRef.value) {
-    sectionRef.value.scrollIntoView({ behavior: 'smooth' });
-    selectedSection.value = section;
-  }
-};
-
-const setSelectedSection = (section) => {
-  selectedSection.value = section;
-};
-
 const dueDate = computed(() => {
   if (props.DeliverableData) {
     return new Date(props.DeliverableData.due_date).toDateString();
@@ -320,12 +292,6 @@ const noRequirements = computed(() => {
   }
 });
 
-// Set the initial selected section when the component mounts. We'll always want to default to the state details
-onMounted(() => {
-  if (props.DeliverableData) {
-    scrollToSection('stateDetails');
-  }
-});
 </script>
 
 <style lang="scss" scoped>
