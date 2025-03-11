@@ -44,10 +44,10 @@
                 <Icon name="grommet-icons:github" size="2rem" />
                 Login with GitHub
               </button>
-              <!-- <button class="button large">
+              <button class="button large" @click="signInWithGoogle">
                 <Icon name="grommet-icons:google" size="2rem" />
                 Login with Google
-              </button> -->
+              </button>
             </div>
             <p class="or-select">Or</p>
             <form class="login-form" @submit.prevent="signInWithPassword">
@@ -91,10 +91,10 @@
                         Sign up with GitHub
                       </section>
                     </button>
-                    <!-- <button class="button large">
+                    <button class="button large">
                       <Icon name="grommet-icons:google" size="2rem" />
-                      Login with Google
-                    </button> -->
+                      Sign up with Google
+                    </button>
                   </div>
                   <p class="or-select">Or</p>
                   <div class="form-group">
@@ -212,7 +212,6 @@ async function signInWithGithub() {
       }
     });
     if (error) throw error;
-    // console.log('Github response', data);
     if (data.provider == 'github') {
       console.log('Github response', data);
       router.push('/auth/confirm');
@@ -223,16 +222,29 @@ async function signInWithGithub() {
   } finally {
     buttonloading.value = false;
   }
-  // const { data, error } = await supabase.auth.signInWithOAuth({
-  //   provider: 'github',
-  //   options: {
-  //       redirectTo: '/auth/confirm',
-  //   }
-  // });
-  // if (error) {
-  //   errorbox.value = error.message;
-  // }
-  // console.log(data);
+}
+
+async function signInWithGoogle() {
+  console.log('Signing in with Google');
+  try {
+    buttonloading.value = true;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+          redirectTo: '/auth/confirm',
+      }
+    });
+    if (error) throw error;
+    if (data.provider == 'google') {
+      console.log('Google response', data);
+      router.push('/auth/confirm');
+    }
+  } catch (error) {
+    errorbox.value = error.error_description || error.message;
+    console.log('Error:', error);
+  } finally {
+    buttonloading.value = false;
+  }
 }
 
 const signInWithMagicLink = async () => {
