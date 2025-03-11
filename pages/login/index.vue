@@ -41,10 +41,16 @@
           <section id="LoginForm" class="form-group" v-if="form == 'login'">
             <div class="login-buttons">
               <button class="button large" @click="signInWithGithub">
+                <section v-if="buttonloading">
+                  <Loading type="button" />
+                </section>
                 <Icon name="grommet-icons:github" size="2rem" />
                 Login with GitHub
               </button>
               <button class="button large" @click="signInWithGoogle">
+                <section v-if="buttonloading">
+                  <Loading type="button" />
+                </section>
                 <Icon name="grommet-icons:google" size="2rem" />
                 Login with Google
               </button>
@@ -80,51 +86,52 @@
           <!-- Signup -->
           <section id="SignUpForm" class="form-group" v-if="form == 'signup'">
             <form class="sign-up-form" @submit.prevent="signUp">
-              <div>
-                  <div class="signup-buttons">
-                    <button class="button large" @click="signInWithGithub">
-                      <section v-if="buttonloading">
-                        <Loading type="button" />
-                      </section>
-                      <section v-else>
-                        <Icon name="grommet-icons:github" size="2rem" />
-                        Sign up with GitHub
-                      </section>
-                    </button>
-                    <button class="button large">
-                      <Icon name="grommet-icons:google" size="2rem" />
-                      Sign up with Google
-                    </button>
+                <div class="signup-buttons">
+                  <button class="button large" @click="signInWithGithub">
+                    <section v-if="buttonloading">
+                      <Loading type="button" />
+                    </section>
+                    <section v-else>
+                      <Icon name="grommet-icons:github" size="2rem" />
+                      Sign up with GitHub
+                    </section>
+                  </button>
+                  <button class="button large" @click="signInWithGoogle">
+                    <section v-if="buttonloading">
+                      <Loading type="button" />
+                    </section>
+                    <Icon name="grommet-icons:google" size="2rem" />
+                    Sign up with Google
+                  </button>
+                </div>
+                <p class="or-select">Or</p>
+                <div class="form-group">
+                  <div v-if="errorbox">
+                      <p class="notification error">{{ errorbox }}</p>
                   </div>
-                  <p class="or-select">Or</p>
-                  <div class="form-group">
-                    <div v-if="errorbox">
-                        <p class="notification error">{{ errorbox }}</p>
-                    </div>
-                    <div v-if="!notification == ''">
-                        <p class="notification success">{{ notification }}</p>
-                    </div>
-                    <p class="description">Sign up for an account to access the app.</p>
-                      <div class="form-input">
-                          <label for="email">Your email address</label>
-                          <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
-                      </div>
+                  <div v-if="!notification == ''">
+                      <p class="notification success">{{ notification }}</p>
                   </div>
+                  <p class="description">Sign up for an account to access the app.</p>
+                    <div class="form-input">
+                        <label for="email">Your email address</label>
+                        <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
+                    </div>
+                </div>
 
-                  <div class="form-group">
-                      <div class="form-input password">
-                          <label for="password">Your password</label>
-                          <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
-                      </div>
-                      <div class="form-input password">
-                        <label for="password">Confirm password</label>
-                        <input class="inputField" type="password" placeholder="••••••••" v-model="confirmPassword" />
+                <div class="form-group">
+                    <div class="form-input password">
+                        <label for="password">Your password</label>
+                        <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
                     </div>
+                    <div class="form-input password">
+                      <label for="password">Confirm password</label>
+                      <input class="inputField" type="password" placeholder="••••••••" v-model="confirmPassword" />
                   </div>
-                  <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading || !matchingPasswords" />
+                </div>
+                <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading || !matchingPasswords" />
 
-                  <div class="notification warning password-warning" v-if="!matchingPasswords">Passwords do not match</div>
-              </div>
+                <div class="notification warning password-warning" v-if="!matchingPasswords">Passwords do not match</div>
             </form>
           </section>
 
@@ -451,9 +458,10 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
       display: flex;
       gap: $spacing-xs;
       align-self: center;
+      justify-content: center;
 
       button {
-        margin: 0 auto;
+        margin: 0;
       }
     }
 
