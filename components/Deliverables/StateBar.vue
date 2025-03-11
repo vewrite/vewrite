@@ -47,9 +47,12 @@
     </div>
     
     <!-- Is approved (49) -->
-    <div v-if="props.StateData[0].state_type === 6">
+    <div v-if="props.StateData[0].state_type === 6 && !isExternal">
       <button class="button primary" @click="downloadFile('markdown')">Download markdown</button>
       <button class="button primary" @click="downloadFile('html')">Download html</button>
+    </div>
+    <div class="notification warning" v-if="props.StateData[0].state_type === 6 && isExternal"> 
+      This deliverable is an external link.
     </div>
 
   </section>
@@ -73,6 +76,14 @@ const deliverableStore = useDeliverableStore();
 
 import TurnDownService from 'turndown';
 const turndownService = new TurnDownService();
+
+const isExternal = () => {
+  if(DeliverableData.content.type == 'link') {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 async function handleState(stateId, deliverableId, stateType) {
 
