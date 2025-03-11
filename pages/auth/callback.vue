@@ -23,12 +23,17 @@ onMounted(async () => {
     // Get initial session
     const { data: { session }, error } = await supabase.auth.getSession()
     
+    console.log('Session:', session)
+
     if (error) throw error
     
     if (session) {
       console.log('User is logged in, setting user:', session.user)
       authStore.setUser(session.user)
       await router.push('/')
+    } else {
+      console.log('User is not logged in')
+      await router.push('/login')
     }
   } catch (error) {
     console.error('Error:', error.message)

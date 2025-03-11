@@ -271,7 +271,8 @@ const signUp = async () => {
       password: password.value
     });
     if (error) throw error;
-    notification.value = 'Check your email for the confirmation link';
+    notification.value = 'Successfully signed up, logging in...';
+    await signInWithPassword();
   } catch (error) {
     errorbox.value = error.error_description || error.message;
     console.log('Error:', error);
