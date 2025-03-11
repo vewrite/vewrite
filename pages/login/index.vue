@@ -154,6 +154,11 @@
         </section>
 
         <section class="login-bottom">
+          <section class="support-links">
+            <a href="https://vewrite.com/">Homepage</a>
+            <a href="https://vewrite.com/support">Support</a>
+            <a href="https://docs.vewrite.com/">Documentation</a>
+          </section>
           <p class="copyright-and-terms">© 2024 All rights reserved. <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
         </section>
       </section>
@@ -335,6 +340,14 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
     align-items: center;
     gap: $spacing-md;
     width: 100%;
+  }
+
+  .support-links {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-md;
+    align-items: center;
+    justify-content: center;
   }
 
   .toggle-form {
