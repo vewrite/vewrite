@@ -89,6 +89,10 @@ const { fetchTeams, deleteTeam, TeamsData, TeamsError } = useTeam();
 import useGroup from '~/composables/useGroup';
 const { fetchGroupId, GroupData, GroupError } = useGroup();
 
+const handleTeamInserts = (payload) => {
+  fetchTeams(GroupData.value.id)
+}
+
 onMounted(async () => {
   // grid/list state
   const savedState = localStorage.getItem('viewMode');
@@ -103,11 +107,7 @@ onMounted(async () => {
 
     const subscription = supabase
       .channel('teams')
-      .on('INSERT', payload => {
-        console.log('New team:', payload.new);
-        teams.value.push(payload.new);
-        fetchTeams(GroupData.value.id);
-      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'teams' }, handleTeamInserts)
       .subscribe();
 
     onUnmounted(() => {
