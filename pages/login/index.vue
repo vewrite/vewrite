@@ -168,7 +168,7 @@
         </section>
 
         <section class="login-bottom">
-          <p class="copyright-and-terms">© 2024 All rights reserved. <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+          <p class="copyright-and-terms">© 2025 All rights reserved. <a href="https://vewrite.com/legal/terms">Terms of Service</a> and <a href="https://vewrite.com/legal/privacy">Privacy Policy</a></p>
         </section>
       </section>
     </main>
