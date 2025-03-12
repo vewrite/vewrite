@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     "@samk-dev/nuxt-vcalendar",
     '@nuxt/icon',
     'nuxt-tiptap-editor',
+    'nuxt-module-hotjar'
   ],
 
   css: [
@@ -50,6 +51,11 @@ export default defineNuxtConfig({
         }
       }
     }
+  },
+
+  hotjar: {
+    hotjarId: 5335288,
+    scriptVersion: 6,
   },
 
   runtimeConfig: {
