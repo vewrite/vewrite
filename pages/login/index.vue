@@ -1,6 +1,13 @@
 <template>
   <NuxtLayout>
     <main id="Login">
+      <section class="home-link">
+        <a class="button" href="https://vewrite.com/">Homepage</a>
+      </section>
+      <section class="support-links">
+        <a class="button" href="https://vewrite.com/support">Support</a>
+        <a class="button" href="https://docs.vewrite.com/">Documentation</a>
+      </section>
       <section id="LoginWrapper" class="max-width sm">
         <section class="login-top">
           <svg width="151" height="46" viewBox="0 0 151 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,13 +48,19 @@
           <section id="LoginForm" class="form-group" v-if="form == 'login'">
             <div class="login-buttons">
               <button class="button large" @click="signInWithGithub">
+                <section v-if="buttonloading">
+                  <Loading type="button" />
+                </section>
                 <Icon name="grommet-icons:github" size="2rem" />
                 Login with GitHub
               </button>
-              <!-- <button class="button large">
+              <button class="button large" @click="signInWithGoogle">
+                <section v-if="buttonloading">
+                  <Loading type="button" />
+                </section>
                 <Icon name="grommet-icons:google" size="2rem" />
                 Login with Google
-              </button> -->
+              </button>
             </div>
             <p class="or-select">Or</p>
             <form class="login-form" @submit.prevent="signInWithPassword">
@@ -80,51 +93,52 @@
           <!-- Signup -->
           <section id="SignUpForm" class="form-group" v-if="form == 'signup'">
             <form class="sign-up-form" @submit.prevent="signUp">
-              <div>
-                  <div class="signup-buttons">
-                    <button class="button large" @click="signInWithGithub">
-                      <section v-if="buttonloading">
-                        <Loading type="button" />
-                      </section>
-                      <section v-else>
-                        <Icon name="grommet-icons:github" size="2rem" />
-                        Sign up with GitHub
-                      </section>
-                    </button>
-                    <!-- <button class="button large">
-                      <Icon name="grommet-icons:google" size="2rem" />
-                      Login with Google
-                    </button> -->
+                <div class="signup-buttons">
+                  <button class="button large" @click="signInWithGithub">
+                    <section v-if="buttonloading">
+                      <Loading type="button" />
+                    </section>
+                    <section v-else>
+                      <Icon name="grommet-icons:github" size="2rem" />
+                      Sign up with GitHub
+                    </section>
+                  </button>
+                  <button class="button large" @click="signInWithGoogle">
+                    <section v-if="buttonloading">
+                      <Loading type="button" />
+                    </section>
+                    <Icon name="grommet-icons:google" size="2rem" />
+                    Sign up with Google
+                  </button>
+                </div>
+                <p class="or-select">Or</p>
+                <div class="form-group">
+                  <div v-if="errorbox">
+                      <p class="notification error">{{ errorbox }}</p>
                   </div>
-                  <p class="or-select">Or</p>
-                  <div class="form-group">
-                    <div v-if="errorbox">
-                        <p class="notification error">{{ errorbox }}</p>
-                    </div>
-                    <div v-if="!notification == ''">
-                        <p class="notification success">{{ notification }}</p>
-                    </div>
-                    <p class="description">Sign up for an account to access the app.</p>
-                      <div class="form-input">
-                          <label for="email">Your email address</label>
-                          <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
-                      </div>
+                  <div v-if="!notification == ''">
+                      <p class="notification success">{{ notification }}</p>
                   </div>
+                  <p class="description">Sign up for an account to access the app.</p>
+                    <div class="form-input">
+                        <label for="email">Your email address</label>
+                        <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
+                    </div>
+                </div>
 
-                  <div class="form-group">
-                      <div class="form-input password">
-                          <label for="password">Your password</label>
-                          <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
-                      </div>
-                      <div class="form-input password">
-                        <label for="password">Confirm password</label>
-                        <input class="inputField" type="password" placeholder="••••••••" v-model="confirmPassword" />
+                <div class="form-group">
+                    <div class="form-input password">
+                        <label for="password">Your password</label>
+                        <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
                     </div>
+                    <div class="form-input password">
+                      <label for="password">Confirm password</label>
+                      <input class="inputField" type="password" placeholder="••••••••" v-model="confirmPassword" />
                   </div>
-                  <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading || !matchingPasswords" />
+                </div>
+                <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading || !matchingPasswords" />
 
-                  <div class="notification warning password-warning" v-if="!matchingPasswords">Passwords do not match</div>
-              </div>
+                <div class="notification warning password-warning" v-if="!matchingPasswords">Passwords do not match</div>
             </form>
           </section>
 
@@ -207,7 +221,6 @@ async function signInWithGithub() {
       }
     });
     if (error) throw error;
-    // console.log('Github response', data);
     if (data.provider == 'github') {
       console.log('Github response', data);
       router.push('/auth/confirm');
@@ -218,16 +231,29 @@ async function signInWithGithub() {
   } finally {
     buttonloading.value = false;
   }
-  // const { data, error } = await supabase.auth.signInWithOAuth({
-  //   provider: 'github',
-  //   options: {
-  //       redirectTo: '/auth/confirm',
-  //   }
-  // });
-  // if (error) {
-  //   errorbox.value = error.message;
-  // }
-  // console.log(data);
+}
+
+async function signInWithGoogle() {
+  console.log('Signing in with Google');
+  try {
+    buttonloading.value = true;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+          redirectTo: '/auth/confirm',
+      }
+    });
+    if (error) throw error;
+    if (data.provider == 'google') {
+      console.log('Google response', data);
+      router.push('/auth/confirm');
+    }
+  } catch (error) {
+    errorbox.value = error.error_description || error.message;
+    console.log('Error:', error);
+  } finally {
+    buttonloading.value = false;
+  }
 }
 
 const signInWithMagicLink = async () => {
@@ -316,6 +342,21 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   flex-direction: row;
   height: 100%;
   width: 100%;
+  position: relative;
+
+  .home-link {
+    position: absolute;
+    top: $spacing-md;
+    left: $spacing-md;
+  }
+
+  .support-links {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    display: flex;
+    gap: $spacing-xs;
+  }
 }
 
 #LoginWrapper {
@@ -335,6 +376,18 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
     align-items: center;
     gap: $spacing-md;
     width: 100%;
+  }
+
+  .login-top {
+    padding-top: $spacing-lg;
+  }
+
+  .support-links {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-md;
+    align-items: center;
+    justify-content: center;
   }
 
   .toggle-form {
@@ -426,9 +479,10 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
       display: flex;
       gap: $spacing-xs;
       align-self: center;
+      justify-content: center;
 
       button {
-        margin: 0 auto;
+        margin: 0;
       }
     }
 
