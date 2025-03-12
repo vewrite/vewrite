@@ -34,7 +34,7 @@
 
           <section class="toggle-form">
             <div class="toggle-item" id="LoginToggle" :class="{ active: form == 'login' }" @click="formToggle('login')">
-              <span class="title">Login</span>
+              <span class="title">Access</span>
             </div>
             <div class="toggle-item" id="SignUpToggle" :class="{ active: form == 'signup' }" @click="formToggle('signup')">
               <span class="title">Sign Up</span>
@@ -52,14 +52,14 @@
                   <Loading type="button" />
                 </section>
                 <Icon name="grommet-icons:github" size="2rem" />
-                Login with GitHub
+                GitHub
               </button>
               <button class="button large" @click="signInWithGoogle">
                 <section v-if="buttonloading">
                   <Loading type="button" />
                 </section>
                 <Icon name="grommet-icons:google" size="2rem" />
-                Login with Google
+                Google
               </button>
             </div>
             <p class="or-select">Or</p>
@@ -93,7 +93,7 @@
           <!-- Signup -->
           <section id="SignUpForm" class="form-group" v-if="form == 'signup'">
             <form class="sign-up-form" @submit.prevent="signUp">
-                <div class="signup-buttons">
+                <!-- <div class="signup-buttons">
                   <button class="button large" @click="signInWithGithub">
                     <section v-if="buttonloading">
                       <Loading type="button" />
@@ -111,7 +111,7 @@
                     Sign up with Google
                   </button>
                 </div>
-                <p class="or-select">Or</p>
+                <p class="or-select">Or</p> -->
                 <div class="form-group">
                   <div v-if="errorbox">
                       <p class="notification error">{{ errorbox }}</p>
