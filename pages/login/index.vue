@@ -342,6 +342,21 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   flex-direction: row;
   height: 100%;
   width: 100%;
+  position: relative;
+
+  .home-link {
+    position: absolute;
+    top: $spacing-md;
+    left: $spacing-md;
+  }
+
+  .support-links {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    display: flex;
+    gap: $spacing-xs;
+  }
 }
 
 #LoginWrapper {
@@ -361,6 +376,10 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
     align-items: center;
     gap: $spacing-md;
     width: 100%;
+  }
+
+  .login-top {
+    padding-top: $spacing-lg;
   }
 
   .support-links {
