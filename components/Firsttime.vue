@@ -1,6 +1,7 @@
 <template>
   <div id="FirstTime">
-    <div class="onboarding-form">
+    <Loading type="small" v-if="loading" /> 
+    <div class="onboarding-form" v-else>
 
       <Logo class="logo" />
 
@@ -33,20 +34,25 @@
 
         <div class="onboarding-header" v-if="TeamsData">
           <p class="center">Next, we'd like to get to know you a little better.</p>
-          <form @submit.prevent="onboardUserDetails">
+          <form @submit.prevent="handleOnboardUserDetails">
             <div class="form-group">
                 <div class="form-input">
                     <label for="username">Name</label>
                     <input v-model="defaultUser.username" id="username" type="text" placeholder="What's your name?" />
+                    <span class="form-required" v-if="formErrors.due_date != ''">{{ formErrors.username }}</span>
                 </div>
                 <div class="form-input">
                     <label for="name">Your website</label>
                     <input v-model="defaultUser.website" id="website" type="text" placeholder="Do you have a website?" />
+                    <span class="form-required" v-if="formErrors.due_date != ''">{{ formErrors.website }}</span>
                 </div>
                 <button type="submit" class="button block large wide primary" :disabled="loading">
                   <span v-if="loading">Updating...</span>
                   <span v-else>Get Started</span>
                 </button>
+                <section class="errors">
+                  <section class="notification warning" v-if="formErrors.persona">{{ formErrors.persona }}</section>
+                </section>
             </div>
           </form>
         </div>
@@ -75,11 +81,6 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const loading = ref(false)
 const onboardingStep = ref(1)
-
-// const newPassword = ref('')
-// const confirmPassword = ref('')
-
-// const matchingPasswords = computed(() => newPassword.value === confirmPassword.value)
 
 const defaultUser = ref({
   id: user.value.id,
@@ -124,7 +125,7 @@ const setPersona = (persona) => {
   defaultUser.value.persona = persona;
 };
 
-async function onboardUserDetails(TeamId) {
+async function onboardUserDetails() {
   try {
     loading.value = true
     await updateProfile(defaultUser.value)
@@ -134,10 +135,37 @@ async function onboardUserDetails(TeamId) {
       await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
     }
     emit('closeOnboarding')
-    loading.value = false
   } catch (error) {
     console.error(error)
+  } finally {
+    loading.value = false
   }
+}
+
+const handleOnboardUserDetails = () => {
+
+  clearErrors();
+  
+  if ($v.value.$invalid) {
+    $v.value.$errors.forEach(error => {
+      processError(error);
+    });
+  } else {
+    onboardUserDetails()
+  }
+
+}
+
+function processError (error) {
+  formErrors.value[error.$property] = error.$property + ' is required';
+}
+
+function clearErrors () {
+  formErrors.value = {
+    username: '',
+    persona: '',
+    website: ''
+  };
 }
 
 async function setFirstTime(set) {
@@ -155,6 +183,27 @@ async function setFirstTime(set) {
   return data
 }
 
+// Form validation
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+
+const rules = {
+  defaultUser: {
+    username: { required },
+    website: { required },
+    persona: { required }
+  }
+}
+
+const formErrors = ref({
+  username: '',
+  website: '',
+  persona: ''
+})
+
+const $v = useVuelidate(rules, { defaultUser })
+
+$v.value.$touch()
 
 </script>
 
@@ -219,6 +268,10 @@ async function setFirstTime(set) {
     h2 {
       margin-top: 0;
       opacity: 0.8;
+    }
+
+    .errors {
+      margin-top: $spacing-xs;
     }
 
     .onboarding-step {

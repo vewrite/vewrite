@@ -1,6 +1,13 @@
 <template>
   <NuxtLayout>
     <main id="Login">
+      <section class="home-link">
+        <a class="button" href="https://vewrite.com/">Homepage</a>
+      </section>
+      <section class="support-links">
+        <a class="button" href="https://vewrite.com/support">Support</a>
+        <a class="button" href="https://docs.vewrite.com/">Documentation</a>
+      </section>
       <section id="LoginWrapper" class="max-width sm">
         <section class="login-top">
           <svg width="151" height="46" viewBox="0 0 151 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,11 +168,6 @@
         </section>
 
         <section class="login-bottom">
-          <section class="support-links">
-            <a href="https://vewrite.com/">Homepage</a>
-            <a href="https://vewrite.com/support">Support</a>
-            <a href="https://docs.vewrite.com/">Documentation</a>
-          </section>
           <p class="copyright-and-terms">© 2024 All rights reserved. <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
         </section>
       </section>
