@@ -61,6 +61,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Server-side environment variables
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
