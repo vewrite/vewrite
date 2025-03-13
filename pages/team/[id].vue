@@ -173,22 +173,20 @@ const invited_profile = reactive({
 })
 
 const inviteToVewrite = async (email) => {
-  console.log('Inviting user by email:', member.email);
-  loadingbutton.value = true;
-  
-  invited_profile.email = email;
 
   try {
-    const { error } = await supabase.auth.admin.inviteUserByEmail(email)
+    const response = await $fetch(`/api/email/inviteUser?email=${email}&team_id=${teamId}`);
 
-    await createInvitedProfile(invited_profile);
+    if (!response) {
+      console.error('No response from server');
+      return;
+    }
 
-    if (error) throw error
-    loadingbutton.value = false;
+    console.log('Invitation sent:', response);
   } catch (error) {
     console.error('Error inviting user:', error.message);
-    loadingbutton.value = false;
   }
+  
 }
 
 async function handleAddTeamMember(member) {

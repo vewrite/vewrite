@@ -94,7 +94,7 @@ const defaultUser = ref({
   avatar_url: '',
   updated_at: new Date(),
   website: '',
-  persona: '',
+  persona: 'writer',
   subscription: {
     "status": "free"
   }
@@ -167,7 +167,7 @@ function processError (error) {
 function clearErrors () {
   formErrors.value = {
     username: '',
-    persona: '',
+    persona: defaultUser.value.persona,
     website: ''
   };
 }
