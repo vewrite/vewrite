@@ -44,7 +44,6 @@
                 <div class="form-input">
                     <label for="name">Your website</label>
                     <input v-model="defaultUser.website" id="website" type="text" placeholder="Do you have a website?" />
-                    <span class="form-required" v-if="formErrors.due_date != ''">{{ formErrors.website }}</span>
                 </div>
                 <button type="submit" class="button block large wide primary" :disabled="loading">
                   <span v-if="loading">Updating...</span>
@@ -67,13 +66,13 @@ import { useUser } from '@/stores/user'
 const userStore = useUser()
 
 import useGroup from '~/composables/useGroup'
-const { createGroup, fetchSingleGroup, GroupData, GroupError } = useGroup()
+const { createGroup } = useGroup()
 
 import useProfile from '~/composables/useProfile'
-const { createProfile, updateProfile, fetchSingleProfile, fetchInvitedTeamsForThisProfile, TeamIds, ProfileData, ProfileError } = useProfile()
+const { updateProfile, fetchInvitedTeamsForThisProfile, TeamIds} = useProfile()
 
 import useTeam from '~/composables/useTeam'
-const { fetchInvitedTeams, approveTeamMember, rejectTeamMember, TeamsData, TeamsError } = useTeam()
+const { fetchInvitedTeams, approveTeamMember, TeamsData } = useTeam()
 
 const emit = defineEmits(['closeOnboarding'])
 
@@ -164,7 +163,6 @@ function clearErrors () {
   formErrors.value = {
     username: '',
     persona: defaultUser.value.persona,
-    website: ''
   };
 }
 
@@ -190,14 +188,12 @@ import { required } from '@vuelidate/validators'
 const rules = {
   defaultUser: {
     username: { required },
-    website: { required },
     persona: { required }
   }
 }
 
 const formErrors = ref({
   username: '',
-  website: '',
   persona: ''
 })
 

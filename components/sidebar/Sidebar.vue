@@ -75,7 +75,6 @@ onMounted(() => {
   min-width: 160px;
   transition: all 0.2s ease;
   position: relative;
-  background: rgba($black, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

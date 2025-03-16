@@ -108,7 +108,6 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: $spacing-sm;
-  background: rgba($black, 0.05);
   width: 100%;
 
   @media (max-width: 960px) {

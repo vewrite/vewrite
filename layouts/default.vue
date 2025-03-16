@@ -1,7 +1,7 @@
 <template>
   <Loading v-if="loading" />
   <Firsttime v-if="!loading && isNewUser == true" @closeOnboarding="close" />
-  <main id="Vewrite" v-if="!loading && isNewUser == false">
+  <main id="Vewrite" class="max-width xl" v-if="!loading && isNewUser == false">
     <TopBar />
     <section class="go">
       <Sidebar />
@@ -87,6 +87,7 @@ onMounted(() => {
   flex-direction: column;
   height: 100%;
   width: 100%;
+
 
   @media (max-width: 960px) {
     flex-direction: column;
