@@ -77,7 +77,6 @@ export default {
     border-bottom: $border;
     border-left: $border;
     border-right: $border;
-    box-shadow: $main-shadow;
 
     @media (max-width: 960px) {
       border: none;

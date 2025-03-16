@@ -46,9 +46,10 @@
           <div class="project-card-owner">
             {{ project.tag }}
           </div>
+          <ClientImage class="client-image" :client="project.client_id" size="medium" table="logos" />
           <div class="project-card-details">
-            <ClientImage :client="project.client_id" size="medium" table="logos" />
             <h3>{{ project.name }}</h3>
+            <p>{{ project.description }}</p>
           </div>
         </div>
         <div class="project-deliverables-status">
@@ -305,19 +306,11 @@ const filteredProjects = computed(() => {
 
     &.grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: $spacing-sm;
       width: 100%;
-      padding: 0 $spacing-sm $spacing-sm;
+      padding: $spacing-sm $spacing-md $spacing-md;
       align-content: flex-start;
-
-      @media (max-width: 1800px) {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      @media (max-width: 1600px) {
-        grid-template-columns: repeat(3, 1fr);
-      }
 
       @media (max-width: 1200px) {
         grid-template-columns: repeat(2, 1fr);
@@ -333,7 +326,7 @@ const filteredProjects = computed(() => {
         border-radius: $br-lg;
         border: $border;
         text-decoration: none;
-        height: 220px;
+        height: 320px;
         color: $black;
         position: relative;
         overflow: hidden;
@@ -347,6 +340,9 @@ const filteredProjects = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
+        background: $white linear-gradient(to bottom, $white 70%, rgba($brand-light, 0.025) 90%, rgba($brand-light, 0.05) 100%);
+        outline: 1px solid $white;
+        outline-offset: -2px;
 
         &.completed {
           background: $white linear-gradient(to bottom, $white 70%, rgba($mint-light, 0.25) 90%, rgba($mint-light, 0.1) 100%);
@@ -368,9 +364,6 @@ const filteredProjects = computed(() => {
         .project-card-owner {
           border: $border;
           color: rgba($brand, 0.5);
-          position: absolute;
-          right: $spacing-xxs;
-          top: $spacing-xxs;
           padding: $spacing-xxxs $spacing-sm;
           border-radius: $br-md;
           font-size: $font-size-xs;
@@ -381,13 +374,25 @@ const filteredProjects = computed(() => {
           justify-content: space-between;
           align-items: flex-start;
           flex-direction: column;
-          margin-top: $spacing-sm;
+          gap: $spacing-sm;
+
+          .client-image {
+            width: 60px;
+            height: 60px;
+            border-radius: $br-md;
+            overflow: hidden;
+            background-color: $gray-light;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: $spacing-md;
+            right: $spacing-md;
+          }
 
           .project-card-details {
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex-direction: row;
+            flex-direction: column;
             gap: $spacing-sm;
           }
 
@@ -400,7 +405,7 @@ const filteredProjects = computed(() => {
             align-items: center;
 
             img {
-              width: auto;
+              width: 120px;
               height: 100%;
             }
           }
@@ -408,10 +413,10 @@ const filteredProjects = computed(() => {
         }
 
         h3 {
-          font-size: $font-size-xs;
+          font-size: $font-size-lg;
           font-family: $font-family-main;
           font-weight: bold;
-          margin: 0 0 $spacing-sm;
+          margin: 0;
           
           a {
             color: $brand;
@@ -592,8 +597,7 @@ const filteredProjects = computed(() => {
         }
 
         p {
-          font-size: $font-size-xs;
-          color: $gray-dark;
+          display: none;
         }
 
         .project-card-buttons {
@@ -677,7 +681,7 @@ const filteredProjects = computed(() => {
               .progress {
                 height: 6px;
                 border-radius: $br-md;
-                background: linear-gradient(to right, $mint, $mint 80%, $brand 100%);
+                background: linear-gradient(to right, $mint-light, $mint-light 80%, $brand 100%);
 
                 &.completed {
                   background: $mint;
