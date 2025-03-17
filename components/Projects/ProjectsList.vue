@@ -417,6 +417,7 @@ const filteredProjects = computed(() => {
           font-family: $font-family-main;
           font-weight: bold;
           margin: 0;
+          width: calc(100% - 80px - $spacing-sm);
           
           a {
             color: $brand;
