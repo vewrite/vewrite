@@ -560,6 +560,22 @@ textarea {
         }
     }
 
+    .form-hint {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-xxs;
+        align-items: center;
+        justify-content: center;
+        padding: 0 $spacing-sm;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        color: rgba($brand, 1);
+        font-weight: bold;
+        font-size: $font-size-xs;
+    }
+
     &:focus,
     &:hover,
     &:focus-within,
