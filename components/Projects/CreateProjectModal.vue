@@ -32,81 +32,79 @@
       </section>
 
       <!-- Has clients and teams -->
-      <form class="inner-container" v-if="!loading && hasReadyTeams && hasClients && isAllowed" @submit.prevent="createProject(project)">
+      <form v-if="!loading && hasReadyTeams && hasClients && isAllowed" @submit.prevent="createProject(project)">
 
-        <!-- isPro or freeLimitedProject -->
-        <div class="form-block" v-if="isAllowed">
-          <div class="form-details">
-            <h4>Project Details</h4>
-            <p class="details">These help you quickly identify and differentiate your projects. Make sure to be as descriptive and details as possible so that you don't confuse your projects.</p>
-          </div>
-          <div class="form-content">
-            <div class="form-input">
-              <label for="name">Name</label>
-              <input v-model="project.name" id="name" type="text" placeholder="Your project's name" />
-              <span class="form-required" v-if="formErrors.name != ''">{{ formErrors.name }}</span>
-            </div>
-            <div class="form-input">
-              <label for="description">Description</label>
-              <input v-model="project.description" id="description" type="text" placeholder="Summarize your project and its objectives" />
-            </div>
-          </div>
-        </div>
+        <section class="form-row">
+          <div class="inner-container">
+            <div class="form-block">
+              <div class="form-content-full">
 
-        <div class="form-block">
-          <div class="form-details">
-            <h4>Team</h4>
-            <p class="details">Assign a team who will work on this project.</p>
-          </div>
-          <div class="form-content">
-            <div class="form-input">
-              <label for="team">Assigned team</label>
-              <select v-model="project.assigned_team" id="team">
-                <option v-for="team in readyTeamsData" :key="team.assigned_team" :value="team.id">{{ team.name }}</option>
-              </select>
-              <span class="form-required" v-if="formErrors.assigned_team != ''">{{ formErrors.assigned_team }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-block">
-          <div class="form-details">
-            <h4>Client</h4>
-            <p class="details">Select which client this is for.</p>
-          </div>
-          <div class="form-content">
-            <div class="form-group">
-              <span class="form-required" v-if="formErrors.client_id != ''">{{ formErrors.client_id }}</span>
-              <section id="ClientSelect">
-                <div class="client-select" v-for="client in clients">
-                  <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client_id" />
-                  <label :for="client.client_id">
-                    <div class="image-wrapper">
-                      <img :src="client.logo_url" alt="Client avatar" />
-                    </div>
-                    {{ client.name }}
-                  </label>
+                <!-- isPro or freeLimitedProject -->
+                <div class="form-input" v-if="isAllowed">
+                  <label for="name">Name</label>
+                  <input v-model="project.name" id="name" type="text" placeholder="Your project's name" />
+                  <span class="form-required" v-if="formErrors.name != ''">{{ formErrors.name }}</span>
                 </div>
-              </section>
-            </div>
-          </div>
-        </div>
+                <div class="form-input" v-if="isAllowed">
+                  <label for="description">Description</label>
+                  <input v-model="project.description" id="description" type="text" placeholder="Summarize your project and its objectives" />
+                </div>
 
-        <div class="form-block">
-          <div class="form-details">
-            <h4>Workflow</h4>
-            <p class="details">Your team relies on this workflow to set the correct order of work.</p>
-          </div>
-          <div class="form-content">
-            <div class="form-input">
-                <label for="client">Workflow</label>
-                <select v-model="project.workflow" id="client">
-                  <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
-                </select>
-                <span class="form-required" v-if="formErrors.workflow != ''">{{ formErrors.workflow }}</span>
+                <!-- Removed for Removing Teams - Single Project page #145 -->
+                <!-- <div class="form-block">
+                  <div class="form-details">
+                    <h4>Team</h4>
+                    <p class="details">Assign a team who will work on this project.</p>
+                  </div>
+                  <div class="form-content">
+                    <div class="form-input">
+                      <label for="team">Assigned team</label>
+                      <select v-model="project.assigned_team" id="team">
+                        <option v-for="team in readyTeamsData" :key="team.assigned_team" :value="team.id">{{ team.name }}</option>
+                      </select>
+                      <span class="form-required" v-if="formErrors.assigned_team != ''">{{ formErrors.assigned_team }}</span>
+                    </div>
+                  </div>
+                </div> -->
+
+                <div class="form-block">
+                  <div class="form-content clients">
+                    <div class="form-group">
+                      <span class="form-required" v-if="formErrors.client_id != ''">{{ formErrors.client_id }}</span>
+                      <section id="ClientSelect">
+                        <div class="client-select" v-for="client in clients">
+                          <input type="radio" :id="client.client_id" name="drone" :value="client.client_id" v-model="project.client_id" />
+                          <label :for="client.client_id">
+                            <div class="image-wrapper">
+                              <img :src="client.logo_url" alt="Client avatar" />
+                            </div>
+                            {{ client.name }}
+                          </label>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- For now we'll default to the standard workflow -->
+                <!-- <div class="form-block">
+                  <div class="form-content">
+                    <div class="form-input">
+                        <label for="client">Workflow</label>
+                        <select v-model="project.workflow" id="client">
+                          <option v-for="workflow in workflows" :value="workflow.id">{{ workflow.name }}</option>
+                        </select>
+                        <span class="form-required" v-if="formErrors.workflow != ''">{{ formErrors.workflow }}</span>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
             </div>
           </div>
-        </div>
+          <div class="inner-container">
+            test
+          </div>
+        </section>
       </form>
           
     </div>
@@ -163,7 +161,13 @@ const project = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   created_by: user.value.id,
-  assigned_team: '',
+  assigned_team: '', // Removed for Removing Teams - Single Project page #145
+  project_members: [
+    {
+      user_id: user.value.id,
+      role: 'owner',
+    },
+  ]
 })
 
 const clients = ref([]);
@@ -280,6 +284,10 @@ function clearErrors () {
   .modal-body {
     width: 100%;
     min-height: 320px;
+
+    .clients {
+      width: 100%;
+    }
 
     p {
       margin: 0;

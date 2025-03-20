@@ -1,7 +1,9 @@
 <template>
   <div id="CreateDeliverableModal">
     <div class="modal-body">
-      <Loading class="loading" v-if="loading" type="small" />
+
+      <Loading v-if="loading" class="loading" type="small" />
+      
       <form v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
         <section class="form-row">
           <div class="inner-container">
