@@ -102,7 +102,20 @@
             </div>
           </div>
           <div class="inner-container">
-            test
+
+            <section class="team-assignment">
+
+              <section class="form-required" v-if="missingRoles">Role selection required</section>
+            
+              <div class="members">
+                <div class="members-title">Project team members</div>
+                <div class="member" v-if="project" v-for="member in project.project_members" :key="member.id">
+                  <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                  <span class="member-role">{{ member.role }}</span>
+                </div>
+              </div>
+
+            </section>
           </div>
         </section>
       </form>
@@ -287,6 +300,64 @@ function clearErrors () {
 
     .clients {
       width: 100%;
+    }
+
+    .team-assignment {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border: $border;
+      border-radius: $br-lg;
+      min-height: 300px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba($gray-light, .25);
+      position: relative;
+
+      .form-required {
+        top: .9rem;
+        z-index: 10;
+      }
+
+      .members {
+        display: flex;
+        flex-direction: column;
+        border-radius: $br-lg;
+        position: relative;
+
+        .members-title {
+          font-size: $font-size-xs;
+          color: rgba($black, 0.65);
+          padding: $spacing-sm;
+          background: linear-gradient(to bottom, rgba($white, 1), rgba($white, 0.85));
+          backdrop-filter: blur(5px);
+          position: sticky;
+          top: 0;
+          z-index: 1;
+        }
+
+        .member {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: $spacing-xs;
+          border-bottom: $border;
+          padding: $spacing-sm;
+
+          .member-role {
+            text-transform: capitalize;
+            padding: $spacing-xxs $spacing-sm;
+            border-radius: $br-xl;
+            border: $border;
+            background: $white;
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
     }
 
     p {

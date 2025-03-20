@@ -298,74 +298,74 @@ function clearErrors () {
   }
 
   .team-assignment {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: $border;
+    border-radius: $br-lg;
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: rgba($gray-light, .25);
+    position: relative;
+
+    .form-required {
+      top: .9rem;
+      z-index: 10;
+    }
+
+    .members {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      border: $border;
       border-radius: $br-lg;
-      min-height: 300px;
-      max-height: 300px;
-      overflow-y: auto;
-      background: rgba($gray-light, .25);
       position: relative;
 
-      .form-required {
-        top: .9rem;
-        z-index: 10;
+      .members-title {
+        font-size: $font-size-xs;
+        color: rgba($black, 0.65);
+        padding: $spacing-sm;
+        background: linear-gradient(to bottom, rgba($white, 1), rgba($white, 0.85));
+        backdrop-filter: blur(5px);
+        position: sticky;
+        top: 0;
+        z-index: 1;
       }
 
-      .members {
+      .member {
         display: flex;
-        flex-direction: column;
-        border-radius: $br-lg;
-        position: relative;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-xs;
+        border-bottom: $border;
+        padding: $spacing-sm;
 
-        .members-title {
-          font-size: $font-size-xs;
-          color: rgba($black, 0.65);
-          padding: $spacing-sm;
-          background: linear-gradient(to bottom, rgba($white, 1), rgba($white, 0.85));
-          backdrop-filter: blur(5px);
-          position: sticky;
-          top: 0;
-          z-index: 1;
-        }
-
-        .member {
+        .role-selector {
           display: flex;
           flex-direction: row;
-          justify-content: space-between;
           align-items: center;
+          overflow: hidden;
           gap: $spacing-xs;
-          border-bottom: $border;
-          padding: $spacing-sm;
+          cursor: pointer;
 
-          .role-selector {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            overflow: hidden;
-            gap: $spacing-xs;
-            cursor: pointer;
+          .single-role {
+            background: rgba($black, 0.05);
+            padding: $spacing-xxs $spacing-sm;
+            border-radius: $br-lg;
 
-            .single-role {
-              background: rgba($black, 0.05);
-              padding: $spacing-xxs $spacing-sm;
-              border-radius: $br-lg;
-
-              &.selected {
-                background: rgba($brand, 0.15);
-                color: $brand;
-              }
+            &.selected {
+              background: rgba($brand, 0.15);
+              color: $brand;
             }
           }
+        }
 
-          &:last-child {
-            border-bottom: none;
-          }
+        &:last-child {
+          border-bottom: none;
         }
       }
     }
+  }
 
   .buttons {
     display: flex;
