@@ -5,13 +5,13 @@
       <Loading v-if="loading" class="loader" type="small" />
       
       <!-- No teams -->
-      <section class="inner-container" v-if="!loading && !hasReadyTeams">
+      <!-- <section class="inner-container" v-if="!loading && !hasReadyTeams">
         <div class="empty">
           <h3>No Ready Teams Found</h3>
           <p>You do not have a team to assign a project to. You must first add a team to Vewrite, and add at least two team members.</p>
           <nuxt-link class="button primary" to="/teams" @click="useModal().reset()">Manage your teams</nuxt-link>
         </div>
-      </section>
+      </section> -->
 
       <!-- No clients -->
       <section class="inner-container" v-if="!loading && !hasClients">
@@ -34,10 +34,13 @@
       <!-- Has clients and teams -->
       <form v-if="!loading && hasReadyTeams && hasClients && isAllowed" @submit.prevent="createProject(project)">
 
-        {{ProfileData}}
+        <!-- {{ProfileData}} -->
 
         <section class="form-row">
           <div class="inner-container">
+
+            <h3>Project Details</h3>
+
             <div class="form-block">
               <div class="form-content-full">
 
@@ -105,6 +108,8 @@
           </div>
           <div class="inner-container">
 
+            <h3>Project Members</h3>
+
             <section class="team-assignment">
 
               <!-- <section class="form-required" v-if="missingRoles">Role selection required</section> -->
@@ -159,7 +164,12 @@
                 <!-- <div class="members-title">Project team members</div> -->
                 <div class="member" v-if="project" v-for="member in project.project_members" :key="member.id">
                   <Avatar :uuid="member.user_id" :hasName="true" size="large" />
-                  <span class="member-role">{{ member.role }}</span>
+                  <section>
+                    <span class="member-role">{{ member.role }} </span>
+                    <div class="button red" @click="removeMember(member)" v-if="member.user_id != user.id">
+                      <Icon name="fluent:dismiss-20-filled" size="1.5rem" /> 
+                    </div>
+                  </section>
                 </div>
               </div>
 
@@ -287,6 +297,15 @@ function handleAddProjectMember() {
   }
 }
 
+function removeMember(member) {
+  console.log('Removing member:', member);
+  project.project_members = project.project_members.filter(item => item.user_id !== member.user_id);
+  // const indexToRemove = project.project_members.findIndex(user => user.user_id === member.user_id);
+  // if (indexToRemove !== -1) {
+  //   project.project_members.splice(indexToRemove, 1);
+  // }
+}
+
   // loadingbutton.value = true;
   // try {
   //   await addProjectMember(member);
@@ -307,9 +326,9 @@ onMounted(async () => {
     ownedProjects.value = await fetchProjectsCreatedBy(user.value.id);
     clients.value = await fetchClients(user.value.id);
     workflows.value = await fetchWorkflows(user.value.id);
-    loading.value = false;
   } catch (error) {
     console.error('Error fetching clients:', error.message);
+  } finally {
     loading.value = false;
   }
 })
@@ -354,9 +373,7 @@ const rules = {
 
 const formErrors = ref({
   name: '',
-  assigned_team: '',
   client_id: '',
-  workflow: '',
 })
 
 const $v = useVuelidate(rules, { project })
@@ -390,9 +407,7 @@ function processError (error) {
 function clearErrors () {
   formErrors.value = {
     name: '',
-    assigned_team: '',
     client_id: '',
-    workflow: '',
   };
 }
 
@@ -420,6 +435,10 @@ function clearErrors () {
   .modal-body {
     width: 100%;
     min-height: 320px;
+
+    .loader {
+      height: 280px;
+    }
 
     .clients {
       width: 100%;
@@ -519,6 +538,13 @@ function clearErrors () {
           gap: $spacing-xs;
           border-bottom: $border;
           padding: $spacing-sm;
+
+          section {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-xs;
+          }
 
           .member-role {
             text-transform: capitalize;
