@@ -107,8 +107,52 @@
 
               <section class="form-required" v-if="missingRoles">Role selection required</section>
             
+              <!-- Input to add a new member to the team -->
+              <div class="form-input" v-if="isAllowed">
+                <label for="newMember">Invite member</label>
+                <input v-model="newMember" id="newMember" type="text" placeholder="Email address" />
+              </div>
+
+              <!-- CASE: We find an email address match -->
+              <div class="profile-result max-width lg" v-if="ProfileData && ProfileData.id" :class="ProfileData && ProfileData.id ? 'active' : ''">
+                <div class="profile-info">
+                  <div class="profile-image">
+                    <Avatar :uuid="ProfileData.id" size="large" />
+                  </div>
+                  <p>{{ ProfileData.username }}</p>
+                </div>
+                <div class="button primary" @click="handleAddTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
+                  <Loading v-if="loadingbutton" type="button" />
+                  <div v-else>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
+                    </svg>
+                    Add to team
+                  </div>
+                </div>
+                <div class="profile-deny" v-else>Already added to this team</div>
+              </div>
+
+              <!-- CASE: We don't find an email address match -->
+              <div class="profile-result max-width lg" v-if="ProfileData && !ProfileData.id" :class="ProfileData && !ProfileData.id ? 'active' : ''">
+                <div class="profile-info">
+                  {{ ProfileData.email }}
+                  <div class="profile-deny">Unknown user email</div>
+                </div>
+                <div class="button primary" @click="inviteToVewrite(member.email)">
+                  <Loading v-if="loadingbutton" type="button" />
+                  <div v-else>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
+                    </svg>
+                    Invite to team
+                  </div>
+                </div>
+              </div>
+
+              <!-- List of project members -->
               <div class="members">
-                <div class="members-title">Project team members</div>
+                <!-- <div class="members-title">Project team members</div> -->
                 <div class="member" v-if="project" v-for="member in project.project_members" :key="member.id">
                   <Avatar :uuid="member.user_id" :hasName="true" size="large" />
                   <span class="member-role">{{ member.role }}</span>
@@ -306,13 +350,49 @@ function clearErrors () {
       display: flex;
       flex-direction: column;
       width: 100%;
-      border: $border;
-      border-radius: $br-lg;
-      min-height: 300px;
-      max-height: 300px;
-      overflow-y: auto;
-      background: rgba($gray-light, .25);
       position: relative;
+      
+      .form-input {
+        margin:0;
+        border-radius: $br-md $br-md 0 0;
+      }
+
+      .profile-result {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba($brand, 0.05) linear-gradient(to bottom, rgba($brand, 0.5) 0%, rgba($brand, 0) 50%);
+        overflow: hidden;
+        padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+        border-radius: 0 0 $br-lg $br-lg;
+        top: -8rem;
+        z-index: 0;
+        position: relative;
+        transition: all 0.3s ease;
+
+        &.active {
+          animation: showResult 0.45s ease forwards;
+          padding: $spacing-lg $spacing-sm $spacing-sm $spacing-sm;
+        }
+
+        .profile-info {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: $spacing-sm;
+
+          p {
+            font-size: $font-size-xs;
+            margin: 0;
+          }
+        }
+
+        .profile-deny {
+          font-size: $font-size-xs;
+          color: $gray-dark;
+        }
+      }
 
       .form-required {
         top: .9rem;
@@ -323,6 +403,14 @@ function clearErrors () {
         display: flex;
         flex-direction: column;
         border-radius: $br-lg;
+        border: $border;
+        border-top: 0;
+        border-radius: 0 0 $br-md $br-md;
+        height: 100%;
+        min-height: 168px;
+        max-height: 168px;
+        overflow-y: auto;
+        background: rgba($gray-light, .25);
         position: relative;
 
         .members-title {
