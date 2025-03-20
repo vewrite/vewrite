@@ -107,7 +107,7 @@
 
             <section class="team-assignment">
 
-              <section class="form-required" v-if="missingRoles">Role selection required</section>
+              <!-- <section class="form-required" v-if="missingRoles">Role selection required</section> -->
             
               <!-- {{newMember}} -->
 
@@ -122,27 +122,25 @@
               </div>
 
               <!-- CASE: We find an email address match -->
-              <div class="profile-result max-width lg" v-if="ProfileData && ProfileData.id" :class="ProfileData && ProfileData.id ? 'active' : ''">
+              <div class="profile-result max-width lg" v-if="ProfileData && ProfileData.id && newMember.email != '' &  newMember.email != ' ' " :class="ProfileData && ProfileData.id ? 'active' : ''">
                 <div class="profile-info">
                   <div class="profile-image">
                     <Avatar :uuid="ProfileData.id" size="large" />
                   </div>
                   <p>{{ ProfileData.username }}</p>
                 </div>
-                <div class="button primary" @click="handleAddTeamMember(member)" v-if="checkDuplicate(ProfileData.id)">
+                <div class="button primary" @click="handleAddProjectMember(newMember)" v-if="checkDuplicate(ProfileData.id)">
                   <Loading v-if="loadingbutton" type="button" />
-                  <div v-else>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23233 1.20415C7.23233 0.914077 6.99718 0.678925 6.7071 0.678925C6.41702 0.678925 6.18187 0.914077 6.18187 1.20415V6.62122L0.764822 6.62122C0.474747 6.62122 0.239594 6.85637 0.239594 7.14644C0.239593 7.43652 0.474747 7.67167 0.764822 7.67167L6.18187 7.67167L6.18187 13.0887C6.18187 13.3788 6.41702 13.614 6.7071 13.614C6.99718 13.614 7.23233 13.3788 7.23233 13.0887L7.23233 7.67167L12.6494 7.67167C12.9395 7.67167 13.1746 7.43652 13.1746 7.14645C13.1746 6.85637 12.9395 6.62122 12.6494 6.62122L7.23233 6.62122V1.20415Z" fill="#fff"/>
-                    </svg>
+                  <section v-else>
+                    <Icon name="fluent:add-circle-20-regular" size="2rem" /> 
                     Add to team
-                  </div>
+                  </section>
                 </div>
                 <div class="profile-deny" v-else>Already added to this team</div>
               </div>
 
               <!-- CASE: We don't find an email address match -->
-              <div class="profile-result max-width lg" v-if="ProfileData && !ProfileData.id && ProfileData.email != '' &  ProfileData.email != ' ' " :class="ProfileData && !ProfileData.id ? 'active' : ''">
+              <div class="profile-result max-width lg" v-if="ProfileData && !ProfileData.id && newMember.email != '' &  newMember.email != ' ' " :class="ProfileData && !ProfileData.id ? 'active' : ''">
                 <div class="profile-info">
                   {{ ProfileData.email }}
                   <div class="profile-deny">Unknown user email</div>
@@ -219,6 +217,7 @@ const readyTeamsData = computed(() => {
 
 // Loading state
 const loading = ref(true);
+const loadingbutton = ref(false);
 // useModal().toggleLoading();
 
 // Set some sane defaults for the workflow
@@ -236,6 +235,7 @@ const project = reactive({
     {
       user_id: user.value.id,
       role: 'owner',
+      email: user.value.email,
     },
   ]
 })
@@ -271,6 +271,31 @@ function clearEmailData() {
 function checkDuplicate(id) {
   return !project.project_members.some(member => member.user_id === id);
 }
+
+function handleAddProjectMember() {
+  // Push newMember to project.project_members
+  if(!ProfileData.value.id) {
+    console.log('No user ID found');
+    return;
+  } else {
+    project.project_members.push({
+      user_id: ProfileData.value.id,
+      role: 'member',
+      email: ProfileData.value.email,
+    });
+    clearEmailData();
+  }
+}
+
+  // loadingbutton.value = true;
+  // try {
+  //   await addProjectMember(member);
+  //   loadingbutton.value = false;
+  // } catch (error) {
+  //   console.error('Error adding project member:', error.message);
+  //   loadingbutton.value = false;
+  // }
+// }
 
 const clients = ref([]);
 const workflows = ref([]);
