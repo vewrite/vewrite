@@ -3,15 +3,6 @@
     <div class="modal-body">
 
       <Loading v-if="loading" class="loader" type="small" />
-      
-      <!-- No teams -->
-      <!-- <section class="inner-container" v-if="!loading && !hasReadyTeams">
-        <div class="empty">
-          <h3>No Ready Teams Found</h3>
-          <p>You do not have a team to assign a project to. You must first add a team to Vewrite, and add at least two team members.</p>
-          <nuxt-link class="button primary" to="/teams" @click="useModal().reset()">Manage your teams</nuxt-link>
-        </div>
-      </section> -->
 
       <!-- No clients -->
       <section class="inner-container" v-if="!loading && !hasClients">
@@ -32,7 +23,7 @@
       </section>
 
       <!-- Has clients and teams -->
-      <form v-if="!loading && hasReadyTeams && hasClients && isAllowed" @submit.prevent="createProject(project)">
+      <form v-if="!loading && hasClients && isAllowed" @submit.prevent="createProject(project)">
 
         <!-- {{ProfileData}} -->
 
@@ -119,7 +110,7 @@
               <!-- Input to add a new member to the team -->
               <div class="form-input add-member" v-if="isAllowed">
                 <label for="newMember">Invite member</label>
-                <input v-model="newMember.email" id="newMember" type="text" placeholder="Email address" autocomplete="off" @input="handleInput" />
+                <input v-model="newMember.email" id="newMember" type="text" placeholder="Email address" autocomplete="off" @input="debounceInput" />
                 <div class="form-hint">
                   <Icon name="fluent:person-20-regular" size="2rem" /> 
                   Add member
@@ -190,7 +181,7 @@
           
     </div>
     
-    <div class="buttons" v-if="!loading && hasReadyTeams && hasClients && isAllowed">
+    <div class="buttons" v-if="!loading && hasClients && isAllowed">
       <button @click="handleCreateProject(project)" class="primary large">Create</button>
     </div>
   </div>
@@ -279,6 +270,8 @@ async function handleInput(event) {
   }
 }
 
+const debounceInput = debounce(handleInput, 500);
+
 async function inviteToVewrite(email) {
   try {
     // const response = await $fetch(`/api/email/inviteUser?email=${email}&team_id=${teamId}`);
@@ -332,21 +325,16 @@ function handleAddProjectMember() {
 function removeMember(member) {
   console.log('Removing member:', member);
   project.project_members = project.project_members.filter(item => item.user_id !== member.user_id);
-  // const indexToRemove = project.project_members.findIndex(user => user.user_id === member.user_id);
-  // if (indexToRemove !== -1) {
-  //   project.project_members.splice(indexToRemove, 1);
-  // }
 }
 
-  // loadingbutton.value = true;
-  // try {
-  //   await addProjectMember(member);
-  //   loadingbutton.value = false;
-  // } catch (error) {
-  //   console.error('Error adding project member:', error.message);
-  //   loadingbutton.value = false;
-  // }
-// }
+// Manual debounce function
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
 
 const clients = ref([]);
 const workflows = ref([]);
@@ -365,9 +353,9 @@ onMounted(async () => {
   }
 })
 
-const hasReadyTeams = computed(() => {
-  return readyTeamsData.value.length > 0;
-})
+// const hasReadyTeams = computed(() => {
+//   return readyTeamsData.value.length > 0;
+// })
 
 const hasClients = computed(() => {
   return clients.value.length > 0;
