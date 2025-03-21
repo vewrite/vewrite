@@ -42,7 +42,7 @@ export default function useProject() {
         created_at: project.created_at,
         updated_at: project.updated_at,
         created_by: project.created_by,
-        assigned_team: project.assigned_team,
+        project_members: project.project_members
       }
 
       let { error } = await supabase.from('projects').upsert(updates, {

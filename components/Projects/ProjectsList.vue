@@ -125,46 +125,55 @@ async function fetchOwnedProjects() {
   
 }
 
-async function fetchAssignedProjects() {
-  // Get all team_ids that the user is a member of
-  // The go get all of the projects that are assigned to those teams
+// async function fetchAssignedProjects() {
+//   // Get all team_ids that the user is a member of
+//   // The go get all of the projects that are assigned to those teams
 
-  const { data: teamMembers, error: teamMembersError } = await supabase
-    .from('team_members')
-    .select('team_id')
-    .eq('user_id', user.value.id)
+//   const { data: teamMembers, error: teamMembersError } = await supabase
+//     .from('team_members')
+//     .select('team_id')
+//     .eq('user_id', user.value.id)
 
-  if (teamMembersError) {
-    console.error('Error fetching team members:', teamMembersError.message)
-    return
-  }
+//   if (teamMembersError) {
+//     console.error('Error fetching team members:', teamMembersError.message)
+//     return
+//   }
 
-  const teamIds = teamMembers.map(team => team.team_id);
+//   const teamIds = teamMembers.map(team => team.team_id);
 
-  const { data: assignedProjects, error: assignedProjectsError } = await supabase
-    .from('projects')
-    .select('*')
-    .in('assigned_team', teamIds)
+//   const { data: assignedProjects, error: assignedProjectsError } = await supabase
+//     .from('projects')
+//     .select('*')
+//     .in('assigned_team', teamIds)
 
-  if (assignedProjectsError) {
-    console.error('Error fetching assigned projects:', assignedProjectsError.message)
-    return
-  }
+//   if (assignedProjectsError) {
+//     console.error('Error fetching assigned projects:', assignedProjectsError.message)
+//     return
+//   }
 
-  return assignedProjects;
-}
+//   return assignedProjects;
+// }
 
 async function fetchProjects() {
   
   const ownedProjects = await fetchOwnedProjects();
-  const assignedProjects = await fetchAssignedProjects();
+  // const assignedProjects = await fetchAssignedProjects();
 
-  const allProjects = Array.from(new Set([...ownedProjects, ...assignedProjects].map(project => project.id)))
-    .map(id => {
-      return [...ownedProjects, ...assignedProjects].find(project => project.id === id);
-    });
+  // const allProjects = Array.from(new Set([...ownedProjects, ...assignedProjects].map(project => project.id)))
+  //   .map(id => {
+  //     return [...ownedProjects, ...assignedProjects].find(project => project.id === id);
+  //   });
 
-  projects.value = await Promise.all(allProjects.map(async project => {
+  // projects.value = await Promise.all(allProjects.map(async project => {
+  //   return {
+  //     ...project,
+  //     client: {
+  //       client_id: project.client,
+  //     }
+  //   };
+  // }));
+
+  projects.value = await Promise.all(ownedProjects.map(async project => {
     return {
       ...project,
       client: {
@@ -394,6 +403,7 @@ const filteredProjects = computed(() => {
             display: flex;
             flex-direction: column;
             gap: $spacing-sm;
+            width: calc(100% - 80px - $spacing-sm);
           }
 
           .image-wrapper {
@@ -417,7 +427,8 @@ const filteredProjects = computed(() => {
           font-family: $font-family-main;
           font-weight: bold;
           margin: 0;
-          width: calc(100% - 80px - $spacing-sm);
+          width: 100%;
+          text-wrap: balance;
           
           a {
             color: $brand;

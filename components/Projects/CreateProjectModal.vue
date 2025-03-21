@@ -22,10 +22,8 @@
         </div>
       </section>
 
-      <!-- Has clients and teams -->
+      <!-- Has clients and is allowed -->
       <form v-if="!loading && hasClients && isAllowed" @submit.prevent="createProject(project)">
-
-        <!-- {{ProfileData}} -->
 
         <section class="form-row">
           <div class="inner-container">
@@ -45,23 +43,6 @@
                   <label for="description">Description</label>
                   <input v-model="project.description" id="description" type="text" placeholder="Summarize your project and its objectives" />
                 </div>
-
-                <!-- Removed for Removing Teams - Single Project page #145 -->
-                <!-- <div class="form-block">
-                  <div class="form-details">
-                    <h4>Team</h4>
-                    <p class="details">Assign a team who will work on this project.</p>
-                  </div>
-                  <div class="form-content">
-                    <div class="form-input">
-                      <label for="team">Assigned team</label>
-                      <select v-model="project.assigned_team" id="team">
-                        <option v-for="team in readyTeamsData" :key="team.assigned_team" :value="team.id">{{ team.name }}</option>
-                      </select>
-                      <span class="form-required" v-if="formErrors.assigned_team != ''">{{ formErrors.assigned_team }}</span>
-                    </div>
-                  </div>
-                </div> -->
 
                 <h3>Select client</h3>
 
@@ -198,12 +179,6 @@ const { fetchClients } = useClient();
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchWorkflows } = useWorkflow();
 
-import useTeam from '~/composables/useTeam';
-const { fetchTeams, TeamsData, TeamsError } = useTeam();
-
-import useGroup from '~/composables/useGroup';
-const { fetchSingleGroup, GroupData, GroupError } = useGroup();
-
 import useProfile from '~/composables/useProfile';
 const { fetchProfileViaEmail, createInvitedProfile, ProfileData, ProfileError } = useProfile();
 
@@ -237,7 +212,6 @@ const project = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   created_by: user.value.id,
-  assigned_team: '', // Removed for Removing Teams - Single Project page #145
   project_members: [
     {
       user_id: user.value.id,
@@ -274,7 +248,8 @@ const debounceInput = debounce(handleInput, 500);
 
 async function inviteToVewrite(email) {
   try {
-    // const response = await $fetch(`/api/email/inviteUser?email=${email}&team_id=${teamId}`);
+    // This actually has to happen AFTER I create the project, so that I'll have the project id
+    // const response = await $fetch(`/api/email/inviteUser?email=${email}&project_id=${teamId}`);
 
     // if (!response) {
     //   console.error('No response from server');
@@ -341,8 +316,6 @@ const workflows = ref([]);
 
 onMounted(async () => {
   try {
-    await fetchSingleGroup(user.value.id);
-    await fetchTeams(GroupData.value.id);
     ownedProjects.value = await fetchProjectsCreatedBy(user.value.id);
     clients.value = await fetchClients(user.value.id);
     workflows.value = await fetchWorkflows(user.value.id);
@@ -352,10 +325,6 @@ onMounted(async () => {
     loading.value = false;
   }
 })
-
-// const hasReadyTeams = computed(() => {
-//   return readyTeamsData.value.length > 0;
-// })
 
 const hasClients = computed(() => {
   return clients.value.length > 0;
@@ -385,9 +354,7 @@ import { required } from '@vuelidate/validators'
 const rules = {
   project: {
     name: { required },
-    assigned_team: { required },
     client_id: { required },
-    workflow: { required },
   }
 }
 

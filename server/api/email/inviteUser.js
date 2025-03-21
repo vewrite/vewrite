@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   
   const email = body.email || query.email;
-  const team_id = body.team_id || query.team_id;
+  const project_id = body.project_id || query.project_id;
   
   if (!email) {
     throw createError({
@@ -17,10 +17,10 @@ export default defineEventHandler(async (event) => {
     });
   }
   
-  if (!team_id) {
+  if (!project_id) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Missing team_id parameter',
+      statusMessage: 'Missing project_id parameter',
     });
   }
   
