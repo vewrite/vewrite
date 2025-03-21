@@ -7,7 +7,14 @@
         <input class="object-description-input" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" placeholder="Add a project description" />
       </div>
     </aside>
-    <TeamMembers :team="team" />
+    <!-- <TeamMembers :team="team" /> -->
+    <section class="project-members">
+      <div class="members">
+        <div class="members-image" v-for="member in project.project_members" :key="member.user_id">
+          <Avatar :uuid="member.user_id" size="large" />
+        </div>
+      </div>
+    </section>
   </section>
 </template>
 
@@ -43,6 +50,46 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: $spacing-sm;
+
+  .members {
+    display: flex;
+    flex-direction: row-reverse;
+    position: relative;
+    width: 100%;
+    height: 40px;
+
+    .members-image {
+      position: relative;
+      top: 0;
+      display: none;
+      border-radius: $br-xl;
+
+      .user-avatar {
+        border: 2px solid $white;
+      }
+
+      &:nth-child(1) {
+        z-index: 3;
+        right: 0px;
+        top: 0px;
+        display: block;
+      }
+
+      &:nth-child(2) {
+        z-index: 2;
+        right: -10px;
+        top: 0px;
+        display: block;
+      }
+
+      &:nth-child(3) {
+        z-index: 1;
+        right: -20px;
+        top: 0px;
+        display: block;
+      }
+    }
+  }
 }
 
 </style>

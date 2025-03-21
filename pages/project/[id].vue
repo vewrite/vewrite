@@ -104,9 +104,6 @@ const { fetchSingleStateInstance, fetchStateInstanceName, StateInstanceData } = 
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchStates, WorkflowStates } = useWorkflow();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers } = useTeamMembers();
-
 const supabase = useSupabaseClient();
 const loading = ref({
   global: true,
@@ -136,7 +133,6 @@ const creator = ref(null);
 const deliverables = ref([]);
 const states = ref([]);
 const completedDeliverables = ref(0);
-const teamMembers = ref([]);
 const user = useSupabaseUser();
 
 // Roles
@@ -146,8 +142,8 @@ const isOwner = computed(() =>
 
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {
-  if (project.value && teamMembers.value) {
-    if(teamMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
+  if (project.value) {
+    if(project.value.project_members.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
       return true;
     }
   }
@@ -311,8 +307,6 @@ onMounted(async () => {
 
   await getProject(projectId);
   await fetchDeliverables(projectId);
-  // For the gated access, we need the team members
-  teamMembers.value = await fetchTeamMembers(project.value.assigned_team);
 
   loading.value.global = false;
 });

@@ -1,8 +1,10 @@
+<!-- THIS SHOULD BE REMOVED  -->
+
 <template>
   <section class="team-members">
     <Loading v-if="loading" type="small" />
-    <div class="notification error" v-if="TeamError">{{ TeamError }}</div>
-    <div class="notification error" v-if="TeamMembersError">{{ TeamMembersError }}</div>
+    <!-- <div class="notification error" v-if="TeamError">{{ TeamError }}</div>
+    <div class="notification error" v-if="TeamMembersError">{{ TeamMembersError }}</div> -->
     <nuxt-link class="team-wrapper" v-if="TeamData" :to="'/team/' + TeamData.id">
       <div class="members">
         <div class="members-image" v-for="member in TeamMembersData" :key="member.id">
@@ -22,18 +24,21 @@ const props = defineProps(['team'])
 
 const loading = ref(true)
 
-// Team composable
-import useTeam from '~/composables/useTeam';
-const { fetchSingleTeam, TeamData, TeamError } = useTeam();
+// // Team composable
+// import useTeam from '~/composables/useTeam';
+// const { fetchSingleTeam, TeamData, TeamError } = useTeam();
 
-// Team members composable
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, TeamMembersData, TeamMembersError } = useTeamMembers();
+// // Team members composable
+// import useTeamMembers from '~/composables/useTeamMembers';
+// const { fetchTeamMembers, TeamMembersData, TeamMembersError } = useTeamMembers();
+
+import useProject from '~/composables/useProject';
+const { getProjectDetails } = useProject();
 
 onMounted(async () => {
   try {
-    await fetchSingleTeam(props.team);
-    await fetchTeamMembers(props.team);
+    // await fetchSingleTeam(props.team);
+    // await fetchTeamMembers(props.team);
     loading.value = false;
   } catch (error) {
     console.error(error);
