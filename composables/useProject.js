@@ -76,14 +76,11 @@ export default function useProject() {
 
               if (!response) {
                 console.error('No response from server');
+                console.error('Error inviting user:', inviteError);
                 return;
               }
                 
-              if (inviteError) {
-                console.error('Error inviting user:', inviteError);
-              } else {
-                console.log('Invited user:', invitedProfile);
-              }
+              console.log('Invited user:', invitedProfile);
             }
           });
         }

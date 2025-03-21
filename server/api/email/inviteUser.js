@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
   // Create the invited profile in database
   const invited_profile = {
     email: email,
-    team_id: team_id,
+    project_id: project_id,
   };
   
   try {
