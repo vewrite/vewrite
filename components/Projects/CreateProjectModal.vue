@@ -72,6 +72,8 @@
                   </div>
                 </div> -->
 
+                <h3>Select client</h3>
+
                 <div class="form-block">
                   <div class="form-content clients">
                     <div class="form-group">
@@ -438,6 +440,14 @@ function clearErrors () {
 
     .loader {
       height: 280px;
+    }
+
+    h3 {
+      margin: $spacing-md 0 $spacing-sm 0;
+    }
+
+    .inner-container {
+      gap: 0;
     }
 
     .clients {
