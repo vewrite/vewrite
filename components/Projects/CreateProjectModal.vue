@@ -115,8 +115,6 @@
             <section class="team-assignment">
 
               <!-- <section class="form-required" v-if="missingRoles">Role selection required</section> -->
-            
-              <!-- {{newMember}} -->
 
               <!-- Input to add a new member to the team -->
               <div class="form-input add-member" v-if="isAllowed">
@@ -152,7 +150,7 @@
                   {{ ProfileData.email }}
                   <div class="profile-deny">Unknown user email</div>
                 </div>
-                <div class="button primary" @click="inviteToVewrite(member.email)">
+                <div class="button primary" @click="inviteToVewrite(newMember.email)">
                   <Loading v-if="loadingbutton" type="button" />
                   <section v-else>
                     <Icon name="fluent:add-circle-20-regular" size="2rem" /> 
@@ -165,7 +163,13 @@
               <div class="members">
                 <!-- <div class="members-title">Project team members</div> -->
                 <div class="member" v-if="project" v-for="member in project.project_members" :key="member.id">
-                  <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                  <Avatar v-if="member.user_id" :uuid="member.user_id" :hasName="true" size="large" />
+                  <section v-else class="invited-member">
+                    <div class="icon-email">
+                      <Icon name="fluent:mail-unread-20-regular" size="2rem" />
+                    </div>
+                    <p>{{ member.email }}</p>
+                  </section>
                   <section>
                     <span class="member-role">{{ member.role }} </span>
                     <div class="button red" @click="removeMember(member)" v-if="member.user_id != user.id">
@@ -272,6 +276,32 @@ async function handleInput(event) {
     } catch (error) {
       console.error('Error fetching profile:', error.message);
     }
+  }
+}
+
+async function inviteToVewrite(email) {
+  try {
+    // const response = await $fetch(`/api/email/inviteUser?email=${email}&team_id=${teamId}`);
+
+    // if (!response) {
+    //   console.error('No response from server');
+    //   return;
+    // }
+
+    project.project_members.push({
+      user_id: '',
+      role: 'invited',
+      email: email,
+    });
+
+    console.log(project.project_members);
+
+    // console.log('Invitation sent:', response);
+
+  } catch (error) {
+    console.error('Error inviting user:', error.message);
+  } finally {
+    clearEmailData();
   }
 }
 
@@ -548,6 +578,26 @@ function clearErrors () {
           gap: $spacing-xs;
           border-bottom: $border;
           padding: $spacing-sm;
+
+          .invited-member {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-xs;
+
+            .icon-email {
+              width: 40px;
+              height: 40px;
+              border-radius: $br-lg;
+              background: $white;
+              border: $border;
+              color: $gray-dark;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+            }
+          }
 
           section {
             display: flex;
