@@ -1,12 +1,12 @@
 <template>
   <NuxtLayout>
-    <main id="Login">
+    <main class="login">
       <section class="home-link">
-        <a class="button" href="https://vewrite.com/">Homepage</a>
+        <a class="button primary" href="https://vewrite.com/">Homepage</a>
       </section>
       <section class="support-links">
-        <a class="button" href="https://vewrite.com/support">Support</a>
-        <a class="button" href="https://docs.vewrite.com/">Documentation</a>
+        <a class="button primary" href="https://vewrite.com/support">Support</a>
+        <a class="button primary" href="https://docs.vewrite.com/">Documentation</a>
       </section>
       <section id="LoginWrapper" class="max-width sm">
         <section class="login-top">
@@ -344,6 +344,16 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   width: 100%;
   position: relative;
 
+  .login {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: url('/images/login-bg.jpg') no-repeat center center;
+    background-size: cover;
+  }
+
   .home-link {
     position: absolute;
     top: $spacing-md;
@@ -364,9 +374,23 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-lg;
-  height: 100%;
+  padding: $spacing-md $spacing-xxl;
+  height: calc(100% - $spacing-lg - $spacing-md - $spacing-lg);
   width: 100%;
+  min-width: 800px;
+  background: $white;
+  border-left: $border;
+  border-right: $border;
+  box-shadow: $big-shadow;
+  border-radius: $br-xl;
+  margin: calc($spacing-lg + $spacing-sm) auto $spacing-md;
+
+  @media (max-width: 800px) {
+    min-width: 100%;
+    padding: $spacing-md $spacing-md;
+    height: 100%;
+    margin: 0;
+  }
 
   .login-top,
   .login-center,
