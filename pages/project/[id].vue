@@ -8,7 +8,8 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
-        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner">Create new deliverable</button>
+        <button class="button primary" @click="manageProjectMembersModal(project.id)" v-if="personaState == 'manager' && isOwner">Manage members</button>
+        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
         <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -23,7 +24,7 @@
       <section v-if="loading.global == false && hasAccess">
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
+          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
         <div class="deliverables-list">
@@ -87,7 +88,7 @@ import AppPanel from '~/components/AppPanel.vue';
 
 // Project composable
 import useProject from '~/composables/useProject';
-const { deleteProjectModal } = useProject();
+const { deleteProjectModal, manageProjectMembersModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
@@ -109,6 +110,7 @@ const loading = ref({
   global: true,
   deliverables: true
 });
+const membersError = ref(false);
 
 const attrs = ref([
   {
@@ -120,6 +122,19 @@ const attrs = ref([
     dates: new Date()
   }
 ])
+
+function checkMemberRequirements() {
+  if (!project.value || !project.value.project_members) {
+    membersError.value = true;
+    return;
+  }
+  
+  // Count members with user_id
+  const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
+  
+  // Set error if less than 2 valid members
+  membersError.value = validMembersCount < 2;
+}
 
 // Get the route object and the meta from /middleware/role.js
 const route = useRoute();
@@ -307,6 +322,7 @@ onMounted(async () => {
 
   await getProject(projectId);
   await fetchDeliverables(projectId);
+  checkMemberRequirements();
 
   loading.value.global = false;
 });

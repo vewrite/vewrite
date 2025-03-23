@@ -96,6 +96,13 @@ export default function useProject() {
     } 
   }
 
+  function manageProjectMembersModal() {
+    useModal().setType('large');
+    useModal().setHeader('Manage Project Members');
+    useModal().setContent('ManageProjectMembersModal');
+    useModal().toggleVisibility();
+  }
+
   function createProjectModal() {
     useModal().setType('large');
     useModal().setHeader('Create Project');
@@ -270,6 +277,7 @@ export default function useProject() {
   return {
     createProject,
     createProjectModal,
+    manageProjectMembersModal,
     updateProject,
     updateProjectName,
     updateProjectDescription,

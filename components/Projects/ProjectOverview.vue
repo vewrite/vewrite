@@ -9,6 +9,7 @@
     </aside>
     <!-- <TeamMembers :team="team" /> -->
     <section class="project-members">
+      <div class="notification warning" v-if="membersError">You don't have enough ready members</div>
       <div class="members">
         <div class="members-image" v-for="member in project.project_members" :key="member.user_id">
           <Avatar v-if="member.user_id" :uuid="member.user_id" size="large" />
@@ -25,7 +26,7 @@
 
 <script setup>
 
-const props = defineProps(['project', 'creator', 'client', 'deliverables', 'team'])
+const props = defineProps(['project', 'creator', 'client', 'deliverables', 'team', 'membersError']);
 const { client, project, team } = toRefs(props)
 
 // useProject composable
@@ -55,6 +56,18 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: $spacing-sm;
+
+  .project-members {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-sm;
+    align-items: center;
+    justify-content: center;
+
+    .notification {
+      text-wrap: nowrap;
+    }
+  }
 
   .members {
     display: flex;
