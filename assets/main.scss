@@ -772,7 +772,6 @@ button.primary,
 .button.primary {
     // background: linear-gradient(to top, $brand 0%, $brand-light 100%);
     background: $brand;
-    box-shadow: $main-shadow;
     color: $white;
 
     &:hover {
@@ -781,8 +780,9 @@ button.primary,
 
     &:disabled {
         cursor: not-allowed;
-        background: rgba($brand, 0.1);
-        color: rgba($brand, 0.5);
+        background: rgba($white, 0.1);
+        border: 1px solid rgba($brand, 0.1);
+        color: rgba($black, 0.5);
     }
 }
 

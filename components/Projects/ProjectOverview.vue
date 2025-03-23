@@ -76,8 +76,8 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
         gap: $spacing-xs;
 
         .icon-email {
-          width: 40px;
-          height: 40px;
+          width: 42px;
+          height: 42px;
           border-radius: $br-lg;
           background: $white;
           border: $border;

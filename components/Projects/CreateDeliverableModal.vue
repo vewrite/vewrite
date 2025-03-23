@@ -74,13 +74,31 @@
 
               <div class="members">
                 <div class="members-title">Team member role assignment</div>
-                <div class="member" v-if="project" v-for="member in project.project_members" :key="member.user_id">
-                  <Avatar :uuid="member.user_id" :hasName="true" size="large" />
-                  <div class="role-selector">
-                    <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
-                      {{ role.name }}
+                <div class="member" v-if="project && !membersError" v-for="member in project.project_members" :key="member.user_id">
+                  <section class="member-details" v-if="member.user_id" >
+                    <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                    <div class="role-selector">
+                      <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
+                        {{ role.name }}
+                      </div>
+                    </div>  
+                  </section>
+                  <section class="member-details" v-else>
+                    <div class="member-invited">
+                      <div class="icon-email">
+                        <Icon name="fluent:mail-unread-20-regular" size="2rem" />
+                      </div>
+                      {{ member.email }}
                     </div>
-                  </div>
+                    <span class="pending">Invitation pending</span>
+                  </section>
+                </div>
+                <div class="role-error notification error" v-if="membersError">
+                  <h4>Not enough users ready to work</h4> 
+                  <ul>
+                    <li>Add more users at the project level</li>
+                    <li>Ensure that any pending users are signed up to Vewrite</li>
+                  </ul>
                 </div>
               </div>
             </section>
@@ -93,7 +111,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large">Create</button>
+      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large" :disabled="membersError">Create</button>
     </div>
   </div>
 </template>
@@ -141,6 +159,7 @@ const route = useRoute();
 const projectId = route.params.id;
 
 const loading = ref(false);
+const membersError = ref(false);
 
 // Set some sane defaults for the deliverable
 const deliverable = reactive({
@@ -174,9 +193,23 @@ function onChange (value) {
   console.log(value)
 }
 
+function checkMemberRequirements() {
+  if (!project.value || !project.value.project_members) {
+    membersError.value = true;
+    return;
+  }
+  
+  // Count members with user_id
+  const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
+  
+  // Set error if less than 2 valid members
+  membersError.value = validMembersCount < 2;
+}
+
 async function init() {
   try {
     await fetchRoles();
+    checkMemberRequirements();
   } catch (error) {
     console.error('Error fetching data:', error.message);
   }
@@ -327,6 +360,20 @@ function clearErrors () {
         z-index: 1;
       }
 
+      .role-error {
+        margin: $spacing-sm;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: $spacing-xxs;
+
+        h4 {
+          margin: 0;
+          text-align: left;
+        }
+      }
+
       .member {
         display: flex;
         flex-direction: row;
@@ -335,6 +382,39 @@ function clearErrors () {
         gap: $spacing-xs;
         border-bottom: $border;
         padding: $spacing-sm;
+
+        .member-details {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: $spacing-xs;
+          width: 100%;
+
+          .member-invited {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-xs;
+
+            .icon-email {
+              width: 42px;
+              height: 42px;
+              border-radius: $br-lg;
+              background: $white;
+              border: $border;
+              color: $gray-dark;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+
+          .pending {
+            color: rgba($black, 0.5);
+            font-size: $font-size-xs;
+          }
+        }
 
         .role-selector {
           display: flex;

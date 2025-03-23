@@ -71,7 +71,7 @@ const project = ref(null);
 const projectId = ref(null);
 const route = useRoute();
 const deliverableId = route.params.id;
-const teamMembers = ref([]);
+const projectMembers = ref([]);
 const StateData = ref(null);
 const fullscreen = ref(false);
 
@@ -87,13 +87,10 @@ const { fetchDeliverable, deleteDeliverableModal, changeAssignmentsModal, Delive
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers } = useTeamMembers();
-
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {
-  if (project.value && teamMembers.value) {
-    if(teamMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
+  if (project.value && projectMembers.value) {
+    if(projectMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
       return true;
     }
   }
@@ -126,8 +123,8 @@ async function init() {
     // Set the deliverable state in the store
     deliverableStore.setDeliverableState(deliverableId, DeliverableData.value.workflow_state);
 
-    // For the gated access, we need the team members
-    teamMembers.value = await fetchTeamMembers(project.value.assigned_team);
+    // For the gated access, we need the project members
+    projectMembers.value = project.value.project_members;
 
     loading.value = false;
   } catch (error) {

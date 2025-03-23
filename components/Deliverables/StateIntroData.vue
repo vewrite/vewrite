@@ -1,10 +1,9 @@
 <template>
   <section class="state-intro-data">
-    <div class="intro-data-row" v-if="TeamMembersData">
+    <div class="intro-data-row" v-if="project">
       <div class="members">
         <div class="single-member" v-if="projectManager">
           <Avatar :uuid="projectManager" :hasName="true" size="tiny" :secondarytext="'Project Manager'" />
-          <!-- <div class="members-role">Project Manager</div> -->
         </div>
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role" :class="DeliverableData.assigned_to == uuid ? 'assigned' : ''">
           <Avatar :uuid="uuid" :hasName="true" size="tiny" :secondarytext="role" />
@@ -30,8 +29,8 @@ const route = useRoute();
 
 const projectManager = route.meta.roles.projectManager;
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
+// import useTeamMembers from '~/composables/useTeamMembers';
+// const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
 
 const assignedTeam = ref(null);
 
@@ -39,7 +38,7 @@ onMounted(async () => {
   try {
     ProjectData.value = await getProjectDetails(props.project);
     assignedTeam.value = props.DeliverableData.role_assignments;
-    await fetchTeamMembers(ProjectData.value.assigned_team);
+    // await fetchTeamMembers(ProjectData.value.assigned_team);
   } catch (error) {
     console.error(error);
   }
