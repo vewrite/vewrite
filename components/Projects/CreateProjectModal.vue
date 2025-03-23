@@ -237,7 +237,6 @@ async function handleInput(event) {
     try {
       await fetchProfileViaEmail(newMember.value.email);
       newMember.value.user_id = ProfileData.value.id;
-      console.log('ProfileData:', ProfileData.value);
     } catch (error) {
       console.error('Error fetching profile:', error.message);
     }
@@ -246,31 +245,13 @@ async function handleInput(event) {
 
 const debounceInput = debounce(handleInput, 500);
 
-async function inviteToVewrite(email) {
-  try {
-    // This actually has to happen AFTER I create the project, so that I'll have the project id
-    // const response = await $fetch(`/api/email/inviteUser?email=${email}&project_id=${teamId}`);
-
-    // if (!response) {
-    //   console.error('No response from server');
-    //   return;
-    // }
-
-    project.project_members.push({
-      user_id: '',
-      role: 'invited',
-      email: email,
-    });
-
-    console.log(project.project_members);
-
-    // console.log('Invitation sent:', response);
-
-  } catch (error) {
-    console.error('Error inviting user:', error.message);
-  } finally {
-    clearEmailData();
-  }
+function inviteToVewrite(email) {
+  project.project_members.push({
+    user_id: '',
+    role: 'invited',
+    email: email,
+  });
+  clearEmailData();
 }
 
 function clearEmailData() {

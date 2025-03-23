@@ -97,7 +97,7 @@ export default function useProject() {
   }
 
   function manageProjectMembersModal() {
-    useModal().setType('large');
+    useModal().setType('medium');
     useModal().setHeader('Manage Project Members');
     useModal().setContent('ManageProjectMembersModal');
     useModal().toggleVisibility();
