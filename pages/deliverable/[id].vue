@@ -16,19 +16,15 @@
           <Icon name="fluent:full-screen-maximize-20-regular" size="2rem" />
         </button>
         
-        <div class="vertical-divider"></div>
-        
         <Dropdown v-if="personaState == 'manager' || isOwner">
           <template v-slot:trigger>
             <Icon name="fluent:calendar-20-regular" size="2rem" />
-            <span>{{ dueDate }}</span>
           </template>
           <template v-slot:menu>
+            <span>{{ dueDate }}</span>
             TODO: Calendar
           </template>
         </Dropdown>
-        
-        <div class="vertical-divider"></div>
 
         <button class="button" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
           <Icon name="fluent:person-20-regular" size="2rem" />
