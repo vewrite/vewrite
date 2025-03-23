@@ -4,23 +4,36 @@
       <Loading class="loading" v-if="loading" type="small" />
       <form v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
           <div class="inner-container">
-
-            <!-- <pre v-if="project">{{ project }}</pre>
-            <pre v-if="TeamMembersData">{{ TeamMembersData }}</pre> -->
-
             <section class="notification small error" v-if="missingRoles">Please assign a writer and a reviewer to the deliverable.</section>
 
-            <!-- Team assignment -->
+            <!-- Project member assignment -->
             <section class="team-assignment">
               <div class="members">
-                <div class="members-title">Team member role assignment</div>
-                <div class="member" v-if="TeamMembersData" v-for="member in TeamMembersData" :key="member.id">
-                  <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                <div class="members-title">Project member role assignment</div>
+                <div class="member" v-if="project" v-for="member in project.project_members" :key="member.id">
+                  <section class="member-details" v-if="member.user_id" >
+                    <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                    <div class="role-selector">
+                      <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
+                        {{ role.name }}
+                      </div>
+                    </div>  
+                  </section>
+                  <section class="member-details" v-else>
+                    <div class="member-invited">
+                      <div class="icon-email">
+                        <Icon name="fluent:mail-unread-20-regular" size="2rem" />
+                      </div>
+                      {{ member.email }}
+                    </div>
+                    <span class="pending">Invitation pending</span>
+                  </section>
+                  <!-- <Avatar :uuid="member.user_id" :hasName="true" size="large" />
                   <div class="role-selector">
                     <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
                       {{ role.name }}
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </section>
@@ -58,9 +71,6 @@ const { fetchDeliverable, updateRoleAssignments, DeliverableData } = useDelivera
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
-
 import useRoles from '~/composables/useRoles';
 const { fetchRoles, RolesData } = useRoles();
 
@@ -97,7 +107,6 @@ async function init() {
   loading.value = true;
   await fetchDeliverable(deliverableId);
   project.value = await getProjectDetails(DeliverableData.value.project);
-  await fetchTeamMembers(project.value.assigned_team);
   await fetchRoles();
   loading.value = false;
 }
@@ -185,6 +194,39 @@ onMounted(async() => {
           gap: $spacing-xs;
           border-bottom: $border;
           padding: $spacing-sm;
+
+          .member-details {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: $spacing-xs;
+          width: 100%;
+
+          .member-invited {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-xs;
+
+            .icon-email {
+              width: 42px;
+              height: 42px;
+              border-radius: $br-lg;
+              background: $white;
+              border: $border;
+              color: $gray-dark;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+
+          .pending {
+            color: rgba($black, 0.5);
+            font-size: $font-size-xs;
+          }
+        }
 
           .role-selector {
             display: flex;
