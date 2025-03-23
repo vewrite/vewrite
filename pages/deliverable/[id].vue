@@ -1,20 +1,50 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
-        <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
-      </router-link>
-      <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+
+      <!-- Back and ObjectOverview title component -->
+      <section class="app-panel-header-left">
+        <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
+          <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
+        </router-link>
+        <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+      </section>
+
+      <!-- Deliverable due date, fullscreen, state bar, state intro, and deliverable dropdown -->
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
         <button class="button" @click="toggleFullscreen()">
-          <Icon name="fluent:full-screen-maximize-20-regular" size="1.5rem" />
+          <Icon name="fluent:full-screen-maximize-20-regular" size="2rem" />
         </button>
-        <button class="button" @click="changeAssignmentsModal()" v-if="isOwner">
-          <Icon name="fluent-mdl2:user-sync" size="1.5rem" />
-        </button>
+        
         <div class="vertical-divider"></div>
+        
+        <Dropdown v-if="personaState == 'manager' || isOwner">
+          <template v-slot:trigger>
+            <Icon name="fluent:calendar-20-regular" size="2rem" />
+            <span>{{ dueDate }}</span>
+          </template>
+          <template v-slot:menu>
+            TODO: Calendar
+          </template>
+        </Dropdown>
+        
+        <div class="vertical-divider"></div>
+
+        <button class="button" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
+          <Icon name="fluent:person-20-regular" size="2rem" />
+        </button>
+        
+        <div class="vertical-divider"></div>
+        
+        <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
         <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
+        
         <div class="vertical-divider"></div>
+        
+        <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
+        
+        <div class="vertical-divider"></div>
+        
         <Dropdown v-if="personaState == 'manager' || isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -23,6 +53,7 @@
             <div class="dropdown-item" @click="deleteDeliverableModal()">Delete deliverable</div>
           </template>
         </Dropdown>
+
       </div>
     </template>
     <template v-slot:body>
@@ -48,6 +79,8 @@
 <script setup>
 
 import StateBar from '~/components/Deliverables/StateBar.vue';
+import ProjectWorkflow from '~/components/Deliverables/ProjectWorkflow.vue';
+import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 
 definePageMeta({
   layout: 'default',
@@ -102,7 +135,9 @@ const isOwner = computed(() =>
   route.meta.role === 'owner'
 );
 
-console.log('isOwner:', isOwner.value);
+const dueDate = computed(() => {
+  return new Date(DeliverableData.value.due_date).toDateString();
+});
 
 const toggleFullscreen = () => {
   fullscreen.value = !fullscreen.value;

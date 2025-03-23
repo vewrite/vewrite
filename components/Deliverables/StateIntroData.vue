@@ -3,10 +3,10 @@
     <div class="intro-data-row" v-if="project">
       <div class="members">
         <div class="single-member" v-if="projectManager">
-          <Avatar :uuid="projectManager" :hasName="true" size="tiny" :secondarytext="'Project Manager'" />
+          <Avatar :uuid="projectManager" :hasName="true" size="small" :secondarytext="'Project Manager'" />
         </div>
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role" :class="DeliverableData.assigned_to == uuid ? 'assigned' : ''">
-          <Avatar :uuid="uuid" :hasName="true" size="tiny" :secondarytext="role" />
+          <Avatar :uuid="uuid" :hasName="true" size="small" :secondarytext="role" />
           <div class="members-role">
             <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Assigned</div>
           </div>
@@ -53,6 +53,7 @@ onMounted(async () => {
 .state-intro-data {
   display: flex;
   flex-direction: column;
+  min-width: 226px;
 
   .intro-data-row {
     display: flex;
@@ -86,15 +87,10 @@ onMounted(async () => {
         justify-content: space-between;
         align-items: center;
         gap: $spacing-sm;
-        padding: $spacing-xs;
-        border-radius: $br-lg;
-        background: rgba($brand, 0.025);
-        border: 1px solid rgba($brand, 0.05);
         display: none;
 
         &.assigned {
           background: $white;
-          border: 1px solid rgba($brand, 0.2);
           display: flex;
         }
 

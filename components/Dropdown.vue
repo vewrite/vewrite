@@ -93,6 +93,15 @@ function toggleDropdown() {
     }
   }
 
+  &.center {
+    .dropdown-content {
+      left: auto;
+      right: 0;
+      transform-origin: top center;
+      top: 100%;
+    }
+  }
+
   &.open {
     .dropdown-content {
       display: flex;

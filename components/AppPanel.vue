@@ -49,6 +49,13 @@ export default {
       margin: 0;
     }
 
+    .app-panel-header-left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-xs;
+    }
+
     .app-panel-header-buttons {
       display: flex;
       flex-direction: row;
