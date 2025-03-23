@@ -243,7 +243,7 @@ async function handleInput(event) {
   }
 }
 
-const debounceInput = debounce(handleInput, 500);
+const debounceInput = debounce(handleInput, 250);
 
 function inviteToVewrite(email) {
   project.project_members.push({

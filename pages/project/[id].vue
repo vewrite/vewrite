@@ -123,17 +123,26 @@ const attrs = ref([
   }
 ])
 
-function checkMemberRequirements() {
+async function checkMemberRequirements() {
   if (!project.value || !project.value.project_members) {
     membersError.value = true;
     return;
   }
+
+  try {
+    // After updating the members list in ManageProjectMembersModal, we need to re-fetch the project
+    await getProject(projectId);
+
+    // Count members with user_id
+    const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
+    console.log('Valid members:', validMembersCount);
+    
+    // Set error if less than 2 valid members
+    membersError.value = validMembersCount < 2;
+  } catch (error) {
+    console.error('Error fetching project members:', error.message);
+  }
   
-  // Count members with user_id
-  const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
-  
-  // Set error if less than 2 valid members
-  membersError.value = validMembersCount < 2;
 }
 
 // Get the route object and the meta from /middleware/role.js
@@ -316,8 +325,17 @@ onMounted(async () => {
     })
     .subscribe();
 
+  const projectSubscription = supabase
+    .channel('projects')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'projects' }, payload => {
+      console.log('Updated project:', payload.new);
+      checkMemberRequirements();
+    })
+    .subscribe();
+
   onUnmounted(() => {
     supabase.removeChannel(subscription);
+    supabase.removeChannel(projectSubscription);
   });
 
   await getProject(projectId);

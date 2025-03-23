@@ -10,7 +10,6 @@
             <div class="form-block">
               <div class="form-content-full">
                 <section class="team-assignment">
-                  <!-- <section class="form-required" v-if="missingRoles">Role selection required</section> -->
 
                   <!-- Input to add a new member to the team -->
                   <div class="form-input add-member">
@@ -74,21 +73,16 @@
                       </section>
                     </div>
                   </div>
-
                 </section>
               </div>
             </div>
           </div>
-          
-
         </section>
-        
       </form>
-          
     </div>
     
     <div class="buttons">
-      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large" :disabled="membersError">Create</button>
+      <button @click="updateProject(project)" class="primary large">Update</button>
     </div>
   </div>
 </template>
@@ -98,7 +92,7 @@
 import { ref, onMounted } from 'vue';
 
 import useProject from '~/composables/useProject';
-const { getProjectDetails } = useProject();
+const { getProjectDetails, updateProject } = useProject();
 
 import useProfile from '~/composables/useProfile';
 const { fetchProfileViaEmail, createInvitedProfile, ProfileData, ProfileError } = useProfile();
@@ -113,7 +107,6 @@ const user = useSupabaseUser();
 
 const loading = ref(false);
 const loadingbutton = ref(false);
-const membersError = ref(false);
 
 const newMember = ref(
   {
@@ -143,7 +136,7 @@ async function handleInput(event) {
   }
 }
 
-const debounceInput = debounce(handleInput, 500);
+const debounceInput = debounce(handleInput, 250);
 
 // Manual debounce function
 function debounce(func, wait) {
