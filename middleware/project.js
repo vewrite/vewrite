@@ -21,10 +21,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       .single();
 
     if(data.created_by === user.value.id) {
-      console.log('Is the owner of this project.');
+      // console.log('Is the owner of this project.');
       role.value = 'owner';
     } else {
-      console.log('Is a member of this project.');
+      // console.log('Is a member of this project.');
       role.value = 'member';
     }
 
