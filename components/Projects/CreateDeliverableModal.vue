@@ -74,7 +74,7 @@
 
               <div class="members">
                 <div class="members-title">Team member role assignment</div>
-                <div class="member" v-if="TeamMembersData" v-for="member in TeamMembersData" :key="member.id">
+                <div class="member" v-if="project" v-for="member in project.project_members" :key="member.user_id">
                   <Avatar :uuid="member.user_id" :hasName="true" size="large" />
                   <div class="role-selector">
                     <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
@@ -129,9 +129,6 @@ const { createDeliverable } = useDeliverables();
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
-
 import useRoles from '~/composables/useRoles';
 const { fetchRoles, RolesData } = useRoles();
 
@@ -179,7 +176,6 @@ function onChange (value) {
 
 async function init() {
   try {
-    await fetchTeamMembers(project.value.assigned_team);
     await fetchRoles();
   } catch (error) {
     console.error('Error fetching data:', error.message);
