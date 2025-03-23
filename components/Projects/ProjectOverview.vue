@@ -11,7 +11,12 @@
     <section class="project-members">
       <div class="members">
         <div class="members-image" v-for="member in project.project_members" :key="member.user_id">
-          <Avatar :uuid="member.user_id" size="large" />
+          <Avatar v-if="member.user_id" :uuid="member.user_id" size="large" />
+          <section v-else class="invited-member">
+            <div class="icon-email">
+              <Icon name="fluent:mail-unread-20-regular" size="2rem" />
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -63,6 +68,26 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
       top: 0;
       display: none;
       border-radius: $br-xl;
+
+      .invited-member {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-xs;
+
+        .icon-email {
+          width: 40px;
+          height: 40px;
+          border-radius: $br-lg;
+          background: $white;
+          border: $border;
+          color: $gray-dark;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+        }
+      }
 
       .user-avatar {
         border: 2px solid $white;
