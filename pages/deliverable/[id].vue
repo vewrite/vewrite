@@ -85,7 +85,7 @@ import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 
 definePageMeta({
   layout: 'default',
-  middleware: ['auth', 'deliverable', 'project'],
+  middleware: ['auth', 'deliverable'],
 });
 
 // Pull personaState from the middleware auth.js
