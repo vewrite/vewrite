@@ -68,21 +68,14 @@
 import { useUser } from '@/stores/user'
 const userStore = useUser()
 
-import useGroup from '~/composables/useGroup'
-const { createGroup } = useGroup()
-
 import useProfile from '~/composables/useProfile'
-const { updateProfile, fetchInvitedTeamsForThisProfile, TeamIds} = useProfile()
-
-import useTeam from '~/composables/useTeam'
-const { fetchInvitedTeams, approveTeamMember, TeamsData } = useTeam()
+const { updateProfile} = useProfile()
 
 const emit = defineEmits(['closeOnboarding'])
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const loading = ref(false)
-const onboardingStep = ref(1)
 const invitedProjects = ref([])
 
 const defaultUser = ref({
@@ -101,13 +94,6 @@ const defaultUser = ref({
 
 /* 
 
-// 1. Get the user from the database.
-// 2. Ensure that the user's group is created
-// 3. If the user was invited (email exists in invited_profiles), then we should allow the user to review those team invitations
-// 4. Allow the user to set their persona
-// 5. Allow the user to set their name and website
-// 6. If they are not in the profiles table, I must create that first, then populate the user's profile with the data they've entered
-
 1. Get the users from the database
 2. Check invited_profiles for that email address
 3. If they are in invited_profiles, allow them to review the projects they've been invited to. Add that to projects ref array
@@ -116,8 +102,6 @@ const defaultUser = ref({
 
 onMounted(async () => {
   try {
-    // await fetchInvitedTeamsForThisProfile(user.value.email)
-    // await fetchInvitedTeams([TeamIds.value])
     await checkInvitedProfiles(user.value.email)
 
   } catch (error) {
@@ -141,8 +125,7 @@ async function checkInvitedProfiles(email) {
     .in('id', data.map(d => d.project_id))
 
   if (error) throw error
-
-  console.log(data, projectsData)
+  if (projectsError) throw projectsError
 
   invitedProjects.value = projectsData
 }
@@ -155,13 +138,7 @@ async function onboardUserDetails() {
   try {
     loading.value = true
     await updateProfile(defaultUser.value)
-    // No need to create groups any more (yay!)
-    // await createGroup(user.value.id)
     await setFirstTime(false)
-    // if (TeamsData.value.length > 0) {
-    //   await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
-    // }
-    
     emit('closeOnboarding')
   } catch (error) {
     console.error(error)
