@@ -49,7 +49,6 @@ onMounted(async () => {
 .state-intro-data {
   display: flex;
   flex-direction: column;
-  min-width: 226px;
 
   .intro-data-row {
     display: flex;
