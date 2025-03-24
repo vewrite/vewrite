@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS invited_profiles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at timestamptz DEFAULT now(),
   email text NOT NULL,
-  team_id uuid NOT NULL
+  project_id uuid NOT NULL
 );
 
 -- Enable Row Level Security
