@@ -1,9 +1,7 @@
 <template>
-  <!-- {{ workflowStates }} -->
-  <Dropdown position="left" :vertical="true" v-if="DeliverableData">
+  <Dropdown position="center" v-if="DeliverableData">
     <template v-slot:trigger>
-      <span class="current-state">{{ CurrentState }}</span>
-      <span class="workflow-state">Workflow State</span>
+      <span class="current-state">{{ CurrentState }} <Icon name="fluent:chevron-down-16-regular" size="1.5rem" /></span>
     </template>
     <template v-slot:menu>
       <div class="state-instance" v-for="state in workflowStateInstances">
@@ -68,6 +66,14 @@ onMounted(async () => {
 
 .current-state {
   font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing-xs;
+
+  span {
+    font-weight: normal;
+  }
 }
 
 .workflow-state {

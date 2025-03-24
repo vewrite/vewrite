@@ -4,18 +4,6 @@
 
     <section class="documents" ref="stateDetails">
 
-      <section class="state-details max-width xl">
-        <div class="state-buttons-wrap">
-          <section class="state-intro">
-            <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
-          </section>
-        </div>
-        <div class="state-data">
-          <p class="due-date">Deliverable due <span>{{ dueDate }}</span></p>
-          <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
-        </div>
-      </section>
-
       <!-- Requirements -->
       <!-- Always editable by the PM -->
       <div class="tiptap-wrap max-width xl" ref="requirementsSection" v-if="props.DeliverableData && props.DeliverableData.content.hasRequirements && stateShowsRequirements" :class="{ 'collapsed': !sections.requirements }">

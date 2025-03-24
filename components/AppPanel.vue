@@ -24,7 +24,6 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  background: rgba($black, 0.05);
 
   .header {
     display: flex;
@@ -48,6 +47,13 @@ export default {
       border: none;
       border-radius: 0;
       margin: 0;
+    }
+
+    .app-panel-header-left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-xs;
     }
 
     .app-panel-header-buttons {
@@ -78,7 +84,6 @@ export default {
     border-bottom: $border;
     border-left: $border;
     border-right: $border;
-    box-shadow: $main-shadow;
 
     @media (max-width: 960px) {
       border: none;

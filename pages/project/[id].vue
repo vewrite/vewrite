@@ -8,7 +8,8 @@
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
-        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner">Create new deliverable</button>
+        <button class="button primary" @click="manageProjectMembersModal(project.id)" v-if="personaState == 'manager' && isOwner">Manage members</button>
+        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
         <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -23,7 +24,7 @@
       <section v-if="loading.global == false && hasAccess">
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" />
+          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
         <div class="deliverables-list">
@@ -87,7 +88,7 @@ import AppPanel from '~/components/AppPanel.vue';
 
 // Project composable
 import useProject from '~/composables/useProject';
-const { deleteProjectModal } = useProject();
+const { deleteProjectModal, manageProjectMembersModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
@@ -104,14 +105,12 @@ const { fetchSingleStateInstance, fetchStateInstanceName, StateInstanceData } = 
 import useWorkflow from '~/composables/useWorkflow';
 const { fetchStates, WorkflowStates } = useWorkflow();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers } = useTeamMembers();
-
 const supabase = useSupabaseClient();
 const loading = ref({
   global: true,
   deliverables: true
 });
+const membersError = ref(false);
 
 const attrs = ref([
   {
@@ -123,6 +122,27 @@ const attrs = ref([
     dates: new Date()
   }
 ])
+
+async function checkMemberRequirements() {
+  if (!project.value || !project.value.project_members) {
+    membersError.value = true;
+    return;
+  }
+
+  try {
+    // After updating the members list in ManageProjectMembersModal, we need to re-fetch the project
+    await getProject(projectId);
+
+    // Count members with user_id
+    const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
+    
+    // Set error if less than 2 valid members
+    membersError.value = validMembersCount < 2;
+  } catch (error) {
+    console.error('Error fetching project members:', error.message);
+  }
+  
+}
 
 // Get the route object and the meta from /middleware/role.js
 const route = useRoute();
@@ -136,7 +156,6 @@ const creator = ref(null);
 const deliverables = ref([]);
 const states = ref([]);
 const completedDeliverables = ref(0);
-const teamMembers = ref([]);
 const user = useSupabaseUser();
 
 // Roles
@@ -146,8 +165,8 @@ const isOwner = computed(() =>
 
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {
-  if (project.value && teamMembers.value) {
-    if(teamMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
+  if (project.value) {
+    if(project.value.project_members.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
       return true;
     }
   }
@@ -305,14 +324,22 @@ onMounted(async () => {
     })
     .subscribe();
 
+  const projectSubscription = supabase
+    .channel('projects')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'projects' }, payload => {
+      console.log('Updated project:', payload.new);
+      checkMemberRequirements();
+    })
+    .subscribe();
+
   onUnmounted(() => {
     supabase.removeChannel(subscription);
+    supabase.removeChannel(projectSubscription);
   });
 
   await getProject(projectId);
   await fetchDeliverables(projectId);
-  // For the gated access, we need the team members
-  teamMembers.value = await fetchTeamMembers(project.value.assigned_team);
+  checkMemberRequirements();
 
   loading.value.global = false;
 });

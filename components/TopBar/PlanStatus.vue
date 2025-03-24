@@ -18,7 +18,7 @@ const personaState = useState('personaState');
 
 // Computed property that depends on the state
 const checkPlanStatus = computed(() => {
-  console.log('Current subscription status:', subscriptionStatus.value);
+  // console.log('Current subscription status:', subscriptionStatus.value);
   if (subscriptionStatus.value && typeof subscriptionStatus.value === 'object') {
     return subscriptionStatus.value.status;
   }
@@ -29,7 +29,7 @@ const checkPlanStatus = computed(() => {
 function updateSubscriptionStatus(newStatus) {
   // This directly updates the shared state
   subscriptionStatus.value = { status: newStatus };
-  console.log('Updated subscription status to:', subscriptionStatus.value);
+  // console.log('Updated subscription status to:', subscriptionStatus.value);
 }
 
 // You could also update the state based on an API call

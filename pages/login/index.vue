@@ -1,12 +1,12 @@
 <template>
   <NuxtLayout>
-    <main id="Login">
+    <main class="login">
       <section class="home-link">
-        <a class="button" href="https://vewrite.com/">Homepage</a>
+        <a class="button primary" href="https://vewrite.com/">Homepage</a>
       </section>
       <section class="support-links">
-        <a class="button" href="https://vewrite.com/support">Support</a>
-        <a class="button" href="https://docs.vewrite.com/">Documentation</a>
+        <a class="button primary" href="https://vewrite.com/support">Support</a>
+        <a class="button primary" href="https://docs.vewrite.com/">Documentation</a>
       </section>
       <section id="LoginWrapper" class="max-width sm">
         <section class="login-top">
@@ -74,8 +74,8 @@
                 <p class="description">Access Vewrite with your email address and password.</p>
                 <div class="form-group">
                     <div class="form-input">
-                        <label for="email">Your email address</label>
-                        <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
+                        <label for="emailLogin">Your email address</label>
+                        <input class="inputField" name="emailLogin" type="email" placeholder="john@example.com" v-model="email" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -93,25 +93,6 @@
           <!-- Signup -->
           <section id="SignUpForm" class="form-group" v-if="form == 'signup'">
             <form class="sign-up-form" @submit.prevent="signUp">
-                <!-- <div class="signup-buttons">
-                  <button class="button large" @click="signInWithGithub">
-                    <section v-if="buttonloading">
-                      <Loading type="button" />
-                    </section>
-                    <section v-else>
-                      <Icon name="grommet-icons:github" size="2rem" />
-                      Sign up with GitHub
-                    </section>
-                  </button>
-                  <button class="button large" @click="signInWithGoogle">
-                    <section v-if="buttonloading">
-                      <Loading type="button" />
-                    </section>
-                    <Icon name="grommet-icons:google" size="2rem" />
-                    Sign up with Google
-                  </button>
-                </div>
-                <p class="or-select">Or</p> -->
                 <div class="form-group">
                   <div v-if="errorbox">
                       <p class="notification error">{{ errorbox }}</p>
@@ -121,19 +102,19 @@
                   </div>
                   <p class="description">Sign up for an account to access the app.</p>
                     <div class="form-input">
-                        <label for="email">Your email address</label>
-                        <input class="inputField" type="email" placeholder="john@example.com" v-model="email" />
+                        <label for="emailSignup">Your email address</label>
+                        <input class="inputField" name="emailSignup" type="email" placeholder="john@example.com" v-model="email" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="form-input password">
-                        <label for="password">Your password</label>
-                        <input class="inputField" type="password" placeholder="••••••••" v-model="password" />
+                        <label for="passwordSignup">Your password</label>
+                        <input class="inputField" name="passwordSignup" type="password" placeholder="••••••••" v-model="passwordSignup" />
                     </div>
                     <div class="form-input password">
-                      <label for="password">Confirm password</label>
-                      <input class="inputField" type="password" placeholder="••••••••" v-model="confirmPassword" />
+                      <label for="passwordConfirmSignup">Confirm password</label>
+                      <input class="inputField" name="passwordConfirmSignup" type="password" placeholder="••••••••" v-model="confirmPasswordSignup" />
                   </div>
                 </div>
                 <input type="submit" class="button large primary" @click="reset" :value="loading ? 'Signing up' : 'Sign up'" :disabled="loading || !matchingPasswords" />
@@ -191,10 +172,11 @@ const notification = ref('');
 const errorbox = ref('');
 const email = ref('');
 const password = ref('');
-const confirmPassword = ref('');
+const passwordSignup = ref('');
+const confirmPasswordSignup = ref('');
 const form = ref('login');
 
-const matchingPasswords = computed(() => password.value === confirmPassword.value)
+const matchingPasswords = computed(() => passwordSignup.value === confirmPasswordSignup.value)
 
 const router = useRouter();
 
@@ -292,13 +274,29 @@ const signInWithPassword = async () => {
 const signUp = async () => {
   try {
     loading.value = true;
+
+    // Sign the user up
     const { error } = await supabase.auth.signUp({
       email: email.value,
-      password: password.value
+      password: passwordSignup.value
     });
+
     if (error) throw error;
-    notification.value = 'Successfully signed up, logging in...';
-    await signInWithPassword();
+
+    if(!error) {
+      // set notification to success
+      notification.value = 'Successfully signed up, getting you ready to log in...';
+      // set notification to nothing after 1.2 seconds
+      setTimeout(() => {
+        notification.value = '';
+      }, 1200);
+      // fill in the login form
+      email.value = email.value;
+      password.value = passwordSignup.value;
+      // switch to the login form
+      formToggle('login');
+    }
+
   } catch (error) {
     errorbox.value = error.error_description || error.message;
     console.log('Error:', error);
@@ -344,6 +342,16 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   width: 100%;
   position: relative;
 
+  .login {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: url('/images/login-bg.jpg') no-repeat center center;
+    background-size: cover;
+  }
+
   .home-link {
     position: absolute;
     top: $spacing-md;
@@ -364,9 +372,23 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-lg;
-  height: 100%;
+  padding: $spacing-md $spacing-xxl;
+  height: calc(100% - $spacing-lg - $spacing-md - $spacing-lg);
   width: 100%;
+  min-width: 800px;
+  background: $white;
+  border-left: $border;
+  border-right: $border;
+  box-shadow: $big-shadow;
+  border-radius: $br-xl;
+  margin: calc($spacing-lg + $spacing-sm) auto $spacing-md;
+
+  @media (max-width: 800px) {
+    min-width: 100%;
+    padding: $spacing-md $spacing-md;
+    height: 100%;
+    margin: 0;
+  }
 
   .login-top,
   .login-center,

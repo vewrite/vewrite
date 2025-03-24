@@ -6,6 +6,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // Start with getting which project this is from the to router
   const projectId = to.params.id;
 
+  // console.log('Project ID:', projectId);
+
   const roleRef = ref(null);
   const role = useState('role', () => (roleRef.value));
 
@@ -20,17 +22,23 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       .eq('id', projectId)
       .single();
 
+    // console.log('Project data:', data);
+
+    if (error) {
+      console.error('Error:', error.message);
+    }
+
     if(data.created_by === user.value.id) {
-      console.log('Is the owner of this project.');
+      // console.log('Is the owner of this project.');
       role.value = 'owner';
     } else {
-      console.log('Is a member of this project.');
+      // console.log('Is a member of this project.');
       role.value = 'member';
     }
 
   }
   catch (error) {
-    console.error('Error fetching project team:', error.message);
+    console.error('Error:', error.message);
   }
 
   // Now we make the information available as meta properties on the route

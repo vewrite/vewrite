@@ -1,7 +1,9 @@
 <template>
   <div id="CreateDeliverableModal">
     <div class="modal-body">
-      <Loading class="loading" v-if="loading" type="small" />
+
+      <Loading v-if="loading" class="loading" type="small" />
+      
       <form v-if="!loading" @submit.prevent="createDeliverable(deliverable)">
         <section class="form-row">
           <div class="inner-container">
@@ -72,13 +74,31 @@
 
               <div class="members">
                 <div class="members-title">Team member role assignment</div>
-                <div class="member" v-if="TeamMembersData" v-for="member in TeamMembersData" :key="member.id">
-                  <Avatar :uuid="member.user_id" :hasName="true" size="large" />
-                  <div class="role-selector">
-                    <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
-                      {{ role.name }}
+                <div class="member" v-if="project && !membersError" v-for="member in project.project_members" :key="member.user_id">
+                  <section class="member-details" v-if="member.user_id" >
+                    <Avatar :uuid="member.user_id" :hasName="true" size="large" />
+                    <div class="role-selector">
+                      <div class="single-role" v-if="RolesData" v-for="role in RolesData" :key="role.id" @click="setDeliverableRole(member, role)" :class="{ selected: role_assignments[role.name] == member.user_id }">
+                        {{ role.name }}
+                      </div>
+                    </div>  
+                  </section>
+                  <section class="member-details" v-else>
+                    <div class="member-invited">
+                      <div class="icon-email">
+                        <Icon name="fluent:mail-unread-20-regular" size="2rem" />
+                      </div>
+                      {{ member.email }}
                     </div>
-                  </div>
+                    <span class="pending">Invitation pending</span>
+                  </section>
+                </div>
+                <div class="role-error notification error" v-if="membersError">
+                  <h4>Not enough users ready to work</h4> 
+                  <ul>
+                    <li>Add more users at the project level</li>
+                    <li>Ensure that any pending users are signed up to Vewrite</li>
+                  </ul>
                 </div>
               </div>
             </section>
@@ -91,7 +111,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large">Create</button>
+      <button @click="handleCreateDeliverable(deliverable, projectId)" class="primary large" :disabled="membersError">Create</button>
     </div>
   </div>
 </template>
@@ -127,9 +147,6 @@ const { createDeliverable } = useDeliverables();
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers, TeamMembersData } = useTeamMembers();
-
 import useRoles from '~/composables/useRoles';
 const { fetchRoles, RolesData } = useRoles();
 
@@ -142,6 +159,7 @@ const route = useRoute();
 const projectId = route.params.id;
 
 const loading = ref(false);
+const membersError = ref(false);
 
 // Set some sane defaults for the deliverable
 const deliverable = reactive({
@@ -175,10 +193,23 @@ function onChange (value) {
   console.log(value)
 }
 
+function checkMemberRequirements() {
+  if (!project.value || !project.value.project_members) {
+    membersError.value = true;
+    return;
+  }
+  
+  // Count members with user_id
+  const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
+  
+  // Set error if less than 2 valid members
+  membersError.value = validMembersCount < 2;
+}
+
 async function init() {
   try {
-    await fetchTeamMembers(project.value.assigned_team);
     await fetchRoles();
+    checkMemberRequirements();
   } catch (error) {
     console.error('Error fetching data:', error.message);
   }
@@ -296,74 +327,121 @@ function clearErrors () {
   }
 
   .team-assignment {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: $border;
+    border-radius: $br-lg;
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: rgba($gray-light, .25);
+    position: relative;
+
+    .form-required {
+      top: .9rem;
+      z-index: 10;
+    }
+
+    .members {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      border: $border;
       border-radius: $br-lg;
-      min-height: 300px;
-      max-height: 300px;
-      overflow-y: auto;
-      background: rgba($gray-light, .25);
       position: relative;
 
-      .form-required {
-        top: .9rem;
-        z-index: 10;
+      .members-title {
+        font-size: $font-size-xs;
+        color: rgba($black, 0.65);
+        padding: $spacing-sm;
+        background: linear-gradient(to bottom, rgba($white, 1), rgba($white, 0.85));
+        backdrop-filter: blur(5px);
+        position: sticky;
+        top: 0;
+        z-index: 1;
       }
 
-      .members {
+      .role-error {
+        margin: $spacing-sm;
         display: flex;
         flex-direction: column;
-        border-radius: $br-lg;
-        position: relative;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: $spacing-xxs;
 
-        .members-title {
-          font-size: $font-size-xs;
-          color: rgba($black, 0.65);
-          padding: $spacing-sm;
-          background: linear-gradient(to bottom, rgba($white, 1), rgba($white, 0.85));
-          backdrop-filter: blur(5px);
-          position: sticky;
-          top: 0;
-          z-index: 1;
+        h4 {
+          margin: 0;
+          text-align: left;
         }
+      }
 
-        .member {
+      .member {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-xs;
+        border-bottom: $border;
+        padding: $spacing-sm;
+
+        .member-details {
           display: flex;
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
           gap: $spacing-xs;
-          border-bottom: $border;
-          padding: $spacing-sm;
+          width: 100%;
 
-          .role-selector {
+          .member-invited {
             display: flex;
             flex-direction: row;
             align-items: center;
-            overflow: hidden;
             gap: $spacing-xs;
-            cursor: pointer;
 
-            .single-role {
-              background: rgba($black, 0.05);
-              padding: $spacing-xxs $spacing-sm;
+            .icon-email {
+              width: 42px;
+              height: 42px;
               border-radius: $br-lg;
-
-              &.selected {
-                background: rgba($brand, 0.15);
-                color: $brand;
-              }
+              background: $white;
+              border: $border;
+              color: $gray-dark;
+              display: flex;
+              justify-content: center;
+              align-items: center;
             }
           }
 
-          &:last-child {
-            border-bottom: none;
+          .pending {
+            color: rgba($black, 0.5);
+            font-size: $font-size-xs;
           }
+        }
+
+        .role-selector {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          overflow: hidden;
+          gap: $spacing-xs;
+          cursor: pointer;
+
+          .single-role {
+            background: rgba($black, 0.05);
+            padding: $spacing-xxs $spacing-sm;
+            border-radius: $br-lg;
+
+            &.selected {
+              background: rgba($brand, 0.15);
+              color: $brand;
+            }
+          }
+        }
+
+        &:last-child {
+          border-bottom: none;
         }
       }
     }
+  }
 
   .buttons {
     display: flex;

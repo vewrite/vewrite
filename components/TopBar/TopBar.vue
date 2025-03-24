@@ -49,7 +49,7 @@
         <div class="link-group">
           <router-link @click="toggleMobile" to="/projects" class="link"><Icon name="fluent:folder-16-regular" size="1.5rem" /> Projects</router-link>
           <!-- <router-link @click="toggleMobile" to="/workflows" class="link"><Icon name="fluent:flow-16-regular" size="1.5rem" /> Workflows</router-link> -->
-          <router-link v-if="personaState == 'manager'" @click="toggleMobile" to="/teams" class="link"><Icon name="fluent:people-16-regular" size="1.5rem" /> Teams</router-link>
+          <!-- <router-link v-if="personaState == 'manager'" @click="toggleMobile" to="/teams" class="link"><Icon name="fluent:people-16-regular" size="1.5rem" /> Teams</router-link> -->
           <router-link v-if="personaState == 'manager'" @click="toggleMobile" to="/clients" class="link"><Icon name="fluent:star-16-regular" size="1.5rem" /> Clients</router-link>
         </div>
       </div>
@@ -108,7 +108,6 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: $spacing-sm;
-  background: rgba($black, 0.05);
   width: 100%;
 
   @media (max-width: 960px) {

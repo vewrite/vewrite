@@ -5,7 +5,6 @@ body {
     padding: 0;
     margin: 0;
     font-family: $font-family-main;
-    background-color: $white;
     font-size: $font-size-xs;
     font-smooth: antialiased;
     -webkit-font-smoothing: antialiased;    
@@ -30,6 +29,10 @@ body,
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
+}
+
+body {
+    background: rgba($brand, 0.025);
 }
 
 .container {
@@ -93,7 +96,7 @@ body,
 /* Notifications */
 
 .notification {
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-xxs calc($spacing-xs + $spacing-xxs);
     font-size: $font-size-xs;
     border-radius: $br-lg;
     gap: $spacing-xs;
@@ -557,6 +560,22 @@ textarea {
         }
     }
 
+    .form-hint {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-xxs;
+        align-items: center;
+        justify-content: center;
+        padding: 0 $spacing-sm;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        color: rgba($brand, 1);
+        font-weight: bold;
+        font-size: $font-size-xs;
+    }
+
     &:focus,
     &:hover,
     &:focus-within,
@@ -687,7 +706,7 @@ button,
     border-radius: $br-lg;
     text-align: center;
     text-decoration: none;
-    padding: $spacing-xxs $spacing-sm;
+    padding: $spacing-xxs calc($spacing-xs + $spacing-xxs);
     cursor: pointer;
     font-size: $font-size-xs;
     transition: all 0.2s ease;
@@ -753,7 +772,6 @@ button.primary,
 .button.primary {
     // background: linear-gradient(to top, $brand 0%, $brand-light 100%);
     background: $brand;
-    box-shadow: $main-shadow;
     color: $white;
 
     &:hover {
@@ -762,14 +780,16 @@ button.primary,
 
     &:disabled {
         cursor: not-allowed;
-        background: rgba($brand, 0.1);
-        color: rgba($brand, 0.5);
+        background: rgba($white, 0.1);
+        border: 1px solid rgba($brand, 0.1);
+        color: rgba($black, 0.5);
     }
 }
 
 button.clear,
 .button.clear {
     background-color: rgba($brand, 0);
+    padding: $spacing-xxs $spacing-xxs;
 
     &:hover {
         background-color: rgba($brand, 0);
@@ -865,8 +885,6 @@ button.vertical,
     justify-content: space-between;
     align-items: center;
     gap: $spacing-md;
-    margin: 0 auto;
-    width: 100%;
 
     &.no-border {
         border-bottom: none;

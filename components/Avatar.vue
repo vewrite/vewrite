@@ -20,7 +20,7 @@ const src = ref("")
 const path = ref("")
 
 import useProfile from '~/composables/useProfile'
-const { fetchSingleProfile, ProfileData, ProfileError } = useProfile()
+const { fetchSingleProfile, ProfileData } = useProfile()
 
 const downloadImage = async (path) => {
     try {

@@ -21,29 +21,23 @@
 import { useModal } from '~/stores/modal'
 
 // Project modals
-import CreateProjectModal     from '~/components/Projects/CreateProjectModal.vue'
-import DeleteProjectModal     from '~/components/Projects/DeleteProjectModal.vue'
+import CreateProjectModal         from '~/components/Projects/CreateProjectModal.vue'
+import DeleteProjectModal         from '~/components/Projects/DeleteProjectModal.vue'
+import ManageProjectMembersModal  from '~/components/Projects/ManageProjectMembersModal.vue'
 
 // Deliverable modals
-import CreateDeliverableModal from '~/components/Projects/CreateDeliverableModal.vue'
-import DeleteDeliverableModal from '~/components/Projects/DeleteDeliverableModal.vue'
-import ChangeAssignmentsModal from '~/components/Deliverables/ChangeAssignmentsModal.vue'
-import ApprovalModal          from '~/components/Deliverables/ApprovalModal.vue'
+import CreateDeliverableModal     from '~/components/Projects/CreateDeliverableModal.vue'
+import DeleteDeliverableModal     from '~/components/Projects/DeleteDeliverableModal.vue'
+import ChangeAssignmentsModal     from '~/components/Deliverables/ChangeAssignmentsModal.vue'
+import ApprovalModal              from '~/components/Deliverables/ApprovalModal.vue'
 
-// Workflow modals
-import CreateWorkflowModal    from '~/components/Workflows/CreateWorkflowModal.vue'
-import DeleteWorkflowModal    from '~/components/Workflows/DeleteWorkflowModal.vue'
+// Workflow modals    
+import CreateWorkflowModal        from '~/components/Workflows/CreateWorkflowModal.vue'
+import DeleteWorkflowModal        from '~/components/Workflows/DeleteWorkflowModal.vue'
 
-// Client modals
-import CreateClientModal      from '~/components/Clients/CreateClientModal.vue'
-import DeleteClientModal      from '~/components/Clients/DeleteClientModal.vue'
-
-// Team modals
-import CreateTeamModal        from '~/components/Teams/CreateTeamModal.vue'
-import DeleteTeamModal        from '~/components/Teams/DeleteTeamModal.vue'
-
-// Team Members modals
-import AddTeamMemberModal     from '~/components/TeamMembers/AddTeamMemberModal.vue'
+// Client modals    
+import CreateClientModal          from '~/components/Clients/CreateClientModal.vue'
+import DeleteClientModal          from '~/components/Clients/DeleteClientModal.vue'
 
 const modal = useModal()
 
@@ -67,15 +61,13 @@ const contentComponent = computed(() => {
   const components = {
     'CreateProjectModal': CreateProjectModal,
     'DeleteProjectModal': DeleteProjectModal,
+    'ManageProjectMembersModal': ManageProjectMembersModal,
     'CreateDeliverableModal': CreateDeliverableModal,
     'DeleteDeliverableModal': DeleteDeliverableModal,
     'CreateWorkflowModal': CreateWorkflowModal,
     'DeleteWorkflowModal': DeleteWorkflowModal,
     'CreateClientModal': CreateClientModal,
     'DeleteClientModal': DeleteClientModal,
-    'CreateTeamModal': CreateTeamModal,
-    'DeleteTeamModal': DeleteTeamModal,
-    'AddTeamMemberModal': AddTeamMemberModal,
     'ChangeAssignmentsModal': ChangeAssignmentsModal,
     'ApprovalModal': ApprovalModal
   }

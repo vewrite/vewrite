@@ -1,28 +1,60 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
-        <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
-      </router-link>
-      <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+
+      <!-- Back and ObjectOverview title component -->
+      <section class="app-panel-header-left">
+        <router-link v-if="projectId && !loading" :to="'/project/' + projectId" class="button">
+          <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
+        </router-link>
+        <ObjectOverview v-if="DeliverableData && !loading" :deliverable="DeliverableData" />
+      </section>
+
+      <!-- Deliverable due date, fullscreen, state bar, state intro, and deliverable dropdown -->
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
-        <button class="button" @click="toggleFullscreen()">
-          <Icon name="fluent:full-screen-maximize-20-regular" size="1.5rem" />
+
+        <!-- Fullscreen -->
+        <button class="button clear" @click="toggleFullscreen()">
+          <Icon name="fluent:full-screen-maximize-20-regular" size="2rem" />
         </button>
-        <button class="button" @click="changeAssignmentsModal()" v-if="isOwner">
-          <Icon name="fluent-mdl2:user-sync" size="1.5rem" />
-        </button>
-        <div class="vertical-divider"></div>
-        <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
-        <div class="vertical-divider"></div>
-        <Dropdown v-if="personaState == 'manager' || isOwner">
+        
+        <!-- Due date select -->
+        <Dropdown v-if="personaState == 'manager' || isOwner" :clear="true">
           <template v-slot:trigger>
-            <Icon name="uis:ellipsis-v" size="1.15rem" />
+            <Icon name="fluent:calendar-20-regular" size="2rem" />
+          </template>
+          <template v-slot:menu>
+            <span>{{ dueDate }}</span>
+            <!-- TODO: Calendar -->
+          </template>
+        </Dropdown>
+
+        <!-- Assignments -->
+        <button class="button clear" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
+          <Icon name="fluent:person-20-regular" size="2rem" />
+        </button>
+        
+        <div class="vertical-divider"></div>
+        
+        <!-- State -->
+        <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
+        <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
+        
+        <!-- State intro -->
+        <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
+        
+        <div class="vertical-divider"></div>
+        
+        <!-- Deliverable dropdown -->
+        <Dropdown v-if="personaState == 'manager' || isOwner" :clear="true">
+          <template v-slot:trigger>
+            <Icon name="uis:ellipsis-v" size="1.5rem" />
           </template>
           <template v-slot:menu>
             <div class="dropdown-item" @click="deleteDeliverableModal()">Delete deliverable</div>
           </template>
         </Dropdown>
+
       </div>
     </template>
     <template v-slot:body>
@@ -48,10 +80,12 @@
 <script setup>
 
 import StateBar from '~/components/Deliverables/StateBar.vue';
+import ProjectWorkflow from '~/components/Deliverables/ProjectWorkflow.vue';
+import StateIntroData from '~/components/Deliverables/StateIntroData.vue';
 
 definePageMeta({
   layout: 'default',
-  middleware: ['auth', 'deliverable', 'project'],
+  middleware: ['auth', 'deliverable'],
 });
 
 // Pull personaState from the middleware auth.js
@@ -71,7 +105,7 @@ const project = ref(null);
 const projectId = ref(null);
 const route = useRoute();
 const deliverableId = route.params.id;
-const teamMembers = ref([]);
+const projectMembers = ref([]);
 const StateData = ref(null);
 const fullscreen = ref(false);
 
@@ -87,13 +121,10 @@ const { fetchDeliverable, deleteDeliverableModal, changeAssignmentsModal, Delive
 import { useDeliverableStore } from '~/stores/deliverable';
 const deliverableStore = useDeliverableStore();
 
-import useTeamMembers from '~/composables/useTeamMembers';
-const { fetchTeamMembers } = useTeamMembers();
-
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {
-  if (project.value && teamMembers.value) {
-    if(teamMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
+  if (project.value && projectMembers.value) {
+    if(projectMembers.value.some(member => member.user_id === user.value.id) || user.value.id === project.value.created_by) {
       return true;
     }
   }
@@ -105,7 +136,9 @@ const isOwner = computed(() =>
   route.meta.role === 'owner'
 );
 
-console.log('isOwner:', isOwner.value);
+const dueDate = computed(() => {
+  return new Date(DeliverableData.value.due_date).toDateString();
+});
 
 const toggleFullscreen = () => {
   fullscreen.value = !fullscreen.value;
@@ -126,8 +159,8 @@ async function init() {
     // Set the deliverable state in the store
     deliverableStore.setDeliverableState(deliverableId, DeliverableData.value.workflow_state);
 
-    // For the gated access, we need the team members
-    teamMembers.value = await fetchTeamMembers(project.value.assigned_team);
+    // For the gated access, we need the project members
+    projectMembers.value = project.value.project_members;
 
     loading.value = false;
   } catch (error) {
