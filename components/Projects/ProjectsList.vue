@@ -100,6 +100,8 @@ const handleProjectFilter = (filter) => {
   projectFilter.value = filter;
 };
 
+const assignedProjects = ref([]);
+
 function assignProjectTag(project) {
   let tag = '';
   if (user.value.id === project.created_by) {
@@ -125,55 +127,70 @@ async function fetchOwnedProjects() {
   
 }
 
-// async function fetchAssignedProjects() {
-//   // Get all team_ids that the user is a member of
-//   // The go get all of the projects that are assigned to those teams
+async function fetchAssignedProjects() {
+  const userId = user.value.id;
+  
+  /*
+  
+  This uses an RPC function to get the list of project IDs assigned to the user.
 
-//   const { data: teamMembers, error: teamMembersError } = await supabase
-//     .from('team_members')
-//     .select('team_id')
-//     .eq('user_id', user.value.id)
+  CREATE OR REPLACE FUNCTION get_projects_for_user(user_id_param UUID)
+  RETURNS SETOF projects AS $$
+    SELECT *
+    FROM projects
+    WHERE EXISTS (
+      SELECT 1
+      FROM unnest(project_members) as member
+      WHERE member->>'user_id' = user_id_param::text
+    );
+  $$ LANGUAGE sql;
 
-//   if (teamMembersError) {
-//     console.error('Error fetching team members:', teamMembersError.message)
-//     return
-//   }
+  */  
 
-//   const teamIds = teamMembers.map(team => team.team_id);
+  // First, get the list of project IDs
+  const { data: projectIds, error: idError } = await supabase
+    .rpc('find_project_ids_for_user', { user_id_param: userId })
+  
+  console.log('projectIds:', projectIds)
 
-//   const { data: assignedProjects, error: assignedProjectsError } = await supabase
-//     .from('projects')
-//     .select('*')
-//     .in('assigned_team', teamIds)
+  if (idError) {
+    console.error('Error finding project IDs:', idError.message)
+    return
+  }
+  
+  // Then, fetch the actual projects
+  if (projectIds && projectIds.length > 0) {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .in('id', projectIds)
+    
+    console.log('assignedProjects:', data)
+    
+    if (error) {
+      console.error('Error fetching projects:', error.message)
+      return
+    }
+    
+    return data
 
-//   if (assignedProjectsError) {
-//     console.error('Error fetching assigned projects:', assignedProjectsError.message)
-//     return
-//   }
-
-//   return assignedProjects;
-// }
+  } else {
+    assignedProjects.value = []
+  }
+}
 
 async function fetchProjects() {
   
   const ownedProjects = await fetchOwnedProjects();
-  // const assignedProjects = await fetchAssignedProjects();
+  const assignedProjects = await fetchAssignedProjects();
 
-  // const allProjects = Array.from(new Set([...ownedProjects, ...assignedProjects].map(project => project.id)))
-  //   .map(id => {
-  //     return [...ownedProjects, ...assignedProjects].find(project => project.id === id);
-  //   });
+  const allProjects = [...new Set([...ownedProjects, ...assignedProjects].map(project => project.id))]
+    .map(id => {
+      return [...ownedProjects, ...assignedProjects].find(project => project.id === id);
+    });
 
-  // projects.value = await Promise.all(allProjects.map(async project => {
-  //   return {
-  //     ...project,
-  //     client: {
-  //       client_id: project.client,
-  //     }
-  //   };
-  // }));
-
-  projects.value = await Promise.all(ownedProjects.map(async project => {
+  projects.value = await Promise.all(allProjects.map(async project => {
+    console.log('project:', project)
     return {
       ...project,
       client: {
@@ -183,6 +200,7 @@ async function fetchProjects() {
   }));
 
   projects.value = await Promise.all(projects.value.map(async project => {
+    console.log('project:', project)
     const deliverables = await fetchProjectDeliverables(project.id);
     const states = await fetchStates(project.workflow);
     const LastState = states[states.length - 1];
