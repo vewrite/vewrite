@@ -5,20 +5,23 @@
 
       <Logo class="logo" />
 
+      <!-- {{ invitedProjects }} -->
+
       <!-- Next, we will be creating a profile for this user in the database by first setting what type of user they are. -->
-      <div class="onboarding-step" v-if="TeamsData && onboardingStep === 1">
+      <div class="onboarding-step" v-if="invitedProjects">
 
         <!-- Initial check for if this user is in the database in invited_profiles. If so, they need to create an account -->
-        <div class="onboarding-header" v-if="TeamsData.length > 0">        
-          <p class="center">Welcome! You've been invited to join a team on Vewrite.</p>
-          <section class="teams-approval-wrapper" v-if="TeamsData && TeamsData.length > 0">
-            <div class="teams-approval-row" v-for="team in TeamsData" :key="team.id">
-              <p>{{ team.name }}</p>
+        <div class="onboarding-header" v-if="invitedProjects.length > 0">        
+          <p class="center" v-if="invitedProjects.length == 1">Welcome! You've been invited to join a project on Vewrite.</p>
+          <p class="center" v-if="invitedProjects.length > 1">Welcome! You've been invited to join these projects on Vewrite.</p>
+          <section class="projects-approval-wrapper" v-if="invitedProjects && invitedProjects.length > 0">
+            <div class="projects-approval-row" v-for="project in invitedProjects" :key="project.id">
+              <p>{{ project.name }}</p>
             </div>
           </section>
         </div>
     
-        <div class="onboarding-header" v-if="TeamsData.length == 0">
+        <div class="onboarding-header">
           <p class="center">First, we'd like to know what kind of user you are.</p>
           <div class="select-persona">
             <div class="selector" @click="setPersona('writer')" :class="{ 'selected': defaultUser.persona === 'writer' }">
@@ -32,7 +35,7 @@
           </div>
         </div>
 
-        <div class="onboarding-header" v-if="TeamsData">
+        <div class="onboarding-header">
           <p class="center">Next, we'd like to get to know you a little better.</p>
           <form @submit.prevent="handleOnboardUserDetails">
             <div class="form-group">
@@ -80,6 +83,7 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const loading = ref(false)
 const onboardingStep = ref(1)
+const invitedProjects = ref([])
 
 const defaultUser = ref({
   id: user.value.id,
@@ -97,19 +101,24 @@ const defaultUser = ref({
 
 /* 
 
-1. Get the user from the database.
-2. Ensure that the user's group is created
-3. If the user was invited (email exists in invited_profiles), then we should allow the user to review those team invitations
-4. Allow the user to set their persona
-5. Allow the user to set their name and website
-6. If they are not in the profiles table, I must create that first, then populate the user's profile with the data they've entered
+// 1. Get the user from the database.
+// 2. Ensure that the user's group is created
+// 3. If the user was invited (email exists in invited_profiles), then we should allow the user to review those team invitations
+// 4. Allow the user to set their persona
+// 5. Allow the user to set their name and website
+// 6. If they are not in the profiles table, I must create that first, then populate the user's profile with the data they've entered
+
+1. Get the users from the database
+2. Check invited_profiles for that email address
+3. If they are in invited_profiles, allow them to review the projects they've been invited to. Add that to projects ref array
 
 */
 
 onMounted(async () => {
   try {
-    await fetchInvitedTeamsForThisProfile(user.value.email)
-    await fetchInvitedTeams([TeamIds.value])
+    // await fetchInvitedTeamsForThisProfile(user.value.email)
+    // await fetchInvitedTeams([TeamIds.value])
+    await checkInvitedProfiles(user.value.email)
 
   } catch (error) {
     console.error(error)
@@ -120,6 +129,24 @@ onMounted(async () => {
   }
 })
 
+async function checkInvitedProfiles(email) {
+  const { data, error } = await supabase
+    .from('invited_profiles')
+    .select('*')
+    .eq('email', email)
+
+  const { data: projectsData, error: projectsError } = await supabase
+    .from('projects')
+    .select('*')
+    .in('id', data.map(d => d.project_id))
+
+  if (error) throw error
+
+  console.log(data, projectsData)
+
+  invitedProjects.value = projectsData
+}
+
 const setPersona = (persona) => {
   defaultUser.value.persona = persona;
 };
@@ -128,11 +155,13 @@ async function onboardUserDetails() {
   try {
     loading.value = true
     await updateProfile(defaultUser.value)
-    await createGroup(user.value.id)
+    // No need to create groups any more (yay!)
+    // await createGroup(user.value.id)
     await setFirstTime(false)
-    if (TeamsData.value.length > 0) {
-      await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
-    }
+    // if (TeamsData.value.length > 0) {
+    //   await approveTeamMember(TeamsData.value[0].id, user.value.id, user.value.email)
+    // }
+    
     emit('closeOnboarding')
   } catch (error) {
     console.error(error)
@@ -219,14 +248,14 @@ $v.value.$touch()
   overflow-x: hidden;
   overflow-y: auto;
 
-  .teams-approval-wrapper {
+  .projects-approval-wrapper {
     border: $border;
     border-radius: $br-md;
     padding: $spacing-sm;
     margin-top: $spacing-md;
     background: rgba($brand, 0.1);
 
-    .teams-approval-row {
+    .projects-approval-row {
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -234,7 +263,7 @@ $v.value.$touch()
       p {
         margin: 0;
         font-weight: bold;
-        font-size: 2rem;
+        font-size: $font-size-md;
       }
 
       .teams-approval-buttons {
