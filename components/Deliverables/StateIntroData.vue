@@ -6,9 +6,9 @@
           <Avatar :uuid="projectManager" :hasName="true" size="small" :secondarytext="'Project Manager'" />
         </div>
         <div class="single-member" v-if="assignedTeam" v-for="(uuid, role) in assignedTeam" :key="role" :class="DeliverableData.assigned_to == uuid ? 'assigned' : ''">
-          <Avatar :uuid="uuid" :hasName="true" size="small" :secondarytext="role" />
+          <Avatar :uuid="uuid" :hasName="true" size="tiny" />
           <div class="members-role">
-            <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">Assigned</div>
+            <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">{{ role }} is assigned</div>
           </div>
         </div>
       </div>

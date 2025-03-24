@@ -96,7 +96,7 @@ body {
 /* Notifications */
 
 .notification {
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-xxs calc($spacing-xs + $spacing-xxs);
     font-size: $font-size-xs;
     border-radius: $br-lg;
     gap: $spacing-xs;
@@ -789,6 +789,7 @@ button.primary,
 button.clear,
 .button.clear {
     background-color: rgba($brand, 0);
+    padding: $spacing-xxs $spacing-xxs;
 
     &:hover {
         background-color: rgba($brand, 0);

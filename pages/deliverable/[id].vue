@@ -40,8 +40,6 @@
         <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
         <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         
-        <div class="vertical-divider"></div>
-        
         <!-- State intro -->
         <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         
