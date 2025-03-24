@@ -141,6 +141,48 @@ export default function useProject() {
     } 
   }
 
+  async function updateProjectMembers(project_id, project_members) {
+    try {
+      useModal().toggleLoading();
+
+      const { data, error } = await supabase
+        .from('projects')
+        .update({ project_members: project_members })
+        .eq('id', project_id);
+
+      if(error) throw error;
+
+      console.log('Updated project members:', data);
+
+      // Now, I also need to go through the members and send out invites to any new members
+      // It's not ideal that this will resend an invite each time that the project is updated
+      // But it's a simple solution and we'll go with that for now
+      project_members.forEach(async (member) => {
+        console.log('Checking member:', member);
+        if (member.role === 'invited') {
+            console.log('Inviting user:', member.email);
+
+            const response = await $fetch(`/api/email/inviteUser?email=${member.email}&project_id=${project_id}`);
+
+            if (!response) {
+              console.error('No response from server');
+              console.error('Error inviting user:', inviteError);
+              return;
+            }
+              
+            console.log('Invited user:', invitedProfile);
+          }
+        }
+      );
+
+      useModal().toggleVisibility();
+      useModal().reset();
+
+    } catch (error) {
+      console.error('Error updating project:', error)
+    } 
+  }
+
   async function updateProjectName(projectId, name) {
 
     console.log(projectId, name);
@@ -279,6 +321,7 @@ export default function useProject() {
     createProjectModal,
     manageProjectMembersModal,
     updateProject,
+    updateProjectMembers,
     updateProjectName,
     updateProjectDescription,
     deleteProject,

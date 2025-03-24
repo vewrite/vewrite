@@ -82,7 +82,7 @@
     </div>
     
     <div class="buttons">
-      <button @click="updateProject(project)" class="primary large">Update</button>
+      <button @click="updateProjectMembers(project.id, project.project_members)" class="primary large">Update</button>
     </div>
   </div>
 </template>
@@ -92,7 +92,7 @@
 import { ref, onMounted } from 'vue';
 
 import useProject from '~/composables/useProject';
-const { getProjectDetails, updateProject } = useProject();
+const { getProjectDetails, updateProjectMembers } = useProject();
 
 import useProfile from '~/composables/useProfile';
 const { fetchProfileViaEmail, createInvitedProfile, ProfileData, ProfileError } = useProfile();
