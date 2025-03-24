@@ -135,7 +135,6 @@ async function checkMemberRequirements() {
 
     // Count members with user_id
     const validMembersCount = project.value.project_members.filter(member => member.user_id).length;
-    console.log('Valid members:', validMembersCount);
     
     // Set error if less than 2 valid members
     membersError.value = validMembersCount < 2;
