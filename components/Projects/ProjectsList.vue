@@ -36,8 +36,8 @@
 
     <div class="empty-state" v-if="projects.length === 0 && !loading">
       <img src="/images/projects-empty-state.svg" alt="No projects found" />
-      <h3>You haven’t created a project yet</h3>
-      <p>That’s ok, It’s easy and we’ll do it together</p>
+      <h3>No Projects</h3>
+      <p>That’s ok, It’s easy and we’ll do it together. If you're a writer, your project is on its way!</p>
     </div>
 
     <div :class="['projects-list', viewMode]" v-if="!loading && projects.length > 0">
@@ -134,9 +134,9 @@ async function fetchAssignedProjects() {
   
   This uses an RPC function to get the list of project IDs assigned to the user.
 
-  CREATE OR REPLACE FUNCTION get_projects_for_user(user_id_param UUID)
-  RETURNS SETOF projects AS $$
-    SELECT *
+  CREATE OR REPLACE FUNCTION find_project_ids_for_user(user_id_param UUID)
+  RETURNS BIGINT[] AS $$
+    SELECT array_agg(id)
     FROM projects
     WHERE EXISTS (
       SELECT 1
@@ -175,7 +175,7 @@ async function fetchAssignedProjects() {
     return data
 
   } else {
-    assignedProjects.value = []
+    return []
   }
 }
 
