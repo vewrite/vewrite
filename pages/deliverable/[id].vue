@@ -12,38 +12,45 @@
 
       <!-- Deliverable due date, fullscreen, state bar, state intro, and deliverable dropdown -->
       <div class="app-panel-header-buttons" v-if="DeliverableData && !loading">
-        <button class="button" @click="toggleFullscreen()">
+
+        <!-- Fullscreen -->
+        <button class="button clear" @click="toggleFullscreen()">
           <Icon name="fluent:full-screen-maximize-20-regular" size="2rem" />
         </button>
         
-        <Dropdown v-if="personaState == 'manager' || isOwner">
+        <!-- Due date select -->
+        <Dropdown v-if="personaState == 'manager' || isOwner" :clear="true">
           <template v-slot:trigger>
             <Icon name="fluent:calendar-20-regular" size="2rem" />
           </template>
           <template v-slot:menu>
             <span>{{ dueDate }}</span>
-            TODO: Calendar
+            <!-- TODO: Calendar -->
           </template>
         </Dropdown>
 
-        <button class="button" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
+        <!-- Assignments -->
+        <button class="button clear" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
           <Icon name="fluent:person-20-regular" size="2rem" />
         </button>
         
         <div class="vertical-divider"></div>
         
+        <!-- State -->
         <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
         <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         
         <div class="vertical-divider"></div>
         
+        <!-- State intro -->
         <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         
         <div class="vertical-divider"></div>
         
-        <Dropdown v-if="personaState == 'manager' || isOwner">
+        <!-- Deliverable dropdown -->
+        <Dropdown v-if="personaState == 'manager' || isOwner" :clear="true">
           <template v-slot:trigger>
-            <Icon name="uis:ellipsis-v" size="1.15rem" />
+            <Icon name="uis:ellipsis-v" size="1.5rem" />
           </template>
           <template v-slot:menu>
             <div class="dropdown-item" @click="deleteDeliverableModal()">Delete deliverable</div>
