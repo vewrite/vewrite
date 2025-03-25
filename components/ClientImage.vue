@@ -28,9 +28,16 @@ async function fetchClientLogo(client) {
     return null
   }
 
-  const logoBlob = await downloadImage(data.logo_url);
-  src.value = URL.createObjectURL(logoBlob);
-  loading.value = false
+  if(data.logo_url === '') {
+    const logoBlob = await fetch('./images/vewrite-personal-project.png').then(res => res.blob());
+    src.value = URL.createObjectURL(logoBlob);
+    loading.value = false
+    return
+  } else {
+    const logoBlob = await downloadImage(data.logo_url);
+    src.value = URL.createObjectURL(logoBlob);
+    loading.value = false
+  }
 
 }
 

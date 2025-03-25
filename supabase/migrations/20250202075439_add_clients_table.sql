@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS clients (
   updated_at timestamptz DEFAULT now(),
   created_by uuid NOT NULL,
   logo_url text NOT NULL,
-  name text NOT NULL
+  name text NOT NULL,
+  personal bool NOT NULL DEFAULT false,
 );
 
 -- Enable Row Level Security
