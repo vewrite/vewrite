@@ -24,8 +24,8 @@
             <Icon name="fluent:calendar-20-regular" size="2rem" />
           </template>
           <template v-slot:menu>
-            <span>{{ dueDate }}</span>
-            <!-- TODO: Calendar -->
+            <!-- <span>{{ dueDate }}</span> -->
+            <VDatePicker :id="'deliverable-calendar-' + DeliverableData.id" :attributes="DeliverableData.attrs" v-model="DeliverableData.selectedDate" @update:modelValue="onDateSelect(DeliverableData.id, DeliverableData.selectedDate)" />
           </template>
         </Dropdown>
 

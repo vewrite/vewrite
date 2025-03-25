@@ -27,7 +27,10 @@
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
-        <div class="deliverables-list">
+        <div class="calendar-view">
+          <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless />
+        </div>
+        <!-- <div class="deliverables-list">
           <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
             <p>No deliverables found for this project</p>
           </div>
@@ -57,7 +60,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </section>
 
       <section v-else-if="loading.global == false && !hasAccess" class="project-gate">
@@ -112,16 +115,27 @@ const loading = ref({
 });
 const membersError = ref(false);
 
-const attrs = ref([
+// const attrs = ref([
+//   {
+//     key: 'today',
+//     highlight: {
+//       color: 'green',
+//       fillMode: 'solid'
+//     },
+//     dates: new Date()
+//   }
+// ])
+
+const calendarViewAttrs = ref([
   {
     key: 'today',
     highlight: {
-      color: 'green',
-      fillMode: 'solid'
+      color: '#5C7DF6',
+      fillMode: 'outline'
     },
     dates: new Date()
   }
-])
+]);
 
 async function checkMemberRequirements() {
   if (!project.value || !project.value.project_members) {
@@ -368,6 +382,11 @@ watchEffect(() => {
   border-radius: $br-lg;
   position: sticky;
   top: $spacing-sm;
+}
+
+.calendar-view {
+  margin: $spacing-md;
+  height: 100%;
 }
 
 .deliverables-list {

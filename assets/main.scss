@@ -992,3 +992,68 @@ button.vertical,
       opacity: 0.35;
     }
   }
+
+  /* VCalendar */
+
+  .vc-popover-content-wrapper {
+    .vc-nav-arrow,
+    .vc-nav-title {
+        background: transparent;
+    }
+
+    .vc-nav-items {
+        .vc-nav-item {
+            background: transparent;
+
+            &.is-active {
+                background: $brand;
+            }
+        }
+    }
+  }
+
+  .vc-container {
+    button {
+        background: transparent;
+    }
+
+    .vc-header {
+        padding-bottom: $spacing-sm;
+        border-bottom: $border;
+        height: fit-content;
+
+        .vc-title {
+            font-size: $font-size-lg;
+            font-weight: normal;
+        }
+    }
+
+    .vc-weekdays {
+        background: rgba($brand, 0.025);
+        height: fit-content;
+    }
+
+    .vc-weekday {
+        color: rgba($black, 0.25);
+        padding: $spacing-xs 0;
+    }
+
+    .vc-weeks {
+        padding: 0;
+    }
+
+    .vc-week {
+        border-bottom: $border;
+    }
+
+    .vc-day {
+        min-height: 7.5vh;
+        height: 7.5vh;
+    
+        .vc-focus {
+            width: 100%;
+            height: 7.5vh;
+            border-radius: 0;
+        }
+      }
+  }
