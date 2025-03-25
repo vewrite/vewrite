@@ -51,7 +51,7 @@
                     Due {{ deliverable.formattedDueDate }}
                   </template>
                   <template v-slot:menu>
-                    <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
+                    <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
                   </template>
                 </Dropdown>
               </div>
@@ -284,14 +284,14 @@ async function fetchDeliverables(projectId) {
 }
 
 const onDateSelect = async (deliverableId, newDate) => {
+
   await updateDeliverableDate(deliverableId, newDate);
-  const popup = document.getElementById(`deliverable-calendar-${deliverableId}`);
-  popup.style.display = 'none';
 
   // Get the date and update the deliverable
   const deliverable = deliverables.value.find(d => d.id === deliverableId);
   if (deliverable) {
     deliverable.due_date = newDate;
+    deliverable.selectedDate = newDate; // Fix for Due date in project list doesn't update #138
     deliverable.formattedDueDate = format(newDate, 'MMMM do, yyyy');
   }
   
@@ -306,7 +306,6 @@ const updateDeliverableDate = async (deliverableId, newDate) => {
 
     if (error) throw error;
 
-    console.log('Deliverable updated:', data);
   } catch (error) {
     console.error('Error updating deliverable:', error.message);
   }
