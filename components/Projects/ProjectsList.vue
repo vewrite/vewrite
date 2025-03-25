@@ -533,7 +533,7 @@ const filteredProjects = computed(() => {
       justify-content: flex-start;
       align-content: center;
       width: calc(100% - $spacing-md - $spacing-md);
-      padding: 0 $spacing-sm $spacing-sm;
+      padding: $spacing-sm $spacing-md $spacing-sm;
       align-content: flex-start;
       width: 100%;
       gap: $spacing-xs;

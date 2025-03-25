@@ -398,7 +398,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-sm;
+    padding: $spacing-md $spacing-md $spacing-sm $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -412,8 +412,8 @@ textarea {
 
     input {
         color: $black;
-        background: rgba($white, .35);
-        border-radius: $br-md;
+        background: rgba($brand, .025);
+        border-radius: $br-xl;
         border: $border;
         padding: $spacing-xxs $spacing-sm;
         width: 100%;
