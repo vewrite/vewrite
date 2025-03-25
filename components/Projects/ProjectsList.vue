@@ -150,8 +150,6 @@ async function fetchAssignedProjects() {
   // First, get the list of project IDs
   const { data: projectIds, error: idError } = await supabase
     .rpc('find_project_ids_for_user', { user_id_param: userId })
-  
-  console.log('projectIds:', projectIds)
 
   if (idError) {
     console.error('Error finding project IDs:', idError.message)
@@ -164,8 +162,6 @@ async function fetchAssignedProjects() {
       .from('projects')
       .select('*')
       .in('id', projectIds)
-    
-    console.log('assignedProjects:', data)
     
     if (error) {
       console.error('Error fetching projects:', error.message)
@@ -190,7 +186,6 @@ async function fetchProjects() {
     });
 
   projects.value = await Promise.all(allProjects.map(async project => {
-    console.log('project:', project)
     return {
       ...project,
       client: {
@@ -200,7 +195,6 @@ async function fetchProjects() {
   }));
 
   projects.value = await Promise.all(projects.value.map(async project => {
-    console.log('project:', project)
     const deliverables = await fetchProjectDeliverables(project.id);
     const states = await fetchStates(project.workflow);
     const LastState = states[states.length - 1];
@@ -219,7 +213,6 @@ async function fetchProjects() {
 }
 
 const handleProjectInserts = (payload) => {
-  console.log('New project:', payload.new);
   projects.value.push(payload.new);
   fetchProjects();
 }
