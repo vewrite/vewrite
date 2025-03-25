@@ -3,6 +3,7 @@
     <Loading v-if="loading" type="small" />
 
     <div class="search-bar" v-if="projects.length > 0 && !loading">
+      <Icon name="fluent:search-20-regular" size="2rem" />
       <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" />
       <div class="list-buttons">
         <button :class="['list-icon', projectFilter == 'all' ? 'active' : '']" @click="handleProjectFilter('all')">
