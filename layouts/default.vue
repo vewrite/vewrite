@@ -42,6 +42,7 @@ If the user is not new, show the main app
 
 */
 const isNewUser = ref(false)
+const hasPersonalClient = ref(false)
 const loading = ref(true)
 
 async function checkUser() {
@@ -68,12 +69,63 @@ async function checkUser() {
   }
 }
 
+// This is a check for if the user already has a "personal" column in the results of the clients. If not, we'll go and create it.
+async function checkClient() {
+  console.log("Checking for personal client")
+  try {
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('created_by', user.value.id)
+
+    if (error) { throw error }
+
+    // I need to check if there is at least one personal client in the data
+    let personalClient = false
+
+
+    data.forEach((client) => {
+      if (client.personal === true) {
+        personalClient = true
+      } 
+    })
+
+    if (!personalClient) {
+      await createPersonalClient(user.value)
+      hasPersonalClient.value = true
+    } else {
+      hasPersonalClient.value = true
+    }
+
+  } catch (error) {
+    console.error(error)
+    loading.value = false
+  }
+}
+
+async function createPersonalClient() {
+  const { data, error } = await supabase
+    .from('clients')
+    .insert([
+      {
+        personal: true,
+        name: 'My Personal Projects',
+        created_at: new Date(),
+        updated_at: new Date(),
+        created_by: user.value.id,
+        logo_url: ''
+      }
+    ])
+  if (error) throw error
+}
+
 function close () {
   isNewUser.value = false
 }
 
 onMounted(() => {
   checkUser()
+  checkClient()
 })
 
 </script>

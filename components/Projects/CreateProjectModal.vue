@@ -599,7 +599,7 @@ function clearErrors () {
     }
 
     .image-wrapper {
-        width: 80px;
+        width: 54px;
         min-height: 54px;
         height: 54px;
         border-radius: $br-md;

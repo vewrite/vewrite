@@ -150,7 +150,8 @@ export default function useClient() {
         return
       }
 
-      // clientsData.value = data
+      console.log('Clients:', data)
+
       if (!data) {
         return
       } else {
@@ -159,12 +160,20 @@ export default function useClient() {
           clientsData.projects = await fetchClientProjects(client.client_id);
           
           // Download the image
-          const logoBlob = await downloadImage(client.logo_url);
-          
-          return {
-            ...client,
-            logo_url: URL.createObjectURL(logoBlob)
-          };
+          if (client.logo_url === '') {
+            console.log('No logo found');
+            const logoBlob = await fetch('./images/vewrite-personal-project.png').then(res => res.blob());
+            return {
+              ...client,
+              logo_url: URL.createObjectURL(logoBlob)
+            };
+          } else {
+            const logoBlob = await downloadImage(client.logo_url);
+            return {
+              ...client,
+              logo_url: URL.createObjectURL(logoBlob)
+            };
+          }
         }));
     
         return clientsData.value
@@ -220,7 +229,7 @@ export default function useClient() {
             .from('logos')
             .download(path)
         if (error) throw error
-        // console.log(data)
+
         return data
     } catch (error) {
         console.error("Error downloading image: ", error.message)

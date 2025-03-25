@@ -7,7 +7,6 @@
         <input class="object-description-input" v-model="project.description" @input="debouncedUpdateProjectDescription(project.id, $event.target.value)" placeholder="Add a project description" />
       </div>
     </aside>
-    <!-- <TeamMembers :team="team" /> -->
     <section class="project-members">
       <div class="notification warning" v-if="membersError">You don't have enough ready members</div>
       <div class="members">
@@ -26,8 +25,8 @@
 
 <script setup>
 
-const props = defineProps(['project', 'creator', 'client', 'deliverables', 'team', 'membersError']);
-const { client, project, team } = toRefs(props)
+const props = defineProps(['project', 'creator', 'client', 'deliverables', 'membersError']);
+const { client, project } = toRefs(props)
 
 // useProject composable
 import useProject from '~/composables/useProject';

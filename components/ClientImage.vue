@@ -28,9 +28,18 @@ async function fetchClientLogo(client) {
     return null
   }
 
-  const logoBlob = await downloadImage(data.logo_url);
-  src.value = URL.createObjectURL(logoBlob);
-  loading.value = false
+  console.log(data)
+
+  if(data.logo_url === '') {
+    const logoBlob = await fetch('/images/vewrite-personal-project.png').then(res => res.blob());
+    src.value = URL.createObjectURL(logoBlob);
+    loading.value = false
+    return
+  } else {
+    const logoBlob = await downloadImage(data.logo_url);
+    src.value = URL.createObjectURL(logoBlob);
+    loading.value = false
+  }
 
 }
 
@@ -88,8 +97,10 @@ watch(() => props.client, (newClient) => {
       background-repeat: no-repeat;
 
       &.small {
-          min-width: 42px;
-          min-height: 42px;
+          min-width: 54px;
+          width: 54px;
+          min-height: 54px;
+          height: 54px;
           border-radius: $br-md;
       }
 
@@ -120,8 +131,8 @@ watch(() => props.client, (newClient) => {
   }
 
   &.small {
-      min-width: 42px;
-      min-height: 42px;
+      min-width: 54px;
+      min-height: 54px;
       border-radius: $br-md;
   }
 
