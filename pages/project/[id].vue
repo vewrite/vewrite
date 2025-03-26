@@ -157,22 +157,22 @@ const calendarViewAttrs = ref([
       fillMode: 'solid'
     },
     dates: new Date()
-  },
-  {
-    key: 'due',
-    content: 'blue',
-    // highlight: {
-    //   color: '#EEEEEE',
-    //   fillMode: 'outline'
-    // },
-    popover: {
-      label: 'Due',
-      color: 'blue',
-      fillMode: 'solid'
-    },
-    dot: true,
-    dates: deliverableDates.value
   }
+  // {
+  //   key: 'due',
+  //   content: 'blue',
+  //   // highlight: {
+  //   //   color: '#EEEEEE',
+  //   //   fillMode: 'outline'
+  //   // },
+  //   popover: {
+  //     label: 'Due',
+  //     color: 'blue',
+  //     fillMode: 'solid'
+  //   },
+  //   dot: true,
+  //   dates: deliverableDates.value
+  // }
 ]);
 
 async function checkMemberRequirements() {
@@ -319,6 +319,21 @@ async function fetchDeliverables(projectId) {
       // Pre-check if the deliverable is already in the array
       if (!deliverableDates.value.some(date => date.getTime() === dueDate.getTime())) {
         deliverableDates.value.push(dueDate); // Use the already parsed dueDate
+
+        calendarViewAttrs.value.push({
+          key: deliverable.title,
+          highlight: {
+            color: '#5C7DF6',
+            fillMode: 'outline'
+          },
+          popover: {
+            label: deliverable.id + ' - ' + deliverable.title + ' (' + deliverable.state_name + ')',
+            color: '#5C7DF6',
+            fillMode: 'solid'
+          },
+          dot: true,
+          dates: dueDate
+        });
       }
 
       if (!deliverable.attrs) {
@@ -327,7 +342,7 @@ async function fetchDeliverables(projectId) {
       deliverable.attrs.push({
         key: deliverable.id,
         highlight: {
-          color: 'red',
+          color: '#5C7DF6',
           fillMode: 'solid'
         },
         dates: dueDate
@@ -446,7 +461,8 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 0 $spacing-sm;
+  border: $border;
+  border-radius: $br-lg;
   gap: $spacing-sm;
 }
 

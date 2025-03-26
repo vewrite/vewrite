@@ -445,15 +445,13 @@ textarea {
         border-radius: $br-md;
         background: rgba($white, .35);
         transition: all 0.2s ease;
-        outline: 1px solid rgba($brand, 0);
+        outline: 2px solid rgba($white, 0);
         outline-offset: 0px;
 
-        &:active,
-        &:focus,
-        &:hover,
-        &:focus-within {
+        &:hover {
             border: 1px solid rgba($brand, 1);
-            outline: 0px solid rgba($brand, 0.1);
+            outline: 2px solid rgba($white, 1);
+            outline-offset: -3px;
             background: rgba($white, 1);
         }
 
@@ -469,23 +467,8 @@ textarea {
             text-transform: uppercase;
         }
 
-        svg {
-            transition: all 0.2s ease;
-            stroke-opacity: 0.5;
-            stroke-width: 1px;
-            width: 20px;
-            height: 20px;
-            transform: scale(0.9);
-
-            path,
-            mask path {
-                stroke: $black;
-                stroke-opacity: 0.65;
-            }
-        }
-
         .active {
-            background: rgba($brand, 0.1);
+            background: rgba($brand, 0.05);
             color: $brand;
 
             svg {
