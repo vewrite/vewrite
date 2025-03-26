@@ -27,8 +27,22 @@
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
+
+        <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
+          <!-- <Icon name="fluent:search-20-regular" size="2rem" />
+          <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" /> -->
+          <div class="list-buttons">
+            <button :class="['list-icon', viewMode == 'list' ? 'active' : '']" @click="listToggle">
+              <Icon name="fluent:list-20-regular" size="1.65rem" />
+            </button>
+            <button :class="['list-icon', viewMode == 'calendar' ? 'active' : '']" @click="listToggle">
+              <Icon name="fluent:calendar-20-regular" size="1.65rem" />
+            </button>
+          </div>
+        </div>
+
         <section class="deliverables-view">
-          <!-- <div class="deliverables-list">
+          <div class="deliverables-list" v-if="viewMode == 'list' && loading.deliverables == false">
             <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
               <p>No deliverables found for this project</p>
             </div>
@@ -58,9 +72,8 @@
                 </div>
               </div>
             </div>
-          </div> -->
-          <div class="calendar-view">
-            <pre>{{deliverableDates}}</pre>
+          </div>
+          <div class="calendar-view" v-if="viewMode == 'calendar'">
             <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless />
           </div>
         </section>
@@ -118,6 +131,12 @@ const loading = ref({
 });
 const membersError = ref(false);
 const deliverableDates = ref([]);
+const viewMode = ref('list');
+
+const listToggle = () => {
+  viewMode.value = viewMode.value === 'list' ? 'calendar' : 'list';
+  // localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
+};
 
 // const attrs = ref([
 //   {
@@ -297,7 +316,7 @@ async function fetchDeliverables(projectId) {
       deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
       deliverable.formattedUpdatedAt = format(parseISO(deliverable.updated_at), 'MMMM do, yyyy');
 
-      // pre-check if the deliverable is already in the array
+      // Pre-check if the deliverable is already in the array
       if (!deliverableDates.value.some(date => date.getTime() === dueDate.getTime())) {
         deliverableDates.value.push(dueDate); // Use the already parsed dueDate
       }
@@ -418,13 +437,16 @@ watchEffect(() => {
 .calendar-view {
   height: 100%;
   width: 100%;
+  border: $border;
+  border-radius: $br-lg;
+  overflow: hidden;
 }
 
 .deliverables-list {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 $spacing-sm $spacing-sm;
+  padding: 0 0 $spacing-sm;
   gap: $spacing-sm;
 }
 
@@ -456,8 +478,12 @@ watchEffect(() => {
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    border-radius: $br-xl;
     transition: background-color 0.2s ease;
+    border-bottom: $border;
+
+    &:last-child {
+      border-bottom: none;
+    }
 
     &:hover {
       background-color: rgba($black, 0.025);

@@ -161,8 +161,7 @@ export default function useClient() {
           
           // Download the image
           if (client.logo_url === '') {
-            console.log('No logo found');
-            const logoBlob = await fetch('./images/vewrite-personal-project.png').then(res => res.blob());
+            const logoBlob = await fetch('/images/vewrite-personal-project.png').then(res => res.blob());
             return {
               ...client,
               logo_url: URL.createObjectURL(logoBlob)
