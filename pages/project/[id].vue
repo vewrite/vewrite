@@ -22,11 +22,6 @@
     </template>
     <template v-slot:body>
       <section v-if="loading.global == false && hasAccess">
-        <div class="project-details">
-          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
-          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
-        </div>
 
         <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
           <!-- <Icon name="fluent:search-20-regular" size="2rem" />
@@ -39,6 +34,12 @@
               <Icon name="fluent:calendar-20-regular" size="1.65rem" />
             </button>
           </div>
+        </div>
+
+        <div class="project-details">
+          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
+          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
+          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
 
         <section class="deliverables-view">
@@ -66,7 +67,7 @@
                       Due {{ deliverable.formattedDueDate }}
                     </template>
                     <template v-slot:menu>
-                      <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
+                      <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate, deliverable.due_date)" borderless />
                     </template>
                   </Dropdown>
                 </div>
@@ -138,17 +139,7 @@ const listToggle = () => {
   // localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
 };
 
-// const attrs = ref([
-//   {
-//     key: 'today',
-//     highlight: {
-//       color: 'green',
-//       fillMode: 'solid'
-//     },
-//     dates: new Date()
-//   }
-// ])
-
+// Set today's date for the calendar view
 const calendarViewAttrs = ref([
   {
     key: 'today',
@@ -158,21 +149,6 @@ const calendarViewAttrs = ref([
     },
     dates: new Date()
   }
-  // {
-  //   key: 'due',
-  //   content: 'blue',
-  //   // highlight: {
-  //   //   color: '#EEEEEE',
-  //   //   fillMode: 'outline'
-  //   // },
-  //   popover: {
-  //     label: 'Due',
-  //     color: 'blue',
-  //     fillMode: 'solid'
-  //   },
-  //   dot: true,
-  //   dates: deliverableDates.value
-  // }
 ]);
 
 async function checkMemberRequirements() {
@@ -355,7 +331,9 @@ async function fetchDeliverables(projectId) {
   }
 }
 
-const onDateSelect = async (deliverableId, newDate) => {
+const onDateSelect = async (deliverableId, newDate, oldDate) => {
+
+  let oldDateConverted = new Date(oldDate);
 
   await updateDeliverableDate(deliverableId, newDate);
 
@@ -366,6 +344,32 @@ const onDateSelect = async (deliverableId, newDate) => {
     deliverable.selectedDate = newDate; // Fix for Due date in project list doesn't update #138
     deliverable.formattedDueDate = format(newDate, 'MMMM do, yyyy');
   }
+
+  // remove the old date from the array
+  deliverableDates.value = deliverableDates.value.filter(date => date.getTime() !== newDate.getTime());
+
+  // remove the old date from the calendarViewAttrs
+  deliverable.attrs = deliverable.attrs.filter(attr => attr.dates.getTime() !== oldDateConverted.getTime());
+  calendarViewAttrs.value = calendarViewAttrs.value.filter(attr => attr.dates.getTime() !== oldDateConverted.getTime());
+
+  // add the new date to the array
+  deliverableDates.value.push(newDate);
+
+  // also add it to the calendarViewAttrs
+  calendarViewAttrs.value.push({
+    key: deliverable.title,
+    highlight: {
+      color: '#5C7DF6',
+      fillMode: 'outline'
+    },
+    popover: {
+      label: deliverable.id + ' - ' + deliverable.title + ' (' + deliverable.state_name + ')',
+      color: '#5C7DF6',
+      fillMode: 'solid'
+    },
+    dot: true,
+    dates: newDate
+  });
   
 };
 
@@ -432,11 +436,8 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
-  padding: $spacing-md;
-  margin: $spacing-sm;
-  background: rgba($white, 0.025);
-  backdrop-filter: blur(10px);
-  z-index: 2;
+  padding: 0 $spacing-md;
+  margin: $spacing-sm 0 $spacing-md;
   border-radius: $br-lg;
   position: sticky;
   top: $spacing-sm;
