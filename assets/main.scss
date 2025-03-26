@@ -1047,13 +1047,11 @@ button.vertical,
     }
 
     .vc-day {
-        min-height: 7.5vh;
-        height: 7.5vh;
-    
-        .vc-focus {
-            width: 100%;
-            height: 7.5vh;
-            border-radius: 0;
+        padding: $spacing-md;
+
+        .vc-dots {
+            bottom: 1rem;
+            position: relative;
         }
-      }
+    }
   }

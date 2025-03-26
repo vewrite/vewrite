@@ -27,40 +27,43 @@
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
-        <div class="calendar-view">
-          <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless />
-        </div>
-        <!-- <div class="deliverables-list">
-          <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
-            <p>No deliverables found for this project</p>
-          </div>
-          <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
-            <div class="single-deliverable" v-for="deliverable in deliverables">
-              <div class="deliverable-details">
-                <div class="deliverable-type">
-                  <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-                  <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+        <section class="deliverables-view">
+          <!-- <div class="deliverables-list">
+            <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
+              <p>No deliverables found for this project</p>
+            </div>
+            <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
+              <div class="single-deliverable" v-for="deliverable in deliverables">
+                <div class="deliverable-details">
+                  <div class="deliverable-type">
+                    <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
+                    <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+                  </div>
+                  <span class="deliverable-id">{{ deliverable.id }}</span>
+                  <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
                 </div>
-                <span class="deliverable-id">{{ deliverable.id }}</span>
-                <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
-              </div>
-              <div class="deliverable-actions">
-                <div class="deliverable-updated-at">
-                  {{ deliverable.formattedUpdatedAt }}
+                <div class="deliverable-actions">
+                  <div class="deliverable-updated-at">
+                    {{ deliverable.formattedUpdatedAt }}
+                  </div>
+                  <span class="deliverable-state">{{ deliverable.state_name }}</span>
+                  <Dropdown>
+                    <template v-slot:trigger>
+                      Due {{ deliverable.formattedDueDate }}
+                    </template>
+                    <template v-slot:menu>
+                      <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
+                    </template>
+                  </Dropdown>
                 </div>
-                <span class="deliverable-state">{{ deliverable.state_name }}</span>
-                <Dropdown>
-                  <template v-slot:trigger>
-                    Due {{ deliverable.formattedDueDate }}
-                  </template>
-                  <template v-slot:menu>
-                    <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
-                  </template>
-                </Dropdown>
               </div>
             </div>
+          </div> -->
+          <div class="calendar-view">
+            <pre>{{deliverableDates}}</pre>
+            <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless />
           </div>
-        </div> -->
+        </section>
       </section>
 
       <section v-else-if="loading.global == false && !hasAccess" class="project-gate">
@@ -114,6 +117,7 @@ const loading = ref({
   deliverables: true
 });
 const membersError = ref(false);
+const deliverableDates = ref([]);
 
 // const attrs = ref([
 //   {
@@ -131,9 +135,24 @@ const calendarViewAttrs = ref([
     key: 'today',
     highlight: {
       color: '#5C7DF6',
-      fillMode: 'outline'
+      fillMode: 'solid'
     },
     dates: new Date()
+  },
+  {
+    key: 'due',
+    content: 'blue',
+    // highlight: {
+    //   color: '#EEEEEE',
+    //   fillMode: 'outline'
+    // },
+    popover: {
+      label: 'Due',
+      color: 'blue',
+      fillMode: 'solid'
+    },
+    dot: true,
+    dates: deliverableDates.value
   }
 ]);
 
@@ -278,6 +297,11 @@ async function fetchDeliverables(projectId) {
       deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
       deliverable.formattedUpdatedAt = format(parseISO(deliverable.updated_at), 'MMMM do, yyyy');
 
+      // pre-check if the deliverable is already in the array
+      if (!deliverableDates.value.some(date => date.getTime() === dueDate.getTime())) {
+        deliverableDates.value.push(dueDate); // Use the already parsed dueDate
+      }
+
       if (!deliverable.attrs) {
         deliverable.attrs = [];
       }
@@ -384,9 +408,16 @@ watchEffect(() => {
   top: $spacing-sm;
 }
 
-.calendar-view {
-  margin: $spacing-md;
+.deliverables-view {
+  display: flex;
+  gap: $spacing-md;
   height: 100%;
+  padding: 0 $spacing-md;
+}
+
+.calendar-view {
+  height: 100%;
+  width: 100%;
 }
 
 .deliverables-list {
