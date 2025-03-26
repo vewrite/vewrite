@@ -24,8 +24,8 @@
       <section v-if="loading.global == false && hasAccess">
 
         <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
-          <!-- <Icon name="fluent:search-20-regular" size="2rem" />
-          <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" /> -->
+          <Icon name="fluent:search-20-regular" size="2rem" />
+          <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
           <div class="list-buttons">
             <button :class="['list-icon', viewMode == 'list' ? 'active' : '']" @click="listToggle">
               <Icon name="fluent:list-20-regular" size="1.65rem" />
@@ -48,7 +48,7 @@
               <p>No deliverables found for this project</p>
             </div>
             <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
-              <div class="single-deliverable" v-for="deliverable in deliverables">
+              <div class="single-deliverable" v-if="filteredDeliverables.length > 0" v-for="deliverable in filteredDeliverables">
                 <div class="deliverable-details">
                   <div class="deliverable-type">
                     <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
@@ -71,6 +71,9 @@
                     </template>
                   </Dropdown>
                 </div>
+              </div>
+              <div class="no-deliverables" v-if="filteredDeliverables.length == 0">
+                <p>No deliverables found for this search</p>
               </div>
             </div>
           </div>
@@ -100,10 +103,10 @@ definePageMeta({
 const personaState = useState('personaState');
 
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
-import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
-import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';
+import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
+import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import AppPanel from '~/components/AppPanel.vue';
 
 // Project composable
@@ -126,18 +129,27 @@ import useWorkflow from '~/composables/useWorkflow';
 const { fetchStates, WorkflowStates } = useWorkflow();
 
 const supabase = useSupabaseClient();
-const loading = ref({
-  global: true,
-  deliverables: true
-});
+const loading = ref({ global: true, deliverables: true });
 const membersError = ref(false);
 const deliverableDates = ref([]);
 const viewMode = ref('list');
+const searchQuery = ref('')
 
 const listToggle = () => {
   viewMode.value = viewMode.value === 'list' ? 'calendar' : 'list';
   // localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
 };
+
+const filteredDeliverables = computed(() => {
+  if (searchQuery.value != '') {
+  return deliverables.value.filter(
+    deliverable => 
+      deliverable.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+  } else {
+    return deliverables.value
+  }
+})
 
 // Set today's date for the calendar view
 const calendarViewAttrs = ref([
@@ -481,11 +493,22 @@ watchEffect(() => {
   color: $gray;
 }
 
+.no-deliverables {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: $font-size-sm;
+  padding: $spacing-sm;
+
+  p {
+    margin: 0;
+  }
+}
+
 .project-deliverables {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  background: $white;
   height: 100%;
 
   .single-deliverable {
