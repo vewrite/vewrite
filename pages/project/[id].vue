@@ -70,6 +70,7 @@
                       <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate, deliverable.due_date)" borderless />
                     </template>
                   </Dropdown>
+                  <Icon class="right-arrow" name="fluent:arrow-right-16-regular" size="1.5rem" />
                 </div>
               </div>
               <div class="no-deliverables" v-if="filteredDeliverables.length == 0">
@@ -78,7 +79,10 @@
             </div>
           </div>
           <div class="calendar-view" v-if="viewMode == 'calendar'">
-            <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless />
+            <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless @dayclick="handleDateSelected" />
+            <section v-if="selectedDay != null">
+              {{ selectedDay }}
+            </section>
           </div>
         </section>
       </section>
@@ -134,10 +138,16 @@ const membersError = ref(false);
 const deliverableDates = ref([]);
 const viewMode = ref('list');
 const searchQuery = ref('')
+const selectedDay = ref(null);
 
 const listToggle = () => {
   viewMode.value = viewMode.value === 'list' ? 'calendar' : 'list';
   // localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
+};
+
+const handleDateSelected = (date) => {
+  console.log('Date selected:', date);
+  selectedDay.value = date;
 };
 
 const filteredDeliverables = computed(() => {
@@ -344,45 +354,81 @@ async function fetchDeliverables(projectId) {
 }
 
 const onDateSelect = async (deliverableId, newDate, oldDate) => {
-
-  let oldDateConverted = new Date(oldDate);
-
-  await updateDeliverableDate(deliverableId, newDate);
-
-  // Get the date and update the deliverable
-  const deliverable = deliverables.value.find(d => d.id === deliverableId);
-  if (deliverable) {
-    deliverable.due_date = newDate;
-    deliverable.selectedDate = newDate; // Fix for Due date in project list doesn't update #138
-    deliverable.formattedDueDate = format(newDate, 'MMMM do, yyyy');
+  try {
+    // Convert dates to standardized format
+    let oldDateConverted = new Date(oldDate);
+    let newDateConverted = new Date(newDate);
+    
+    // Update in database first
+    await updateDeliverableDate(deliverableId, newDateConverted);
+    
+    // Find deliverable by its ID
+    const deliverableIndex = deliverables.value.findIndex(d => d.id === deliverableId);
+    if (deliverableIndex === -1) return;
+    
+    // Create clean date format for display
+    const formattedNewDate = format(newDateConverted, 'MMMM do, yyyy');
+    
+    // Update deliverable with new values (create a new object to avoid reference issues)
+    deliverables.value[deliverableIndex] = {
+      ...deliverables.value[deliverableIndex],
+      due_date: newDateConverted,
+      selectedDate: newDateConverted,
+      formattedDueDate: formattedNewDate
+    };
+    
+    // Remove old calendar attributes that match the old date
+    calendarViewAttrs.value = calendarViewAttrs.value.filter(attr => 
+      !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
+    );
+    
+    // Clean up deliverable attributes
+    if (deliverables.value[deliverableIndex].attrs) {
+      deliverables.value[deliverableIndex].attrs = 
+        deliverables.value[deliverableIndex].attrs.filter(attr => 
+          !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
+        );
+    } else {
+      deliverables.value[deliverableIndex].attrs = [];
+    }
+    
+    // Clean deliverable dates array
+    deliverableDates.value = deliverableDates.value.filter(date => 
+      date.getTime() !== oldDateConverted.getTime()
+    );
+    
+    // Add new date to arrays with clean references
+    deliverableDates.value.push(new Date(newDateConverted));
+    
+    // Add new attributes with primitive values where possible
+    const deliverable = deliverables.value[deliverableIndex];
+    deliverable.attrs.push({
+      key: `${deliverable.id}-${newDateConverted.getTime()}`,
+      highlight: {
+        color: '#5C7DF6',
+        fillMode: 'solid'
+      },
+      dates: new Date(newDateConverted) // Create a new date instance
+    });
+    
+    // Add to calendar with new date instance
+    calendarViewAttrs.value.push({
+      key: `${deliverable.title}-${newDateConverted.getTime()}`,
+      highlight: {
+        color: '#5C7DF6',
+        fillMode: 'outline'
+      },
+      popover: {
+        label: `${deliverable.id} - ${deliverable.title} (${deliverable.state_name})`,
+        color: '#5C7DF6',
+        fillMode: 'solid'
+      },
+      dot: true,
+      dates: new Date(newDateConverted) // Create a new date instance
+    });
+  } catch (error) {
+    console.error('Error updating date:', error);
   }
-
-  // remove the old date from the array
-  deliverableDates.value = deliverableDates.value.filter(date => date.getTime() !== newDate.getTime());
-
-  // remove the old date from the calendarViewAttrs
-  deliverable.attrs = deliverable.attrs.filter(attr => attr.dates.getTime() !== oldDateConverted.getTime());
-  calendarViewAttrs.value = calendarViewAttrs.value.filter(attr => attr.dates.getTime() !== oldDateConverted.getTime());
-
-  // add the new date to the array
-  deliverableDates.value.push(newDate);
-
-  // also add it to the calendarViewAttrs
-  calendarViewAttrs.value.push({
-    key: deliverable.title,
-    highlight: {
-      color: '#5C7DF6',
-      fillMode: 'outline'
-    },
-    popover: {
-      label: deliverable.id + ' - ' + deliverable.title + ' (' + deliverable.state_name + ')',
-      color: '#5C7DF6',
-      fillMode: 'solid'
-    },
-    dot: true,
-    dates: newDate
-  });
-  
 };
 
 const updateDeliverableDate = async (deliverableId, newDate) => {
@@ -527,6 +573,12 @@ watchEffect(() => {
 
     &:hover {
       background-color: rgba($black, 0.025);
+
+      .deliverable-actions {
+        .right-arrow {
+          width: 18px;
+        }
+      }
     }
 
     .deliverable-details {
@@ -534,6 +586,8 @@ watchEffect(() => {
       align-items: center;
       justify-content: center;
       gap: $spacing-xs;
+      width: 100%;
+      height: 44px;
 
       .deliverable-id {
         color: $gray-dark;
@@ -557,6 +611,8 @@ watchEffect(() => {
         color: $black;
         text-decoration: none;
         font-size: $font-size-xs;
+        width: 100%;
+        line-height: 44px;
 
         @media (max-width: 960px) {
           font-size: $font-size-xxs;
@@ -580,6 +636,9 @@ watchEffect(() => {
         border: $border;
         padding: $spacing-xxxs $spacing-xs;
         border-radius: $br-lg;
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         @media (max-width: 960px) {
           font-size: $font-size-xxs;
@@ -589,6 +648,9 @@ watchEffect(() => {
       .deliverable-updated-at {
         color: $gray-dark;
         font-size: $font-size-xs;
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         @media (max-width: 960px) {
           font-size: $font-size-xxs;
@@ -598,6 +660,9 @@ watchEffect(() => {
       .deliverable-workflow-state {
         position: relative;
         cursor: pointer;
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         .deliverable-workflow-state-popup {
           position: absolute;
@@ -606,6 +671,12 @@ watchEffect(() => {
           z-index: 1000;
           display: none;
         }
+      }
+
+      .right-arrow {
+        width: 0;
+        overflow: hidden;
+        transition: width 0.2s ease;
       }
 
       .deliverable-calendar {
