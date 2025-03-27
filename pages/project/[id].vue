@@ -58,9 +58,9 @@
                   <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
                 </div>
                 <div class="deliverable-actions">
-                  <div class="deliverable-updated-at">
+                  <!-- <div class="deliverable-updated-at">
                     {{ deliverable.formattedUpdatedAt }}
-                  </div>
+                  </div> -->
                   <span class="deliverable-state">{{ deliverable.state_name }}</span>
                   <Dropdown>
                     <template v-slot:trigger>
@@ -70,7 +70,7 @@
                       <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate, deliverable.due_date)" borderless />
                     </template>
                   </Dropdown>
-                  <Icon class="right-arrow" name="fluent:arrow-right-16-regular" size="1.5rem" />
+                  <Icon class="right-arrow" name="fluent:chevron-right-16-regular" size="1.5rem" />
                 </div>
               </div>
               <div class="no-deliverables" v-if="filteredDeliverables.length == 0">
@@ -79,9 +79,24 @@
             </div>
           </div>
           <div class="calendar-view" v-if="viewMode == 'calendar'">
-            <VCalendar :attributes="calendarViewAttrs" title-position="left" expanded borderless @dayclick="handleDateSelected" />
-            <section v-if="selectedDay != null">
-              {{ selectedDay }}
+            <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" />
+            <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
+              <section class="calendar-panel-header">
+                <span class="panel-title">
+                  Deliverables
+                </span>
+                <button class="button" @click="panelToggle">
+                  <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
+                </button>
+              </section>
+              <section class="calendar-panel-content">
+                <div class="no-deliverables" v-if="deliverablesByDate.length == 0">
+                  <p>No deliverables found for this date</p>
+                </div>
+                <div class="calendar-panel-deliverables" v-for="deliverable in deliverablesByDate">
+                  {{ deliverable.title }}
+                </div>
+              </section>
             </section>
           </div>
         </section>
@@ -139,16 +154,64 @@ const deliverableDates = ref([]);
 const viewMode = ref('list');
 const searchQuery = ref('')
 const selectedDay = ref(null);
+const panelState = ref('closed');
+const deliverablesByDate = ref([]);
 
 const listToggle = () => {
   viewMode.value = viewMode.value === 'list' ? 'calendar' : 'list';
   // localStorage.setItem('viewMode', JSON.stringify(viewMode.value));
 };
 
-const handleDateSelected = (date) => {
-  console.log('Date selected:', date);
-  selectedDay.value = date;
+const panelToggle = () => {
+  panelState.value = panelState.value === 'closed' ? 'open' : 'closed';
 };
+
+async function handleDateSelected(date) {
+  // format should be timestamptz
+  // like: 2025-03-11 22:00:00+00
+  const simplifiedDate = {
+    year: date.year,
+    month: date.month,
+    day: date.day,
+    date: new Date(date.year, date.month - 1, date.day),
+  };
+  
+  console.log('Date selected:', simplifiedDate);
+  selectedDay.value = simplifiedDate;
+
+  try {
+    deliverablesByDate.value = await loadDeliverableByDate(simplifiedDate.date);
+  } catch (error) {
+    console.error('Error fetching deliverables:', error.message);
+  }
+
+  if (panelState.value === 'closed') {
+    panelToggle();
+  }
+}
+
+async function loadDeliverableByDate(timestamptz) {
+
+  const targetDate = format(timestamptz, 'yyyy-MM-dd');
+  console.log('Target date:', targetDate);
+
+  try {
+    const { data, error } = await supabase
+      .from('deliverables')
+      .select('*')
+      .eq('due_date::date', targetDate)
+      .eq('project', projectId);
+
+
+    if (error) throw error;
+
+    return data;
+
+    console.log('Deliverables due on', targetDate, ':', data);
+  } catch (error) {
+    console.error('Error fetching deliverables:', error.message);
+  }
+}
 
 const filteredDeliverables = computed(() => {
   if (searchQuery.value != '') {
@@ -354,10 +417,16 @@ async function fetchDeliverables(projectId) {
 }
 
 const onDateSelect = async (deliverableId, newDate, oldDate) => {
+  
+  console.log('Updating date:', deliverableId, newDate, oldDate);
+
   try {
     // Convert dates to standardized format
     let oldDateConverted = new Date(oldDate);
     let newDateConverted = new Date(newDate);
+
+    console.log('Old date:', oldDateConverted);
+    console.log('New date:', newDateConverted);
     
     // Update in database first
     await updateDeliverableDate(deliverableId, newDateConverted);
@@ -366,7 +435,7 @@ const onDateSelect = async (deliverableId, newDate, oldDate) => {
     const deliverableIndex = deliverables.value.findIndex(d => d.id === deliverableId);
     if (deliverableIndex === -1) return;
     
-    // Create clean date format for display
+    // Create clean date format for display. This is shown to the user.
     const formattedNewDate = format(newDateConverted, 'MMMM do, yyyy');
     
     // Update deliverable with new values (create a new object to avoid reference issues)
@@ -377,16 +446,23 @@ const onDateSelect = async (deliverableId, newDate, oldDate) => {
       formattedDueDate: formattedNewDate
     };
     
+    console.log(calendarViewAttrs.value);
+
     // Remove old calendar attributes that match the old date
+    // This needs a conversion because in Postgres we are using date and not timestamptz
     calendarViewAttrs.value = calendarViewAttrs.value.filter(attr => 
-      !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
+      // !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
+      // console.log(attr.dates.toISOString(), oldDateConverted.toISOString())
+      !attr.dates || (attr.dates.toISOString() !== oldDateConverted.toISOString())
     );
     
     // Clean up deliverable attributes
+    // Same as above, we must convert the dates to strings for comparison
     if (deliverables.value[deliverableIndex].attrs) {
       deliverables.value[deliverableIndex].attrs = 
         deliverables.value[deliverableIndex].attrs.filter(attr => 
-          !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
+          // !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
+          !attr.dates || (attr.dates.toISOString() !== oldDateConverted.toISOString())
         );
     } else {
       deliverables.value[deliverableIndex].attrs = [];
@@ -394,11 +470,13 @@ const onDateSelect = async (deliverableId, newDate, oldDate) => {
     
     // Clean deliverable dates array
     deliverableDates.value = deliverableDates.value.filter(date => 
-      date.getTime() !== oldDateConverted.getTime()
+      // date.getTime() !== oldDateConverted.getTime()
+      date.toISOString() !== oldDateConverted.toISOString()
     );
     
     // Add new date to arrays with clean references
     deliverableDates.value.push(new Date(newDateConverted));
+    
     
     // Add new attributes with primitive values where possible
     const deliverable = deliverables.value[deliverableIndex];
@@ -514,6 +592,66 @@ watchEffect(() => {
   border: $border;
   border-radius: $br-lg;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+
+  .vc-expanded {
+    min-width: auto;
+  }
+
+  .calendar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    width: 100%;
+    border-left: $border;
+
+    &.open {
+      display: flex;
+      min-width: 300px;
+      width: 300px;
+    }
+
+    &.closed {
+      display: none;
+    }
+
+    .calendar-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 58px;
+      border-bottom: $border;
+      padding: 0 $spacing-md;
+
+      .panel-title {
+        font-size: $font-size-md;
+      }
+    }
+
+    .calendar-panel-content {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      padding: 0 $spacing-md;
+      overflow-y: auto;
+      height: 100%;
+
+      .calendar-panel-deliverables {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-sm;
+        border: $border;
+        border-radius: $br-md;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: rgba($black, 0.025);
+        }
+      }
+    }
+  }
 }
 
 .deliverables-list {

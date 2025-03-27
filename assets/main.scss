@@ -1006,11 +1006,10 @@ button.vertical,
 
     .vc-header {
         padding-bottom: $spacing-sm;
-        border-bottom: $border;
-        height: fit-content;
+        height: 48px;
 
         .vc-title {
-            font-size: $font-size-lg;
+            font-size: $font-size-md;
             font-weight: normal;
         }
     }
@@ -1064,5 +1063,15 @@ button.vertical,
 
     .vc-week {
         border-bottom: none;
+    }
+  }
+
+  .calendar-view {
+    .vc-container {
+        min-width: 100%;
+
+        &.open {
+            min-width: calc(100% - 300px);
+        }
     }
   }
