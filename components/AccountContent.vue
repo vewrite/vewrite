@@ -91,8 +91,6 @@ const avatar_path = ref('')
 const router = useRouter()
 const persona = useState('personaState')
 
-console.log('persona', persona.value)
-
 async function clickSelectPersona(type) {
 
     // Update the user's persona in the db

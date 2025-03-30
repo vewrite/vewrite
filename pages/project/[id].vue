@@ -44,7 +44,7 @@
 
         <section class="deliverables-view">
           <DeliverablesList v-if="viewModeDeliverable == 'list' && loading.deliverables == false" :deliverables="filteredDeliverables" />
-          <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" />
+          <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" :personaState="personaState" :isOwner="isOwner" :membersError="membersError" />
         </section>
       </section>
 
@@ -331,7 +331,6 @@ async function fetchDeliverables(projectId) {
 
       // Format the due date into something nicer
       deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
-      console.log('Due date:', deliverable.formattedDueDate);
 
       // Setup the calendar view attributes by resetting and setting new ones
       resetCalendarViewAttrs();

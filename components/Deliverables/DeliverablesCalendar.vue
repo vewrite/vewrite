@@ -4,11 +4,16 @@
     <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
       <section class="calendar-panel-header">
         <span class="panel-title">
-          Deliverables
+          {{ selectedDay ? format(selectedDay.date, 'MMMM do, yyyy') : 'No date selected' }}
         </span>
-        <button class="button" @click="panelToggle">
-          <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
-        </button>
+        <section class="panel-actions">
+          <button class="button" @click="panelToggle">
+            <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
+          </button>
+          <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">
+            <Icon name="fluent:add-20-regular" size="1.5rem" />
+          </button>
+        </section>
       </section>
       <section class="calendar-panel-content">
         <div class="no-deliverables" v-if="deliverablesByDate.length == 0">
@@ -47,7 +52,7 @@ import { format, parseISO } from 'date-fns';
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchDeliverable, onDateSelect } = useDeliverables();
+const { fetchDeliverable, onDateSelect, createDeliverableModal } = useDeliverables();
 
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
@@ -59,6 +64,9 @@ const props = defineProps({
   deliverables: Array,
   project: Object,
   calendarViewAttrs: Array,
+  personaState: String,
+  isOwner: Boolean,
+  membersError: Boolean
 });
 
 const deliverablesByDate = ref([]);
@@ -91,7 +99,6 @@ async function handleDateSelected(date) {
     date: new Date(date.year, date.month - 1, date.day),
   };
   
-  console.log('Date selected:', simplifiedDate);
   selectedDay.value = simplifiedDate;
 
   try {
@@ -106,8 +113,6 @@ async function handleDateSelected(date) {
 }
 
 async function loadDeliverableByDate(timestamptz) {
-
-  console.log('Loading deliverables for:', timestamptz);
 
   const targetDate = format(timestamptz, 'yyyy-MM-dd');
 
@@ -191,10 +196,16 @@ async function loadDeliverableByDate(timestamptz) {
       align-items: center;
       height: 58px;
       border-bottom: $border;
-      padding: 0 $spacing-md;
+      padding: 0 $spacing-sm 0 $spacing-sm;
 
       .panel-title {
         font-size: $font-size-md;
+      }
+
+      .panel-actions {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-xs;
       }
     }
 

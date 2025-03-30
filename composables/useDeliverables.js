@@ -339,7 +339,7 @@ export default function useDeliverables() {
     }
   }
 
-  function createDeliverableModal(projectId) {
+  function createDeliverableModal(projectId, selectedDate) {
     useModal().setType('large');
     useModal().setHeader('Create Deliverable');
     useModal().setContent('CreateDeliverableModal');
