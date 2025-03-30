@@ -398,7 +398,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-sm;
+    padding: $spacing-md $spacing-md $spacing-sm $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -410,10 +410,14 @@ textarea {
     backdrop-filter: blur(10px);
     z-index: 10;
 
+    &.right {
+        justify-content: flex-end;
+    }
+
     input {
         color: $black;
-        background: rgba($white, .35);
-        border-radius: $br-md;
+        background: rgba($brand, .025);
+        border-radius: $br-xl;
         border: $border;
         padding: $spacing-xxs $spacing-sm;
         width: 100%;
@@ -441,15 +445,13 @@ textarea {
         border-radius: $br-md;
         background: rgba($white, .35);
         transition: all 0.2s ease;
-        outline: 1px solid rgba($brand, 0);
+        outline: 2px solid rgba($white, 0);
         outline-offset: 0px;
 
-        &:active,
-        &:focus,
-        &:hover,
-        &:focus-within {
+        &:hover {
             border: 1px solid rgba($brand, 1);
-            outline: 0px solid rgba($brand, 0.1);
+            outline: 2px solid rgba($white, 1);
+            outline-offset: -3px;
             background: rgba($white, 1);
         }
 
@@ -465,23 +467,8 @@ textarea {
             text-transform: uppercase;
         }
 
-        svg {
-            transition: all 0.2s ease;
-            stroke-opacity: 0.5;
-            stroke-width: 1px;
-            width: 20px;
-            height: 20px;
-            transform: scale(0.9);
-
-            path,
-            mask path {
-                stroke: $black;
-                stroke-opacity: 0.65;
-            }
-        }
-
         .active {
-            background: rgba($brand, 0.1);
+            background: rgba($brand, 0.05);
             color: $brand;
 
             svg {
@@ -990,5 +977,101 @@ button.vertical,
     p {
       margin: 0;
       opacity: 0.35;
+    }
+  }
+
+  /* VCalendar */
+
+  .vc-popover-content-wrapper {
+    .vc-nav-arrow,
+    .vc-nav-title {
+        background: transparent;
+    }
+
+    .vc-nav-items {
+        .vc-nav-item {
+            background: transparent;
+
+            &.is-active {
+                background: $brand;
+            }
+        }
+    }
+  }
+
+  .vc-container {
+    button {
+        background: transparent;
+    }
+
+    .vc-header {
+        padding-bottom: $spacing-sm;
+        height: 48px;
+
+        .vc-title {
+            font-size: $font-size-md;
+            font-weight: normal;
+        }
+    }
+
+    .vc-weekdays {
+        background: rgba($brand, 0.025);
+        height: fit-content;
+    }
+
+    .vc-weekday {
+        color: rgba($black, 0.25);
+        padding: $spacing-xs 0;
+    }
+
+    .vc-weeks {
+        padding: 0;
+    }
+
+    .vc-week {
+        border-bottom: $border;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .vc-day {
+        padding: $spacing-md;
+
+        .vc-dots {
+            bottom: 1rem;
+            position: relative;
+        }
+    }
+  }
+
+
+  .dropdown-content {
+
+    .vc-header {
+
+        .vc-title {
+            font-size: $font-size-sm;
+            font-weight: normal;
+        }
+    }
+
+    .vc-day {
+        padding: initial;
+    }
+
+    .vc-week {
+        border-bottom: none;
+    }
+  }
+
+  .calendar-view {
+    .vc-container {
+        min-width: 100%;
+
+        &.open {
+            min-width: calc(100% - 500px);
+        }
     }
   }

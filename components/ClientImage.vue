@@ -28,8 +28,6 @@ async function fetchClientLogo(client) {
     return null
   }
 
-  console.log(data)
-
   if(data.logo_url === '') {
     const logoBlob = await fetch('/images/vewrite-personal-project.png').then(res => res.blob());
     src.value = URL.createObjectURL(logoBlob);

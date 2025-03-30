@@ -2,15 +2,14 @@
   <div id="Sidebar" :class="collapsed ? 'collapsed' : ''">
     <div class="sidebar-content">
       <div class="link-group">
-        <router-link to="/projects" :class="['link', isProjects ? 'router-link-active' : '']"><Icon name="fluent:folder-16-regular" size="1.75rem" /> Projects</router-link>
+        <router-link to="/projects" :class="['link', isProjects ? 'router-link-active' : '']"><Icon name="fluent:folder-16-regular" size="2rem" /> Projects</router-link>
         <!-- <router-link to="/workflows" :class="['link', isWorkflows ? 'router-link-active' : '']"><Icon name="fluent:flow-16-regular" size="1.75rem" /> Workflows</router-link> -->
-        <!-- <router-link v-if="personaState == 'manager'" to="/teams" :class="['link', isTeams ? 'router-link-active' : '']"><Icon name="fluent:people-16-regular" size="1.75rem" /> Teams</router-link> -->
-        <router-link v-if="personaState == 'manager'" to="/clients" :class="['link', isClients ? 'router-link-active' : '']"><Icon name="fluent:star-16-regular" size="1.75rem" /> Clients</router-link>
+        <router-link v-if="personaState == 'manager'" to="/clients" :class="['link', isClients ? 'router-link-active' : '']"><Icon name="fluent:star-16-regular" size="2rem" /> Clients</router-link>
       </div>
     </div>
     <div class="button clear toggle-sidebar" @click="toggleSidebar">
-      <Icon name="fluent:chevron-left-16-regular" size="1.5rem" v-if="!collapsed" />
-      <Icon name="fluent:chevron-right-16-regular" size="1.5rem" v-if="collapsed" />
+      <Icon name="fluent:chevron-left-16-regular" size="2rem" v-if="!collapsed" />
+      <Icon name="fluent:chevron-right-16-regular" size="2rem" v-if="collapsed" />
     </div>
   </div>
 </template>
@@ -38,10 +37,6 @@ const isProjects = computed(() => {
 
 const isWorkflows = computed(() => {
   return route.path.startsWith('/workflow/');
-});
-
-const isTeams = computed(() => {
-  return route.path.startsWith('/team/');
 });
 
 const isClients = computed(() => {
@@ -72,13 +67,18 @@ onMounted(() => {
 
 #Sidebar {
   height: 100%;
-  min-width: 160px;
+  min-width: 220px;
   transition: all 0.2s ease;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 0 0 $spacing-sm $spacing-sm;
+
+  @media (max-width: 1180px) {
+    min-width: 160px;
+  }
+
 
   &.collapsed {
     min-width: 60px;
@@ -164,16 +164,17 @@ onMounted(() => {
         padding: $spacing-xs $spacing-sm;
         border-radius: $br-lg;
         transition: background-color 0.18s ease;
-        color: rgba($black, 0.5);
+        color: rgba($black, 0.65);
         font-size: $font-size-xs;
         font-family: $font-family-main;
+        font-weight: bold;
         text-decoration: none;
         border: 1px solid rgba($brand, 0.0);
 
         &:hover,
         &.router-link-active,
         &.router-link-exact-active {
-          background-color: rgba($black, 0.05);
+          background-color: rgba($brand, 0.075);
           border: 1px solid rgba($black, 0.0);
           color: $black;
 

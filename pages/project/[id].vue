@@ -22,42 +22,30 @@
     </template>
     <template v-slot:body>
       <section v-if="loading.global == false && hasAccess">
+
+        <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
+          <Icon name="fluent:search-20-regular" size="2rem" />
+          <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
+          <div class="list-buttons">
+            <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle">
+              <Icon name="fluent:list-20-regular" size="1.65rem" />
+            </button>
+            <button :class="['list-icon', viewModeDeliverable == 'calendar' ? 'active' : '']" @click="listToggle">
+              <Icon name="fluent:calendar-20-regular" size="1.65rem" />
+            </button>
+          </div>
+        </div>
+
         <div class="project-details">
           <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
           <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
-        <div class="deliverables-list">
-          <div class="no-deliverables" v-if="loading.deliverables == false && deliverables.length == 0">
-            <p>No deliverables found for this project</p>
-          </div>
-          <div v-if="loading.deliverables == false && deliverables.length > 0" class="project-deliverables">
-            <div class="single-deliverable" v-for="deliverable in deliverables">
-              <div class="deliverable-details">
-                <div class="deliverable-type">
-                  <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-                  <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
-                </div>
-                <span class="deliverable-id">{{ deliverable.id }}</span>
-                <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
-              </div>
-              <div class="deliverable-actions">
-                <div class="deliverable-updated-at">
-                  {{ deliverable.formattedUpdatedAt }}
-                </div>
-                <span class="deliverable-state">{{ deliverable.state_name }}</span>
-                <Dropdown>
-                  <template v-slot:trigger>
-                    Due {{ deliverable.formattedDueDate }}
-                  </template>
-                  <template v-slot:menu>
-                    <VDatePicker :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate)" />
-                  </template>
-                </Dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
+
+        <section class="deliverables-view">
+          <DeliverablesList v-if="viewModeDeliverable == 'list' && loading.deliverables == false" :deliverables="filteredDeliverables" />
+          <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" :personaState="personaState" :isOwner="isOwner" :membersError="membersError" />
+        </section>
       </section>
 
       <section v-else-if="loading.global == false && !hasAccess" class="project-gate">
@@ -71,6 +59,9 @@
 
 <script setup>
 
+import DeliverablesList from '~/components/Deliverables/DeliverablesList.vue';
+import DeliverablesCalendar from '~/components/Deliverables/DeliverablesCalendar.vue';
+
 definePageMeta({
   layout: 'default',
   middleware: ['auth', 'project'],
@@ -80,10 +71,10 @@ definePageMeta({
 const personaState = useState('personaState');
 
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
-import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
-import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import { useRoute } from 'vue-router';
 import { parseISO, format } from 'date-fns';
+import ProjectOverview from '~/components/Projects/ProjectOverview.vue';
+import DeliverablesProgress from '~/components/DeliverablesProgress.vue';
 import AppPanel from '~/components/AppPanel.vue';
 
 // Project composable
@@ -106,22 +97,116 @@ import useWorkflow from '~/composables/useWorkflow';
 const { fetchStates, WorkflowStates } = useWorkflow();
 
 const supabase = useSupabaseClient();
-const loading = ref({
-  global: true,
-  deliverables: true
-});
+const user = useSupabaseUser();
+
+const loading = ref({ global: true, deliverables: true });
 const membersError = ref(false);
 
-const attrs = ref([
+const deliverableDates = ref([]);
+const viewModeDeliverable = ref('list');
+
+const searchQuery = ref('')
+
+// This is pushed into the DeliverablesCalendar component
+// It starts with today, and we push new deliverables into it when they are fetched
+const calendarViewAttrs = ref([
   {
     key: 'today',
     highlight: {
-      color: 'green',
+      color: '#5C7DF6',
       fillMode: 'solid'
     },
     dates: new Date()
   }
-])
+]);
+
+function resetCalendarViewAttrs() {
+  calendarViewAttrs.value = [
+    {
+      key: 'today',
+      highlight: {
+        color: '#5C7DF6',
+        fillMode: 'solid'
+      },
+      dates: new Date()
+    }
+  ];
+}
+
+async function setNewCalendarViewAttrs() {
+
+  try {
+    deliverables.value.forEach(deliverable => {
+
+      const dueDate = parseISO(deliverable.due_date);
+      if (isNaN(dueDate)) {
+        console.error('Invalid date:', deliverable.due_date);
+        return;
+      }
+
+      // Push the new deliverable into the calendar view
+      calendarViewAttrs.value.push({
+        key: deliverable.title,
+        highlight: {
+          color: '#5C7DF6',
+          fillMode: 'outline'
+        },
+        popover: {
+          label: deliverable.id + ' - ' + deliverable.title + ' (' + deliverable.state_name + ')',
+          color: '#5C7DF6',
+          fillMode: 'solid'
+        },
+        dot: true,
+        dates: dueDate
+      });
+      // }
+
+      if (!deliverable.attrs) {
+        deliverable.attrs = [];
+      }
+      deliverable.attrs.push({
+        key: deliverable.id,
+        highlight: {
+          color: '#5C7DF6',
+          fillMode: 'solid'
+        },
+        dates: dueDate
+      });
+    });
+
+  } catch (error) {
+    console.error('Error setting new calendar view attributes:', error.message);
+  }
+}
+
+// Get the route object and the meta from /middleware/role.js
+const route = useRoute();
+
+// Extract the project ID from the route parameters
+const projectId = route.params.id;
+
+// Fetch the project data from supabase
+const project = ref(null);
+const creator = ref(null);
+const deliverables = ref([]);
+const states = ref([]);
+const completedDeliverables = ref(0);
+
+const listToggle = () => {
+  viewModeDeliverable.value = viewModeDeliverable.value === 'list' ? 'calendar' : 'list';
+  localStorage.setItem('viewModeDeliverable', JSON.stringify(viewModeDeliverable.value));
+};
+
+const filteredDeliverables = computed(() => {
+  if (searchQuery.value != '') {
+  return deliverables.value.filter(
+    deliverable => 
+      deliverable.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+  } else {
+    return deliverables.value
+  }
+})
 
 async function checkMemberRequirements() {
   if (!project.value || !project.value.project_members) {
@@ -143,20 +228,6 @@ async function checkMemberRequirements() {
   }
   
 }
-
-// Get the route object and the meta from /middleware/role.js
-const route = useRoute();
-
-// Extract the project ID from the route parameters
-const projectId = route.params.id;
-
-// Fetch the project data from supabase
-const project = ref(null);
-const creator = ref(null);
-const deliverables = ref([]);
-const states = ref([]);
-const completedDeliverables = ref(0);
-const user = useSupabaseUser();
 
 // Roles
 const isOwner = computed(() => 
@@ -207,9 +278,7 @@ async function fetchWorkflowStates(workflowId) {
 
     // Fetch the states as an array of objects from the states table
     states.value = await Promise.all(states.value.map(async state => {
-      // return await fetchState(state);
       const fetchedState = await fetchSingleStateInstance(state);
-      // console.log(fetchedState);
       return {
         ...fetchedState
       }
@@ -262,7 +331,10 @@ async function fetchDeliverables(projectId) {
 
       // Format the due date into something nicer
       deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
-      deliverable.formattedUpdatedAt = format(parseISO(deliverable.updated_at), 'MMMM do, yyyy');
+
+      // Setup the calendar view attributes by resetting and setting new ones
+      resetCalendarViewAttrs();
+      await setNewCalendarViewAttrs();
 
       if (!deliverable.attrs) {
         deliverable.attrs = [];
@@ -270,7 +342,7 @@ async function fetchDeliverables(projectId) {
       deliverable.attrs.push({
         key: deliverable.id,
         highlight: {
-          color: 'red',
+          color: '#5C7DF6',
           fillMode: 'solid'
         },
         dates: dueDate
@@ -283,36 +355,12 @@ async function fetchDeliverables(projectId) {
   }
 }
 
-const onDateSelect = async (deliverableId, newDate) => {
-  await updateDeliverableDate(deliverableId, newDate);
-  const popup = document.getElementById(`deliverable-calendar-${deliverableId}`);
-  popup.style.display = 'none';
-
-  // Get the date and update the deliverable
-  const deliverable = deliverables.value.find(d => d.id === deliverableId);
-  if (deliverable) {
-    deliverable.due_date = newDate;
-    deliverable.formattedDueDate = format(newDate, 'MMMM do, yyyy');
-  }
-  
-};
-
-const updateDeliverableDate = async (deliverableId, newDate) => {
-  try {
-    const { data, error } = await supabase
-      .from('deliverables')
-      .update({ due_date: newDate })
-      .eq('id', deliverableId);
-
-    if (error) throw error;
-
-    console.log('Deliverable updated:', data);
-  } catch (error) {
-    console.error('Error updating deliverable:', error.message);
-  }
-};
-
 onMounted(async () => {
+
+  const savedState = localStorage.getItem('viewModeDeliverable');
+  if (savedState !== null) {
+    viewModeDeliverable.value = JSON.parse(savedState);
+  }
 
   const subscription = supabase
     .channel('deliverables')
@@ -332,9 +380,21 @@ onMounted(async () => {
     })
     .subscribe();
 
+  const deliverablesSubscription = supabase
+    .channel('deliverables')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'deliverables' }, payload => {
+      fetchDeliverables(projectId);
+
+      // Setup the calendar view attributes by resetting and setting new ones
+      resetCalendarViewAttrs();
+      setNewCalendarViewAttrs();
+    })
+    .subscribe();
+
   onUnmounted(() => {
     supabase.removeChannel(subscription);
     supabase.removeChannel(projectSubscription);
+    supabase.removeChannel(deliverablesSubscription);
   });
 
   await getProject(projectId);
@@ -361,148 +421,18 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
-  padding: $spacing-md;
-  margin: $spacing-sm;
-  background: rgba($white, 0.025);
-  backdrop-filter: blur(10px);
-  z-index: 2;
+  padding: 0 $spacing-md;
+  margin: $spacing-sm 0 $spacing-md;
   border-radius: $br-lg;
   position: sticky;
   top: $spacing-sm;
 }
 
-.deliverables-list {
+.deliverables-view {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0 $spacing-sm $spacing-sm;
-  gap: $spacing-sm;
-}
-
-.new-deliverable {
-  display: flex;
-  justify-content: flex-end;
-  margin: $spacing-md $spacing-md 0 $spacing-md;
-}
-
-.no-deliverables {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: $spacing-md;
   height: 100%;
-  color: $gray;
-}
-
-.project-deliverables {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  background: $white;
-  height: 100%;
-
-  .single-deliverable {
-    padding: $spacing-sm;
-    width: 100%;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: $br-xl;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: rgba($black, 0.025);
-    }
-
-    .deliverable-details {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: $spacing-xs;
-
-      .deliverable-id {
-        color: $gray-dark;
-        font-size: $font-size-xs;
-        padding-right: $spacing-xs;
-        border-right: $border;
-
-        @media (max-width: 960px) {
-          font-size: $font-size-xxs;
-        }
-      }
-
-      .deliverable-type {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $gray-dark;
-      }
-
-      .deliverable-title {
-        color: $black;
-        text-decoration: none;
-        font-size: $font-size-xs;
-
-        @media (max-width: 960px) {
-          font-size: $font-size-xxs;
-        }
-      }
-    }
-
-    .deliverable-title {
-      color: $black;
-      text-decoration: none;
-    }
-
-    .deliverable-actions {
-      display: flex;
-      align-items: center;
-      gap: $spacing-xs;
-
-      .deliverable-state {
-        color: $black;
-        font-size: $font-size-xs;
-        border: $border;
-        padding: $spacing-xxxs $spacing-xs;
-        border-radius: $br-lg;
-
-        @media (max-width: 960px) {
-          font-size: $font-size-xxs;
-        }
-      }
-
-      .deliverable-updated-at {
-        color: $gray-dark;
-        font-size: $font-size-xs;
-
-        @media (max-width: 960px) {
-          font-size: $font-size-xxs;
-        }
-      }
-
-      .deliverable-workflow-state {
-        position: relative;
-        cursor: pointer;
-
-        .deliverable-workflow-state-popup {
-          position: absolute;
-          top: calc(100% + 2px);
-          right: 0;
-          z-index: 1000;
-          display: none;
-        }
-      }
-
-      .deliverable-calendar {
-        display: flex;
-        position: relative;
-      
-        .deliverable-duedate {
-          cursor: pointer;
-        }
-      }
-    }
-  }
+  padding: 0 $spacing-md;
 }
 
 </style>
