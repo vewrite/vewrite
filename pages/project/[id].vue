@@ -9,7 +9,7 @@
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
         <button class="button primary" @click="manageProjectMembersModal(project.id)" v-if="personaState == 'manager' && isOwner">Manage members</button>
-        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
+        <button class="button primary" @click="handleOpenModal()" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
         <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -83,7 +83,7 @@ const { deleteProjectModal, manageProjectMembersModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { createDeliverableModal, fetchDeliverable, DeliverableError } = useDeliverables();
+const { createDeliverableModal, fetchDeliverable, useSelectedDate } = useDeliverables();
 
 // Client composable
 import useClient from '~/composables/useClient';
@@ -106,6 +106,13 @@ const deliverableDates = ref([]);
 const viewModeDeliverable = ref('list');
 
 const searchQuery = ref('')
+
+const selectedDeliverableDate = useSelectedDate();
+
+function handleOpenModal(selectedDate) {
+  selectedDeliverableDate.value = new Date();
+  createDeliverableModal(project.id)
+}
 
 // This is pushed into the DeliverablesCalendar component
 // It starts with today, and we push new deliverables into it when they are fetched

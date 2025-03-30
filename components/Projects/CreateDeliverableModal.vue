@@ -335,6 +335,10 @@ function clearErrors () {
     color: rgba($black, 0.65);
     background: rgba($gray-light, 0.25);
     min-height: 72px;
+
+    .form-content {
+      align-items: flex-end;
+    }
   }
 
   .team-assignment {
