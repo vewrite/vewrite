@@ -1074,4 +1074,15 @@ button.vertical,
             min-width: calc(100% - 500px);
         }
     }
+
+    &.weekly {
+        .vc-day {
+            padding: $spacing-xxl $spacing-md;
+            border-right: $border;
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+    }
   }

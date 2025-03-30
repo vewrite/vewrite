@@ -1,54 +1,64 @@
 <template>
-  <div class="calendar-view">
+  <div class="calendar-view" :class="calendarType">
 
-    <!-- Calendar -->
-    <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" />
-    
-    <!-- Panel -->
-    <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
-      <section class="calendar-panel-header">
-        <span class="panel-title">
-          {{ selectedDay ? format(selectedDay.date, 'MMMM do, yyyy') : 'No date selected' }}
-        </span>
-        <section class="panel-actions">
-          <button class="button" @click="panelToggle">
-            <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
-          </button>
-          <button class="button primary" @click="handleOpenModal(selectedDay.date)" v-if="personaState == 'manager' && isOwner && !membersError">
-            <Icon name="fluent:add-20-regular" size="1.5rem" />
-          </button>
+    <section class="calendar-switch">
+      <span @click="calendarTypeToggle('monthly')" class="switch-item" :class="calendarType == 'monthly' ? 'active' : ''">Monthly</span>
+      <span @click="calendarTypeToggle('weekly')" class="switch-item" :class="calendarType == 'weekly' ? 'active' : ''">Weekly</span>
+    </section>
+
+    <section class="calendar-layout">
+
+      <!-- Calendar -->
+      <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" v-if="calendarType == 'monthly'" />
+      <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" view="weekly" v-if="calendarType == 'weekly'" />
+      
+      <!-- Panel -->
+      <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
+        <section class="calendar-panel-header">
+          <span class="panel-title">
+            {{ selectedDay ? format(selectedDay.date, 'MMMM do, yyyy') : 'No date selected' }}
+          </span>
+          <section class="panel-actions">
+            <button class="button" @click="panelToggle">
+              <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
+            </button>
+            <button class="button primary" @click="handleOpenModal(selectedDay.date)" v-if="personaState == 'manager' && isOwner && !membersError">
+              <Icon name="fluent:add-20-regular" size="1.5rem" />
+            </button>
+          </section>
+        </section>
+        <section class="calendar-panel-content">
+          
+          <Loading v-if="loading" type="small" class="padded-loader" />
+          
+          <div class="no-deliverables" v-if="deliverablesByDate.length == 0 && !loading">
+            <p>No deliverables found for this date</p>
+          </div>
+          <div class="calendar-panel-deliverables" v-if="!loading" v-for="deliverable in deliverablesByDate">
+            <div class="deliverable-details">
+              <div class="deliverable-type">
+                <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
+                <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+                <span class="deliverable-id">{{ deliverable.id }}</span>
+              </div>
+              <span class="deliverable-state">{{ deliverable.state_name }}</span>
+            </div>
+            <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
+            <div class="deliverable-actions">
+              <Dropdown position="left">
+                <template v-slot:trigger>
+                  Due {{ deliverable.formattedDueDate }}
+                </template>
+                <template v-slot:menu>
+                  <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="handleOnDateSelect(deliverable.id, deliverable.selectedDate)" borderless />
+                </template>
+              </Dropdown>
+              <router-link :to="'/deliverable/' + deliverable.id" class="button primary">Open</router-link>
+            </div>
+          </div>
         </section>
       </section>
-      <section class="calendar-panel-content">
-        
-        <Loading v-if="loading" type="small" class="padded-loader" />
-        
-        <div class="no-deliverables" v-if="deliverablesByDate.length == 0 && !loading">
-          <p>No deliverables found for this date</p>
-        </div>
-        <div class="calendar-panel-deliverables" v-if="!loading" v-for="deliverable in deliverablesByDate">
-          <div class="deliverable-details">
-            <div class="deliverable-type">
-              <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-              <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
-              <span class="deliverable-id">{{ deliverable.id }}</span>
-            </div>
-            <span class="deliverable-state">{{ deliverable.state_name }}</span>
-          </div>
-          <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
-          <div class="deliverable-actions">
-            <Dropdown position="left">
-              <template v-slot:trigger>
-                Due {{ deliverable.formattedDueDate }}
-              </template>
-              <template v-slot:menu>
-                <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="handleOnDateSelect(deliverable.id, deliverable.selectedDate)" borderless />
-              </template>
-            </Dropdown>
-            <router-link :to="'/deliverable/' + deliverable.id" class="button primary">Open</router-link>
-          </div>
-        </div>
-      </section>
+    
     </section>
     
   </div>
@@ -71,6 +81,8 @@ const selectedDeliverableDate = useSelectedDate();
 
 const loading = ref(false);
 
+const calendarType = ref('weekly');
+
 const props = defineProps({
   deliverables: Array,
   project: Object,
@@ -88,6 +100,10 @@ const panelState = ref('closed');
 
 const panelToggle = () => {
   panelState.value = panelState.value === 'closed' ? 'open' : 'closed';
+};
+
+const calendarTypeToggle = (type) => {
+  calendarType.value = type;
 };
 
 function handleOpenModal(selectedDate) {
@@ -189,10 +205,47 @@ async function loadDeliverableByDate(timestamptz) {
   border: $border;
   border-radius: $br-lg;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+
+  .calendar-switch {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-sm;
+    border-bottom: $border;
+    overflow: visible;
+    z-index: 1;
+    position: relative;
+
+    .switch-item {
+      cursor: pointer;
+      padding: $spacing-sm;
+      border-bottom: 1px solid transparent;
+      margin-bottom: -1px;
+
+      &.active {
+        color: $brand;
+        border-bottom: 1px solid $brand;
+      }
+    }
+  }
 
   .vc-expanded {
     min-width: auto;
+  }
+
+  .calendar-layout {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-sm;
+    height: 100%;
+
+    .v-calendar {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .calendar-panel {
@@ -204,8 +257,6 @@ async function loadDeliverableByDate(timestamptz) {
 
     &.open {
       display: flex;
-      min-width: 500px;
-      width: 500px;
     }
 
     &.closed {
