@@ -13,6 +13,9 @@ export default function useDeliverables() {
   const supabase = useSupabaseClient();
   const DeliverableStates = ref([]);
   const router = useRouter();
+  const useSelectedDate = () => {
+    return useState('selected-date', () => null)
+  }
 
   const { fetchProjectWorkflow, fetchStates, WorkflowData, WorkflowError } = useWorkflow();
 
@@ -585,7 +588,8 @@ export default function useDeliverables() {
     assignToRole,
     formatDate,
     onDateSelect,
-    updateDeliverableDate
+    updateDeliverableDate,
+    useSelectedDate
   }
 
 }

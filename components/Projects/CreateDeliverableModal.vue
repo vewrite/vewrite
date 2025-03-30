@@ -142,7 +142,11 @@ const setDeliverableRole = (member, role) => {
 }
 
 import useDeliverables from '~/composables/useDeliverables';
-const { createDeliverable } = useDeliverables();
+const { createDeliverable, useSelectedDate, formatDate } = useDeliverables();
+
+// state passed from deliverable calendar
+const selectedDeliverableDate = useSelectedDate();
+console.log(selectedDeliverableDate.value);
 
 import useProject from '~/composables/useProject';
 const { getProjectDetails } = useProject();
@@ -161,6 +165,13 @@ const projectId = route.params.id;
 const loading = ref(false);
 const membersError = ref(false);
 
+// computed property for selected date
+// first check if selectedDeliverableDate is set
+// if not, use the current date
+const selectedDate = computed(() => {
+  return selectedDeliverableDate.value ? selectedDeliverableDate.value : new Date();
+})
+
 // Set some sane defaults for the deliverable
 const deliverable = reactive({
   title: '',
@@ -168,7 +179,7 @@ const deliverable = reactive({
   created_at: new Date(),
   updated_at: new Date(),
   project: projectId,
-  due_date: new Date(),
+  due_date: selectedDate.value,
   workflow_state: '43',
   content: {
     type: 'content',

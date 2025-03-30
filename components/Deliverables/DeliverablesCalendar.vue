@@ -10,7 +10,7 @@
           <button class="button" @click="panelToggle">
             <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
           </button>
-          <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">
+          <button class="button primary" @click="handleOpenModal(selectedDay.date)" v-if="personaState == 'manager' && isOwner && !membersError">
             <Icon name="fluent:add-20-regular" size="1.5rem" />
           </button>
         </section>
@@ -52,13 +52,14 @@ import { format, parseISO } from 'date-fns';
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchDeliverable, onDateSelect, createDeliverableModal } = useDeliverables();
+const { fetchDeliverable, onDateSelect, createDeliverableModal, useSelectedDate } = useDeliverables();
 
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchStateInstanceName } = useWorkflowStateInstances();
 
 const supabase = useSupabaseClient();
+const selectedDeliverableDate = useSelectedDate();
 
 const props = defineProps({
   deliverables: Array,
@@ -78,6 +79,11 @@ const panelState = ref('closed');
 const panelToggle = () => {
   panelState.value = panelState.value === 'closed' ? 'open' : 'closed';
 };
+
+function handleOpenModal(selectedDate) {
+  selectedDeliverableDate.value = selectedDate;
+  createDeliverableModal(props.project.id)
+}
 
 async function handleOnDateSelect(deliverableId, selectedDate) {
   try {
