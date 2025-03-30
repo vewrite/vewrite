@@ -30,7 +30,7 @@
                 Due {{ deliverable.formattedDueDate }}
               </template>
               <template v-slot:menu>
-                <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate, deliverable.due_date)" borderless />
+                <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="handleOnDateSelect(deliverable.id, deliverable.selectedDate)" borderless />
               </template>
             </Dropdown>
             <router-link :to="'/deliverable/' + deliverable.id" class="button primary">Open</router-link>
@@ -47,14 +47,13 @@ import { format, parseISO } from 'date-fns';
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchDeliverable, formatDate, onDateSelect, updateDeliverableDate } = useDeliverables();
+const { fetchDeliverable, onDateSelect } = useDeliverables();
 
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchStateInstanceName } = useWorkflowStateInstances();
 
 const supabase = useSupabaseClient();
-const user = useSupabaseUser();
 
 const props = defineProps({
   deliverables: Array,
@@ -71,6 +70,16 @@ const panelState = ref('closed');
 const panelToggle = () => {
   panelState.value = panelState.value === 'closed' ? 'open' : 'closed';
 };
+
+async function handleOnDateSelect(deliverableId, selectedDate) {
+  try {
+    await onDateSelect(deliverableId, selectedDate);
+    deliverablesByDate.value = await loadDeliverableByDate(selectedDate);
+  } catch (error) {
+    console.error('Error selecting date:', error.message);
+  }
+
+}
 
 async function handleDateSelected(date) {
   // format should be timestamptz
@@ -97,6 +106,8 @@ async function handleDateSelected(date) {
 }
 
 async function loadDeliverableByDate(timestamptz) {
+
+  console.log('Loading deliverables for:', timestamptz);
 
   const targetDate = format(timestamptz, 'yyyy-MM-dd');
 

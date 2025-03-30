@@ -39,9 +39,6 @@
 import useDeliverables from '~/composables/useDeliverables';
 const { onDateSelect } = useDeliverables();
 
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
-
 const props = defineProps({
   deliverables: Array,
   project: Object

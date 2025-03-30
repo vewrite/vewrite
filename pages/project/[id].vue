@@ -331,6 +331,7 @@ async function fetchDeliverables(projectId) {
 
       // Format the due date into something nicer
       deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
+      console.log('Due date:', deliverable.formattedDueDate);
 
       // Setup the calendar view attributes by resetting and setting new ones
       resetCalendarViewAttrs();
