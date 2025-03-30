@@ -1,6 +1,10 @@
 <template>
   <div class="calendar-view">
+
+    <!-- Calendar -->
     <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" />
+    
+    <!-- Panel -->
     <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
       <section class="calendar-panel-header">
         <span class="panel-title">
@@ -16,10 +20,13 @@
         </section>
       </section>
       <section class="calendar-panel-content">
-        <div class="no-deliverables" v-if="deliverablesByDate.length == 0">
+        
+        <Loading v-if="loading" type="small" class="padded-loader" />
+        
+        <div class="no-deliverables" v-if="deliverablesByDate.length == 0 && !loading">
           <p>No deliverables found for this date</p>
         </div>
-        <div class="calendar-panel-deliverables" v-for="deliverable in deliverablesByDate">
+        <div class="calendar-panel-deliverables" v-if="!loading" v-for="deliverable in deliverablesByDate">
           <div class="deliverable-details">
             <div class="deliverable-type">
               <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
@@ -43,6 +50,7 @@
         </div>
       </section>
     </section>
+    
   </div>
 </template>
 
@@ -60,6 +68,8 @@ const { fetchStateInstanceName } = useWorkflowStateInstances();
 
 const supabase = useSupabaseClient();
 const selectedDeliverableDate = useSelectedDate();
+
+const loading = ref(false);
 
 const props = defineProps({
   deliverables: Array,
@@ -96,6 +106,13 @@ async function handleOnDateSelect(deliverableId, selectedDate) {
 }
 
 async function handleDateSelected(date) {
+
+  loading.value = true;
+
+  if (panelState.value === 'closed') {
+    panelToggle();
+  }
+
   // format should be timestamptz
   // like: 2025-03-11 22:00:00+00
   const simplifiedDate = {
@@ -111,11 +128,10 @@ async function handleDateSelected(date) {
     deliverablesByDate.value = await loadDeliverableByDate(simplifiedDate.date);
   } catch (error) {
     console.error('Error fetching deliverables:', error.message);
+  } finally {
+    loading.value = false;
   }
 
-  if (panelState.value === 'closed') {
-    panelToggle();
-  }
 }
 
 async function loadDeliverableByDate(timestamptz) {
