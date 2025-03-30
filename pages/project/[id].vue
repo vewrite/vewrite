@@ -43,51 +43,8 @@
         </div>
 
         <section class="deliverables-view">
-
-          <!-- Deliverables list component -->
           <DeliverablesList v-if="viewModeDeliverable == 'list' && loading.deliverables == false" :deliverables="filteredDeliverables" />
-
-          <!-- Deliverables calendar component -->
-          <div class="calendar-view" v-if="viewModeDeliverable == 'calendar'">
-            <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" />
-            <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
-              <section class="calendar-panel-header">
-                <span class="panel-title">
-                  Deliverables
-                </span>
-                <button class="button" @click="panelToggle">
-                  <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
-                </button>
-              </section>
-              <section class="calendar-panel-content">
-                <div class="no-deliverables" v-if="deliverablesByDate.length == 0">
-                  <p>No deliverables found for this date</p>
-                </div>
-                <div class="calendar-panel-deliverables" v-for="deliverable in deliverablesByDate">
-                  <div class="deliverable-details">
-                    <div class="deliverable-type">
-                      <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-                      <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
-                      <span class="deliverable-id">{{ deliverable.id }}</span>
-                    </div>
-                    <span class="deliverable-state">{{ deliverable.state_name }}</span>
-                  </div>
-                  <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
-                  <div class="deliverable-actions">
-                    <Dropdown position="left">
-                      <template v-slot:trigger>
-                        Due {{ deliverable.formattedDueDate }}
-                      </template>
-                      <template v-slot:menu>
-                        <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="onDateSelect(deliverable.id, deliverable.selectedDate, deliverable.due_date)" borderless />
-                      </template>
-                    </Dropdown>
-                    <router-link :to="'/deliverable/' + deliverable.id" class="button primary">Open</router-link>
-                  </div>
-                </div>
-              </section>
-            </section>
-          </div>
+          <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" />
         </section>
       </section>
 
@@ -101,6 +58,9 @@
 </template>
 
 <script setup>
+
+import DeliverablesList from '~/components/Deliverables/DeliverablesList.vue';
+import DeliverablesCalendar from '~/components/Deliverables/DeliverablesCalendar.vue';
 
 definePageMeta({
   layout: 'default',
@@ -146,12 +106,78 @@ const deliverableDates = ref([]);
 const viewModeDeliverable = ref('list');
 
 const searchQuery = ref('')
-const selectedDay = ref(null);
 
-// Calendar panel state
-const panelState = ref('closed');
+// This is pushed into the DeliverablesCalendar component
+// It starts with today, and we push new deliverables into it when they are fetched
+const calendarViewAttrs = ref([
+  {
+    key: 'today',
+    highlight: {
+      color: '#5C7DF6',
+      fillMode: 'solid'
+    },
+    dates: new Date()
+  }
+]);
 
-const deliverablesByDate = ref([]);
+function resetCalendarViewAttrs() {
+  calendarViewAttrs.value = [
+    {
+      key: 'today',
+      highlight: {
+        color: '#5C7DF6',
+        fillMode: 'solid'
+      },
+      dates: new Date()
+    }
+  ];
+}
+
+async function setNewCalendarViewAttrs() {
+
+  try {
+    deliverables.value.forEach(deliverable => {
+
+      const dueDate = parseISO(deliverable.due_date);
+      if (isNaN(dueDate)) {
+        console.error('Invalid date:', deliverable.due_date);
+        return;
+      }
+
+      // Push the new deliverable into the calendar view
+      calendarViewAttrs.value.push({
+        key: deliverable.title,
+        highlight: {
+          color: '#5C7DF6',
+          fillMode: 'outline'
+        },
+        popover: {
+          label: deliverable.id + ' - ' + deliverable.title + ' (' + deliverable.state_name + ')',
+          color: '#5C7DF6',
+          fillMode: 'solid'
+        },
+        dot: true,
+        dates: dueDate
+      });
+      // }
+
+      if (!deliverable.attrs) {
+        deliverable.attrs = [];
+      }
+      deliverable.attrs.push({
+        key: deliverable.id,
+        highlight: {
+          color: '#5C7DF6',
+          fillMode: 'solid'
+        },
+        dates: dueDate
+      });
+    });
+
+  } catch (error) {
+    console.error('Error setting new calendar view attributes:', error.message);
+  }
+}
 
 // Get the route object and the meta from /middleware/role.js
 const route = useRoute();
@@ -171,79 +197,6 @@ const listToggle = () => {
   localStorage.setItem('viewModeDeliverable', JSON.stringify(viewModeDeliverable.value));
 };
 
-const panelToggle = () => {
-  panelState.value = panelState.value === 'closed' ? 'open' : 'closed';
-};
-
-async function handleDateSelected(date) {
-  // format should be timestamptz
-  // like: 2025-03-11 22:00:00+00
-  const simplifiedDate = {
-    year: date.year,
-    month: date.month,
-    day: date.day,
-    date: new Date(date.year, date.month - 1, date.day),
-  };
-  
-  console.log('Date selected:', simplifiedDate);
-  selectedDay.value = simplifiedDate;
-
-  try {
-    deliverablesByDate.value = await loadDeliverableByDate(simplifiedDate.date);
-  } catch (error) {
-    console.error('Error fetching deliverables:', error.message);
-  }
-
-  if (panelState.value === 'closed') {
-    panelToggle();
-  }
-}
-
-async function loadDeliverableByDate(timestamptz) {
-
-  const targetDate = format(timestamptz, 'yyyy-MM-dd');
-  console.log('Target date:', targetDate);
-
-  try {
-    const { data, error } = await supabase
-      .from('deliverables')
-      .select('*')
-      .eq('due_date::date', targetDate)
-      .eq('project', projectId);
-
-    if (error) throw error;
-
-    await Promise.all(data.map(async deliverable => {
-      try {
-        // Workflow state instance name
-        const state_name = await fetchStateInstanceName(deliverable.workflow_state);
-        deliverable.state_name = state_name[0].instance_name;
-      } catch (error) {
-        console.error('Error fetching state:', error.message);
-      }
-
-      try {
-        await fetchDeliverable(deliverable.id);
-      } catch (error) {
-        console.error('Error fetching content type:', error.message);
-      }
-
-      // Due date
-      const dueDate = parseISO(deliverable.due_date);
-
-      // Format the due date into something nicer
-      deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
-
-    }));
-
-    return data;
-
-    console.log('Deliverables due on', targetDate, ':', data);
-  } catch (error) {
-    console.error('Error fetching deliverables:', error.message);
-  }
-}
-
 const filteredDeliverables = computed(() => {
   if (searchQuery.value != '') {
   return deliverables.value.filter(
@@ -254,18 +207,6 @@ const filteredDeliverables = computed(() => {
     return deliverables.value
   }
 })
-
-// Set today's date for the calendar view
-const calendarViewAttrs = ref([
-  {
-    key: 'today',
-    highlight: {
-      color: '#5C7DF6',
-      fillMode: 'solid'
-    },
-    dates: new Date()
-  }
-]);
 
 async function checkMemberRequirements() {
   if (!project.value || !project.value.project_members) {
@@ -337,9 +278,7 @@ async function fetchWorkflowStates(workflowId) {
 
     // Fetch the states as an array of objects from the states table
     states.value = await Promise.all(states.value.map(async state => {
-      // return await fetchState(state);
       const fetchedState = await fetchSingleStateInstance(state);
-      // console.log(fetchedState);
       return {
         ...fetchedState
       }
@@ -393,25 +332,9 @@ async function fetchDeliverables(projectId) {
       // Format the due date into something nicer
       deliverable.formattedDueDate = format(dueDate, 'MMMM do, yyyy');
 
-      // Pre-check if the deliverable is already in the array
-      if (!deliverableDates.value.some(date => date.getTime() === dueDate.getTime())) {
-        deliverableDates.value.push(dueDate); // Use the already parsed dueDate
-
-        calendarViewAttrs.value.push({
-          key: deliverable.title,
-          highlight: {
-            color: '#5C7DF6',
-            fillMode: 'outline'
-          },
-          popover: {
-            label: deliverable.id + ' - ' + deliverable.title + ' (' + deliverable.state_name + ')',
-            color: '#5C7DF6',
-            fillMode: 'solid'
-          },
-          dot: true,
-          dates: dueDate
-        });
-      }
+      // Setup the calendar view attributes by resetting and setting new ones
+      resetCalendarViewAttrs();
+      await setNewCalendarViewAttrs();
 
       if (!deliverable.attrs) {
         deliverable.attrs = [];
@@ -431,113 +354,6 @@ async function fetchDeliverables(projectId) {
     console.error('Error fetching deliverables:', error.message);
   }
 }
-
-// const onDateSelect = async (deliverableId, newDate, oldDate) => {
-  
-//   console.log('Updating date:', deliverableId, newDate, oldDate);
-
-//   try {
-//     // Convert dates to standardized format
-//     let oldDateConverted = new Date(oldDate);
-//     let newDateConverted = new Date(newDate);
-
-//     console.log('Old date:', oldDateConverted);
-//     console.log('New date:', newDateConverted);
-    
-//     // Update in database first
-//     await updateDeliverableDate(deliverableId, newDateConverted);
-    
-//     // Find deliverable by its ID
-//     const deliverableIndex = deliverables.value.findIndex(d => d.id === deliverableId);
-//     if (deliverableIndex === -1) return;
-    
-//     // Create clean date format for display. This is shown to the user.
-//     const formattedNewDate = format(newDateConverted, 'MMMM do, yyyy');
-    
-//     // Update deliverable with new values (create a new object to avoid reference issues)
-//     deliverables.value[deliverableIndex] = {
-//       ...deliverables.value[deliverableIndex],
-//       due_date: newDateConverted,
-//       selectedDate: newDateConverted,
-//       formattedDueDate: formattedNewDate
-//     };
-    
-//     console.log(calendarViewAttrs.value);
-
-//     // Remove old calendar attributes that match the old date
-//     // This needs a conversion because in Postgres we are using date and not timestamptz
-//     calendarViewAttrs.value = calendarViewAttrs.value.filter(attr => 
-//       // !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
-//       // console.log(attr.dates.toISOString(), oldDateConverted.toISOString())
-//       !attr.dates || (attr.dates.toISOString() !== oldDateConverted.toISOString())
-//     );
-    
-//     // Clean up deliverable attributes
-//     // Same as above, we must convert the dates to strings for comparison
-//     if (deliverables.value[deliverableIndex].attrs) {
-//       deliverables.value[deliverableIndex].attrs = 
-//         deliverables.value[deliverableIndex].attrs.filter(attr => 
-//           // !attr.dates || (attr.dates.getTime && attr.dates.getTime() !== oldDateConverted.getTime())
-//           !attr.dates || (attr.dates.toISOString() !== oldDateConverted.toISOString())
-//         );
-//     } else {
-//       deliverables.value[deliverableIndex].attrs = [];
-//     }
-    
-//     // Clean deliverable dates array
-//     deliverableDates.value = deliverableDates.value.filter(date => 
-//       // date.getTime() !== oldDateConverted.getTime()
-//       date.toISOString() !== oldDateConverted.toISOString()
-//     );
-    
-//     // Add new date to arrays with clean references
-//     deliverableDates.value.push(new Date(newDateConverted));
-    
-    
-//     // Add new attributes with primitive values where possible
-//     const deliverable = deliverables.value[deliverableIndex];
-//     deliverable.attrs.push({
-//       key: `${deliverable.id}-${newDateConverted.getTime()}`,
-//       highlight: {
-//         color: '#5C7DF6',
-//         fillMode: 'solid'
-//       },
-//       dates: new Date(newDateConverted) // Create a new date instance
-//     });
-    
-//     // Add to calendar with new date instance
-//     calendarViewAttrs.value.push({
-//       key: `${deliverable.title}-${newDateConverted.getTime()}`,
-//       highlight: {
-//         color: '#5C7DF6',
-//         fillMode: 'outline'
-//       },
-//       popover: {
-//         label: `${deliverable.id} - ${deliverable.title} (${deliverable.state_name})`,
-//         color: '#5C7DF6',
-//         fillMode: 'solid'
-//       },
-//       dot: true,
-//       dates: new Date(newDateConverted) // Create a new date instance
-//     });
-//   } catch (error) {
-//     console.error('Error updating date:', error);
-//   }
-// };
-
-// const updateDeliverableDate = async (deliverableId, newDate) => {
-//   try {
-//     const { data, error } = await supabase
-//       .from('deliverables')
-//       .update({ due_date: newDate })
-//       .eq('id', deliverableId);
-
-//     if (error) throw error;
-
-//   } catch (error) {
-//     console.error('Error updating deliverable:', error.message);
-//   }
-// };
 
 onMounted(async () => {
 
@@ -568,6 +384,10 @@ onMounted(async () => {
     .channel('deliverables')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'deliverables' }, payload => {
       fetchDeliverables(projectId);
+
+      // Setup the calendar view attributes by resetting and setting new ones
+      resetCalendarViewAttrs();
+      setNewCalendarViewAttrs();
     })
     .subscribe();
 
@@ -613,121 +433,6 @@ watchEffect(() => {
   gap: $spacing-md;
   height: 100%;
   padding: 0 $spacing-md;
-}
-
-.calendar-view {
-  height: 100%;
-  width: 100%;
-  border: $border;
-  border-radius: $br-lg;
-  display: flex;
-  flex-direction: row;
-
-  .vc-expanded {
-    min-width: auto;
-  }
-
-  .calendar-panel {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-    width: 100%;
-    border-left: $border;
-
-    &.open {
-      display: flex;
-      min-width: 500px;
-      width: 500px;
-    }
-
-    &.closed {
-      display: none;
-    }
-
-    .calendar-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 58px;
-      border-bottom: $border;
-      padding: 0 $spacing-md;
-
-      .panel-title {
-        font-size: $font-size-md;
-      }
-    }
-
-    .calendar-panel-content {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-sm;
-      padding: 0 $spacing-sm;
-      height: 100%;
-
-      .no-deliverables {
-        font-size: $font-size-xs;
-        text-align: center;
-      }
-
-      .calendar-panel-deliverables {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        padding: $spacing-sm;
-        border: $border;
-        border-radius: $br-md;
-        transition: background-color 0.2s ease;
-
-        .deliverable-details {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-
-          .deliverable-type {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: $gray-dark;
-            gap: $spacing-xxs;
-          }
-
-          .deliverable-id,
-          .deliverable-state {
-            color: $gray-dark;
-            font-size: $font-size-xs;
-          }
-
-        }
-
-        .deliverable-title {
-          color: $black;
-          text-decoration: none;
-          font-size: $font-size-sm;
-          width: 100%;
-          line-height: 54px;
-          text-align: center;
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-start;
-          align-items: center;
-          gap: $spacing-xxs;
-        }
-
-        .deliverable-actions {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-        }
-
-        &:hover {
-          background-color: rgba($black, 0.025);
-        }
-      }
-    }
-  }
 }
 
 </style>

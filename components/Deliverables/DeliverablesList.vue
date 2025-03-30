@@ -35,7 +35,9 @@
 
 <script setup>
 
-import { format, parseISO } from 'date-fns';
+// Deliverables composable
+import useDeliverables from '~/composables/useDeliverables';
+const { onDateSelect } = useDeliverables();
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
@@ -44,53 +46,6 @@ const props = defineProps({
   deliverables: Array,
   project: Object
 });
-
-// returns format 'yyyy-MM-dd'
-function formatDate(date){
-  // If date is already a string in ISO format
-  let dateObj;
-  
-  if (typeof date === 'string') {
-    // Parse the ISO string to a Date object
-    dateObj = parseISO(date);
-  } else {
-    // Already a Date object
-    dateObj = date;
-  }
-  
-  // Format to yyyy-MM-dd and return
-  return format(dateObj, 'yyyy-MM-dd');
-}
-
-const onDateSelect = async (deliverableId, newDate) => {
-
-  try {
-    // Convert date to date format for postgres using the format 'yyyy-MM-dd'
-    let newDateConverted = formatDate(newDate);
-    newDateConverted = new Date(newDateConverted);
-    console.log('New date:', newDateConverted);
-    
-    // Update in database first
-    await updateDeliverableDate(deliverableId, newDateConverted);
-    
-  } catch (error) {
-    console.error('Error updating date:', error);
-  }
-};
-
-const updateDeliverableDate = async (deliverableId, newDate) => {
-  try {
-    const { error } = await supabase
-      .from('deliverables')
-      .update({ due_date: newDate })
-      .eq('id', deliverableId);
-
-    if (error) throw error;
-
-  } catch (error) {
-    console.error('Error updating deliverable:', error.message);
-  }
-};
 
 </script>
 
