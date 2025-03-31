@@ -21,20 +21,22 @@
       </div>
     </template>
     <template v-slot:body>
-      <section v-if="loading.global == false && hasAccess">
+      <section class="deliverables-wrapper" v-if="loading.global == false && hasAccess">
 
         <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
+          
           <Icon name="fluent:search-20-regular" size="2rem" />
           <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
+          
           <div class="list-buttons">
             <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle('list')">
-              <Icon name="fluent:list-20-regular" size="1.65rem" />
+              <Icon name="fluent:list-20-regular" size="1.65rem" /> List
             </button>
             <button :class="['list-icon', viewModeDeliverable == 'calendar' ? 'active' : '']" @click="listToggle('calendar')">
-              <Icon name="fluent:calendar-20-regular" size="1.65rem" />
+              <Icon name="fluent:calendar-20-regular" size="1.65rem" /> Calendar
             </button>
             <button :class="['kanban-icon', viewModeDeliverable == 'kanban' ? 'active' : '']" @click="listToggle('kanban')">
-              <Icon name="fluent:grid-kanban-20-regular" size="1.65rem" />
+              <Icon name="fluent:grid-kanban-20-regular" size="1.65rem" /> Kanban
             </button>
           </div>
         </div>
@@ -48,7 +50,7 @@
         <section class="deliverables-view">
           <DeliverablesList v-if="viewModeDeliverable == 'list' && loading.deliverables == false" :deliverables="filteredDeliverables" />
           <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" :personaState="personaState" :isOwner="isOwner" :membersError="membersError" />
-          <DeliverablesKanban v-if="viewModeDeliverable == 'kanban' && loading.deliverables == false" :deliverables="filteredDeliverables" />
+          <DeliverablesKanban v-if="viewModeDeliverable == 'kanban' && loading.deliverables == false" :deliverables="filteredDeliverables" :workflowStates="WorkflowStates" />
         </section>
       </section>
 
@@ -437,11 +439,15 @@ watchEffect(() => {
   border-radius: $br-lg;
 }
 
+.deliverables-wrapper {
+  height: calc(100% - 120px);
+}
+
 .deliverables-view {
   display: flex;
   gap: $spacing-md;
-  height: 100%;
-  padding: 0 $spacing-md;
+  height: calc(100% - 104px);
+  overflow: hidden;
 }
 
 </style>

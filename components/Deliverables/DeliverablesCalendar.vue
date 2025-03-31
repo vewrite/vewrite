@@ -203,9 +203,11 @@ async function loadDeliverableByDate(timestamptz) {
   height: 100%;
   width: 100%;
   border: $border;
-  border-radius: $br-lg;
+  border-bottom: 0;
+  border-radius: $br-lg $br-lg 0 0;
   display: flex;
   flex-direction: column;
+  margin: 0 $spacing-md;
 
   .calendar-switch {
     width: 100%;

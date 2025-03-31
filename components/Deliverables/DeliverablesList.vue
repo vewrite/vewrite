@@ -55,7 +55,9 @@ const props = defineProps({
   flex-direction: column;
   width: 100%;
   border: $border;
-  border-radius: $br-lg;
+  border-bottom: 0;
+  border-radius: $br-lg $br-lg 0 0;
+  margin: 0 $spacing-md;
   gap: $spacing-sm;
 
   .no-deliverables {
