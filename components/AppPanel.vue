@@ -1,5 +1,5 @@
 <template>
-  <div id="AppPanel" class="app-panel">
+  <div id="AppPanel" class="app-panel max-width xl">
     <div class="header">
       <slot name="header"></slot>
     </div>
@@ -24,6 +24,11 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
+  border-left: $border;
+  border-right: $border;
+  border-top: $border;
+  border-radius: $br-xl $br-xl 0 0;
+  margin-top: $spacing-sm;
 
   .header {
     display: flex;
@@ -33,8 +38,10 @@ export default {
     min-height: 60px;
     gap: $spacing-xs;
     position: relative;
-    margin: 0 $spacing-sm;
+    margin: 0;
+    padding: 0 $spacing-sm;
     background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, 0.5) 50%);
+    border-bottom: $border;
 
     @media (max-width: 960px) {
       border: none;
