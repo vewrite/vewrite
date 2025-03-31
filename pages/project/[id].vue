@@ -23,6 +23,12 @@
     <template v-slot:body>
       <section class="deliverables-wrapper" v-if="loading.global == false && hasAccess">
 
+        <div class="project-details">
+          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
+          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
+          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
+        </div>
+
         <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
           
           <Icon name="fluent:search-20-regular" size="2rem" />
@@ -39,12 +45,6 @@
               <Icon name="fluent:grid-kanban-20-regular" size="1.65rem" /> Kanban
             </button>
           </div>
-        </div>
-
-        <div class="project-details">
-          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
-          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
 
         <section class="deliverables-view">
@@ -434,13 +434,13 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
-  padding: $spacing-sm $spacing-md;
-  margin: $spacing-sm 0 $spacing-md;
+  padding: 0 $spacing-md;
+  margin: $spacing-sm 0;
   border-radius: $br-lg;
 }
 
 .deliverables-wrapper {
-  height: calc(100% - 120px);
+  height: calc(100% - 86px);
   width: 100%;
 
   .deliverables-view {
