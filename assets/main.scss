@@ -421,11 +421,12 @@ textarea {
         border-radius: $br-xl;
         border: $border;
         padding: $spacing-xxs $spacing-sm;
-        width: 100%;
         font-size: $font-size-xs;
         outline: 1px solid rgba($brand, 0);
         outline-offset: 0px;
         height: 100%;
+        width: 100%;
+        max-width: 300px;
 
         &:active,
         &:focus,
@@ -435,6 +436,14 @@ textarea {
             outline: 4px solid rgba($brand, 0.1);
             background: rgba($white, 1);
         }
+    }
+
+    .list-filters {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        height: 100%;
+        gap: $spacing-sm;
     }
 
     .list-buttons {
@@ -447,6 +456,7 @@ textarea {
         background: rgba($white, .35);
         transition: all 0.2s ease;
         overflow: hidden;
+        min-width: auto;
 
         &:hover {
             border: 1px solid rgba($brand, .3);
@@ -459,12 +469,13 @@ textarea {
             border-radius: 0;
             background-color: transparent;
             height: 100%;
-            min-width: 36px;
+            min-width: auto;
             outline: 0;
             font-size: $font-size-xs;
 
             span {
-                width: 40px;
+                min-width: 20px;
+                width: 20px;
             }
 
             &:hover {

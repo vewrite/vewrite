@@ -3,27 +3,31 @@
     <Loading v-if="loading" type="small" />
 
     <div class="search-bar" v-if="projects.length > 0 && !loading">
-      <Icon name="fluent:search-20-regular" size="2rem" />
+      
       <input type="text" placeholder="Search project titles" v-model="searchQuery" :class="[listToggle]" />
-      <div class="list-buttons">
-        <button :class="['list-icon', projectFilter == 'all' ? 'active' : '']" @click="handleProjectFilter('all')">
-          All
-        </button>
-        <button :class="['list-icon', projectFilter == 'owner' ? 'active' : '']" @click="handleProjectFilter('owner')">
-          Owner
-        </button>
-        <button :class="['list-icon', projectFilter == 'member' ? 'active' : '']" @click="handleProjectFilter('member')">
-          Member
-        </button>
-      </div>
-      <div class="list-buttons">
-        <button :class="['list-icon', viewMode == 'grid' ? 'active' : '']" @click="listToggle">
-          <Icon name="fluent:grid-20-regular" size="1.65rem" />
-        </button>
-        <button :class="['list-icon', viewMode == 'list' ? 'active' : '']" @click="listToggle">
-          <Icon name="fluent:list-20-regular" size="1.65rem" />
-        </button>
-      </div>
+      
+      <section class="list-filters">
+        <div class="list-buttons">
+          <button :class="['list-icon', projectFilter == 'all' ? 'active' : '']" @click="handleProjectFilter('all')">
+            All
+          </button>
+          <button :class="['list-icon', projectFilter == 'owner' ? 'active' : '']" @click="handleProjectFilter('owner')">
+            Owner
+          </button>
+          <button :class="['list-icon', projectFilter == 'member' ? 'active' : '']" @click="handleProjectFilter('member')">
+            Member
+          </button>
+        </div>
+        
+        <div class="list-buttons">
+          <button :class="['list-icon', viewMode == 'grid' ? 'active' : '']" @click="listToggle">
+            <Icon name="fluent:grid-20-regular" size="1.65rem" />
+          </button>
+          <button :class="['list-icon', viewMode == 'list' ? 'active' : '']" @click="listToggle">
+            <Icon name="fluent:list-20-regular" size="1.65rem" />
+          </button>
+        </div>
+      </section>
     </div>
 
     <div class="empty-state" v-if="projects.length === 0 && !loading">

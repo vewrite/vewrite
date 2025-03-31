@@ -104,13 +104,17 @@ watch(() => props.client, (newClient) => {
 
       &.medium {
           min-width: 60px;
+          width: 60px;
           min-height: 60px;
+          height: 60px;
           border-radius: $br-md;
       }
 
       &.large {
           min-width: 100px;
+          width: 100px;
           min-height: 100px;
+          height: 100px;
           border-radius: $br-lg;
       }
   }
@@ -130,19 +134,25 @@ watch(() => props.client, (newClient) => {
 
   &.small {
       min-width: 54px;
+      width: 54px;
       min-height: 54px;
+      height: 54px;
       border-radius: $br-md;
   }
 
   &.medium {
       min-width: 60px;
+      width: 60px;
       min-height: 60px;
+      height: 60px;
       border-radius: $br-md;
   }
 
   &.large {
       min-width: 100px;
+      width: 100px;
       min-height: 100px;
+      height: 100px;
       border-radius: $br-lg;
   }
 

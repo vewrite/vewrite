@@ -53,6 +53,7 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
 
 .project-overview {
   display: grid;
+  align-items: center;
   grid-template-columns: auto 1fr auto;
   gap: $spacing-sm;
 

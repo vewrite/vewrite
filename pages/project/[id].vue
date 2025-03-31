@@ -29,9 +29,8 @@
           <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
 
-        <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
+        <div class="search-bar" v-if="deliverables.length > 0 && !loading.deliverables">
           
-          <Icon name="fluent:search-20-regular" size="2rem" />
           <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
           
           <div class="list-buttons">
