@@ -27,11 +27,14 @@
           <Icon name="fluent:search-20-regular" size="2rem" />
           <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
           <div class="list-buttons">
-            <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle">
+            <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle('list')">
               <Icon name="fluent:list-20-regular" size="1.65rem" />
             </button>
-            <button :class="['list-icon', viewModeDeliverable == 'calendar' ? 'active' : '']" @click="listToggle">
+            <button :class="['list-icon', viewModeDeliverable == 'calendar' ? 'active' : '']" @click="listToggle('calendar')">
               <Icon name="fluent:calendar-20-regular" size="1.65rem" />
+            </button>
+            <button :class="['kanban-icon', viewModeDeliverable == 'kanban' ? 'active' : '']" @click="listToggle('kanban')">
+              <Icon name="fluent:grid-kanban-20-regular" size="1.65rem" />
             </button>
           </div>
         </div>
@@ -45,6 +48,7 @@
         <section class="deliverables-view">
           <DeliverablesList v-if="viewModeDeliverable == 'list' && loading.deliverables == false" :deliverables="filteredDeliverables" />
           <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" :personaState="personaState" :isOwner="isOwner" :membersError="membersError" />
+          <DeliverablesKanban v-if="viewModeDeliverable == 'kanban' && loading.deliverables == false" :deliverables="filteredDeliverables" />
         </section>
       </section>
 
@@ -199,8 +203,8 @@ const deliverables = ref([]);
 const states = ref([]);
 const completedDeliverables = ref(0);
 
-const listToggle = () => {
-  viewModeDeliverable.value = viewModeDeliverable.value === 'list' ? 'calendar' : 'list';
+const listToggle = (type) => {
+  viewModeDeliverable.value = type;
   localStorage.setItem('viewModeDeliverable', JSON.stringify(viewModeDeliverable.value));
 };
 
@@ -428,11 +432,9 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
-  padding: 0 $spacing-md;
+  padding: $spacing-sm $spacing-md;
   margin: $spacing-sm 0 $spacing-md;
   border-radius: $br-lg;
-  position: sticky;
-  top: $spacing-sm;
 }
 
 .deliverables-view {

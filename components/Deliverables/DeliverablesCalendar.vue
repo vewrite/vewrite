@@ -81,7 +81,7 @@ const selectedDeliverableDate = useSelectedDate();
 
 const loading = ref(false);
 
-const calendarType = ref('weekly');
+const calendarType = ref('monthly');
 
 const props = defineProps({
   deliverables: Array,

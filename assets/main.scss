@@ -398,7 +398,7 @@ textarea {
 
 .search-bar {
     width: 100%;
-    padding: $spacing-md $spacing-md $spacing-sm $spacing-md;
+    padding: $spacing-sm $spacing-md;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -406,8 +406,9 @@ textarea {
     gap: $spacing-sm;
     position: sticky;
     top: 0;
-    background: rgba($white, .5);
+    background: rgba($white, .65);
     backdrop-filter: blur(10px);
+    border-bottom: $border;
     z-index: 10;
 
     &.right {
@@ -445,13 +446,10 @@ textarea {
         border-radius: $br-md;
         background: rgba($white, .35);
         transition: all 0.2s ease;
-        outline: 2px solid rgba($white, 0);
-        outline-offset: 0px;
+        overflow: hidden;
 
         &:hover {
             border: 1px solid rgba($brand, 1);
-            outline: 2px solid rgba($white, 1);
-            outline-offset: -3px;
             background: rgba($white, 1);
         }
 
@@ -468,17 +466,8 @@ textarea {
         }
 
         .active {
-            background: rgba($brand, 0.05);
-            color: $brand;
-
-            svg {
-
-                path,
-                mask path {
-                    stroke: $brand;
-                    stroke-opacity: 1;
-                }
-            }
+            background: rgba($brand, 1);
+            color: $white;
         }
     }
 }
