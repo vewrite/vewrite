@@ -40,7 +40,7 @@ export default {
     position: relative;
     margin: 0;
     padding: 0 $spacing-sm;
-    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, 0.5) 50%);
+    background: $white;
     border-bottom: $border;
 
     @media (max-width: 960px) {
