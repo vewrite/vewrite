@@ -293,6 +293,11 @@ async function loadDeliverableByDate(timestamptz) {
       .no-deliverables {
         font-size: $font-size-xs;
         text-align: center;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgba($black, 0.5);
       }
 
       .calendar-panel-deliverables {

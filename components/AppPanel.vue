@@ -29,6 +29,7 @@ export default {
   border-top: $border;
   border-radius: $br-xl $br-xl 0 0;
   margin-top: $spacing-sm;
+  box-shadow: $soft-shadow;
 
   .header {
     display: flex;

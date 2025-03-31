@@ -878,6 +878,7 @@ button.vertical,
     justify-content: space-between;
     align-items: center;
     gap: $spacing-md;
+    margin: $spacing-sm 0;
 
     &.no-border {
         border-bottom: none;

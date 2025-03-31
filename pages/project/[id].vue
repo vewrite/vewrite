@@ -446,7 +446,7 @@ watchEffect(() => {
   .deliverables-view {
     display: flex;
     gap: $spacing-md;
-    height: calc(100% - 104px);
+    height: calc(100% - 125px);
     width: 100%;
   }
 }
