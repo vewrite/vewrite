@@ -57,7 +57,7 @@ async function fetchAndUpdateStatus() {
   }
 
   .free {
-    color: rgba($black, 0.5);
+    color: rgba($white, 0.5);
     border-radius: $br-md;
     display: flex;
     flex-direction: row;
@@ -76,9 +76,9 @@ async function fetchAndUpdateStatus() {
   }
 
   .pro {
-    border: .7px solid $brand;
+    border: .7px solid $white;
     border-radius: $br-xl;
-    color: $brand;
+    color: $white;
     padding: $spacing-xxxs $spacing-xs;
   }
   

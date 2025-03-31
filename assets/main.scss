@@ -449,7 +449,7 @@ textarea {
         overflow: hidden;
 
         &:hover {
-            border: 1px solid rgba($brand, 1);
+            border: 1px solid rgba($brand, .3);
             background: rgba($white, 1);
         }
 
@@ -776,6 +776,16 @@ button.clear,
 
     &:hover {
         background-color: rgba($brand, 0);
+    }
+}
+
+button.white,
+.button.white {
+    background-color: rgba($white, 0.1);
+    color: $white;
+
+    &:hover {
+        background-color: rgba($white, 0.2);
     }
 }
 

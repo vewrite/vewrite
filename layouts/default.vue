@@ -4,7 +4,6 @@
   <main id="Vewrite" v-if="!loading && isNewUser == false">
     <TopBar />
     <section class="go">
-      <Sidebar />
       <main>
         <slot />
       </main>
