@@ -28,7 +28,7 @@ export default {
   border-right: $border;
   border-top: $border;
   border-radius: $br-xl $br-xl 0 0;
-  margin-top: $spacing-sm;
+  margin: $spacing-sm $spacing-md 0;
   box-shadow: $soft-shadow;
 
   .header {
@@ -36,11 +36,10 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    min-height: 60px;
     gap: $spacing-xs;
     position: relative;
     margin: 0;
-    padding: 0 $spacing-sm;
+    padding: $spacing-sm;
     background: $white;
     border-bottom: $border;
 

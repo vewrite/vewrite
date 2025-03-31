@@ -1,9 +1,13 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/projects/" class="button">
-        <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
-      </router-link>
+      <div class="project-details">
+        <router-link to="/projects/" class="button">
+          <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
+        </router-link>
+        <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
+      </div>
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading.global" />
       </div>
@@ -23,11 +27,7 @@
     <template v-slot:body>
       <section class="deliverables-wrapper" v-if="loading.global == false && hasAccess">
 
-        <div class="project-details">
-          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
-          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
-        </div>
+        <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
 
         <div class="search-bar" v-if="deliverables.length > 0 && !loading.deliverables">
           
@@ -431,16 +431,17 @@ watchEffect(() => {
 
 .project-details {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: $spacing-md;
-  padding: 0 $spacing-md;
-  margin: $spacing-sm 0;
   border-radius: $br-lg;
+  width: 100%;
 }
 
 .deliverables-wrapper {
-  height: calc(100% - 86px);
+  height: 100% ;
   width: 100%;
+  overflow-y: auto;
 
   .deliverables-view {
     display: flex;

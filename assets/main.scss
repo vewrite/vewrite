@@ -404,8 +404,6 @@ textarea {
     justify-content: space-between;
     align-items: center;
     gap: $spacing-sm;
-    position: sticky;
-    top: 0;
     background: rgba($white, .65);
     backdrop-filter: blur(10px);
     border-bottom: $border;
@@ -889,7 +887,6 @@ button.vertical,
     justify-content: space-between;
     align-items: center;
     gap: $spacing-md;
-    margin: $spacing-sm 0;
 
     &.no-border {
         border-bottom: none;
