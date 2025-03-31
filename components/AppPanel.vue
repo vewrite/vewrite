@@ -70,13 +70,8 @@ export default {
 
   .body {
     height: calc(100% - 60px);
-    overflow-y: auto;
     position: relative;
     background: $white;
-    margin: 0 $spacing-sm;
-    border-bottom: $border;
-    border-left: $border;
-    border-right: $border;
 
     @media (max-width: 960px) {
       border: none;

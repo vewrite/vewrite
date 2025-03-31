@@ -1013,6 +1013,7 @@ button.vertical,
     .vc-header {
         padding-bottom: $spacing-sm;
         height: 48px;
+        border-bottom: $border;
 
         .vc-title {
             font-size: $font-size-md;
@@ -1081,13 +1082,51 @@ button.vertical,
         }
     }
 
+    /* Not dropdown content */
     &.weekly {
+
+        .vc-week,
+        .vc-weeks,
+        .vc-pane,
+        .vc-pane-layout,
+        .vc-pane-container,
+        .vc-container {
+            height: 100%;
+        }
+
         .vc-day {
             padding: $spacing-xxl $spacing-md;
             border-right: $border;
+            height: 100%;
+
+            .vc-dots {
+                bottom: 140px;
+            }
 
             &:last-child {
                 border-right: none;
+            }
+        }
+
+        .dropdown-content {
+
+            .vc-week,
+            .vc-weeks,
+            .vc-pane,
+            .vc-pane-layout,
+            .vc-pane-container,
+            .vc-container {
+                height: auto;
+            }
+
+            .vc-day {
+                padding: 4px;
+                border-right: none;
+                height: auto;
+
+                .vc-dots {
+                    bottom: auto;
+                }
             }
         }
     }

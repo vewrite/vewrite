@@ -241,7 +241,6 @@ async function loadDeliverableByDate(timestamptz) {
   .calendar-layout {
     display: flex;
     flex-direction: row;
-    gap: $spacing-sm;
     height: 100%;
 
     .v-calendar {
