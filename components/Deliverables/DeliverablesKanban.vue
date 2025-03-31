@@ -131,7 +131,7 @@ onMounted(async () => {
 
       .deliverable {
         padding: $spacing-sm;
-        border-radius: $br-md;
+        border-radius: $br-lg;
         background-color: rgba($white, 1);
         cursor: pointer;
         transition: background-color 0.2s;

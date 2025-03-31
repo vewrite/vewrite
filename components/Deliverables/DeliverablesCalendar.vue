@@ -256,6 +256,7 @@ async function loadDeliverableByDate(timestamptz) {
     gap: $spacing-sm;
     width: 100%;
     border-left: $border;
+    background-color: rgba($black, 0.025);
 
     &.open {
       display: flex;
@@ -270,8 +271,8 @@ async function loadDeliverableByDate(timestamptz) {
       justify-content: space-between;
       align-items: center;
       height: 58px;
-      border-bottom: $border;
       padding: 0 $spacing-sm 0 $spacing-sm;
+      background: linear-gradient(to bottom, rgba($white, 0.75), transparent);
 
       .panel-title {
         font-size: $font-size-md;
@@ -302,9 +303,11 @@ async function loadDeliverableByDate(timestamptz) {
         justify-content: space-between;
         align-items: center;
         padding: $spacing-sm;
-        border: $border;
-        border-radius: $br-md;
         transition: background-color 0.2s ease;
+        border-radius: $br-xl;
+        background-color: rgba($white, 1);
+        cursor: pointer;
+        box-shadow: $small-shadow;
 
         .deliverable-details {
           display: flex;

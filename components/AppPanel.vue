@@ -77,7 +77,7 @@ export default {
 
   .body {
     height: calc(100% - 60px);
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
     background: $white;
     margin: 0 $spacing-sm;

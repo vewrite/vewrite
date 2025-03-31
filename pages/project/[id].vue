@@ -441,13 +441,14 @@ watchEffect(() => {
 
 .deliverables-wrapper {
   height: calc(100% - 120px);
-}
+  width: 100%;
 
-.deliverables-view {
-  display: flex;
-  gap: $spacing-md;
-  height: calc(100% - 104px);
-  overflow: hidden;
+  .deliverables-view {
+    display: flex;
+    gap: $spacing-md;
+    height: calc(100% - 104px);
+    width: 100%;
+  }
 }
 
 </style>
