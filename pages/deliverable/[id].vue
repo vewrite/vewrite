@@ -30,13 +30,6 @@
             <VDatePicker :id="'deliverable-calendar-' + DeliverableData.id" :attributes="DeliverableData.attrs" v-model="DeliverableData.selectedDate" @update:modelValue="onDateSelect(DeliverableData.id, DeliverableData.selectedDate)" />
           </template>
         </Dropdown>
-
-        <div class="vertical-divider"></div>
-
-        <!-- Assignments -->
-        <button class="button clear" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
-          <Icon name="fluent:person-20-regular" size="2rem" />
-        </button>
         
         <div class="vertical-divider"></div>
         
@@ -49,6 +42,13 @@
         <!-- State intro -->
         <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         
+        <div class="vertical-divider"></div>
+
+        <!-- Assignments -->
+        <button class="button clear" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
+          <Icon name="fluent:person-20-regular" size="2rem" />
+        </button>
+
         <div class="vertical-divider"></div>
         
         <!-- Deliverable dropdown -->

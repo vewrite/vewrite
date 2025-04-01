@@ -372,16 +372,17 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-md $spacing-xxl;
-  height: calc(100% - $spacing-lg - $spacing-md - $spacing-lg);
+  padding: $spacing-md $spacing-lg $spacing-xl;
+  height: fit-content;
   width: 100%;
-  min-width: 800px;
+  min-width: 720px;
   background: $white;
   border-left: $border;
   border-right: $border;
-  box-shadow: $big-shadow;
+  box-shadow: $soft-shadow;
   border-radius: $br-xl;
-  margin: calc($spacing-lg + $spacing-sm) auto $spacing-md;
+  margin: 0 auto;
+  align-self: center;
 
   @media (max-width: 800px) {
     min-width: 100%;
@@ -398,6 +399,17 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
     align-items: center;
     gap: $spacing-md;
     width: 100%;
+
+    .copyright-and-terms {
+      font-size: $font-size-xs;
+      opacity: 0.2;
+      margin-top: $spacing-md;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   .login-top {
