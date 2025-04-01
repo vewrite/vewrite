@@ -24,7 +24,7 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  margin: $spacing-sm auto 0;
+  margin: 0 auto 0;
 
   .header {
     display: flex;
