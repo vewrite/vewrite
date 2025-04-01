@@ -8,11 +8,10 @@
     <template v-slot:menu>
       <section class="dropdown-header">
         <span class="user-name">{{ loading ? 'Loading' : ProfileData.username }}</span>
-        <section class="dropdown-plan">
+        <!-- <section class="dropdown-plan">
           <PlanStatus />
-        </section>
+        </section> -->
       </section>
-      <hr class="dropdown-divider" />
       <router-link to="/account" class="dropdown-item"><Icon name="solar:user-linear" size="1.5rem" /> Account</router-link>
       <router-link v-if="personaState == 'manager'" to="/subscriptions" class="dropdown-item"><Icon name="solar:lock-linear" size="1.5rem" /> Subscriptions</router-link>
       <div class="dropdown-item" @click="logout"><Icon name="fluent:arrow-exit-20-regular" size="1.5rem" /> Logout</div>
@@ -65,8 +64,8 @@ const logout = async () => {
   align-items: flex-start;
 
   .user-name {
-    font-weight: bold;
-    margin-bottom: $spacing-xxs;
+    font-size: $font-size-md;
+    text-align: center;
   }
   
   .button:not(.green) {
@@ -79,6 +78,9 @@ const logout = async () => {
     flex-direction: column;
     gap: $spacing-xxs;
     width: 100%;
+    border: $border;
+    background: rgba($white, 0.4);
+    border-radius: $br-md;
 
     .dropdown-plan {
       display: flex;
