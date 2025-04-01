@@ -1,48 +1,66 @@
 <template>
-  <div class="calendar-view">
-    <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" />
-    <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
-      <section class="calendar-panel-header">
-        <span class="panel-title">
-          {{ selectedDay ? format(selectedDay.date, 'MMMM do, yyyy') : 'No date selected' }}
-        </span>
-        <section class="panel-actions">
-          <button class="button" @click="panelToggle">
-            <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
-          </button>
-          <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">
-            <Icon name="fluent:add-20-regular" size="1.5rem" />
-          </button>
+  <div class="calendar-view" :class="calendarType">
+
+    <section class="calendar-switch">
+      <span @click="calendarTypeToggle('monthly')" class="switch-item" :class="calendarType == 'monthly' ? 'active' : ''">Monthly</span>
+      <span @click="calendarTypeToggle('weekly')" class="switch-item" :class="calendarType == 'weekly' ? 'active' : ''">Weekly</span>
+    </section>
+
+    <section class="calendar-layout">
+
+      <!-- Calendar -->
+      <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" v-if="calendarType == 'monthly'" />
+      <VCalendar :class="panelState" :attributes="calendarViewAttrs" title-position="left" borderless @dayclick="handleDateSelected" view="weekly" v-if="calendarType == 'weekly'" />
+      
+      <!-- Panel -->
+      <section class="calendar-panel" :class="panelState" v-if="panelState == 'open'">
+        <section class="calendar-panel-header">
+          <span class="panel-title">
+            {{ selectedDay ? format(selectedDay.date, 'MMMM do, yyyy') : 'No date selected' }}
+          </span>
+          <section class="panel-actions">
+            <button class="button" @click="panelToggle">
+              <Icon name="fluent:chevron-left-16-regular" size="1.5rem" />
+            </button>
+            <button class="button primary" @click="handleOpenModal(selectedDay.date)" v-if="personaState == 'manager' && isOwner && !membersError">
+              <Icon name="fluent:add-20-regular" size="1.5rem" />
+            </button>
+          </section>
+        </section>
+        <section class="calendar-panel-content">
+          
+          <Loading v-if="loading" type="small" class="padded-loader" />
+          
+          <div class="no-deliverables" v-if="deliverablesByDate.length == 0 && !loading">
+            <p>No deliverables found for this date</p>
+          </div>
+          <div class="calendar-panel-deliverables" v-if="!loading" v-for="deliverable in deliverablesByDate">
+            <div class="deliverable-details">
+              <div class="deliverable-type">
+                <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
+                <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
+                <span class="deliverable-id">{{ deliverable.id }}</span>
+              </div>
+              <span class="deliverable-state">{{ deliverable.state_name }}</span>
+            </div>
+            <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
+            <div class="deliverable-actions">
+              <Dropdown position="left">
+                <template v-slot:trigger>
+                  Due {{ deliverable.formattedDueDate }}
+                </template>
+                <template v-slot:menu>
+                  <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="handleOnDateSelect(deliverable.id, deliverable.selectedDate)" borderless />
+                </template>
+              </Dropdown>
+              <router-link :to="'/deliverable/' + deliverable.id" class="button primary">Open</router-link>
+            </div>
+          </div>
         </section>
       </section>
-      <section class="calendar-panel-content">
-        <div class="no-deliverables" v-if="deliverablesByDate.length == 0">
-          <p>No deliverables found for this date</p>
-        </div>
-        <div class="calendar-panel-deliverables" v-for="deliverable in deliverablesByDate">
-          <div class="deliverable-details">
-            <div class="deliverable-type">
-              <Icon v-if="deliverable.content.type == 'link'" name="fluent:open-16-regular" size="1.5rem" />
-              <Icon v-if="deliverable.content.type == 'content'" name="fluent:document-16-regular" size="1.5rem" />
-              <span class="deliverable-id">{{ deliverable.id }}</span>
-            </div>
-            <span class="deliverable-state">{{ deliverable.state_name }}</span>
-          </div>
-          <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
-          <div class="deliverable-actions">
-            <Dropdown position="left">
-              <template v-slot:trigger>
-                Due {{ deliverable.formattedDueDate }}
-              </template>
-              <template v-slot:menu>
-                <VDatePicker :id="'deliverable-calendar-' + deliverable.id" :attributes="deliverable.attrs" v-model="deliverable.selectedDate" @update:modelValue="handleOnDateSelect(deliverable.id, deliverable.selectedDate)" borderless />
-              </template>
-            </Dropdown>
-            <router-link :to="'/deliverable/' + deliverable.id" class="button primary">Open</router-link>
-          </div>
-        </div>
-      </section>
+    
     </section>
+    
   </div>
 </template>
 
@@ -52,13 +70,18 @@ import { format, parseISO } from 'date-fns';
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { fetchDeliverable, onDateSelect, createDeliverableModal } = useDeliverables();
+const { fetchDeliverable, onDateSelect, createDeliverableModal, useSelectedDate } = useDeliverables();
 
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchStateInstanceName } = useWorkflowStateInstances();
 
 const supabase = useSupabaseClient();
+const selectedDeliverableDate = useSelectedDate();
+
+const loading = ref(false);
+
+const calendarType = ref('monthly');
 
 const props = defineProps({
   deliverables: Array,
@@ -79,6 +102,15 @@ const panelToggle = () => {
   panelState.value = panelState.value === 'closed' ? 'open' : 'closed';
 };
 
+const calendarTypeToggle = (type) => {
+  calendarType.value = type;
+};
+
+function handleOpenModal(selectedDate) {
+  selectedDeliverableDate.value = selectedDate;
+  createDeliverableModal(props.project.id)
+}
+
 async function handleOnDateSelect(deliverableId, selectedDate) {
   try {
     await onDateSelect(deliverableId, selectedDate);
@@ -90,6 +122,13 @@ async function handleOnDateSelect(deliverableId, selectedDate) {
 }
 
 async function handleDateSelected(date) {
+
+  loading.value = true;
+
+  if (panelState.value === 'closed') {
+    panelToggle();
+  }
+
   // format should be timestamptz
   // like: 2025-03-11 22:00:00+00
   const simplifiedDate = {
@@ -105,11 +144,10 @@ async function handleDateSelected(date) {
     deliverablesByDate.value = await loadDeliverableByDate(simplifiedDate.date);
   } catch (error) {
     console.error('Error fetching deliverables:', error.message);
+  } finally {
+    loading.value = false;
   }
 
-  if (panelState.value === 'closed') {
-    panelToggle();
-  }
 }
 
 async function loadDeliverableByDate(timestamptz) {
@@ -167,10 +205,47 @@ async function loadDeliverableByDate(timestamptz) {
   border: $border;
   border-radius: $br-lg;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  margin: $spacing-md;
+
+  .calendar-switch {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-sm;
+    border-bottom: $border;
+    overflow: visible;
+    z-index: 1;
+    position: relative;
+
+    .switch-item {
+      cursor: pointer;
+      padding: $spacing-sm;
+      border-bottom: 1px solid transparent;
+      margin-bottom: -1px;
+
+      &.active {
+        color: $brand;
+        border-bottom: 1px solid $brand;
+      }
+    }
+  }
 
   .vc-expanded {
     min-width: auto;
+  }
+
+  .calendar-layout {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    .v-calendar {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .calendar-panel {
@@ -179,11 +254,10 @@ async function loadDeliverableByDate(timestamptz) {
     gap: $spacing-sm;
     width: 100%;
     border-left: $border;
+    background-color: rgba($black, 0.025);
 
     &.open {
       display: flex;
-      min-width: 500px;
-      width: 500px;
     }
 
     &.closed {
@@ -195,8 +269,8 @@ async function loadDeliverableByDate(timestamptz) {
       justify-content: space-between;
       align-items: center;
       height: 58px;
-      border-bottom: $border;
       padding: 0 $spacing-sm 0 $spacing-sm;
+      background: linear-gradient(to bottom, rgba($white, 0.75), transparent);
 
       .panel-title {
         font-size: $font-size-md;
@@ -219,6 +293,11 @@ async function loadDeliverableByDate(timestamptz) {
       .no-deliverables {
         font-size: $font-size-xs;
         text-align: center;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgba($black, 0.5);
       }
 
       .calendar-panel-deliverables {
@@ -227,9 +306,11 @@ async function loadDeliverableByDate(timestamptz) {
         justify-content: space-between;
         align-items: center;
         padding: $spacing-sm;
-        border: $border;
-        border-radius: $br-md;
         transition: background-color 0.2s ease;
+        border-radius: $br-xl;
+        background-color: rgba($white, 1);
+        cursor: pointer;
+        box-shadow: $small-shadow;
 
         .deliverable-details {
           display: flex;

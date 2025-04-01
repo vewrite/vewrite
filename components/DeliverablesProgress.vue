@@ -33,8 +33,9 @@ const props = defineProps({
   flex-direction: column-reverse;
   gap: $spacing-xxs;
   justify-content: flex-start;
-  width: 100%;
+  width: calc(100% - #{$spacing-md * 2});
   transition: bottom 0.2s ease;
+  margin: $spacing-md $spacing-md 0;
 
   .progress-status { 
     display: flex;

@@ -24,24 +24,19 @@ export default {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
+  margin: $spacing-sm auto 0;
 
   .header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    min-height: 60px;
-    padding: $spacing-sm;
     gap: $spacing-xs;
     position: relative;
-    margin: 0 $spacing-sm;
-    border-top: $border;
+    margin: 0;
+    padding: $spacing-sm;
+    background: $white;
     border-bottom: $border;
-    border-left: $border;
-    border-right: $border;
-    border-top-left-radius: $br-xl;
-    border-top-right-radius: $br-xl;
-    background: linear-gradient(to bottom, rgba($white, 0.25), rgba($white, 0.5) 50%);
 
     @media (max-width: 960px) {
       border: none;
@@ -77,13 +72,8 @@ export default {
 
   .body {
     height: calc(100% - 60px);
-    overflow-y: scroll;
     position: relative;
     background: $white;
-    margin: 0 $spacing-sm;
-    border-bottom: $border;
-    border-left: $border;
-    border-right: $border;
 
     @media (max-width: 960px) {
       border: none;

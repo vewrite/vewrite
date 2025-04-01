@@ -1,5 +1,5 @@
 <template>
-  <Dropdown class="top-bar-user" v-if="user">
+  <Dropdown class="top-bar-user" v-if="user" :white="true">
     <template v-slot:trigger>
       <!-- {{ loading ? 'Loading' : ProfileData.username }} -->
       <Avatar :uuid="user.id" />

@@ -1,7 +1,7 @@
 <template>
-  <Dropdown position="center" v-if="DeliverableData">
+  <Dropdown position="center" v-if="DeliverableData" :clear="true">
     <template v-slot:trigger>
-      <span class="current-state">{{ CurrentState }} <Icon name="fluent:chevron-down-16-regular" size="1.5rem" /></span>
+      <span class="current-state"><Icon name="fluent:flow-20-regular" size="2rem" /></span>
     </template>
     <template v-slot:menu>
       <div class="state-instance" v-for="state in workflowStateInstances">

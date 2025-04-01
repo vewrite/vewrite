@@ -56,6 +56,7 @@ const props = defineProps({
   width: 100%;
   border: $border;
   border-radius: $br-lg;
+  margin: $spacing-md;
   gap: $spacing-sm;
 
   .no-deliverables {

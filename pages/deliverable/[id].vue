@@ -17,6 +17,8 @@
         <button class="button clear" @click="toggleFullscreen()">
           <Icon name="fluent:full-screen-maximize-20-regular" size="2rem" />
         </button>
+
+        <div class="vertical-divider"></div>
         
         <!-- Due date select -->
         <Dropdown v-if="personaState == 'manager' || isOwner" :clear="true">
@@ -29,6 +31,8 @@
           </template>
         </Dropdown>
 
+        <div class="vertical-divider"></div>
+
         <!-- Assignments -->
         <button class="button clear" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
           <Icon name="fluent:person-20-regular" size="2rem" />
@@ -40,6 +44,8 @@
         <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
         <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
         
+        <div class="vertical-divider"></div>
+
         <!-- State intro -->
         <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
         

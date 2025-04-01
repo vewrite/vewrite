@@ -1,15 +1,19 @@
 <template>
   <AppPanel>
     <template v-slot:header>
-      <router-link to="/projects/" class="button">
-        <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
-      </router-link>
+      <div class="project-details">
+        <router-link to="/projects/" class="button">
+          <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
+        </router-link>
+        <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
+      </div>
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
         <button class="button primary" @click="manageProjectMembersModal(project.id)" v-if="personaState == 'manager' && isOwner">Manage members</button>
-        <button class="button primary" @click="createDeliverableModal(project.id)" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
+        <button class="button primary" @click="handleOpenModal()" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
         <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -21,30 +25,31 @@
       </div>
     </template>
     <template v-slot:body>
-      <section v-if="loading.global == false && hasAccess">
+      <section class="deliverables-wrapper" v-if="loading.global == false && hasAccess">
 
-        <div class="search-bar right" v-if="deliverables.length > 0 && !loading.deliverables">
-          <Icon name="fluent:search-20-regular" size="2rem" />
+        <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
+
+        <div class="search-bar" v-if="deliverables.length > 0 && !loading.deliverables">
+          
           <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
+          
           <div class="list-buttons">
-            <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle">
-              <Icon name="fluent:list-20-regular" size="1.65rem" />
+            <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle('list')">
+              <Icon name="fluent:list-20-regular" size="1.65rem" /> List
             </button>
-            <button :class="['list-icon', viewModeDeliverable == 'calendar' ? 'active' : '']" @click="listToggle">
-              <Icon name="fluent:calendar-20-regular" size="1.65rem" />
+            <button :class="['list-icon', viewModeDeliverable == 'calendar' ? 'active' : '']" @click="listToggle('calendar')">
+              <Icon name="fluent:calendar-20-regular" size="1.65rem" /> Calendar
+            </button>
+            <button :class="['kanban-icon', viewModeDeliverable == 'kanban' ? 'active' : '']" @click="listToggle('kanban')">
+              <Icon name="fluent:grid-kanban-20-regular" size="1.65rem" /> Kanban
             </button>
           </div>
-        </div>
-
-        <div class="project-details">
-          <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-          <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
-          <DeliverablesProgress v-if="project && loading.global == false && deliverables.length > 0" :deliverables="deliverables" :completedDeliverables="completedDeliverables" :totalDeliverables="deliverables.length" />
         </div>
 
         <section class="deliverables-view">
           <DeliverablesList v-if="viewModeDeliverable == 'list' && loading.deliverables == false" :deliverables="filteredDeliverables" />
           <DeliverablesCalendar v-if="viewModeDeliverable == 'calendar' && loading.deliverables == false" :deliverables="filteredDeliverables" :calendarViewAttrs="calendarViewAttrs" :project="project" :personaState="personaState" :isOwner="isOwner" :membersError="membersError" />
+          <DeliverablesKanban v-if="viewModeDeliverable == 'kanban' && loading.deliverables == false" :deliverables="filteredDeliverables" :workflowStates="WorkflowStates" />
         </section>
       </section>
 
@@ -83,7 +88,7 @@ const { deleteProjectModal, manageProjectMembersModal } = useProject();
 
 // Deliverables composable
 import useDeliverables from '~/composables/useDeliverables';
-const { createDeliverableModal, fetchDeliverable, DeliverableError } = useDeliverables();
+const { createDeliverableModal, fetchDeliverable, useSelectedDate } = useDeliverables();
 
 // Client composable
 import useClient from '~/composables/useClient';
@@ -106,6 +111,13 @@ const deliverableDates = ref([]);
 const viewModeDeliverable = ref('list');
 
 const searchQuery = ref('')
+
+const selectedDeliverableDate = useSelectedDate();
+
+function handleOpenModal(selectedDate) {
+  selectedDeliverableDate.value = new Date();
+  createDeliverableModal(project.id)
+}
 
 // This is pushed into the DeliverablesCalendar component
 // It starts with today, and we push new deliverables into it when they are fetched
@@ -192,8 +204,8 @@ const deliverables = ref([]);
 const states = ref([]);
 const completedDeliverables = ref(0);
 
-const listToggle = () => {
-  viewModeDeliverable.value = viewModeDeliverable.value === 'list' ? 'calendar' : 'list';
+const listToggle = (type) => {
+  viewModeDeliverable.value = type;
   localStorage.setItem('viewModeDeliverable', JSON.stringify(viewModeDeliverable.value));
 };
 
@@ -419,20 +431,24 @@ watchEffect(() => {
 
 .project-details {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: $spacing-md;
-  padding: 0 $spacing-md;
-  margin: $spacing-sm 0 $spacing-md;
   border-radius: $br-lg;
-  position: sticky;
-  top: $spacing-sm;
+  width: 100%;
 }
 
-.deliverables-view {
-  display: flex;
-  gap: $spacing-md;
-  height: 100%;
-  padding: 0 $spacing-md;
+.deliverables-wrapper {
+  height: 100% ;
+  width: 100%;
+  overflow-y: auto;
+
+  .deliverables-view {
+    display: flex;
+    gap: $spacing-md;
+    height: calc(100% - 125px);
+    width: 100%;
+  }
 }
 
 </style>

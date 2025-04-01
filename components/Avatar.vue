@@ -77,7 +77,7 @@ watch(path, () => {
     flex-direction: column;
 
     .username {
-      font-weight: bold;
+      font-weight: normal;
     }
 
     .secondarytext {

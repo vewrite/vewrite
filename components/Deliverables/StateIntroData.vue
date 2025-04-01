@@ -90,14 +90,13 @@ onMounted(async () => {
         }
 
         .members-role {
-          font-size: $font-size-xxs;
+          font-size: $font-size-xs;
           display: flex;
           flex-direction: row;
           align-items: center;
           gap: $spacing-xs;
 
           .assigned-to {
-            font-size: $font-size-xxs;
             color: $brand;
             background: rgba($white, 0.5);
             border: 1px solid rgba($brand, 0.5);
