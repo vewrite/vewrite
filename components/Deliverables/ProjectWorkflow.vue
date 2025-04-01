@@ -1,5 +1,5 @@
 <template>
-  <Dropdown position="center" v-if="DeliverableData" :clear="true">
+  <Dropdown position="left" v-if="DeliverableData" :clear="true">
     <template v-slot:trigger>
       <span class="current-state"><Icon name="fluent:flow-20-regular" size="2rem" /></span>
     </template>
