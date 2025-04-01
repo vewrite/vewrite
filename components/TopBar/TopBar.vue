@@ -110,12 +110,12 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-sm $spacing-sm $spacing-lg $spacing-sm;
+  padding: $spacing-sm;
   width: 100%;
   background: $brand;
 
   @media (max-width: 960px) {
-    ppadding: $spacing-xs $spacing-xs $spacing-lg $spacing-xs;
+    ppadding: $spacing-xs;
   }
 
   .left {
