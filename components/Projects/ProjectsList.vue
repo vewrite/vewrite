@@ -323,8 +323,10 @@ const filteredProjects = computed(() => {
     &.grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: $spacing-sm;
+      gap: $spacing-md;
       width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
       padding: $spacing-sm $spacing-md $spacing-md;
       align-content: flex-start;
 
@@ -356,9 +358,10 @@ const filteredProjects = computed(() => {
         animation-delay: 0s;
         opacity: 0;
         transform: scale(0.9);
-        background: $white linear-gradient(to bottom, $white 70%, rgba($brand-light, 0.025) 90%, rgba($brand-light, 0.05) 100%);
+        background: $white linear-gradient(to bottom, $white 70%, rgba($brand-light, 0.1) 90%, rgba($brand-light, 0.05) 100%);
         outline: 1px solid $white;
         outline-offset: -2px;
+        box-shadow: $main-shadow;
 
         &.completed {
           background: $white linear-gradient(to bottom, $white 70%, rgba($mint-light, 0.25) 90%, rgba($mint-light, 0.1) 100%);
@@ -532,6 +535,8 @@ const filteredProjects = computed(() => {
       padding: $spacing-sm $spacing-md $spacing-sm;
       align-content: flex-start;
       width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
       gap: $spacing-xs;
 
       .project-card {
@@ -550,6 +555,7 @@ const filteredProjects = computed(() => {
         border-radius: $br-md;
         border: $border;
         background-color: $white;
+        box-shadow: $main-shadow;
 
         .project-card-header {
           display: flex;

@@ -14,7 +14,7 @@
       </section>
 
       <!-- Free user, maxxed out projects -->
-      <section class="inner-container" v-if="!loading && !isPro && !isAllowed">
+      <section class="inner-container" v-if="!loading && !isAllowed">
         <div class="empty">
           <h3>Free projects are limited</h3>
           <p>You're a manager and already have one free project. If you need more, you must upgrade.</p>
@@ -320,12 +320,13 @@ const isPro = computed(() => {
 })
 
 const isAllowed = computed(() => {
-  // Free user, already has one project, not allowed
-  if (isPro || ownedProjects.value == 0) {
+  if (PlanStatus.value == 'pro') {
     return true;
-  } else { // Free user, already has one team, not allowed
+  } else if (ownedProjects.value == 0 && PlanStatus.value == 'free') {
+    return true;
+  } else {
     return false;
-  } 
+  }
 })
 
 // Form validation
