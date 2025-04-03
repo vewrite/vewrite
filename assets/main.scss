@@ -698,7 +698,7 @@ button,
     border-radius: $br-lg;
     text-align: center;
     text-decoration: none;
-    padding: $spacing-xxs calc($spacing-xs + $spacing-xxs);
+    padding: $spacing-xxs $spacing-sm;
     cursor: pointer;
     font-size: $font-size-xs;
     transition: all 0.2s ease;
@@ -1104,7 +1104,7 @@ button.vertical,
         }
 
         .vc-day {
-            padding: $spacing-xxl $spacing-md;
+            padding: 0 $spacing-md;
             border-right: $border;
             height: 100%;
 

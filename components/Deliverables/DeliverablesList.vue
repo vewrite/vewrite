@@ -60,6 +60,8 @@ const props = defineProps({
   border-bottom: none;
   border-radius: $br-lg $br-lg 0 0;
   gap: $spacing-sm;
+  height: 100%;
+
 
   .no-deliverables {
     display: flex;

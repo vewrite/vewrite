@@ -31,7 +31,8 @@
 
         <div class="search-bar" v-if="deliverables.length > 0 && !loading.deliverables">
           
-          <input type="text" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
+          <input type="text" v-if="viewModeDeliverable == 'list'" placeholder="Search in this project" v-model="searchQuery" :class="[listToggle]" />
+          <div v-else></div>
           
           <div class="list-buttons">
             <button :class="['list-icon', viewModeDeliverable == 'list' ? 'active' : '']" @click="listToggle('list')">
@@ -454,7 +455,7 @@ watchEffect(() => {
   .deliverables-view {
     display: flex;
     gap: $spacing-md;
-    height: calc(100% - 125px);
+    height: 100%;
     width: 100%;
   }
 }

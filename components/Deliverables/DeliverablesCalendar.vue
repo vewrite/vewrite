@@ -242,6 +242,7 @@ async function loadDeliverableByDate(timestamptz) {
     display: flex;
     flex-direction: row;
     height: 100%;
+    overflow: hidden;
 
     .v-calendar {
       width: 100%;
