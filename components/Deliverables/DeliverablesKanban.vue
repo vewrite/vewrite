@@ -50,6 +50,8 @@ async function populateStates() {
   
   loading.value = true;
 
+  deliverablesByState
+
   try {
 
     for (const state of props.workflowStates) {
@@ -68,6 +70,14 @@ async function populateStates() {
     loading.value = false;
   }
 }
+
+// when the deliverables updates, I want to call the populateStates function again.
+watch(() => props.deliverables, async (newDeliverables) => {
+  if (newDeliverables.length > 0) {
+    console.log('Deliverables updated, updating kanban view');
+    await populateStates();
+  }
+});
 
 onMounted(async () => {
   
