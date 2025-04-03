@@ -3,13 +3,12 @@
     <Loading v-if="loading" type="small" />
 
     <div class="kanban-column" v-if="!loading" v-for="state in deliverablesByState">
-      <!-- {{ state }} -->
       <div class="kanban-column-header">{{ state.instance_name }}</div>
       <div class="deliverables">
-        <div class="deliverable" v-for="deliverable in state.deliverables">
+        <router-link :to="'/deliverable/' + deliverable.id" class="deliverable" v-for="deliverable in state.deliverables">
           <div class="deliverable-title">{{ deliverable.title }}</div>
           <div class="deliverable-due-date">{{ deliverable.due_date }}</div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -19,16 +18,9 @@
 
 import { format, parseISO } from 'date-fns';
 
-// Deliverables composable
-import useDeliverables from '~/composables/useDeliverables';
-const { fetchDeliverable, onDateSelect, createDeliverableModal, useSelectedDate } = useDeliverables();
-
 // State Instance composable
 import useWorkflowStateInstances from '~/composables/useWorkflowStateInstances';
 const { fetchStateInstanceName } = useWorkflowStateInstances();
-
-const supabase = useSupabaseClient();
-const selectedDeliverableDate = useSelectedDate();
 
 const loading = ref(false);
 
@@ -148,6 +140,8 @@ onMounted(async () => {
         cursor: pointer;
         transition: background-color 0.2s;
         box-shadow: $small-shadow;
+        text-decoration: none;
+        color: $black;
 
         &:hover {
           outline: 1px solid rgba($brand, 0.25);
