@@ -236,12 +236,14 @@ onMounted(async () => {
 });
 
 const filteredProjects = computed(() => {
+
   if (projectFilter.value === 'all') {
     return projects.value.filter(
       project => 
         project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
   }
+
   if (projectFilter.value === 'owner') {
     return projects.value.filter(
       project => 
@@ -257,9 +259,11 @@ const filteredProjects = computed(() => {
         && project.tag === 'Member'
     )
   }
+
   if (!searchQuery.value) {
     return projects.value
   }
+  
 })
 
 </script>

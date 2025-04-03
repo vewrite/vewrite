@@ -54,9 +54,11 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 1600px;
+  margin: $spacing-md auto 0;
   border: $border;
-  border-radius: $br-lg;
-  margin: $spacing-md;
+  border-bottom: none;
+  border-radius: $br-lg $br-lg 0 0;
   gap: $spacing-sm;
 
   .no-deliverables {
