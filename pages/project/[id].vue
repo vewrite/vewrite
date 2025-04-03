@@ -394,6 +394,14 @@ onMounted(async () => {
 
   const deliverablesSubscription = supabase
     .channel('deliverables')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'deliverables' }, payload => {
+      console.log('New deliverable:', payload.new);
+      fetchDeliverables(projectId);
+
+      // Setup the calendar view attributes by resetting and setting new ones
+      resetCalendarViewAttrs();
+      setNewCalendarViewAttrs();
+    })
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'deliverables' }, payload => {
       fetchDeliverables(projectId);
 

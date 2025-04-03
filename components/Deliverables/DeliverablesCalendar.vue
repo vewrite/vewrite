@@ -202,11 +202,12 @@ async function loadDeliverableByDate(timestamptz) {
 .calendar-view {
   height: 100%;
   width: 100%;
+  max-width: 1600px;
+  margin: $spacing-md auto;
   border: $border;
   border-radius: $br-lg;
   display: flex;
   flex-direction: column;
-  margin: $spacing-md;
 
   .calendar-switch {
     width: 100%;

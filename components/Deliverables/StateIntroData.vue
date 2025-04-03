@@ -8,7 +8,7 @@
         <div class="single-member" v-if="assignedProjectMembers" v-for="(uuid, role) in assignedProjectMembers" :key="role" :class="DeliverableData.assigned_to == uuid ? 'assigned' : ''">
           <Avatar :uuid="uuid" :hasName="true" size="tiny" />
           <div class="members-role">
-            <div class="assigned-to" v-if="DeliverableData.assigned_to == uuid">{{ role }} is assigned</div>
+            <div class="assigned-to notification info" v-if="DeliverableData.assigned_to == uuid">{{ role }} is assigned</div>
           </div>
         </div>
       </div>
@@ -95,14 +95,6 @@ onMounted(async () => {
           flex-direction: row;
           align-items: center;
           gap: $spacing-xs;
-
-          .assigned-to {
-            color: $brand;
-            background: rgba($white, 0.5);
-            border: 1px solid rgba($brand, 0.5);
-            padding: 2px $spacing-xs;
-            border-radius: $br-lg;
-          }
         }
       }
     }
