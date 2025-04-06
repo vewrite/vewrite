@@ -77,11 +77,39 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
     width: 100%;
     height: 40px;
 
+    &:hover {
+
+      .members-image {
+      
+        &:nth-child(1) {
+          z-index: 3;
+          right: 0px;
+          top: 0px;
+          display: block;
+        }
+
+        &:nth-child(2) {
+          z-index: 2;
+          right: 6px;
+          top: 0px;
+          display: block;
+        }
+
+        &:nth-child(3) {
+          z-index: 1;
+          right: 12px;
+          top: 0px;
+          display: block;
+        }
+      }
+    }
+
     .members-image {
       position: relative;
       top: 0;
       display: none;
       border-radius: $br-xl;
+      transition: all 0.3s ease;
 
       .invited-member {
         display: flex;
@@ -128,6 +156,8 @@ const debouncedUpdateProjectDescription = debounce((id, value) => updateProjectD
         display: block;
       }
     }
+
+    
   }
 }
 
