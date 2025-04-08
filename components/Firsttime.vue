@@ -106,9 +106,7 @@ onMounted(async () => {
     console.error(error)
   }
 
-  if (TeamsData.value.length > 0) {
-    defaultUser.value.persona = 'writer'
-  }
+  defaultUser.value.persona = 'manager'
 })
 
 async function checkInvitedProfiles(email) {

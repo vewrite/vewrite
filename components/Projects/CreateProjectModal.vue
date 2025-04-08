@@ -193,10 +193,6 @@ const ownedProjects = ref(0);
 const subscriptionStatus = useState('subscriptionStatus');
 PlanStatus.value = subscriptionStatus.value.status
 
-const readyTeamsData = computed(() => {
-  return TeamsData.value.filter(team => team.details.ready === true);
-})
-
 // Loading state
 const loading = ref(true);
 const loadingbutton = ref(false);
@@ -311,18 +307,10 @@ const hasClients = computed(() => {
   return clients.value.length > 0;
 })
 
-const isPro = computed(() => {
-  if (PlanStatus.value == 'pro') {
-    return true;
-  } else {
-    return false;
-  }
-})
-
 const isAllowed = computed(() => {
   if (PlanStatus.value == 'pro') {
     return true;
-  } else if (ownedProjects.value == 0 && PlanStatus.value == 'free') {
+  } else if (ownedProjects.value == 0 && PlanStatus.value == 'free' || ownedProjects.value == 0 && subscriptionStatus.value == 'free') {
     return true;
   } else {
     return false;
@@ -415,6 +403,7 @@ function clearErrors () {
 
     .inner-container {
       gap: 0;
+      padding-top: 0
     }
 
     .clients {

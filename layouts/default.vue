@@ -15,7 +15,7 @@
 <script setup>
 
 import useProfile from '~/composables/useProfile'
-const { createProfile } = useProfile()
+const { createProfile, ProfileData } = useProfile()
 
 import { useUser } from '@/stores/user'
 const userStore = useUser()
@@ -27,19 +27,10 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 // This covers users who aren't logged in and solves all of the issues in https://github.com/vewrite/vewrite/issues/97
-if(user.value == null) {
+if (user.value == null) {
   router.push('/login')
 }
 
-/*
-
-If the user is new, show the onboarding screen
-- Check if the user has a profile
-- If not, create one
-
-If the user is not new, show the main app
-
-*/
 const isNewUser = ref(false)
 const hasPersonalClient = ref(false)
 const loading = ref(true)
@@ -62,8 +53,6 @@ async function checkUser() {
 
   } catch (error) {
     isNewUser.value = true
-    console.log("There is no profile for this user. Creating now.")
-    await createProfile(user.value)
     loading.value = false
   }
 }

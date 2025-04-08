@@ -1,5 +1,6 @@
 import { useAuthStore } from '~/stores/auth'
 import { navigateTo } from '#app'
+import useProfile from '~/composables/useProfile'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
@@ -9,6 +10,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // I'm going to want to get the user's subscription status here via the object in the column 'subscription' in the 'profiles' table
   const subscriptionStatus = useState('subscriptionStatus', () => ({}));
   const personaState = useState('personaState', () => ({}));
+
+  const { createProfile, ProfileData } = useProfile()
 
 
   async function handleProfileInserts(payload) {
@@ -24,19 +27,59 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   async function initProfile() {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.value.id)
-      .single()
 
-    if (error) {
+    console.log('Initializing profile...')
+
+    try {
+      
+      if (!user.value) {
+        console.log('User is not authenticated')
+        return
+      }
+
+      // Fetch the user's profile from the database
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.value.id)
+        .maybeSingle();
+
+      console.log('Fetched profile:', data)
+
+      if (error) { throw error }
+
+      // if there are zero rows returned, create a new profile
+      if (data === undefined || data === null) {
+        console.log('No profile found for this user')
+        await createProfile(user.value)
+
+        // Go get that new profile
+        const { data: newProfile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.value.id)
+          .single()
+
+        if (error) { throw error }
+
+        console.log('Created new profile:', newProfile)
+
+        // recursively call initProfile to get the new profile
+        await initProfile()
+        return
+
+      } else {
+        subscriptionStatus.value = data.subscription
+        personaState.value = data.persona
+      }
+
+
+    } catch (error) {
       console.error('Error fetching user profile:', error.message)
-    } else {
-      subscriptionStatus.value = data.subscription
-      personaState.value = data.persona
     }
   }
+
+  
 
   // Set subscription status and persona state for use in the app
   if (user.value) {
@@ -47,18 +90,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles' }, handleProfileUpdates)
       .subscribe();
 
-    initProfile()
+    await initProfile()
 
     onUnmounted(() => {
       supabase.removeChannel(subscription);
     });
 
-    // if (error) {
-    //   console.error('Error fetching user profile:', error.message)
-    // } else {
-    //   subscriptionStatus.value = data.subscription
-    //   personaState.value = data.persona
-    // }
   }
 
   // Define public routes

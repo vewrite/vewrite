@@ -9,6 +9,8 @@ export default function useProfile() {
 
   async function createProfile(profile) {
 
+    console.log('Creating profile:', profile);
+
     try {
 
       const newProfile = {
@@ -24,14 +26,20 @@ export default function useProfile() {
         },
       }
 
-      const { data, error } = await supabase
+      let { data, error } = await supabase.from('profiles').insert(newProfile, {
+        returning: 'minimal', 
+      })
+
+      const { data: userProfile } = await supabase
         .from('profiles')
-        .insert(newProfile);
+        .select('*')
+        .eq('id', profile.id)
+        .single();
 
       if (error) throw error
 
-      ProfileData.value = data[0]
-      return data
+      ProfileData.value = userProfile
+      // return data
   
     } catch (error) {
       console.error('Error creating profile:', error)
