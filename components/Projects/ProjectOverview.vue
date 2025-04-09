@@ -11,7 +11,7 @@
       <div class="notification warning" v-if="membersError">You don't have enough ready members</div>
       <div class="members">
         <div class="members-image" v-for="member in project.project_members" :key="member.user_id">
-          <Avatar v-if="member.user_id" :uuid="member.user_id" size="large" />
+          <Avatar v-if="member.user_id" :uuid="member.user_id" size="large" :avatar="true" />
           <section v-else class="invited-member">
             <div class="icon-email">
               <Icon name="fluent:mail-unread-20-regular" size="2rem" />
