@@ -221,6 +221,12 @@ $v.value.$touch()
   overflow-x: hidden;
   overflow-y: auto;
 
+  @media (max-width: 600px) {
+    height: fit-content;
+    width: 100%;
+    padding: $spacing-md 0;
+  }
+
   .projects-approval-wrapper {
     border: $border;
     border-radius: $br-md;
@@ -279,6 +285,7 @@ $v.value.$touch()
       display: flex;
       flex-direction: column;
       gap: $spacing-lg;
+      padding: 0 $spacing-md;
 
       .password-capture {
         .notification {
@@ -330,6 +337,11 @@ $v.value.$touch()
         h2 {
           margin: 0;
           font-size: $font-size-lg;
+
+          @media (max-width: 600px) {
+            font-size: $font-size-sm;
+            font-weight: bold;
+          }
         }
 
         p {
@@ -338,6 +350,10 @@ $v.value.$touch()
           text-transform: none;
           max-width: 80%;
           margin: 0 0 $spacing-xxs 0;
+
+          @media (max-width: 600px) {
+            display: none;
+          }
         }
 
       }
