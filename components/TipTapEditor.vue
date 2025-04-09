@@ -562,7 +562,7 @@ onBeforeUnmount(() => {
   padding: $spacing-xxs $spacing-xs;
   position: sticky;
   top: $spacing-sm;
-  margin: $spacing-sm;
+  margin: 0;
   z-index: 10;
   flex-wrap: wrap;
   border-radius: $br-lg;
