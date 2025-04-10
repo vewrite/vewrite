@@ -14,7 +14,7 @@
           <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
         </div>
         <div class="deliverable-actions">
-          <span class="deliverable-state">{{ deliverable.state_name }}</span>
+          <span class="deliverable-state" :class="deliverable.state_name == 'Approved by Stakeholder' ? 'approved' : ''"><Icon v-if="deliverable.state_name == 'Approved by Stakeholder'" name="fluent:checkmark-16-regular" size="1.5rem" />{{ deliverable.state_name }}</span>
           <Dropdown>
             <template v-slot:trigger>
               Due {{ deliverable.formattedDueDate }}
@@ -165,6 +165,16 @@ const props = defineProps({
           text-wrap: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: $spacing-xxxs;
+
+          &.approved {
+            background: rgba($mint, 0.1);
+            color: $mint;
+            border: 1px solid rgba($mint, 0.2);
+          }
 
           @media (max-width: 960px) {
             font-size: $font-size-xxs;
