@@ -74,6 +74,7 @@ export default {
     height: calc(100% - 60px);
     position: relative;
     background: $white;
+    overflow-y: auto;
 
     @media (max-width: 960px) {
       border: none;

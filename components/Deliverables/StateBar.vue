@@ -47,11 +47,20 @@
     </div>
     
     <!-- Is approved (49) -->
-    <div v-if="props.StateData[0].state_type === 6 && !isExternal">
-      <button class="button primary" @click="downloadFile('markdown')">Download markdown</button>
-      <button class="button primary" @click="downloadFile('html')">Download html</button>
+    <div v-if="props.StateData[0].state_type === 6 && isContent">
+      <Dropdown position="left" primary="true">
+        <template v-slot:trigger>
+          Download Deliverable
+        </template>
+        <template v-slot:menu>
+          <div class="dropdown-item" @click="downloadFile('markdown')">Download markdown</div>
+          <div class="dropdown-item" @click="downloadFile('html')">Download html</div>
+        </template>
+      </Dropdown>
+      <!-- <button class="button primary" @click="downloadFile('markdown')">Download markdown</button>
+      <button class="button primary" @click="downloadFile('html')">Download html</button> -->
     </div>
-    <div class="notification warning" v-if="props.StateData[0].state_type === 6 && isExternal"> 
+    <div class="notification warning" v-if="props.StateData[0].state_type === 6 && !isContent"> 
       This deliverable is an external link.
     </div>
 
@@ -77,13 +86,13 @@ const deliverableStore = useDeliverableStore();
 import TurnDownService from 'turndown';
 const turndownService = new TurnDownService();
 
-const isExternal = () => {
-  if(DeliverableData.content.type == 'link') {
+const isContent = computed(() => {
+  if(props.DeliverableData.content.type == 'content') {
     return true;
-  } else {
+  } else { // Is a link
     return false;
   }
-}
+});
 
 async function handleState(stateId, deliverableId, stateType) {
 

@@ -48,15 +48,6 @@ export default defineEventHandler(async (event) => {
 
   let fileName = '';
 
-  // // Simple condition to test if the block runs
-  // if (type === 'html') {
-  //   console.log('HTML export');
-  //   fileName = `vewrite-export-html-${id}.html`;
-  // } else {
-  //   console.log('Default export');
-  //   fileName = `vewrite-export-${id}.md`;
-  // }
-
   // Set the response headers
   event.res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
   event.res.setHeader('Content-Type', 'text/plain');
