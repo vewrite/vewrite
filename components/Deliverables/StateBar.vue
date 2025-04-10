@@ -53,12 +53,11 @@
           Download Deliverable
         </template>
         <template v-slot:menu>
-          <div class="dropdown-item" @click="downloadFile('markdown')">Download markdown</div>
-          <div class="dropdown-item" @click="downloadFile('html')">Download html</div>
+          <div class="dropdown-item" @click="downloadFile('markdown')">Markdown</div>
+          <div class="dropdown-item" @click="downloadFile('asciidoc')">Asciidoc</div>
+          <div class="dropdown-item" @click="downloadFile('html')">Html</div>
         </template>
       </Dropdown>
-      <!-- <button class="button primary" @click="downloadFile('markdown')">Download markdown</button>
-      <button class="button primary" @click="downloadFile('html')">Download html</button> -->
     </div>
     <div class="notification warning" v-if="props.StateData[0].state_type === 6 && !isContent"> 
       This deliverable is an external link.
@@ -68,6 +67,8 @@
 </template>
 
 <script setup>
+
+import { convertToAsciidoc } from '~/utils/asciidocConverter'
 
 const props = defineProps(['StateData', 'DeliverableData']);
 const loading = ref(false);
@@ -188,6 +189,32 @@ async function downloadFile(type) {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+
+    if(type == 'asciidoc') {
+
+      const markdown = await response.text();
+      const asciidocContent = convertToAsciidoc(markdown);
+      
+      const blob = new Blob([asciidocContent], { type: 'text/plain' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+
+      link.href = url
+      link.setAttribute('download', `vewrite-asciidoc-export-${props.DeliverableData.id}.adoc`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+
+      // const markdown = await response.text();
+      // const html = turndownService.turndown(markdown);
+      // const url = window.URL.createObjectURL(new Blob([html], {type: 'text/html'}));
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.setAttribute('download', `vewrite-asciidoc-export-${props.DeliverableData.id}.adoc`);
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
     }
 
     if(type == 'markdown'){
