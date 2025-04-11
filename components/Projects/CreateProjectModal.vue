@@ -28,8 +28,6 @@
         <section class="form-row">
           <div class="inner-container">
 
-            <h3>Project Details</h3>
-
             <div class="form-block">
               <div class="form-content-full">
 
@@ -82,9 +80,12 @@
           </div>
           <div class="inner-container">
 
-            <h3>Project Members</h3>
+            <div class="user-select">
+              <div class="single-select" :class="userSelect == 'team' ? 'active' : ''" @click="userSelectToggle('team')">Team</div>
+              <div class="single-select" :class="userSelect == 'solo' ? 'active' : ''" @click="userSelectToggle('solo')">Solo</div>
+            </div>
 
-            <section class="team-assignment">
+            <section class="team-assignment" v-if="userSelect == 'team'">
 
               <!-- <section class="form-required" v-if="missingRoles">Role selection required</section> -->
 
@@ -133,7 +134,6 @@
 
               <!-- List of project members -->
               <div class="members">
-                <!-- <div class="members-title">Project team members</div> -->
                 <div class="member" v-if="project" v-for="member in project.project_members" :key="member.id">
                   <Avatar v-if="member.user_id" :uuid="member.user_id" :hasName="true" size="large" />
                   <section v-else class="invited-member">
@@ -155,6 +155,22 @@
                 You must add at least one more team member to create this project.
               </div>
 
+            </section>
+
+            <section class="solo-assignment" v-else>
+              <div class="form-info">
+                <div class="members">
+                  <div class="member" v-if="project" >
+                    <Avatar :uuid="user.id" :hasName="true" size="large" />
+                    <section>
+                      <span class="member-role">Solo</span>
+                    </section>
+                  </div>
+                </div>
+              </div>
+              <div class="notification info">
+                <p>Solo projects are a great way to get started with Vewrite. You can always add team members later.</p>
+              </div>
             </section>
           </div>
         </section>
@@ -188,6 +204,12 @@ const user = useSupabaseUser();
 
 const PlanStatus = ref('')
 const ownedProjects = ref(0);
+
+const userSelect = ref('team');
+
+function userSelectToggle(type) {
+  userSelect.value = type;
+}
 
 // Pull subscription status from the middleware auth.js
 const subscriptionStatus = useState('subscriptionStatus');
@@ -406,22 +428,72 @@ function clearErrors () {
       padding-top: 0
     }
 
+    .user-select {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-xs;
+      background: rgba($brand, 0.025);
+      border-radius: $br-md $br-md 0 0;
+      width: 100%;
+      margin-bottom: $spacing-sm;
+      border: $border;
+
+      .single-select {
+        padding: $spacing-xxs;
+        border-radius: $br-md;
+        background-color: rgba($black, 0.025);
+        color: $black;
+        font-size: $font-size-xs;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 50%;
+        text-align: center;
+
+        &.active {
+          background-color: $brand;
+          color: $white;
+
+          &:hover {
+            background-color: darken($brand, 5%);
+          }
+        }
+
+        &:hover {
+          background-color: rgba($black, 0.05);
+        }
+
+        &:first-child {
+          border-radius: $br-md 0 0 $br-md;
+        }
+
+        &:last-child {
+          border-radius: 0 $br-md $br-md 0;
+        }
+      }
+    }
+
     .clients {
       width: 100%;
     }
 
-    .team-assignment {
+    .team-assignment,
+    .solo-assignment {
       display: flex;
       flex-direction: column;
       width: 100%;
       position: relative;
+      margin-top: -$spacing-sm;
       
       .form-input {
         margin:0;
-        border-radius: $br-md $br-md 0 0;
+        border-radius: 0;
+        border-top: 1px solid transparent;
 
-        &.add-member {
-          height: 52px;
+        &:hover,
+        &:active {
+          border-top: 1px solid $brand;
         }
       }
 
@@ -478,8 +550,8 @@ function clearErrors () {
         border-top: 0;
         border-radius: 0 0 $br-md $br-md;
         height: 100%;
-        min-height: 168px;
-        max-height: 168px;
+        min-height: 218px;
+        max-height: 218px;
         overflow-y: auto;
         background: rgba($gray-light, .25);
         position: relative;
@@ -544,6 +616,14 @@ function clearErrors () {
             border-bottom: none;
           }
         }
+      }
+    }
+
+    .solo-assignment {
+      .members {
+        min-height: 256px;
+        max-height: 256px;
+        overflow-y: auto;
       }
     }
 
