@@ -14,7 +14,7 @@
           <router-link :to="'/deliverable/' + deliverable.id" class="deliverable-title">{{ deliverable.title }}</router-link>
         </div>
         <div class="deliverable-actions">
-          <span class="deliverable-state" :class="deliverable.state_name == 'Approved by Stakeholder' ? 'approved' : ''"><Icon v-if="deliverable.state_name == 'Approved by Stakeholder'" name="fluent:checkmark-16-regular" size="1.5rem" />{{ deliverable.state_name }}</span>
+          <span class="deliverable-state" :class="deliverable.state_name == 'Approved' ? 'approved' : ''"><Icon v-if="deliverable.state_name == 'Approved'" name="fluent:checkmark-16-regular" size="1.5rem" />{{ deliverable.state_name }}</span>
           <Dropdown>
             <template v-slot:trigger>
               Due {{ deliverable.formattedDueDate }}
