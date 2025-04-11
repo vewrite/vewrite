@@ -3,7 +3,6 @@
     <Loading v-if="loading" />
 
     <div class="search-bar" v-if="!loading">
-      <Icon name="fluent:search-20-regular" size="1.5rem" />
       <input type="text" placeholder="Search clients" v-model="searchQuery" />
     </div>
 
