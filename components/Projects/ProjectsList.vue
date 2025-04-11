@@ -11,6 +11,9 @@
           <button :class="['list-icon', projectFilter == 'all' ? 'active' : '']" @click="handleProjectFilter('all')">
             All
           </button>
+          <button :class="['list-icon', projectFilter == 'solo' ? 'active' : '']" @click="handleProjectFilter('solo')">
+            Solo
+          </button>
           <button :class="['list-icon', projectFilter == 'owner' ? 'active' : '']" @click="handleProjectFilter('owner')">
             Owner
           </button>
@@ -101,7 +104,11 @@ const assignedProjects = ref([]);
 function assignProjectTag(project) {
   let tag = '';
   if (user.value.id === project.created_by) {
-    tag = 'Owner'
+    if (project.project_type === 'solo') {
+      tag = 'Solo'
+    } else {
+      tag = 'Owner'
+    }
   } else {
     tag = 'Member'
   }
@@ -249,6 +256,14 @@ const filteredProjects = computed(() => {
       project => 
         project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
         && project.tag === 'Owner'
+    )
+  }
+
+  if (projectFilter.value === 'solo') {
+    return projects.value.filter(
+      project => 
+        project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+        && project.tag === 'Solo'
     )
   }
 
