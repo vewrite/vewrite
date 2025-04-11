@@ -35,21 +35,21 @@
         
         <!-- State -->
         <ProjectWorkflow :DeliverableData="DeliverableData" :CurrentState="StateData[0].instance_name" />
-        <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" />
+        <StateBar v-if="StateData" :StateData="StateData" :DeliverableData="DeliverableData" :isSolo="isSolo" />
         
         <div class="vertical-divider"></div>
 
         <!-- State intro -->
-        <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" /> 
+        <StateIntroData :project="DeliverableData.project" :DeliverableData="DeliverableData" v-if="!isSolo" /> 
         
-        <div class="vertical-divider"></div>
+        <div class="vertical-divider" v-if="!isSolo"></div>
 
         <!-- Assignments -->
-        <button class="button clear" @click="changeAssignmentsModal()" v-if="personaState == 'manager' || isOwner">
+        <button class="button clear" @click="changeAssignmentsModal()" v-if=" !isSolo && personaState == 'manager' || isOwner">
           <Icon name="fluent:person-20-regular" size="2rem" />
         </button>
 
-        <div class="vertical-divider"></div>
+        <div class="vertical-divider" v-if="!isSolo"></div>
         
         <!-- Deliverable dropdown -->
         <Dropdown v-if="personaState == 'manager' || isOwner" :clear="true">
@@ -141,6 +141,10 @@ const hasAccess = computed(() => {
 const isOwner = computed(() => 
   route.meta.role === 'owner'
 );
+
+const isSolo = computed(() => {
+  return project.value && project.value.project_type === 'solo';
+});
 
 const dueDate = computed(() => {
   return new Date(DeliverableData.value.due_date).toDateString();

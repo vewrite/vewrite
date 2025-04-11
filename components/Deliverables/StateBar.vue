@@ -16,16 +16,19 @@
       <button class="button" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 44)">Back to research</button>
       <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 46)">Send for review</button>
     </div>
-    <div class="notification warning" v-if="props.StateData[0].state_type === 3 && route.meta.roles.reviewer == user.id"> 
+    <div class="notification warning" v-if="props.StateData[0].state_type === 3 && route.meta.roles.reviewer == user.id && !isSolo"> 
       Waiting for writer to finish.
     </div>
 
     <!-- Is in outline review state (46) -->
     <div v-if="props.StateData[0].state_type === 2 && route.meta.roles.reviewer == user.id">
-      <button class="button" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">Send back to writer</button>
+      <button class="button" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 45)">
+        <span v-if="isSolo">Back to writing</span>
+        <span v-else>Send back to writer</span>
+      </button>
       <button class="button primary" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 47, DeliverableData.role_assignments.Writer)">Approve outline</button>
     </div>
-    <div class="notification warning" v-if="props.StateData[0].state_type === 2 && route.meta.roles.writer == user.id"> 
+    <div class="notification warning" v-if="props.StateData[0].state_type === 2 && route.meta.roles.writer == user.id && !isSolo"> 
       Waiting for reviewer to finish.
     </div>
 
@@ -33,16 +36,19 @@
     <div v-if="props.StateData[0].state_type === 4 && route.meta.roles.writer == user.id"> 
       <button class="button primary" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 48)">Send for review</button>
     </div>
-    <div class="notification warning" v-if="props.StateData[0].state_type === 4 && route.meta.roles.reviewer == user.id"> 
+    <div class="notification warning" v-if="props.StateData[0].state_type === 4 && route.meta.roles.reviewer == user.id && !isSolo"> 
       Waiting for writer to finish.
     </div>
 
     <!-- Is in draft review state (48) -->
     <div v-if="props.StateData[0].state_type === 5 && route.meta.roles.reviewer == user.id">
-      <button class="button" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">Send back to writer</button>
+      <button class="button" @click="handleState(DeliverableData.workflow_state, DeliverableData.id, 47)">
+        <span v-if="isSolo">Back to writing</span>
+        <span v-else>Send back to writer</span>
+      </button>
       <button class="button primary" @click="approvalModal(DeliverableData.workflow_state, DeliverableData.id, 49, DeliverableData.role_assignments.Writer)">Approve draft</button>
     </div>
-    <div class="notification warning" v-if="props.StateData[0].state_type === 5 && route.meta.roles.writer == user.id"> 
+    <div class="notification warning" v-if="props.StateData[0].state_type === 5 && route.meta.roles.writer == user.id && !isSolo"> 
       Waiting for reviewer to finish.
     </div>
     
@@ -70,7 +76,7 @@
 
 import { convertToAsciidoc } from '~/utils/asciidocConverter'
 
-const props = defineProps(['StateData', 'DeliverableData']);
+const props = defineProps(['StateData', 'DeliverableData', 'isSolo']);
 const loading = ref(false);
 
 const user = useSupabaseUser();
