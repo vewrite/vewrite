@@ -236,7 +236,8 @@ const project = reactive({
       role: 'owner',
       email: user.value.email,
     },
-  ]
+  ],
+  project_type: ''
 })
 
 const newMember = ref(
@@ -374,7 +375,23 @@ function handleCreateProject (project) {
     });
     return
   } else {
-    createProject(project);
+    project.project_type = userSelect.value;
+    console.log(project);
+    // For teams, we can just use the regular createProject function
+    if(userSelect.value == 'team') {
+      createProject(project);
+    } else {
+      // For solo projects, we need to set the project_members to the current user
+      project.project_members = [
+        {
+          user_id: user.value.id,
+          role: 'member',
+          email: user.value.email,
+        },
+      ];
+      // Set the project type to solo
+      createProject(project);
+    }
   }
 
 }
@@ -456,7 +473,7 @@ function clearErrors () {
           color: $white;
 
           &:hover {
-            background-color: darken($brand, 5%);
+            background-color: $brand;
           }
         }
 

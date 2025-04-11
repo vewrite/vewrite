@@ -6,14 +6,14 @@
           <Icon name="fluent:arrow-left-16-regular" size="1.5rem" />
         </router-link>
         <Loading v-if="loading.global == true" zeroHeight="zero-height" type="small"  />
-        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" />
+        <ProjectOverview v-if="project && loading.global == false" :project="project" :deliverables="deliverables" :client="project.client_id" :creator="creator" :team="project.assigned_team" :membersError="membersError" :isSolo="isSolo" />
       </div>
       <div class="app-panel-header" v-if="project">
         <Loading type="header" v-if="loading.global" />
       </div>
       <div class="app-panel-header-buttons" v-if="loading.global == false && hasAccess">
-        <button class="button primary" @click="manageProjectMembersModal(project.id)" v-if="personaState == 'manager' && isOwner">Manage members</button>
-        <button class="button primary" @click="handleOpenModal()" v-if="personaState == 'manager' && isOwner && !membersError">Create new deliverable</button>
+        <button class="button primary" @click="manageProjectMembersModal(project.id)" v-if="personaState == 'manager' && isOwner && !isSolo">Manage members</button>
+        <button class="button primary" @click="handleOpenModal()" v-if="personaState == 'manager' && isOwner && !membersError || isSolo">Create new deliverable</button>
         <Dropdown v-if="personaState == 'manager' && isOwner">
           <template v-slot:trigger>
             <Icon name="uis:ellipsis-v" size="1.15rem" />
@@ -246,6 +246,10 @@ async function checkMemberRequirements() {
 const isOwner = computed(() => 
   route.meta.role === 'owner'
 );
+
+const isSolo = computed(() => {
+  return project.value && project.value.project_type === 'solo';
+});
 
 // Gated access, only for the project creator or team members
 const hasAccess = computed(() => {

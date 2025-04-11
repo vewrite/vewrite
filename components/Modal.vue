@@ -240,6 +240,7 @@ computed(() => {
       height: calc(100% - 88px);
       overflow-y: auto;
       position: relative;
+      padding: $spacing-xxs 0;
 
       .padded-loader {
         padding: $spacing-xxl;

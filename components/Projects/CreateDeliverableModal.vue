@@ -68,7 +68,14 @@
             </div>
 
             <!-- Team assignment -->
-            <section class="team-assignment">
+
+            <section class="solo-project" v-if="project && isSolo">
+              <div class="notification info">
+                <p>This is a solo project and there is no need to assign roles. Within the workflow, the owner of this project will be assigned to both the writer and reviewer roles.</p>
+              </div>
+            </section>
+
+            <section class="team-assignment" v-else>
 
               <section class="form-required" v-if="missingRoles">Role selection required</section>
 
@@ -123,6 +130,9 @@ import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps(['team']);
 const emit = defineEmits(['update']);
+
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
 const role_assignments = ref({
   Writer: null,
@@ -196,6 +206,10 @@ const deliverable = reactive({
   assigned_to: role_assignments.value.Writer,
 })
 
+const isSolo = computed(() => {
+  return project.value && project.value.project_type === 'solo';
+});
+
 const buttonDate = computed(() => {
   return deliverable.due_date.toDateString();
 })
@@ -220,7 +234,18 @@ function checkMemberRequirements() {
 async function init() {
   try {
     await fetchRoles();
-    checkMemberRequirements();
+    // Check if the project has enough members. Solo projects are good as is.
+    if (isSolo.value) {
+      // set the project members to be the owner
+      role_assignments.value = {
+        Writer: user.value.id,
+        Reviewer: user.value.id
+      };
+
+      membersError.value = false;
+    } else {
+      checkMemberRequirements();
+    }
   } catch (error) {
     console.error('Error fetching data:', error.message);
   }
@@ -263,9 +288,11 @@ const handleCreateDeliverable = (deliverable, projectId) => {
   
   clearErrors();
 
-  if (!role_assignments.value.Writer || !role_assignments.value.Reviewer) {
-    console.log('Missing roles');
-    missingRoles.value = true;
+  if (!isSolo.value) {
+    if (role_assignments.value.Writer === null || role_assignments.value.Reviewer === null) {
+      console.log('Missing roles');
+      missingRoles.value = true;
+    }
   }
 
   if ($v.value.$invalid) {

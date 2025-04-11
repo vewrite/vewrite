@@ -2,12 +2,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useModal } from '~/stores/modal'
 import useDeliverables from '~/composables/useDeliverables'
-import useClient from '~/composables/useClient'
-
-// Vuelidate
-// TODO - Implement vuelidate again within the composable
-// import { useVuelidate } from '@vuelidate/core'
-// import { required, email } from '@vuelidate/validators'
 
 export default function useProject() {
 
@@ -34,6 +28,7 @@ export default function useProject() {
         updated_at: project.updated_at,
         created_by: project.created_by,
         project_members: project.project_members,
+        project_type: project.project_type,
       };
       
       const { data, error } = await supabase

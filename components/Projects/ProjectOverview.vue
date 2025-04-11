@@ -8,7 +8,8 @@
       </div>
     </aside>
     <section class="project-members">
-      <div class="notification warning" v-if="membersError">You don't have enough ready members</div>
+      <div class="notification info" v-if="isSolo">This is a solo project</div>
+      <div class="notification warning" v-if="membersError && !isSolo">You don't have enough ready members</div>
       <div class="members">
         <div class="members-image" v-for="member in project.project_members" :key="member.user_id">
           <Avatar v-if="member.user_id" :uuid="member.user_id" size="large" :avatar="true" />
@@ -25,7 +26,7 @@
 
 <script setup>
 
-const props = defineProps(['project', 'creator', 'client', 'deliverables', 'membersError']);
+const props = defineProps(['project', 'creator', 'client', 'deliverables', 'membersError', 'isSolo']);
 const { client, project } = toRefs(props)
 
 // useProject composable
