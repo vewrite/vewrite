@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   
   // Initialize Supabase client
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_KEY;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   
   if (!supabaseUrl || !supabaseKey) {
     console.error('Missing Supabase credentials:', { supabaseUrl, supabaseKey });
@@ -30,13 +30,6 @@ export default defineEventHandler(async (event) => {
   }
   
   const supabase = createClient(supabaseUrl, supabaseKey);
-
-  console.log('Environment check:', {
-    supabaseUrlExists: !!process.env.SUPABASE_URL,
-    supabaseKeyExists: !!process.env.SUPABASE_KEY,
-    // Log the first few characters of secrets for verification without exposing them
-    supabaseKeyPrefix: process.env.SUPABASE_KEY ? process.env.SUPABASE_KEY.substring(0, 4) + '...' : null
-  });
   
   try {
     // Query the database
