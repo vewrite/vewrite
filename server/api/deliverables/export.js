@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
   const supabaseKey = process.env.SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  console.log('Supabase:', supabase);
+
   const { data, error } = await supabase
     .from('deliverables')
     .select('*')
