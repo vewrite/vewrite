@@ -25,6 +25,8 @@ export default defineEventHandler(async (event) => {
     .eq('id', id)
     .single();
 
+  console.log('Fetched deliverable data:', data);
+
   if (error) {
     throw createError({
       statusCode: 500,
