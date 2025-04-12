@@ -30,6 +30,13 @@ export default defineEventHandler(async (event) => {
   }
   
   const supabase = createClient(supabaseUrl, supabaseKey);
+
+  console.log('Environment check:', {
+    supabaseUrlExists: !!process.env.SUPABASE_URL,
+    supabaseKeyExists: !!process.env.SUPABASE_KEY,
+    // Log the first few characters of secrets for verification without exposing them
+    supabaseKeyPrefix: process.env.SUPABASE_KEY ? process.env.SUPABASE_KEY.substring(0, 4) + '...' : null
+  });
   
   try {
     // Query the database
