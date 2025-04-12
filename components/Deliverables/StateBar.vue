@@ -54,7 +54,7 @@
     
     <!-- Is approved (49) -->
     <div v-if="props.StateData[0].state_type === 6 && isContent">
-      <Dropdown position="left" primary="true">
+      <Dropdown primary="true">
         <template v-slot:trigger>
           Download Deliverable
         </template>
