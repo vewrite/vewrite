@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       .eq('id', deliverableId)
       .single();
 
-    // console.log('deliverable data', data);
+    console.log('deliverable data', data);
 
     rolesRef.value.writer = data.role_assignments.Writer;
     rolesRef.value.reviewer = data.role_assignments.Reviewer;

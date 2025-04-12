@@ -322,7 +322,7 @@ const handleCommentText = (event) => {
   comment.text = event.target.value;
 };
 
-const handleAddComment = (contentType) => { // TODO - functions above must pass through contentType
+const handleAddComment = (contentType) => { 
   if (selectedText.value && commentText.value) {
     // Generate a unique ID for the comment
     const commentId = `comment-${Date.now()}`;
