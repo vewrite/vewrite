@@ -1,6 +1,6 @@
 <template>
   <div :class="[ 'dropdown', isOpen ? 'open' : '', props.position ]">
-    <div @click="toggleDropdown" :class="['button', props.primary ? 'primary' : '', props.vertical ? 'vertical' : '', props.clear ? 'clear' : '', props.white ? 'white' : '']">
+    <div @click="toggleDropdown" :class="['button', props.primary ? 'primary' : '', props.vertical ? 'vertical' : '', props.clear ? 'clear' : '', props.white ? 'white' : '', props.typeselect ? 'type-select' : '']">
       <slot name="trigger"></slot>
     </div>
     <div class="dropdown-content" @click="toggleDropdown">
@@ -15,7 +15,7 @@
 import { ref } from 'vue';
 
 const isOpen = ref(false);
-const props = defineProps(['position', 'primary', 'vertical', 'clear', 'white']);
+const props = defineProps(['position', 'primary', 'vertical', 'clear', 'white', 'typeselect']);
 
 function toggleDropdown() {
   isOpen.value = !isOpen.value;
@@ -49,8 +49,24 @@ function toggleDropdown() {
 
   .button {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     gap: $spacing-xxs;
+
+    &.type-select {
+      justify-content: space-between;
+      min-width: 140px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      gap: $spacing-xxs;
+      width: 100%;
+    }
 
     &.vertical {
       flex-direction: column;

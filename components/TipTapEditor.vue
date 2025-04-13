@@ -137,6 +137,39 @@
   <div v-if="props.type == 'draft'" class="TipTapEditor draft">
     <div class="TipTapTools"  v-if="draftEditor">
       <section class="button-group">
+
+        <Dropdown position="left" clear="true" typeselect="true" >
+          <template v-slot:trigger>
+            <!-- <span class="current-state"><Icon name="fluent:flow-20-regular" size="2rem" /></span> -->
+             <div v-if="draftEditor.isActive('paragraph')">Paragraph <Icon name="fluent:chevron-down-16-regular" size="1.15rem" /></div>
+             <div v-if="draftEditor.isActive('heading', { level: 1 })">Main title <Icon name="fluent:chevron-down-16-regular" size="1.15rem" /></div>
+             <div v-if="draftEditor.isActive('heading', { level: 2 })">Section <Icon name="fluent:chevron-down-16-regular" size="1.15rem" /></div>
+             <div v-if="draftEditor.isActive('heading', { level: 3 })">Sub-section <Icon name="fluent:chevron-down-16-regular" size="1.15rem" /></div>
+          </template>
+          <template v-slot:menu>
+            <div @click="draftEditor.chain().focus().setParagraph().run()" :class="{ 'active': draftEditor.isActive('paragraph') }" class="dropdown-item toolbar">
+              Paragraph
+            </div>
+            <div @click="draftEditor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'active': draftEditor.isActive('heading', { level: 1 }) }" class="dropdown-item toolbar">
+              Main title (h1)
+            </div>
+            <div @click="draftEditor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'active': draftEditor.isActive('heading', { level: 2 }) }" class="dropdown-item toolbar">
+              Section (h2)
+            </div>
+            <div @click="draftEditor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'active': draftEditor.isActive('heading', { level: 3 }) }" class="dropdown-item toolbar">
+              Sub-section (h3)
+            </div>
+          </template>
+        </Dropdown>
+
+        <div class="vertical-divider"></div>
+
+        <button @click="draftEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
+          <Icon name="fluent:clear-formatting-16-regular" size="1.15rem" /> 
+        </button>
+
+        <div class="vertical-divider"></div>
+
         <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!draftEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': draftEditor.isActive('bold') }" class="toolbar">
           <Icon name="fluent:text-bold-16-regular" size="1.15rem" />
         </button>
@@ -148,9 +181,6 @@
         </button> -->
         <button @click="draftEditor.chain().focus().toggleCode().run()" :disabled="!draftEditor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': draftEditor.isActive('code') }" class="toolbar">
           <Icon name="fluent:code-16-regular" size="1.15rem" /> 
-        </button>
-        <button @click="draftEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
-          <Icon name="fluent:clear-formatting-16-regular" size="1.15rem" /> 
         </button>
         <button @click="draftEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': draftEditor.isActive('bulletList') }" class="toolbar">
           <Icon name="fluent:text-bullet-list-16-regular" size="1.15rem" /> 
@@ -169,21 +199,6 @@
         </button>
         <button @click="draftEditor.chain().focus().setHardBreak().run()" class="toolbar">
           <Icon name="fluent:document-page-break-24-regular" size="1.15rem" />
-        </button>
-
-        <div class="vertical-divider"></div>
-
-        <button @click="draftEditor.chain().focus().setParagraph().run()" :class="{ 'is-active': draftEditor.isActive('paragraph') }" class="toolbar">
-          P
-        </button>
-        <button @click="draftEditor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 1 }) }" class="toolbar">
-          h1
-        </button>
-        <button @click="draftEditor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 2 }) }" class="toolbar">
-          h2
-        </button>
-        <button @click="draftEditor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 3 }) }" class="toolbar">
-          h3
         </button>
 
         <div class="vertical-divider"></div>
@@ -616,7 +631,6 @@ onBeforeUnmount(() => {
 
   &:hover .TipTapTools {
     background: rgba($white, .5);
-    opacity: 1;
   }
   
 }
@@ -660,7 +674,6 @@ onBeforeUnmount(() => {
   transition: opacity 0.3s ease;
   transition: all 0.2s ease;
   background: rgba($white, .25);
-  opacity: 0.25;
 
   .character-count {
     font-size: $font-size-xxs;
