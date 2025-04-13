@@ -3,6 +3,41 @@
   
   <!-- Requirements -->
   <div v-if="props.type == 'requirements'" class="TipTapEditor requirements">
+    <div class="TipTapTools" v-if="requirementsEditor">
+      <section class="button-group">
+        <button @click="requirementsEditor.chain().focus().toggleBold().run()" :disabled="!requirementsEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': requirementsEditor.isActive('bold') }" class="toolbar">
+          <Icon name="fluent:text-bold-16-regular" size="1.15rem" />
+        </button>
+        <button @click="requirementsEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
+          <Icon name="fluent:clear-formatting-16-regular" size="1.15rem" /> 
+        </button>
+        <button @click="requirementsEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': requirementsEditor.isActive('bulletList') }" class="toolbar">
+          <Icon name="fluent:text-bullet-list-16-regular" size="1.15rem" /> 
+        </button>
+        <button @click="requirementsEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': requirementsEditor.isActive('orderedList') }" class="toolbar">
+          <Icon name="fluent:text-number-list-16-regular" size="1.15rem" /> 
+        </button>
+
+        <div class="vertical-divider"></div>
+
+        <!-- Links -->
+        <button @click="setLink(requirementsEditor)" class="toolbar" :class="{ 'is-active': requirementsEditor.isActive('link') }">
+          <Icon name="fluent:link-16-regular" size="1.15rem" />
+        </button>
+        <button @click="requirementsEditor.chain().focus().unsetLink().run()" class="toolbar" :disabled="!requirementsEditor.isActive('link')">
+          <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
+        </button>
+
+      </section>
+      <section class="button-group undo-redo">
+        <button @click="requirementsEditor.chain().focus().undo().run()" :disabled="!requirementsEditor.can().chain().focus().undo().run()" class="toolbar">
+          <Icon name="fluent:arrow-undo-16-regular" size="1.15rem" />
+        </button>
+        <button @click="requirementsEditor.chain().focus().redo().run()" :disabled="!requirementsEditor.can().chain().focus().redo().run()" class="toolbar">
+          <Icon name="fluent:arrow-redo-16-regular" size="1.15rem" />
+        </button>
+      </section>
+    </div>
     <TiptapEditorContent :editor="requirementsEditor"  ref="textareaRef" />
   </div>
 
@@ -11,30 +46,41 @@
     <div class="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleBold().run()" :disabled="!outlineEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': outlineEditor.isActive('bold') }" class="toolbar">
-          <Icon name="fluent-mdl2:bold" size="1rem" /> 
+          <Icon name="fluent:text-bold-16-regular" size="1.15rem" />
         </button>
-        <button @click="outlineEditor.chain().focus().toggleItalic().run()" :disabled="!outlineEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': outlineEditor.isActive('italic') }" class="toolbar">
+        <!-- <button @click="outlineEditor.chain().focus().toggleItalic().run()" :disabled="!outlineEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': outlineEditor.isActive('italic') }" class="toolbar">
           <Icon name="fluent-mdl2:italic" size="1rem" /> 
-        </button>
-        <button @click="outlineEditor.chain().focus().toggleStrike().run()" :disabled="!outlineEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': outlineEditor.isActive('strike') }" class="toolbar">
+        </button> -->
+        <!-- <button @click="outlineEditor.chain().focus().toggleStrike().run()" :disabled="!outlineEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': outlineEditor.isActive('strike') }" class="toolbar">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
-        </button>
+        </button> -->
         <button @click="outlineEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
-          <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:clear-formatting-16-regular" size="1.15rem" /> 
         </button>
         <button @click="outlineEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': outlineEditor.isActive('bulletList') }" class="toolbar">
-          <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:text-bullet-list-16-regular" size="1.15rem" /> 
         </button>
         <button @click="outlineEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': outlineEditor.isActive('orderedList') }" class="toolbar">
-          <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:text-number-list-16-regular" size="1.15rem" /> 
+        </button>
+
+        <div class="vertical-divider"></div>
+
+        <!-- Links -->
+        <button @click="setLink(outlineEditor)" class="toolbar" :class="{ 'is-active': outlineEditor.isActive('link') }">
+          <Icon name="fluent:link-16-regular" size="1.15rem" />
+        </button>
+        <button @click="outlineEditor.chain().focus().unsetLink().run()" class="toolbar" :disabled="!outlineEditor.isActive('link')">
+          <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
         </button>
       </section>
+      
       <section class="button-group undo-redo">
         <button @click="outlineEditor.chain().focus().undo().run()" :disabled="!outlineEditor.can().chain().focus().undo().run()" class="toolbar">
-          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-undo-16-regular" size="1.15rem" />
         </button>
         <button @click="outlineEditor.chain().focus().redo().run()" :disabled="!outlineEditor.can().chain().focus().redo().run()" class="toolbar">
-          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-redo-16-regular" size="1.15rem" />
         </button>
       </section>
     </div>
@@ -46,30 +92,41 @@
     <div class="TipTapTools"  v-if="researchEditor">
       <section class="button-group">
         <button @click="researchEditor.chain().focus().toggleBold().run()" :disabled="!researchEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': researchEditor.isActive('bold') }" class="toolbar">
-          <Icon name="fluent-mdl2:bold" size="1rem" /> 
+          <Icon name="fluent:text-bold-16-regular" size="1.15rem" />
         </button>
-        <button @click="researchEditor.chain().focus().toggleItalic().run()" :disabled="!researchEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': researchEditor.isActive('italic') }" class="toolbar">
+        <!-- <button @click="researchEditor.chain().focus().toggleItalic().run()" :disabled="!researchEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': researchEditor.isActive('italic') }" class="toolbar">
           <Icon name="fluent-mdl2:italic" size="1rem" /> 
-        </button>
-        <button @click="researchEditor.chain().focus().toggleStrike().run()" :disabled="!researchEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': researchEditor.isActive('strike') }" class="toolbar">
+        </button> -->
+        <!-- <button @click="researchEditor.chain().focus().toggleStrike().run()" :disabled="!researchEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': researchEditor.isActive('strike') }" class="toolbar">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
-        </button>
+        </button> -->
         <button @click="researchEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
-          <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:clear-formatting-16-regular" size="1.15rem" /> 
         </button>
         <button @click="researchEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': researchEditor.isActive('bulletList') }" class="toolbar">
-          <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:text-bullet-list-16-regular" size="1.15rem" /> 
         </button>
         <button @click="researchEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': researchEditor.isActive('orderedList') }" class="toolbar">
-          <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:text-number-list-16-regular" size="1.15rem" /> 
         </button>
+
+        <div class="vertical-divider"></div>
+
+        <!-- Links -->
+        <button @click="setLink(researchEditor)" class="toolbar" :class="{ 'is-active': researchEditor.isActive('link') }">
+          <Icon name="fluent:link-16-regular" size="1.15rem" />
+        </button>
+        <button @click="researchEditor.chain().focus().unsetLink().run()" class="toolbar" :disabled="!researchEditor.isActive('link')">
+          <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
+        </button>
+
       </section>
       <section class="button-group undo-redo">
         <button @click="researchEditor.chain().focus().undo().run()" :disabled="!researchEditor.can().chain().focus().undo().run()" class="toolbar">
-          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-undo-16-regular" size="1.15rem" />
         </button>
         <button @click="researchEditor.chain().focus().redo().run()" :disabled="!researchEditor.can().chain().focus().redo().run()" class="toolbar">
-          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-redo-16-regular" size="1.15rem" />
         </button>
       </section>
     </div>
@@ -81,20 +138,41 @@
     <div class="TipTapTools"  v-if="draftEditor">
       <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleBold().run()" :disabled="!draftEditor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': draftEditor.isActive('bold') }" class="toolbar">
-          <Icon name="fluent-mdl2:bold" size="1rem" /> 
+          <Icon name="fluent:text-bold-16-regular" size="1.15rem" />
         </button>
         <button @click="draftEditor.chain().focus().toggleItalic().run()" :disabled="!draftEditor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': draftEditor.isActive('italic') }" class="toolbar">
           <Icon name="fluent-mdl2:italic" size="1rem" /> 
         </button>
-        <button @click="draftEditor.chain().focus().toggleStrike().run()" :disabled="!draftEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': draftEditor.isActive('strike') }" class="toolbar">
+        <!-- <button @click="draftEditor.chain().focus().toggleStrike().run()" :disabled="!draftEditor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': draftEditor.isActive('strike') }" class="toolbar">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
-        </button>
+        </button> -->
         <button @click="draftEditor.chain().focus().toggleCode().run()" :disabled="!draftEditor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': draftEditor.isActive('code') }" class="toolbar">
-          <Icon name="fluent:code-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:code-16-regular" size="1.15rem" /> 
         </button>
         <button @click="draftEditor.chain().focus().unsetAllMarks().run()" class="toolbar">
-          <Icon name="fluent:clear-formatting-16-regular" size="1.5rem" /> 
+          <Icon name="fluent:clear-formatting-16-regular" size="1.15rem" /> 
         </button>
+        <button @click="draftEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': draftEditor.isActive('bulletList') }" class="toolbar">
+          <Icon name="fluent:text-bullet-list-16-regular" size="1.15rem" /> 
+        </button>
+        <button @click="draftEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': draftEditor.isActive('orderedList') }" class="toolbar">
+          <Icon name="fluent:text-number-list-16-regular" size="1.15rem" /> 
+        </button>
+        <button @click="draftEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': draftEditor.isActive('codeBlock') }" class="toolbar">
+          <Icon name="fluent:code-block-16-regular" size="1.15rem" />
+        </button>
+        <button @click="draftEditor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': draftEditor.isActive('blockquote') }" class="toolbar">
+          <Icon name="fluent:text-quote-16-filled" size="1.15rem" />
+        </button>
+        <button @click="draftEditor.chain().focus().setHorizontalRule().run()" class="toolbar">
+          <Icon name="codicon:horizontal-rule" size="1.15rem" />
+        </button>
+        <button @click="draftEditor.chain().focus().setHardBreak().run()" class="toolbar">
+          <Icon name="fluent:document-page-break-24-regular" size="1.15rem" />
+        </button>
+
+        <div class="vertical-divider"></div>
+
         <button @click="draftEditor.chain().focus().setParagraph().run()" :class="{ 'is-active': draftEditor.isActive('paragraph') }" class="toolbar">
           P
         </button>
@@ -107,44 +185,28 @@
         <button @click="draftEditor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 3 }) }" class="toolbar">
           h3
         </button>
-        <button @click="draftEditor.chain().focus().toggleHeading({ level: 4 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 4 }) }" class="toolbar">
-          h4
+
+        <div class="vertical-divider"></div>
+
+        <!-- Links -->
+        <button @click="setLink(draftEditor)" class="toolbar" :class="{ 'is-active': draftEditor.isActive('link') }">
+          <Icon name="fluent:link-16-regular" size="1.15rem" />
         </button>
-        <button @click="draftEditor.chain().focus().toggleHeading({ level: 5 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 5 }) }" class="toolbar">
-          h5
-        </button>
-        <button @click="draftEditor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active': draftEditor.isActive('heading', { level: 6 }) }" class="toolbar">
-          h6
-        </button>
-        <button @click="draftEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': draftEditor.isActive('bulletList') }" class="toolbar">
-          <Icon name="fluent:text-bullet-list-16-regular" size="1.5rem" /> 
-        </button>
-        <button @click="draftEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': draftEditor.isActive('orderedList') }" class="toolbar">
-          <Icon name="fluent:text-number-list-16-regular" size="1.5rem" /> 
-        </button>
-        <button @click="draftEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': draftEditor.isActive('codeBlock') }" class="toolbar">
-          <Icon name="fluent:code-block-16-regular" size="1.5rem" />
-        </button>
-        <button @click="draftEditor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': draftEditor.isActive('blockquote') }" class="toolbar">
-          <Icon name="fluent:text-quote-16-filled" size="1.5rem" />
-        </button>
-        <button @click="draftEditor.chain().focus().setHorizontalRule().run()" class="toolbar">
-          <Icon name="codicon:horizontal-rule" size="1.5rem" />
-        </button>
-        <button @click="draftEditor.chain().focus().setHardBreak().run()" class="toolbar">
-          <Icon name="fluent:document-page-break-24-regular" size="1.5rem" />
+        <button @click="draftEditor.chain().focus().unsetLink().run()" class="toolbar" :disabled="!draftEditor.isActive('link')">
+          <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
         </button>
       </section>
+        
       <section class="button-group undo-redo">
         <div class="character-count" @click="toggleCount">
           <span class="chars" v-if="!showChar">{{ characterCount }} chars</span>
           <span class="words" v-if="showChar">{{ wordCount }} words</span>
         </div>
         <button @click="draftEditor.chain().focus().undo().run()" :disabled="!draftEditor.can().chain().focus().undo().run()" class="toolbar">
-          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-undo-16-regular" size="1.15rem" />
         </button>
         <button @click="draftEditor.chain().focus().redo().run()" :disabled="!draftEditor.can().chain().focus().redo().run()" class="toolbar">
-          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-redo-16-regular" size="1.15rem" />
         </button>
       </section>
     </div>
@@ -156,7 +218,7 @@
     <div class="TipTapTools" v-if="outlineEditor">
       <section class="button-group">
         <button @click="outlineEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': outlineEditor.isActive('highlight') }">
-          <Icon name="fluent:highlight-16-regular" size="1.5rem" />
+          <Icon name="fluent:highlight-16-regular" size="1.15rem" />
         </button>
         <button @click="outlineEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': outlineEditor.isActive('strike') }">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
@@ -164,10 +226,10 @@
       </section>
       <section class="button-group undo-redo">
         <button @click="outlineEditor.chain().focus().undo().run()" :disabled="!outlineEditor.can().chain().focus().undo().run()" class="toolbar">
-          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-undo-16-regular" size="1.15rem" />
         </button>
         <button @click="outlineEditor.chain().focus().redo().run()" :disabled="!outlineEditor.can().chain().focus().redo().run()" class="toolbar">
-          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-redo-16-regular" size="1.15rem" />
         </button>
         <div class="character-count">
           {{ characterCount }} chars
@@ -187,7 +249,7 @@
     <div class="TipTapTools" v-if="draftEditor">
       <section class="button-group">
         <button @click="draftEditor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': draftEditor.isActive('highlight') }">
-          <Icon name="fluent:highlight-16-regular" size="1.5rem" />
+          <Icon name="fluent:highlight-16-regular" size="1.15rem" />
         </button>
         <button @click="draftEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': draftEditor.isActive('strike') }">
           <Icon name="fluent-mdl2:strikethrough" size="1rem" /> 
@@ -195,10 +257,10 @@
       </section>
       <section class="button-group undo-redo">
         <button @click="draftEditor.chain().focus().undo().run()" :disabled="!draftEditor.can().chain().focus().undo().run()" class="toolbar">
-          <Icon name="fluent:arrow-undo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-undo-16-regular" size="1.15rem" />
         </button>
         <button @click="draftEditor.chain().focus().redo().run()" :disabled="!draftEditor.can().chain().focus().redo().run()" class="toolbar">
-          <Icon name="fluent:arrow-redo-16-regular" size="1.5rem" />
+          <Icon name="fluent:arrow-redo-16-regular" size="1.15rem" />
         </button>
         <div class="character-count">
           {{ characterCount }} chars
@@ -220,6 +282,7 @@
 import useDeliverables from '~/composables/useDeliverables';
 import TiptapStarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
+import Link from '@tiptap/extension-link'
 
 import useComments from '~/composables/useComments';
 const { addComment } = useComments();
@@ -271,22 +334,22 @@ const comment = {
 
 const requirementsEditor = useEditor({
   content: deliverable.value.content.requirements,
-  extensions: [TiptapStarterKit],
+  extensions: [TiptapStarterKit, Link, Highlight],
 });
 
 const outlineEditor = useEditor({
   content: deliverable.value.content.outline,
-  extensions: [TiptapStarterKit],
+  extensions: [TiptapStarterKit, Link, Highlight],
 });
 
 const researchEditor = useEditor({
   content: deliverable.value.content.research,
-  extensions: [TiptapStarterKit],
+  extensions: [TiptapStarterKit, Link, Highlight],
 });
 
 const draftEditor = useEditor({
   content: deliverable.value.content.draft,
-  extensions: [TiptapStarterKit],
+  extensions: [TiptapStarterKit, Link, Highlight],
 });
 
 const handleTextSelection = () => {
@@ -305,6 +368,36 @@ const handleTextSelection = () => {
     showCommentInput.value = false;
   }
 };
+
+const setLink = (editor) => {
+  const previousUrl = editor.getAttributes('link').href
+  const url = window.prompt('URL', previousUrl)
+
+  // cancelled
+  if (url === null) {
+    return
+  }
+
+  // empty
+  if (url === '') {
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange('link')
+      .unsetLink()
+      .run()
+
+    return
+  }
+
+  // update link
+  editor
+    .chain()
+    .focus()
+    .extendMarkRange('link')
+    .setLink({ href: url })
+    .run()
+}
 
 const characterCount = computed(() => {
   return draftEditor.value ? draftEditor.value.getHTML().replace(/<[^>]*>?/gm, '').length : 0;
@@ -523,6 +616,7 @@ onBeforeUnmount(() => {
 
   &:hover .TipTapTools {
     background: rgba($white, .5);
+    opacity: 1;
   }
   
 }
@@ -556,19 +650,17 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
-  box-shadow: $soft-shadow;
   backdrop-filter: blur(6px);
-  border: $border;
-  padding: $spacing-xxs $spacing-xs;
+  padding: $spacing-xxxs 0;
   position: sticky;
-  top: $spacing-sm;
+  top: 0;
   margin: 0;
   z-index: 10;
   flex-wrap: wrap;
-  border-radius: $br-lg;
   transition: opacity 0.3s ease;
   transition: all 0.2s ease;
   background: rgba($white, .25);
+  opacity: 0.25;
 
   .character-count {
     font-size: $font-size-xxs;
@@ -591,8 +683,18 @@ onBeforeUnmount(() => {
 
   .button-group {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: $spacing-xxxs;
+
+    .vertical-divider {
+      width: 1px;
+      height: 24px;
+      background-color: rgba($black, 0.2);
+      margin: 0 $spacing-sm;
+    }
   }
 
   button {
