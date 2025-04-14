@@ -967,6 +967,28 @@ button.vertical,
     @media (max-width: 600px) {
         padding: $spacing-sm;
     }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        margin: $spacing-sm 0;
+        border-radius: $br-sm;
+        transition: all 0.1s ease;
+        outline: 1px solid rgba($black, 0.05);
+        outline-offset: 2px;
+
+        &:active,
+        &:focus,
+        &:hover,
+        &:focus-within {
+            outline: 1px solid rgba($brand, 0.3);
+            outline-offset: 2px;
+        }
+
+        &:active {
+            outline: 1px solid rgba($brand, 1);
+        }
+    }
   }
 
   .ProseMirror-focused {
