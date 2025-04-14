@@ -21,6 +21,8 @@
     "@nuxtjs/style-resources": "^1.2.2",
     "@pinia/nuxt": "^0.5.3",
     "@supabase/supabase-js": "^2.46.1",
+    "@tiptap-pro/extension-file-handler": "^2.17.8",
+    "@tiptap/extension-dropcursor": "^2.11.7",
     "@tiptap/extension-highlight": "^2.10.4",
     "@tiptap/extension-image": "^2.11.7",
     "@tiptap/extension-link": "^2.11.7",

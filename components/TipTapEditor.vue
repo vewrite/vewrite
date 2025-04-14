@@ -298,6 +298,9 @@ import useDeliverables from '~/composables/useDeliverables';
 import TiptapStarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Link from '@tiptap/extension-link'
+import Dropcursor from '@tiptap/extension-dropcursor';
+import FileHandler from '@tiptap-pro/extension-file-handler'
+import Image from '@tiptap/extension-image';
 
 import useComments from '~/composables/useComments';
 const { addComment } = useComments();
@@ -349,22 +352,82 @@ const comment = {
 
 const requirementsEditor = useEditor({
   content: deliverable.value.content.requirements,
-  extensions: [TiptapStarterKit, Link, Highlight],
+  extensions: [
+                TiptapStarterKit, 
+                Link, 
+                Highlight, 
+                Image.configure({
+                  inline: true,
+                  allowBase64: true, 
+                }),
+                Dropcursor,
+                FileHandler.configure({
+                  allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+                  onDrop: (requirementsEditor, files, pos) => {
+                    files.forEach(file => {
+                      const fileReader = new FileReader()
+
+                      fileReader.readAsDataURL(file)
+                      fileReader.onload = () => {
+                        requirementsEditor.chain().focus().insertContent({
+                          type: 'image',
+                          attrs: {
+                            src: fileReader.result,
+                          },
+                        }).run();
+                      }
+                    })
+                  },
+                  onPaste: (requirementsEditor, files) => {
+                    files.forEach(file => {
+                      const fileReader = new FileReader()
+
+                      fileReader.readAsDataURL(file)
+                      fileReader.onload = () => {
+                        requirementsEditor.chain().focus().insertContent({
+                          type: 'image',
+                          attrs: {
+                            src: fileReader.result,
+                          },
+                        }).run();
+                      }
+                    })
+                  },
+                }),
+              ],
 });
 
 const outlineEditor = useEditor({
   content: deliverable.value.content.outline,
-  extensions: [TiptapStarterKit, Link, Highlight],
+  extensions: [
+                TiptapStarterKit, 
+                Link, 
+                Highlight, 
+                Image, 
+                Dropcursor
+              ],
 });
 
 const researchEditor = useEditor({
   content: deliverable.value.content.research,
-  extensions: [TiptapStarterKit, Link, Highlight],
+  extensions: [
+                TiptapStarterKit, 
+                Link, 
+                Highlight, 
+                Image, 
+                Dropcursor
+              ],
 });
 
 const draftEditor = useEditor({
   content: deliverable.value.content.draft,
-  extensions: [TiptapStarterKit, Link, Highlight],
+  extensions: [
+                TiptapStarterKit, 
+                Link, 
+                Highlight, 
+                Image, 
+                Dropcursor
+              ],
 });
 
 const handleTextSelection = () => {
