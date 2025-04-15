@@ -28,6 +28,13 @@
           <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
         </button>
 
+        <div class="vertical-divider"></div>
+
+        <!-- Image -->
+        <button @click="openAddImageModal()" class="toolbar">
+          <Icon name="fluent:image-16-regular" size="1.15rem" />
+        </button>
+
       </section>
       <section class="button-group undo-redo">
         <button @click="requirementsEditor.chain().focus().undo().run()" :disabled="!requirementsEditor.can().chain().focus().undo().run()" class="toolbar">

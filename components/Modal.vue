@@ -30,6 +30,7 @@ import CreateDeliverableModal     from '~/components/Projects/CreateDeliverableM
 import DeleteDeliverableModal     from '~/components/Projects/DeleteDeliverableModal.vue'
 import ChangeAssignmentsModal     from '~/components/Deliverables/ChangeAssignmentsModal.vue'
 import ApprovalModal              from '~/components/Deliverables/ApprovalModal.vue'
+import AddImageModal              from '~/components/Deliverables/AddImageModal.vue'
 
 // Workflow modals    
 import CreateWorkflowModal        from '~/components/Workflows/CreateWorkflowModal.vue'
@@ -69,7 +70,8 @@ const contentComponent = computed(() => {
     'CreateClientModal': CreateClientModal,
     'DeleteClientModal': DeleteClientModal,
     'ChangeAssignmentsModal': ChangeAssignmentsModal,
-    'ApprovalModal': ApprovalModal
+    'ApprovalModal': ApprovalModal,
+    'AddImageModal': AddImageModal,
   }
   return components[modal.content]
 })
