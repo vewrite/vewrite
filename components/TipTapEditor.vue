@@ -135,6 +135,13 @@
           <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
         </button>
 
+        <div class="vertical-divider"></div>
+
+        <!-- Image -->
+        <button @click="openAddImageModal()" class="toolbar">
+          <Icon name="fluent:image-16-regular" size="1.15rem" />
+        </button>
+
       </section>
       <section class="button-group undo-redo">
         <button @click="researchEditor.chain().focus().undo().run()" :disabled="!researchEditor.can().chain().focus().undo().run()" class="toolbar">
@@ -225,6 +232,14 @@
         <button @click="draftEditor.chain().focus().unsetLink().run()" class="toolbar" :disabled="!draftEditor.isActive('link')">
           <Icon name="fluent:link-dismiss-16-regular" size="1.15rem" />
         </button>
+
+        <div class="vertical-divider"></div>
+
+        <!-- Image -->
+        <button @click="openAddImageModal()" class="toolbar">
+          <Icon name="fluent:image-16-regular" size="1.15rem" />
+        </button>
+
       </section>
         
       <section class="button-group undo-redo">
@@ -434,8 +449,59 @@ const outlineEditor = useEditor({
                 TiptapStarterKit, 
                 Link, 
                 Highlight, 
-                Image, 
-                Dropcursor
+                Image.configure({
+                  inline: true,
+                  allowBase64: true, 
+                }),
+                Dropcursor,
+                FileHandler.configure({
+                  // For right now, we'll limit to images
+                  allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+                  onDrop: async (editor, files, pos) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Dropped image',
+                            },
+                          }).run();
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading dropped image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
+                  },
+                  onPaste: async (editor, files) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Pasted image',
+                            },
+                          }).run();
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading pasted image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
+                  },
+                }),
               ],
 });
 
@@ -445,8 +511,59 @@ const researchEditor = useEditor({
                 TiptapStarterKit, 
                 Link, 
                 Highlight, 
-                Image, 
-                Dropcursor
+                Image.configure({
+                  inline: true,
+                  allowBase64: true, 
+                }),
+                Dropcursor,
+                FileHandler.configure({
+                  // For right now, we'll limit to images
+                  allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+                  onDrop: async (editor, files, pos) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Dropped image',
+                            },
+                          }).run();
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading dropped image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
+                  },
+                  onPaste: async (editor, files) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Pasted image',
+                            },
+                          }).run();
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading pasted image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
+                  },
+                }),
               ],
 });
 
@@ -456,8 +573,59 @@ const draftEditor = useEditor({
                 TiptapStarterKit, 
                 Link, 
                 Highlight, 
-                Image, 
-                Dropcursor
+                Image.configure({
+                  inline: true,
+                  allowBase64: true, 
+                }),
+                Dropcursor,
+                FileHandler.configure({
+                  // For right now, we'll limit to images
+                  allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+                  onDrop: async (editor, files, pos) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Dropped image',
+                            },
+                          }).run();
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading dropped image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
+                  },
+                  onPaste: async (editor, files) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Pasted image',
+                            },
+                          }).run();
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading pasted image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
+                  },
+                }),
               ],
 });
 
@@ -519,6 +687,9 @@ const handleImageUpload = async (event) => {
   
   // Figure out which editor is currently active
   let currentEditor;
+
+  console.log('Current editor:', props.type);
+
   if (props.type === 'requirements') {
     currentEditor = requirementsEditor.value;
   } else if (props.type === 'outline') {
