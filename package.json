@@ -5,7 +5,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "netlify:build": "echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc && echo '@tiptap-pro:registry=https://registry.tiptap.dev/' >> .npmrc && echo '//registry.tiptap.dev/:_authToken=${TIPTAP_PRO_TOKEN}' >> .npmrc && echo 'always-auth=true' >> .npmrc && npm install && npm run build"
+    "netlify:build": "echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc && echo '@tiptap-pro:registry=https://registry.tiptap.dev/' >> .npmrc && echo '//registry.tiptap.dev/:_authToken=${TIPTAP_PRO_TOKEN}' >> .npmrc && echo 'always-auth=true' >> .npmrc && npm install && nuxt build"
   },
   "devDependencies": {
     "@nuxt/icon": "^1.6.1",
