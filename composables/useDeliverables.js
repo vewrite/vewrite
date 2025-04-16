@@ -342,6 +342,13 @@ export default function useDeliverables() {
     }
   }
 
+  function addImageModal(deliverableId) {
+    useModal().setType('large');
+    useModal().setHeader('Add Image to Deliverable');
+    useModal().setContent('AddImageModal');
+    useModal().toggleVisibility();
+  }
+
   function createDeliverableModal(projectId, selectedDate) {
     useModal().setType('large');
     useModal().setHeader('Create Deliverable');
@@ -573,6 +580,7 @@ export default function useDeliverables() {
     createDeliverableModal,
     deleteDeliverableModal,
     changeAssignmentsModal,
+    addImageModal,
     approvalModal,
     createDeliverable,
     fetchSingleProjectDeliverable,

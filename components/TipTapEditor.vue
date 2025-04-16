@@ -1,5 +1,13 @@
 <template>
   <Loading class="saving" v-if="saving" saving="saving" type="tiny" />
+
+  <input 
+    type="file" 
+    ref="imageInput"
+    @change="handleImageUpload" 
+    accept="image/*"
+    style="display: none;"
+  />
   
   <!-- Requirements -->
   <div v-if="props.type == 'requirements'" class="TipTapEditor requirements">
@@ -312,6 +320,7 @@ import Image from '@tiptap/extension-image';
 import useComments from '~/composables/useComments';
 const { addComment } = useComments();
 
+const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 const showCommentInput = ref(false);
@@ -369,36 +378,51 @@ const requirementsEditor = useEditor({
                 }),
                 Dropcursor,
                 FileHandler.configure({
+                  // For right now, we'll limit to images
                   allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
-                  onDrop: (requirementsEditor, files, pos) => {
-                    files.forEach(file => {
-                      const fileReader = new FileReader()
-
-                      fileReader.readAsDataURL(file)
-                      fileReader.onload = () => {
-                        requirementsEditor.chain().focus().insertContent({
-                          type: 'image',
-                          attrs: {
-                            src: fileReader.result,
-                          },
-                        }).run();
+                  onDrop: async (editor, files, pos) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Dropped image',
+                            },
+                          }).run();
+                        }
                       }
-                    })
+                    } catch (error) {
+                      console.error('Error uploading dropped image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
                   },
-                  onPaste: (requirementsEditor, files) => {
-                    files.forEach(file => {
-                      const fileReader = new FileReader()
-
-                      fileReader.readAsDataURL(file)
-                      fileReader.onload = () => {
-                        requirementsEditor.chain().focus().insertContent({
-                          type: 'image',
-                          attrs: {
-                            src: fileReader.result,
-                          },
-                        }).run();
+                  onPaste: async (editor, files) => {
+                    saving.value = true;
+                    try {
+                      for (const file of files) {
+                        const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+                        
+                        if (imageUrl) {
+                          editor.chain().focus().insertContent({
+                            type: 'image',
+                            attrs: {
+                              src: imageUrl,
+                              alt: 'Pasted image',
+                            },
+                          }).run();
+                        }
                       }
-                    })
+                    } catch (error) {
+                      console.error('Error uploading pasted image:', error);
+                    } finally {
+                      saving.value = false;
+                    }
                   },
                 }),
               ],
@@ -451,6 +475,91 @@ const handleTextSelection = () => {
     comment.quote = selectedText.value;
   } else {
     showCommentInput.value = false;
+  }
+};
+
+const imageInput = ref(null);
+
+const openAddImageModal = () => {
+  // Open the file manager to select an image
+  imageInput.value.click();
+}
+
+const uploadImageToStorage = async (file, folder = 'deliverable-images') => {
+  try {
+    // Generate a unique file name to prevent collisions
+    const fileName = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+    
+    // Upload file to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from('attachments')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+      
+    if (error) throw error;
+    
+    // Get public URL for the uploaded file
+    const { data: { publicUrl } } = supabase.storage
+      .from('attachments')
+      .getPublicUrl(fileName);
+      
+    return publicUrl;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return null;
+  }
+};
+
+const handleImageUpload = async (event) => {
+  const files = event.target.files;
+  
+  if (files.length === 0) return;
+  
+  // Figure out which editor is currently active
+  let currentEditor;
+  if (props.type === 'requirements') {
+    currentEditor = requirementsEditor.value;
+  } else if (props.type === 'outline') {
+    currentEditor = outlineEditor.value;
+  } else if (props.type === 'research') {
+    currentEditor = researchEditor.value;
+  } else if (props.type === 'draft') {
+    currentEditor = draftEditor.value;
+  }
+  
+  if (!currentEditor) return;
+  
+  saving.value = true; // Show loading indicator
+  
+  // Process each selected file
+  try {
+    for (const file of Array.from(files)) {
+      // 1. Upload file to Supabase Storage
+      const imageUrl = await uploadImageToStorage(file, `deliverables/${deliverable.value.id}`);
+      
+      if (!imageUrl) {
+        console.error('Failed to upload image');
+        continue;
+      }
+      
+      // 2. Insert the image URL into the editor
+      currentEditor.chain().focus().insertContent({
+        type: 'image',
+        attrs: {
+          src: imageUrl,
+          alt: file.name,
+        },
+      }).run();
+    }
+  } catch (error) {
+    console.error('Error in image upload process:', error);
+  } finally {
+    saving.value = false; // Hide loading indicator
+    
+    // Reset the file input so the same file can be selected again
+    event.target.value = '';
   }
 };
 
