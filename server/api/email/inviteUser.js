@@ -1,4 +1,3 @@
-// server/api/invite-user.ts
 import { defineEventHandler, getQuery, createError, readBody } from 'h3';
 import { createClient } from '@supabase/supabase-js';
 
