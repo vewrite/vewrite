@@ -141,7 +141,8 @@ watch(path, () => {
   position: relative;
 
   .avatar-popup {
-    position: fixed;
+    position: absolute;
+    right: 0;
     width: 280px;
     background: rgba($white, 0.75);
     backdrop-filter: blur(6px);
@@ -152,7 +153,7 @@ watch(path, () => {
     align-items: center;
     z-index: 10000;
     animation: scaleBounce 0.4s ease;
-    transform-origin: top left;
+    transform-origin: top right;
 
     .avatar-popup-content {
       display: flex;
