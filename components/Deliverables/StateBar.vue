@@ -122,8 +122,9 @@ async function handleState(stateId, deliverableId, stateType) {
 
     // Here we will handle assignments to the writer and reviewer
     if(stateType == 43 || stateType == 44 || stateType == 45 || stateType == 47) {
-      console.log(props.DeliverableData.role_assignments.Writer)
-      await notifyUser(props.DeliverableData.role_assignments.Writer, props.DeliverableData, props.DeliverableData.project);
+      if(!isSolo){
+        await notifyUser(props.DeliverableData.role_assignments.Writer, props.DeliverableData, props.DeliverableData.project);
+      }
       // Get the assigned writer
       let userId = props.DeliverableData.role_assignments.Writer;
       await assignToRole(deliverableId, userId);
@@ -131,8 +132,9 @@ async function handleState(stateId, deliverableId, stateType) {
     
     // Here we will handle assignments to the reviewer
     } else if(stateType == 46 || stateType == 48 || stateType == 49) {
-      console.log(props.DeliverableData.role_assignments.Reviewer)
-      await notifyUser(props.DeliverableData.role_assignments.Reviewer, props.DeliverableData, props.DeliverableData.project);
+      if(!isSolo){
+        await notifyUser(props.DeliverableData.role_assignments.Reviewer, props.DeliverableData, props.DeliverableData.project);
+      }
 
       // Need to migrate this to an approval system
       let userId = props.DeliverableData.role_assignments.Reviewer;
