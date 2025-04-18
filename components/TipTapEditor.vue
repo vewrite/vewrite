@@ -330,6 +330,7 @@ import Highlight from '@tiptap/extension-highlight';
 import Link from '@tiptap/extension-link'
 import Dropcursor from '@tiptap/extension-dropcursor';
 import FileHandler from '@tiptap-pro/extension-file-handler'
+import Gapcursor from '@tiptap/extension-gapcursor'
 import Image from '@tiptap/extension-image';
 
 import useComments from '~/composables/useComments';
@@ -385,6 +386,7 @@ const requirementsEditor = useEditor({
   content: deliverable.value.content.requirements,
   extensions: [
                 TiptapStarterKit, 
+                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
@@ -447,6 +449,7 @@ const outlineEditor = useEditor({
   content: deliverable.value.content.outline,
   extensions: [
                 TiptapStarterKit, 
+                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
@@ -509,6 +512,7 @@ const researchEditor = useEditor({
   content: deliverable.value.content.research,
   extensions: [
                 TiptapStarterKit, 
+                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
@@ -571,6 +575,7 @@ const draftEditor = useEditor({
   content: deliverable.value.content.draft,
   extensions: [
                 TiptapStarterKit, 
+                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
