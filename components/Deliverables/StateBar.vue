@@ -101,6 +101,16 @@ const isContent = computed(() => {
   }
 });
 
+async function notifyUser(userId, deliverable, projectId) {
+  const response = await $fetch(`/api/email/notifyUser?project_id=${projectId}&deliverable_id=${deliverable.id}&user_id=${userId}`);
+
+  if (!response) {
+    console.error('No response from server');
+    console.error('Error inviting user:', inviteError);
+    return;
+  }
+}
+
 async function handleState(stateId, deliverableId, stateType) {
 
   loading.value = true;
@@ -112,6 +122,8 @@ async function handleState(stateId, deliverableId, stateType) {
 
     // Here we will handle assignments to the writer and reviewer
     if(stateType == 43 || stateType == 44 || stateType == 45 || stateType == 47) {
+      console.log(props.DeliverableData.role_assignments.Writer)
+      await notifyUser(props.DeliverableData.role_assignments.Writer, props.DeliverableData, props.DeliverableData.project);
       // Get the assigned writer
       let userId = props.DeliverableData.role_assignments.Writer;
       await assignToRole(deliverableId, userId);
@@ -119,7 +131,8 @@ async function handleState(stateId, deliverableId, stateType) {
     
     // Here we will handle assignments to the reviewer
     } else if(stateType == 46 || stateType == 48 || stateType == 49) {
-      // Get the assigned reviewer
+      console.log(props.DeliverableData.role_assignments.Reviewer)
+      await notifyUser(props.DeliverableData.role_assignments.Reviewer, props.DeliverableData, props.DeliverableData.project);
 
       // Need to migrate this to an approval system
       let userId = props.DeliverableData.role_assignments.Reviewer;
