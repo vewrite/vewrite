@@ -386,14 +386,12 @@ const requirementsEditor = useEditor({
   content: deliverable.value.content.requirements,
   extensions: [
                 TiptapStarterKit, 
-                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
                   inline: true,
                   allowBase64: true, 
                 }),
-                Dropcursor,
                 FileHandler.configure({
                   // For right now, we'll limit to images
                   allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
@@ -449,14 +447,12 @@ const outlineEditor = useEditor({
   content: deliverable.value.content.outline,
   extensions: [
                 TiptapStarterKit, 
-                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
                   inline: true,
                   allowBase64: true, 
                 }),
-                Dropcursor,
                 FileHandler.configure({
                   // For right now, we'll limit to images
                   allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
@@ -512,14 +508,12 @@ const researchEditor = useEditor({
   content: deliverable.value.content.research,
   extensions: [
                 TiptapStarterKit, 
-                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
                   inline: true,
                   allowBase64: true, 
                 }),
-                Dropcursor,
                 FileHandler.configure({
                   // For right now, we'll limit to images
                   allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
@@ -575,14 +569,12 @@ const draftEditor = useEditor({
   content: deliverable.value.content.draft,
   extensions: [
                 TiptapStarterKit, 
-                Gapcursor,
                 Link, 
                 Highlight, 
                 Image.configure({
                   inline: true,
                   allowBase64: true, 
                 }),
-                Dropcursor,
                 FileHandler.configure({
                   // For right now, we'll limit to images
                   allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],

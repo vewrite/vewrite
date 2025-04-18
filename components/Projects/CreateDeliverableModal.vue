@@ -203,7 +203,7 @@ const deliverable = reactive({
     draft: ''
   },
   role_assignments: role_assignments,
-  assigned_to: role_assignments.value.Writer,
+  assigned_to: user.value.id
 })
 
 const isSolo = computed(() => {
