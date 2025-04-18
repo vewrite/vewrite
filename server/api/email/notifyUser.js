@@ -68,6 +68,8 @@ export default defineEventHandler(async (event) => {
       });
     }
 
+    console.log('User data:', userData);
+
     const user = userData;
 
     if (!user) {
@@ -90,6 +92,8 @@ export default defineEventHandler(async (event) => {
         statusMessage: `Deliverable retrieval error: ${deliverableError.message}`,
       });
     }
+
+    console.log('Deliverable data:', deliverableData);
 
     const deliverable = deliverableData;
 
@@ -130,6 +134,8 @@ export default defineEventHandler(async (event) => {
       });
     }
 
+    console.log('State instance data:', stateInstanceData);
+
     const state_instance = stateInstanceData;
     
     // Next, we have to build the template of what we'll send to the user
@@ -145,7 +151,7 @@ export default defineEventHandler(async (event) => {
                   </div>
                   <hr style="max-width: 600px; border: none; border-top: 1px solid #eaeaea; margin: 40px auto;">
                   <div style="max-width: 600px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-family: Arial, sans-serif;">
-                    <h3 style="margin: 0;">An update on your project, ${template.project.name}</h3>
+                    <h3 style="margin: 0;">Here's an update on your project, ${template.project.name}</h3>
                     <div>Your deliverable, <a href="${process.env.APP_ENVIRONMENT}/deliverable/${template.deliverable.id}">${template.deliverable.title}</a>, has moved from state <strong>${template.state_instance.instance_name}</strong>.</div>
                     <a href="${process.env.APP_ENVIRONMENT}/deliverable/${template.deliverable.id}" style="background: #1864DA; color: #ffffff; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 20px;">View Deliverable</a>
                   </div>
@@ -164,6 +170,8 @@ export default defineEventHandler(async (event) => {
     if (error) {
       return console.error({ error });
     }
+  
+    console.log({ data });
     
     return {
       success: true,
