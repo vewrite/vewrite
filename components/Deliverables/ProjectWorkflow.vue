@@ -4,6 +4,9 @@
       <span class="current-state"><Icon name="fluent:flow-20-regular" size="2rem" /></span>
     </template>
     <template v-slot:menu>
+      <div class="dropdown-header">
+        Position in workflow
+      </div>
       <div class="state-instance" v-for="state in workflowStateInstances">
         <span :class="['dot', CurrentState == state[0].instance_name ? 'current' : '']"></span>
         <span>{{ state[0].instance_name }}</span>

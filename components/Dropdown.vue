@@ -155,6 +155,21 @@ function toggleDropdown() {
   }
 }
 
+.dropdown-header {
+  padding: $spacing-xs $spacing-xs 0;
+  font-size: $font-size-xxs;
+  color: rgba($black, 0.5);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.dropdown-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba($black, 0.1);
+  margin: $spacing-xxs $spacing-xxs 0;
+}
+
 .blur {
   position: fixed;
   top: 0;
