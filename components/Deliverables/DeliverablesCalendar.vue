@@ -340,8 +340,9 @@ async function loadDeliverableByDate(timestamptz) {
           color: $black;
           text-decoration: none;
           font-size: $font-size-sm;
-          width: 100%;
-          line-height: 54px;
+          width: 80%;
+          text-wrap: balance;
+          margin: $spacing-md;
           text-align: center;
           display: flex;
           flex-direction: row;

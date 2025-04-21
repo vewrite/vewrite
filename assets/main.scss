@@ -409,6 +409,11 @@ textarea {
     border-bottom: $border;
     z-index: 10;
 
+    @media (max-width: 600px) {
+        flex-direction: column;
+        padding: $spacing-xxs;
+    }
+
     &.right {
         justify-content: flex-end;
     }
@@ -425,6 +430,11 @@ textarea {
         height: 100%;
         width: 100%;
         max-width: 300px;
+
+        @media (max-width: 600px) {
+            width: 100%;
+            max-width: 100%;
+        }
 
         &:active,
         &:focus,
@@ -887,6 +897,7 @@ button.vertical,
     justify-content: space-between;
     align-items: center;
     gap: $spacing-md;
+    width: 100%;
 
     &.no-border {
         border-bottom: none;

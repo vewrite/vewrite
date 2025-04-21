@@ -42,6 +42,8 @@ export default {
       border: none;
       border-radius: 0;
       margin: 0;
+      flex-direction: column;
+      width: 100%;
     }
 
     .app-panel-header-left {
@@ -49,6 +51,11 @@ export default {
       flex-direction: row;
       align-items: center;
       gap: $spacing-xs;
+      width: 50%;
+
+      @media (max-width: 960px) {
+        width: 100%;
+      }
     }
 
     .app-panel-header-buttons {
@@ -57,6 +64,12 @@ export default {
       align-items: center;
       justify-content: flex-end;
       gap: $spacing-xs;
+      width: 50%;
+      flex-wrap: wrap;
+
+      @media (max-width: 960px) {
+        width: 100%;
+      }
 
       .notification {
         white-space: nowrap;
