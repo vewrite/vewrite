@@ -1,13 +1,6 @@
 <template>
   <NuxtLayout>
     <main class="login">
-      <section class="home-link">
-        <a class="button primary" href="https://vewrite.com/">Homepage</a>
-      </section>
-      <section class="support-links">
-        <a class="button primary" href="https://vewrite.com/support">Support</a>
-        <a class="button primary" href="https://docs.vewrite.com/">Documentation</a>
-      </section>
       <section id="LoginWrapper" class="max-width sm">
         <section class="login-top">
           <svg width="151" height="46" viewBox="0 0 151 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -149,6 +142,13 @@
         </section>
 
         <section class="login-bottom">
+          <nav class="login-nav"> 
+            <section class="support-links">
+              <a class="button" href="https://vewrite.com/">Homepage</a>
+              <a class="button" href="https://vewrite.com/support">Support</a>
+              <a class="button" href="https://docs.vewrite.com/">Documentation</a>
+            </section>
+          </nav>
           <p class="copyright-and-terms">© 2025 All rights reserved. <a href="https://vewrite.com/legal/terms">Terms of Service</a> and <a href="https://vewrite.com/legal/privacy">Privacy Policy</a></p>
         </section>
       </section>
@@ -337,34 +337,55 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
 
 #Login {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
   width: 100%;
   position: relative;
 
-  .login {
+  .login-nav {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-sm;
+    width: 100%;
+    margin-bottom: $spacing-md;
+
+    @media (max-width: 800px) {
+      padding: $spacing-sm;
+      margin-bottom: $spacing-xs;
+    }
+
+    .support-links {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-xs;
+    }
+  }
+
+  .login {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     position: relative;
     background: url('/images/login-bg.jpg') no-repeat center center;
     background-size: cover;
+    z-index: 1;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0px;
+      left: 0;
+      right: 0;
+      height: 100px;
+      z-index: -1;
+      background: linear-gradient(to bottom, rgba($white, 1) 0%, rgba($white, 0) 100%);
+    }
   }
 
-  .home-link {
-    position: absolute;
-    top: $spacing-md;
-    left: $spacing-md;
-  }
-
-  .support-links {
-    position: absolute;
-    top: $spacing-md;
-    right: $spacing-md;
-    display: flex;
-    gap: $spacing-xs;
-  }
+  
 }
 
 #LoginWrapper {
@@ -372,21 +393,16 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-md $spacing-lg $spacing-xl;
-  height: fit-content;
+  padding: $spacing-md;
   width: 100%;
   min-width: 720px;
-  background: $white;
-  border-left: $border;
-  border-right: $border;
-  box-shadow: $soft-shadow;
   border-radius: $br-xl;
   margin: 0 auto;
   align-self: center;
 
   @media (max-width: 800px) {
     min-width: 100%;
-    padding: $spacing-md $spacing-md;
+    padding: $spacing-sm;
     height: 100%;
     margin: 0;
   }
@@ -405,6 +421,8 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
       opacity: 0.2;
       margin-top: $spacing-md;
       transition: opacity 0.2s ease;
+      text-align: center;
+      text-wrap: balance;
 
       &:hover {
         opacity: 1;
@@ -413,7 +431,7 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   }
 
   .login-top {
-    padding-top: $spacing-lg;
+    padding-top: $spacing-md;
   }
 
   .support-links {
@@ -427,11 +445,17 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
   .toggle-form {
     display: flex;
     flex-direction: row;
-    margin-bottom: $spacing-md;
     width: 100%;
-    background: rgba($brand, 0.025);
+    background: rgba($white, 1);
+    border: $border;
     padding: $spacing-xs;
     border-radius: $br-xl;
+
+    @media (max-width: 800px) {
+      padding: 0;
+      border: none;
+      background: none;
+    }
 
     .toggle-item {
       cursor: pointer;
@@ -443,6 +467,10 @@ watch(() => router.currentRoute.value.query.section, (newSection) => {
       text-align: center;
       width: 50%;
       border: $border; 
+
+      @media (max-width: 800px) {
+        padding: $spacing-xxs;
+      }
 
       &:first-child {
         border-top-left-radius: $br-lg;

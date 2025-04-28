@@ -452,19 +452,29 @@ textarea {
         justify-content: flex-end;
         height: 100%;
         gap: $spacing-sm;
+
+        @media (max-width: 600px) {
+            width: 100%;
+            justify-content: space-between;
+        }
     }
 
     .list-buttons {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        width: 100%;
+        max-width: 400px;
         height: 100%;
         border: $border;
         border-radius: $br-md;
         background: rgba($white, .35);
         transition: all 0.2s ease;
         overflow: hidden;
-        min-width: auto;
+
+        @media (max-width: 600px) {
+            width: 100%;
+            max-width: 100%;
+        }
 
         &:hover {
             border: 1px solid rgba($brand, .3);
@@ -721,10 +731,6 @@ button,
     min-height: 24px;
     border: none;
     text-wrap: nowrap;
-
-    @media (max-width: 960px) {
-        font-size: $font-size-xxs;
-    }
 
     &:hover {
         background: rgba($black, 0.075);

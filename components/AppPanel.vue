@@ -42,8 +42,11 @@ export default {
       border: none;
       border-radius: 0;
       margin: 0;
-      flex-direction: column;
+      padding: $spacing-xs;
       width: 100%;
+      justify-content: flex-end;
+      align-items: flex-end;
+      flex-direction: column;
     }
 
     .app-panel-header-left {
@@ -66,10 +69,6 @@ export default {
       gap: $spacing-xs;
       width: 50%;
       flex-wrap: wrap;
-
-      @media (max-width: 960px) {
-        width: 100%;
-      }
 
       .notification {
         white-space: nowrap;

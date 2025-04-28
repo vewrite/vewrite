@@ -2,6 +2,11 @@
   <Loading v-if="loading" />
   <Firsttime v-if="!loading && isNewUser == true" @closeOnboarding="close" />
   <main id="Vewrite" v-if="!loading && isNewUser == false">
+    <div class="mobile-warning">
+      <Icon name="fluent:warning-12-regular" size="4rem" />
+      <h2>Warning</h2>
+      <p>Vewrite is not optimized for mobile devices. Please use a desktop or laptop for the best experience.</p>
+    </div>
     <TopBar />
     <section class="go">
       <main>
@@ -121,6 +126,36 @@ onMounted(() => {
 <style lang="scss" scoped>
 
 @use 'assets/variables' as *;
+
+.mobile-warning {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($white, 0.6);
+  backdrop-filter: blur(50px);
+  color: $black;
+  font-size: $font-size-sm;
+  padding: $spacing-xl;
+  z-index: 9999;
+
+  h2 {
+    font-size: $font-size-lg;
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: $font-size-xs;
+  }
+}
 
 #Vewrite {
   display: flex;

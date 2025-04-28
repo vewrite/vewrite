@@ -37,6 +37,10 @@ const props = defineProps({
   transition: bottom 0.2s ease;
   margin: $spacing-md $spacing-md 0;
 
+  @media (max-width: 600px) {
+    display: none;
+  }
+
   .progress-status { 
     display: flex;
     justify-content: space-between;

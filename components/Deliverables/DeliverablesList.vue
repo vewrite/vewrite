@@ -93,6 +93,12 @@ const props = defineProps({
       transition: background-color 0.2s ease;
       border-bottom: $border;
 
+      @media (max-width: 960px) {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: $spacing-xs;
+      }
+
       &:last-child {
         border-bottom: none;
       }
@@ -120,10 +126,6 @@ const props = defineProps({
           font-size: $font-size-xs;
           padding-right: $spacing-xs;
           border-right: $border;
-
-          @media (max-width: 960px) {
-            font-size: $font-size-xxs;
-          }
         }
 
         .deliverable-type {
@@ -141,7 +143,7 @@ const props = defineProps({
           line-height: 44px;
 
           @media (max-width: 960px) {
-            font-size: $font-size-xxs;
+            line-height: initial;
           }
         }
       }
@@ -176,9 +178,6 @@ const props = defineProps({
             border: 1px solid rgba($mint, 0.2);
           }
 
-          @media (max-width: 960px) {
-            font-size: $font-size-xxs;
-          }
         }
 
         .deliverable-updated-at {
